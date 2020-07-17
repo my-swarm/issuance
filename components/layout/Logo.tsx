@@ -4,8 +4,8 @@ interface LogoProps {}
 
 export function Logo({}: LogoProps) {
   return (
-    <div className="logo">
-      <img src="/logo.svg" alt="Logo" />
+    <div className="c-logo">
+      <img src="/images/logo.svg" alt="Logo" />
     </div>
   );
 }

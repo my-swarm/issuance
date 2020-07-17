@@ -1,9 +1,26 @@
 @import '~antd/dist/antd.css';
 
-.logo {
+.c-logo {
 	padding: 1rem 1.5rem;
 }
 
 .ant-layout-content {
 	padding: 1rem 1.5rem;
+}
+
+
+.c-metamask-connect-button {
+	img {
+		width: 20px;
+		position: relative;
+		left: -4px;
+		top: -2px;
+	}
+}
+
+.c-address {
+  font-family: monospace;
+  span {
+    display: inline-block;
+  }
 }

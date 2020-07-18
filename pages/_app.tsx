@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { AppProps } from 'next/app';
 import '../styles/index.scss';
-import { DefaultLayout } from '../components';
 import { EthersProvider } from '../context/EthersContext';
-import { MetamaskNotReadyError } from '../lib/Metamask';
+import { MetamaskNotReadyError } from '@lib/Metamask';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -19,9 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   });
   return (
     <EthersProvider>
-      <DefaultLayout>
-        <Component {...pageProps} />
-      </DefaultLayout>
+      <Component {...pageProps} />
     </EthersProvider>
   );
 }

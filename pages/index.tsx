@@ -1,5 +1,6 @@
 import React from 'react';
-import { MetamaskConnect } from '../components/auth/MetamaskConnect';
+import { MetamaskConnect } from '@components';
+import { DefaultLayout } from '@components';
 
 interface IndexProps {
   title?: string;
@@ -7,9 +8,9 @@ interface IndexProps {
 
 export default function Index({ title }: IndexProps) {
   return (
-    <div>
+    <DefaultLayout title="Home">
       <p>Index</p>
       <MetamaskConnect />
-    </div>
+    </DefaultLayout>
   );
 }

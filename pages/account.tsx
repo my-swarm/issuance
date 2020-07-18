@@ -4,6 +4,6 @@ interface MyAccountProps {
   title?: string;
 }
 
-export default function MyAccount({ title }: MyAccountProps) {
+export default function Account({ title }: MyAccountProps) {
   return <p>My account</p>;
 }

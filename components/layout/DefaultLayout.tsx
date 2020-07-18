@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import { Button, Card, Layout, Menu } from 'antd';
+import { Button, Card, Layout, Menu, PageHeader } from 'antd';
 import { AppstoreOutlined, DashboardOutlined, UserOutlined } from '@ant-design/icons';
-import { Logo, Address, MetamaskConnect } from '..';
+import { Logo, Address, MetamaskConnect, MetamaskStatus } from '..';
 import Link from 'next/link';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { EthersContext, Status } from '../../context/EthersContext';
+import { PageProps } from '../../types';
 
 const { SubMenu } = Menu;
 const { Content, Sider } = Layout;
 
-interface DefaultLayoutProps {
-  children: React.ReactNode;
+interface DefaultLayoutProps extends PageProps {
+  headExtra?: React.ReactNode;
 }
 
-export function DefaultLayout({ children }: DefaultLayoutProps) {
+export function DefaultLayout({ title, headExtra, children }: DefaultLayoutProps) {
   const [siderCollapsed, setSiderCollapsed] = useState(false);
   const router = useRouter();
 
@@ -27,6 +29,9 @@ export function DefaultLayout({ children }: DefaultLayoutProps) {
 
   return (
     <Layout>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <Sider trigger={null} collapsible collapsed={siderCollapsed}>
         <Logo />
         <Menu theme="dark" mode="inline" defaultSelectedKeys={[router.pathname]}>
@@ -35,55 +40,25 @@ export function DefaultLayout({ children }: DefaultLayoutProps) {
               <a>Dashboard</a>
             </Link>
           </Menu.Item>
-          <Menu.Item key="/my-tokens" icon={<AppstoreOutlined />}>
-            <Link href="/my-tokens">
+          <Menu.Item key="/tokens" icon={<AppstoreOutlined />}>
+            <Link href="/tokens">
               <a>My Tokens</a>
             </Link>
           </Menu.Item>
-          <Menu.Item key="/my-account" icon={<UserOutlined />}>
-            <Link href="/my-account">
+          <Menu.Item key="/account" icon={<UserOutlined />}>
+            <Link href="/account">
               <a>My Account</a>
             </Link>
           </Menu.Item>
         </Menu>
         <div style={{ padding: '.5rem' }}>
-          <EthersContext.Consumer>
-            {({ status, address, connect, disconnect }) => {
-              console.log('consumer init', { status });
-              // if (status === Status.DISCONNECTED) {
-              //   connect(true);
-              // }
-              let cardTitle, cardBody;
-              switch (status) {
-                case Status.DISCONNECTED:
-                  cardTitle = 'Disconnected';
-                  cardBody = <MetamaskConnect label="Connect now" />;
-                  break;
-                case Status.CONNECTED:
-                  cardTitle = 'Connceted';
-                  cardBody = (
-                    <div>
-                      your address:
-                      <br />
-                      {address ? <Address>{address}</Address> : 'unknown address'}
-                    </div>
-                  );
-                  break;
-                case Status.FAILED:
-                  cardTitle = 'Failed';
-                  cardBody = 'Failed to connect. Make sure you have Metamask installed';
-                  break;
-              }
-              return (
-                <Card size="small" title={cardTitle}>
-                  {cardBody}
-                </Card>
-              );
-            }}
-          </EthersContext.Consumer>
+          <MetamaskStatus />
         </div>
       </Sider>
-      <Content>{children}</Content>
+      <Content>
+        <PageHeader title={title} extra={headExtra} />
+        {children}
+      </Content>
     </Layout>
   );
 }

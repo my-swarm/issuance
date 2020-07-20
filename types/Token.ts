@@ -1,15 +1,17 @@
 import { Uuid } from '.';
 
-export enum TransferRestrictionTypes {
+export type EthereumAddress = string;
+
+export enum TransferRestrictionsTypes {
   None,
   Whitelist,
   Graylist,
 }
 
-export const tranferRestrictionTypes = {
-  [TransferRestrictionTypes.None]: 'None',
-  [TransferRestrictionTypes.Whitelist]: 'Whitelist',
-  [TransferRestrictionTypes.Graylist]: 'Graylist',
+export const transferRestrictionsTypes: { [key: number]: string } = {
+  [TransferRestrictionsTypes.None]: 'None',
+  [TransferRestrictionsTypes.Whitelist]: 'Whitelist',
+  [TransferRestrictionsTypes.Graylist]: 'Graylist',
 };
 
 export interface Token {
@@ -20,5 +22,10 @@ export interface Token {
   initialSupply: number;
   image?: string; // todo: change to better type?
   description: string;
-  transferRestrictionType: TransferRestrictionTypes;
+  transferRestrictionsType: TransferRestrictionsTypes;
+}
+
+export interface StoredToken {
+  token: Token;
+  address: EthereumAddress;
 }

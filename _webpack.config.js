@@ -7,7 +7,8 @@ module.exports = {
       '@help': path.resolve(__dirname, 'help'),
       '@lib': path.resolve(__dirname, 'lib'),
       '@const': path.resolve(__dirname, 'const'),
-      '@types': path.resolve(__dirname, 'const'),
+      '@types': path.resolve(__dirname, 'types'),
+      '@app': path.resolve(__dirname, 'app'),
     },
   },
 };

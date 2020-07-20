@@ -1,15 +1,16 @@
 import { IStorageAdapter } from './IStorageAdapter';
 import { AppContext } from '@types';
 
-class Storage {
+export class Storage {
   private adapter: IStorageAdapter;
 
   constructor(adapter: IStorageAdapter) {
     this.adapter = adapter;
   }
 
-  public store(data: AppContext) {
-    return this.adapter.store(data);
+  public save(data: AppContext) {
+    console.log('storge save', data);
+    return this.adapter.save(data);
   }
 
   public load(): AppContext {

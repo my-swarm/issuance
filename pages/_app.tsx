@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
 import '../styles/index.scss';
-import { EthersProvider } from '../context/EthersContext';
+import { EthersProvider, StateProvider } from '@app';
 import { MetamaskNotReadyError } from '@lib/Metamask';
+import { AppState } from '../types';
+import { reducer } from '@app';
+import { StateStorageSync } from '@components';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -17,9 +20,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     };
   });
   return (
-    <EthersProvider>
-      <Component {...pageProps} />
-    </EthersProvider>
+    <StateProvider reducer={reducer}>
+      <EthersProvider>
+        <Component {...pageProps} />
+        <StateStorageSync />
+      </EthersProvider>
+    </StateProvider>
   );
 }
 

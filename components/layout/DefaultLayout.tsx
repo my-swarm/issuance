@@ -5,7 +5,7 @@ import { Logo, Address, MetamaskConnect, MetamaskStatus } from '..';
 import Link from 'next/link';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { EthersContext, Status } from '../../context/EthersContext';
+import { EthersContext, Status } from '../../app/EthersContext';
 import { PageProps } from '../../types';
 
 const { SubMenu } = Menu;

@@ -1,4 +1,4 @@
-import { EthersContext, Status } from '../../context/EthersContext';
+import { EthersContext, Status } from '../../app/EthersContext';
 import { MetamaskConnect } from './MetamaskConnect';
 import { Address } from '../utility';
 import { Card } from 'antd';

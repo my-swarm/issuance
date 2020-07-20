@@ -1,4 +1,4 @@
-import { Token, TransferRestrictionTypes } from '../types';
+import { Token, TransferRestrictionsTypes } from '../types';
 import { v4 as uuid } from 'uuid';
 
 export const dummyTokens: Token[] = [
@@ -9,7 +9,7 @@ export const dummyTokens: Token[] = [
     decimals: 18,
     initialSupply: 1000,
     description: 'Testing dummy token',
-    transferRestrictionType: TransferRestrictionTypes.None,
+    transferRestrictionsType: TransferRestrictionsTypes.None,
   },
   {
     id: uuid(),
@@ -18,6 +18,6 @@ export const dummyTokens: Token[] = [
     decimals: 18,
     initialSupply: 10000000,
     description: 'Swarm network utility token',
-    transferRestrictionType: TransferRestrictionTypes.Whitelist,
+    transferRestrictionsType: TransferRestrictionsTypes.Whitelist,
   },
 ];

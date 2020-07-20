@@ -11,6 +11,7 @@ module.exports = {
     config.resolve.alias['@lib'] = path.resolve(__dirname, 'lib');
     config.resolve.alias['@const'] = path.resolve(__dirname, 'const');
     config.resolve.alias['@types'] = path.resolve(__dirname, 'types');
+    config.resolve.alias['@app'] = path.resolve(__dirname, 'app');
 
     return config;
   },

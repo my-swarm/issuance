@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { Table, Button, Drawer, Space } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
-import { dummyTokens as tokens } from '../dummy-data/dummy-tokens';
+import React, { useEffect, useState } from 'react';
+import { Table, Button, Drawer, Space, Popconfirm } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { DefaultLayout } from '@components';
-import Link from 'next/link';
-import { Token, Uuid } from '../types';
-import { TokenForm } from '../components/form';
+import { Token, Uuid } from '@types';
+import { TokenForm } from '@components';
+import { useStateValue } from '@app';
+import BaseError from '../lib/BaseError';
+import { transferRestrictionsTypes } from '../types';
 
 enum EditMode {
   None,
@@ -14,7 +15,6 @@ enum EditMode {
 }
 
 export default function Tokens() {
-  const dataSource = tokens.map((token, key) => ({ key, ...token }));
   const columns = [
     {
       title: 'Token name',
@@ -27,13 +27,26 @@ export default function Tokens() {
       key: 'symbol',
     },
     {
+      title: 'Transfer restrictions',
+      dataIndex: 'transferRestrictionsType',
+      key: 'transferRestrictionsType',
+      render: (text: string, token: Token) => {
+        return transferRestrictionsTypes[token.transferRestrictionsType];
+      },
+    },
+    {
       title: 'Action',
       key: 'action',
-      render: (text: string, record: Token) => (
+      render: (text: string, token: Token) => (
         <Space size="middle">
-          <Button size="small" onClick={() => handleEdit(record.id)} icon={<EditOutlined />}>
+          <Button size="small" onClick={() => handleEdit(token.id)} icon={<EditOutlined />}>
             Edit
           </Button>
+          <Popconfirm title={`Are you sure you want to delete '${token.name}`} onConfirm={() => handleDelete(token.id)}>
+            <Button size="small" icon={<DeleteOutlined />}>
+              Delete
+            </Button>
+          </Popconfirm>
         </Space>
       ),
     },
@@ -41,6 +54,10 @@ export default function Tokens() {
 
   const [id, setId] = useState<Uuid>();
   const [editMode, setEditMode] = useState<EditMode>(EditMode.None);
+  const [state, dispatch] = useStateValue();
+  const { tokens } = state;
+
+  const dataSource = tokens.map((token, key) => ({ key, ...token }));
 
   const getCurrentToken = () => {
     return tokens.find((token) => token.id === id);
@@ -66,6 +83,24 @@ export default function Tokens() {
     setEditMode(EditMode.None);
   };
 
+  const handleSubmit = (token: Token) => {
+    switch (editMode) {
+      case EditMode.Add:
+        dispatch({ type: 'addToken', token });
+        break;
+      case EditMode.Edit:
+        dispatch({ type: 'updateToken', token: { ...token, id } });
+        break;
+      default:
+        throw new BaseError('Cannot submit when not editing');
+    }
+    handleCancelEdit();
+  };
+
+  const handleDelete = (id: number) => {
+    dispatch({ type: 'deleteToken', id });
+  };
+
   const renderHeadExtra = () => (
     <Button key="1" type="primary" onClick={() => handleEdit()}>
       Add token
@@ -81,7 +116,7 @@ export default function Tokens() {
         closable={true}
         onClose={() => handleCancelEdit()}
       >
-        <TokenForm onCancel={() => handleCancelEdit()} formData={getCurrentToken()} />
+        <TokenForm onSubmit={handleSubmit} onCancel={() => handleCancelEdit()} formData={getCurrentToken()} />
       </Drawer>
     </DefaultLayout>
   );

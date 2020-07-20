@@ -3,14 +3,15 @@ import { Form, Input, Button, Checkbox, Popover, Space, Radio } from 'antd';
 import { QuestionCircleTwoTone as HelpIcon } from '@ant-design/icons/lib';
 import * as help from '@help';
 import { FORM } from '@const';
-import { Token, TransferRestrictionTypes } from '../../types';
+import { Token, TransferRestrictionsTypes } from '../../types';
 
 interface EditFormProps {
   onCancel: () => void;
+  onSubmit: () => void;
   formData?: Token;
 }
 
-export function TokenForm({ onCancel, formData }: EditFormProps) {
+export function TokenForm({ onCancel, onSubmit, formData }: EditFormProps) {
   const rules = {
     name: [
       {
@@ -28,6 +29,12 @@ export function TokenForm({ onCancel, formData }: EditFormProps) {
         message: `Enter 3-5 uppercase token symbol`,
       },
     ],
+    transferRestrictionsType: [
+      {
+        required: true,
+        message: 'Select transfer restriction type',
+      },
+    ],
   };
 
   const [form] = Form.useForm();
@@ -35,6 +42,10 @@ export function TokenForm({ onCancel, formData }: EditFormProps) {
   const handleCancel = () => {
     form.resetFields();
     onCancel();
+  };
+
+  const handleAdd = (values: Token) => {
+    onSubmit(values);
   };
 
   useEffect(() => {
@@ -46,7 +57,7 @@ export function TokenForm({ onCancel, formData }: EditFormProps) {
   }, [formData]);
 
   return (
-    <Form form={form} {...FORM.layout} onReset={() => handleCancel()}>
+    <Form form={form} {...FORM.layout} onFinish={handleAdd} onReset={handleCancel}>
       <h3>Token basics</h3>
       <Form.Item name="name" label="Token name" rules={rules.name}>
         <Input />
@@ -61,23 +72,23 @@ export function TokenForm({ onCancel, formData }: EditFormProps) {
           <HelpIcon />
         </Popover>
       </p>
-      <Form.Item>
-        <Radio.Group name="tranferRestrictionType">
+      <Form.Item name="transferRestrictionsType" rules={rules.transferRestrictionsType}>
+        <Radio.Group>
           <div>
-            <Radio value={TransferRestrictionTypes.None}>No transfer restrictions</Radio>
+            <Radio value={TransferRestrictionsTypes.None}>No transfer restrictions</Radio>
           </div>
           <div>
-            <Radio value={TransferRestrictionTypes.Whitelist}>Whitelist</Radio>
+            <Radio value={TransferRestrictionsTypes.Whitelist}>Whitelist</Radio>
           </div>
           <div>
-            <Radio value={TransferRestrictionTypes.Graylist}>Graylist</Radio>
+            <Radio value={TransferRestrictionsTypes.Graylist}>Graylist</Radio>
           </div>
         </Radio.Group>
       </Form.Item>
       <Form.Item {...FORM.tailLayout}>
         <Space>
           <Button type="primary" htmlType="submit">
-            Create Token
+            {formData ? 'Save Token' : 'Create Token'}
           </Button>
           <Button htmlType="reset">Cancel</Button>
         </Space>

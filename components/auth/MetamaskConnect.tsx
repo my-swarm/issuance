@@ -2,7 +2,7 @@ import React from 'react';
 import { ethers } from 'ethers';
 import { Button } from 'antd';
 import { Metamask } from '../../lib/Metamask';
-import { EthersContext } from '../../context/EthersContext';
+import { EthersContext } from '../../app/EthersContext';
 
 interface MetamaskConnectProps {
   label: string;

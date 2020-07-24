@@ -1,42 +1,29 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Button, Checkbox, Popover, Space, Radio } from 'antd';
-import { QuestionCircleTwoTone as HelpIcon } from '@ant-design/icons/lib';
-import * as help from '@help';
+import { Form, Input, InputNumber, Button, Checkbox, Popover, Space, Radio, Upload } from 'antd';
 import { FORM } from '@const';
-import { Token, TransferRestrictionsTypes } from '../../types';
+import { Token, TransferRestrictionsTypes } from '@types';
+import { tokenFormRules as rules } from './rules';
+import { Help, HelpLabel, SingleFileUpload } from '@components';
+import { MultipleFilesUpload } from './MultipleFilesUpload';
 
 interface EditFormProps {
   onCancel: () => void;
-  onSubmit: () => void;
+  onSubmit: (token: Token) => void;
   formData?: Token;
 }
 
-export function TokenForm({ onCancel, onSubmit, formData }: EditFormProps) {
-  const rules = {
-    name: [
-      {
-        required: true,
-        message: 'Enter the token name',
-      },
-    ],
-    symbol: [
-      {
-        required: true,
-        message: 'Enter the token symbol',
-      },
-      {
-        pattern: /[A-Z0-9]{3,5}/,
-        message: `Enter 3-5 uppercase token symbol`,
-      },
-    ],
-    transferRestrictionsType: [
-      {
-        required: true,
-        message: 'Select transfer restriction type',
-      },
-    ],
-  };
+const sampleFormData: Partial<Token> = {
+  name: 'New Token',
+  symbol: 'NWT',
+  decimals: 18,
+  description: 'Completely new token',
+  initialSupply: 1000000,
+  transferRestrictionsType: TransferRestrictionsTypes.Whitelist,
+  allowAccountFreeze: true,
+  allowBurn: true,
+};
 
+export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: EditFormProps): React.ReactElement {
   const [form] = Form.useForm();
 
   const handleCancel = () => {
@@ -44,8 +31,9 @@ export function TokenForm({ onCancel, onSubmit, formData }: EditFormProps) {
     onCancel();
   };
 
-  const handleAdd = (values: Token) => {
-    onSubmit(values);
+  const handleSubmit = (token: Token) => {
+    console.log(token);
+    onSubmit(token);
   };
 
   useEffect(() => {
@@ -57,21 +45,35 @@ export function TokenForm({ onCancel, onSubmit, formData }: EditFormProps) {
   }, [formData]);
 
   return (
-    <Form form={form} {...FORM.layout} onFinish={handleAdd} onReset={handleCancel}>
+    <Form form={form} onFinish={handleSubmit} onReset={handleCancel} layout="vertical">
       <h3>Token basics</h3>
       <Form.Item name="name" label="Token name" rules={rules.name}>
-        <Input />
+        <Input placeholder="Your token name" />
       </Form.Item>
       <Form.Item name="symbol" label="Symbol" rules={rules.symbol}>
-        <Input />
+        <Input placeholder="XXX" />
+      </Form.Item>
+      <Form.Item name="decimals" label="Decimals" rules={rules.decimals}>
+        <InputNumber min={0} max={36} placeholder="18" />
+      </Form.Item>
+      <Form.Item name="initialSupply" label="Initial Supply" rules={rules.decimals}>
+        <InputNumber min={0} placeholder="Gazillion" />
+      </Form.Item>
+      <Form.Item name="image" label="Image/logo" rules={rules.image}>
+        <SingleFileUpload image />
+      </Form.Item>
+      <Form.Item name="description" label="Token description">
+        <Input.TextArea rows={5} />
       </Form.Item>
       <h3>Tranfer restrictions</h3>
-      <p>
-        Select how do you wanna restrict token transfers{' '}
-        <Popover title={help.transferRestrictions.title} content={help.transferRestrictions.content} placement="right">
-          <HelpIcon />
-        </Popover>
-      </p>
+
+      <div style={{ marginBottom: '1rem' }}>
+        <Space>
+          Select how do you wanna restrict token transfers
+          <Help name="transferRestrictions" />
+        </Space>
+      </div>
+
       <Form.Item name="transferRestrictionsType" rules={rules.transferRestrictionsType}>
         <Radio.Group>
           <div>
@@ -85,7 +87,64 @@ export function TokenForm({ onCancel, onSubmit, formData }: EditFormProps) {
           </div>
         </Radio.Group>
       </Form.Item>
-      <Form.Item {...FORM.tailLayout}>
+
+      <h3>Token features</h3>
+      <Form.Item>
+        <Form.Item name="allowAccountFreeze" valuePropName="checked" className="no-margin">
+          <Checkbox>
+            <HelpLabel name="allowAccountFreeze" />
+          </Checkbox>
+        </Form.Item>
+        <Form.Item name="allowContractFreeze" valuePropName="checked" className="no-margin">
+          <Checkbox>
+            <HelpLabel name="allowContractFreeze" />
+          </Checkbox>
+        </Form.Item>
+        <Form.Item name="allowForceTransfer" valuePropName="checked" className="no-margin">
+          <Checkbox>
+            <HelpLabel name="allowForceTransfer" />
+          </Checkbox>
+        </Form.Item>
+        <Form.Item name="allowBurn" valuePropName="checked" className="no-margin">
+          <Checkbox>
+            <HelpLabel name="allowBurn" />
+          </Checkbox>
+        </Form.Item>
+        <Form.Item name="allowMint" valuePropName="checked" className="no-margin">
+          <Checkbox>
+            <HelpLabel name="allowMint" />
+          </Checkbox>
+        </Form.Item>
+      </Form.Item>
+
+      <h3>Asset details</h3>
+      <p>Define your asset, it's value and other information in detail.</p>
+
+      <Form.Item name="assetName" label="Asset Name">
+        <Input />
+      </Form.Item>
+
+      <Form.Item name="assetNetValue" label="Net Asset Value (USD)">
+        <Input />
+      </Form.Item>
+
+      <Form.Item name="assetNavDocument" label={<HelpLabel name="assetNavDocument" />}>
+        <SingleFileUpload />
+      </Form.Item>
+
+      <Form.Item name="assetDescription" label={<HelpLabel name="assetDescription" />}>
+        <Input.TextArea />
+      </Form.Item>
+
+      <Form.Item name="assetImage" label="Asset Image">
+        <SingleFileUpload image />
+      </Form.Item>
+
+      <Form.Item name="assetLegalDocuments" label="Asset Legal Documents">
+        <MultipleFilesUpload />
+      </Form.Item>
+
+      <Form.Item>
         <Space>
           <Button type="primary" htmlType="submit">
             {formData ? 'Save Token' : 'Create Token'}

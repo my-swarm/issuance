@@ -5,7 +5,7 @@ import { useStateValue } from '@app';
 import { useStorage } from '../app';
 import _ from 'lodash';
 
-export function StateStorageSync(): React.ReactNode {
+export function StateStorageSync(): React.ReactElement {
   const [state, dispatch] = useStateValue();
   const { isLoaded, isSaving, isSynced, version, ...data } = state;
 

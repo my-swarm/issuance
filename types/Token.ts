@@ -1,4 +1,5 @@
-import { Uuid } from '.';
+import { Uuid, AppFile, AppImage } from '.';
+import { UploadFile } from 'antd/lib/upload/interface';
 
 export type EthereumAddress = string;
 
@@ -20,9 +21,22 @@ export interface Token {
   symbol: string;
   decimals: number;
   initialSupply: number;
-  image?: string; // todo: change to better type?
+  image?: AppImage;
   description: string;
   transferRestrictionsType: TransferRestrictionsTypes;
+
+  allowAccountFreeze: boolean;
+  allowContractFreeze: boolean;
+  allowForceTransfer: boolean;
+  allowBurn: boolean;
+  allowMint: boolean;
+
+  assetName: string;
+  assetNetValue: string;
+  navSupportingDocument: AppFile;
+  assetDescription: string;
+  assetImage: AppImage;
+  assetLegalDocuments: AppFile[];
 }
 
 export interface StoredToken {

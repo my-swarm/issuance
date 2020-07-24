@@ -1,21 +1,46 @@
 @import '~antd/dist/antd.css';
 
-.c-logo {
-	padding: 1rem 1.5rem;
-}
-
 .ant-layout-content {
 	padding: 1rem 1.5rem;
 }
 
+.ant-popover {
+  width: 24rem;
+}
+
+.ant-form-item.no-margin {
+  margin-bottom: 0;
+}
+
+.ant-upload.ant-upload-drag {
+  .ant-upload {
+    padding: 12px 0;
+  }
+
+  p.ant-upload-drag-icon {
+    margin-bottom: 0;
+
+    .anticon {
+      font-size: 32px;
+    }
+  }
+  p.ant-upload-hint {
+    font-size: 12px;
+  }
+}
+
+.c-logo {
+  padding: 1rem 1.5rem;
+}
+
 
 .c-metamask-connect-button {
-	img {
-		width: 20px;
-		position: relative;
-		left: -4px;
-		top: -2px;
-	}
+  img {
+    width: 20px;
+    position: relative;
+    left: -4px;
+    top: -2px;
+  }
 }
 
 .c-address {
@@ -29,4 +54,8 @@
   position: fixed;
   left: 1rem;
   bottom: 1rem;
+}
+
+.c-help {
+  cursor: help;
 }

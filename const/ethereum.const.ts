@@ -1,0 +1,8 @@
+export enum NETWORK_TYPES {
+  UNKNOWN,
+  MAIN,
+  MORDEN,
+  ROPSTEN,
+  RINKEBY,
+  KOVAN = 42,
+}

@@ -1,6 +1,4 @@
-import { Uuid, AppFile, AppImage } from '.';
-
-export type EthereumAddress = string;
+import { Uuid, AppFile, AppImage, EthereumAddress } from '.';
 
 export enum TransferRestrictionsTypes {
   None,

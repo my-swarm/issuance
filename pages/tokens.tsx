@@ -29,15 +29,15 @@ export default function Tokens() {
       title: 'Transfer restrictions',
       dataIndex: 'transferRestrictionsType',
       key: 'transferRestrictionsType',
-      render: (text: string, token: Token) => {
-        return transferRestrictionsTypes[token.transferRestrictionsType];
+      render: (type) => {
+        return transferRestrictionsTypes[type];
       },
     },
     {
       title: 'Action',
       key: 'action',
       render: (text: string, token: Token) => (
-        <Space size="middle">
+        <Space size="small">
           <Button size="small" onClick={() => handleEdit(token.id)} icon={<EditOutlined />}>
             Edit
           </Button>
@@ -105,6 +105,7 @@ export default function Tokens() {
       Add token
     </Button>
   );
+
   return (
     <DefaultLayout title="My Tokens" headExtra={renderHeadExtra()} headTableAligned={true}>
       <Table columns={columns} dataSource={dataSource} />

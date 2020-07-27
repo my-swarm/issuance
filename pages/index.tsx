@@ -1,6 +1,5 @@
 import React from 'react';
-import { MetamaskConnect } from '@components';
-import { DefaultLayout } from '@components';
+import { DefaultLayout, MetamaskConnect } from '@components';
 
 interface IndexProps {
   title?: string;

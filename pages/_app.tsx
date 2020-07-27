@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
 import '../styles/index.scss';
-import { EthersProvider, StateProvider } from '@app';
-import { MetamaskNotReadyError } from '@lib/Metamask';
-import { AppState } from '../types';
-import { reducer } from '@app';
+import { EthersProvider, StateProvider, reducer } from '@app';
+import { MetamaskNotReadyError } from '@lib';
 import { StateStorageSync } from '@components';
 
 function MyApp({ Component, pageProps }: AppProps) {

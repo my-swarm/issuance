@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Drawer, Space, Popconfirm } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { DefaultLayout } from '@components';
-import { Token, Uuid } from '@types';
-import { TokenForm } from '@components';
+
 import { useStateValue } from '@app';
-import BaseError from '../lib/BaseError';
-import { transferRestrictionsTypes } from '../types';
+import { BaseError } from '@lib';
+import { DefaultLayout, TokenForm } from '@components';
+import { Token, Uuid, transferRestrictionsTypes } from '@types';
 
 enum EditMode {
   None,
@@ -57,10 +56,10 @@ export default function Tokens() {
   const [state, dispatch] = useStateValue();
   const { tokens } = state;
 
-  const dataSource = tokens.map((token, key) => ({ key, ...token }));
+  const dataSource = tokens.map((token: Token, key: number) => ({ key, ...token }));
 
   const getCurrentToken = () => {
-    return tokens.find((token) => token.id === id);
+    return tokens.find((token: Token) => token.id === id);
   };
 
   const getEditTitle = () => {
@@ -97,7 +96,7 @@ export default function Tokens() {
     handleCancelEdit();
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: Uuid) => {
     dispatch({ type: 'deleteToken', id });
   };
 
@@ -107,7 +106,7 @@ export default function Tokens() {
     </Button>
   );
   return (
-    <DefaultLayout title="My Tokens" headExtra={renderHeadExtra()}>
+    <DefaultLayout title="My Tokens" headExtra={renderHeadExtra()} headTableAligned={true}>
       <Table columns={columns} dataSource={dataSource} />
       <Drawer
         title={getEditTitle()}

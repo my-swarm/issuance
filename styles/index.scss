@@ -29,6 +29,13 @@
   }
 }
 
+.ant-page-header {
+  padding-left: 0;
+  &.table-aligned {
+    padding-left: 16px;
+  }
+}
+
 .c-logo {
   padding: 1rem 1.5rem;
 }

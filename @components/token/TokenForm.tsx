@@ -3,8 +3,8 @@ import { Form, Input, InputNumber, Button, Checkbox, Popover, Space, Radio, Uplo
 import { Store } from 'rc-field-form/lib/interface';
 
 import { Token, TransferRestrictionsTypes } from '@types';
-import { tokenFormRules as rules } from './rules';
-import { Help, HelpLabel, SingleFileUpload, MultipleFilesUpload } from '@components';
+import { tokenFormRules as rules } from './tokenFormRules';
+import { Help, HelpLabel, SingleFileUpload, MultipleFilesUpload } from '@components/index';
 
 interface EditFormProps {
   onCancel: () => void;

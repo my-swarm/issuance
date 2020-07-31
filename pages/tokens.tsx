@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Drawer, Space, Popconfirm } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, RocketOutlined } from '@ant-design/icons';
 
 import { useStateValue } from '@app';
 import { BaseError } from '@lib';
-import { DefaultLayout, TokenForm } from '@components';
+import { DefaultLayout, TokenForm, TokenDeploy } from '@components';
 import { Token, Uuid, transferRestrictionsTypes } from '@types';
 
 enum EditMode {
   None,
   Add,
   Edit,
+  Deploy,
+  Manage,
 }
 
 export default function Tokens() {
@@ -40,6 +42,9 @@ export default function Tokens() {
         <Space size="small">
           <Button size="small" onClick={() => handleEdit(token.id)} icon={<EditOutlined />}>
             Edit
+          </Button>
+          <Button size="small" onClick={() => handleDeploy(token.id)} icon={<RocketOutlined />}>
+            Deploy
           </Button>
           <Popconfirm title={`Are you sure you want to delete '${token.name}`} onConfirm={() => handleDelete(token.id)}>
             <Button size="small" icon={<DeleteOutlined />}>
@@ -75,6 +80,11 @@ export default function Tokens() {
   const handleEdit = (id?: Uuid) => {
     setId(id);
     setEditMode(id ? EditMode.Edit : EditMode.Add);
+  };
+
+  const handleDeploy = (id: Uuid) => {
+    setId(id);
+    setEditMode(EditMode.Deploy);
   };
 
   const handleCancelEdit = () => {
@@ -116,7 +126,11 @@ export default function Tokens() {
         closable={true}
         onClose={() => handleCancelEdit()}
       >
-        <TokenForm onSubmit={handleSubmit} onCancel={() => handleCancelEdit()} formData={getCurrentToken()} />
+        {editMode === EditMode.Add || editMode === EditMode.Edit ? (
+          <TokenForm onSubmit={handleSubmit} onCancel={() => handleCancelEdit()} formData={getCurrentToken()} />
+        ) : editMode === EditMode.Deploy ? (
+          <TokenDeploy id={getCurrentToken().id} />
+        ) : null}
       </Drawer>
     </DefaultLayout>
   );

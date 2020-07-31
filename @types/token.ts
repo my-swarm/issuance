@@ -12,8 +12,23 @@ export const transferRestrictionsTypes: { [key: number]: string } = {
   [TransferRestrictionsTypes.Graylist]: 'Graylist',
 };
 
+export enum TokenState {
+  Created,
+  Deployed,
+  Fundraising,
+  Deleted,
+}
+
+export const tokenStates: { [key: number]: string } = {
+  [TokenState.Created]: 'Created',
+  [TokenState.Deployed]: 'Deployed',
+  [TokenState.Fundraising]: 'Fundraising',
+  [TokenState.Deleted]: 'Deleted',
+};
+
 export interface Token {
   id: Uuid;
+  state: TokenState;
   name: string;
   symbol: string;
   decimals: number;

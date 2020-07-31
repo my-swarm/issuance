@@ -1,0 +1,329 @@
+{
+  "contractName": "Asset Registry",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "src20",
+          "type": "address"
+        },
+        {
+          "name": "kyaHash",
+          "type": "bytes32"
+        },
+        {
+          "name": "kyaUrl",
+          "type": "string"
+        },
+        {
+          "name": "netAssetValueUSD",
+          "type": "uint256"
+        }
+      ],
+      "name": "addAsset",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "src20",
+          "type": "address"
+        }
+      ],
+      "name": "getNetAssetValueUSD",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "_src20Factory",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "src20",
+          "type": "address"
+        },
+        {
+          "name": "netAssetValueUSD",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateNetAssetValueUSD",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "assetList",
+      "outputs": [
+        {
+          "name": "kyaHash",
+          "type": "bytes32"
+        },
+        {
+          "name": "kyaUrl",
+          "type": "string"
+        },
+        {
+          "name": "netAssetValueUSD",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "src20",
+          "type": "address"
+        },
+        {
+          "name": "kyaHash",
+          "type": "bytes32"
+        },
+        {
+          "name": "kyaUrl",
+          "type": "string"
+        }
+      ],
+      "name": "updateKYA",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "src20",
+          "type": "address"
+        }
+      ],
+      "name": "getKYA",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "src20Factory",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "src20",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "kyaHash",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "kyaUrl",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "AssetValueUSD",
+          "type": "uint256"
+        }
+      ],
+      "name": "AssetAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "src20",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "AssetValueUSD",
+          "type": "uint256"
+        }
+      ],
+      "name": "AssetNVAUSDUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "src20",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "kyaHash",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "kyaUrl",
+          "type": "string"
+        }
+      ],
+      "name": "AssetKYAUpdated",
+      "type": "event"
+    }
+  ],
+  "bytecode": null,
+  "networks": {
+    "1": {
+      "address": "0x30b32447137DddF089b327085D2026eaF2eaF65A"
+    },
+    "3": {
+      "address": "0x54F9b26eDc46bD4BEAF70aB2771B7Ec178241932"
+    },
+    "4": {
+      "address": "0xdC31EDEC3668AE135f1bD45Ef531E5d4d3ea6804"
+    },
+    "42": {
+      "address": null
+    }
+  }
+}

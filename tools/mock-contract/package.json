@@ -1,0 +1,12 @@
+{
+  "name": "mock-contract",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "truffle": "^5.1.37"
+  },
+  "scripts": {
+    "compile": "truffle compile && cp build/contracts/*.json ../../tests/resources/contracts"
+  }
+}

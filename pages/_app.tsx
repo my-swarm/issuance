@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { AppProps } from 'next/app';
 import '../styles/index.scss';
 import { EthersProvider, StateProvider, reducer } from '@app';
 import { MetamaskNotReadyError } from '@lib';
 import { StateStorageSync } from '@components';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps): ReactElement {
   useEffect(() => {
     window.onerror = function (msg, url, line, col, error) {
       if (error instanceof MetamaskNotReadyError) {

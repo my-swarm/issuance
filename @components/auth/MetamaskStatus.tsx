@@ -14,7 +14,7 @@ export function MetamaskStatus() {
       cardBody = <MetamaskConnect label="Connect now" />;
       break;
     case EthersStatus.CONNECTED:
-      cardTitle = 'Connceted';
+      cardTitle = 'Connected';
       cardBody = (
         <div>
           {address ? <Address>{address}</Address> : 'unknown address'}

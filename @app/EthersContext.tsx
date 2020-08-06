@@ -1,7 +1,8 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { Web3Provider } from '@ethersproject/providers';
 import { ethers, Signer } from 'ethers';
 import { Metamask } from '@lib';
+import { EthereumNetwork } from '@types';
 
 export enum EthersStatus {
   DISCONNECTED,
@@ -14,15 +15,17 @@ interface ContextProps {
   provider: Web3Provider | undefined;
   signer: Signer | undefined;
   address: string | undefined;
+  networkId: EthereumNetwork;
   connect: (silent: boolean) => void;
   disconnect: () => void;
 }
 
 export const EthersContext = React.createContext<Partial<ContextProps>>({});
 
-export function EthersProvider({ children }: { children: ReactNode }) {
+export function EthersProvider({ children }: { children: ReactNode }): ReactElement {
   const [provider, setProvider] = useState<Web3Provider | undefined>(undefined);
   const [signer, setSigner] = useState<Signer>();
+  const [networkId, setNetworkId] = useState<Signer>();
   const [status, setStatus] = useState<EthersStatus>(EthersStatus.DISCONNECTED);
   const [address, setAddress] = useState<string>();
 
@@ -31,6 +34,7 @@ export function EthersProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const updateAddress = async () => {
       if (provider) {
         const accounts = await provider.listAccounts();
@@ -46,7 +50,7 @@ export function EthersProvider({ children }: { children: ReactNode }) {
     metamask = new Metamask(window['ethereum']);
   }
 
-  async function connect(silent: boolean) {
+  async function connect(silent: boolean): Promise<void> {
     if (!metamask) {
       return;
     }
@@ -55,7 +59,10 @@ export function EthersProvider({ children }: { children: ReactNode }) {
       const _provider = new ethers.providers.Web3Provider(ethereum);
       setProvider(_provider);
       if (_provider) {
-        setSigner(_provider.getSigner());
+        const signer = _provider.getSigner();
+        setSigner(signer);
+        const networkId = (await this._signer.getChainId()) as EthereumNetwork;
+        setNetworkId(networkId);
         const accounts = await _provider.listAccounts();
         if (accounts && accounts.length > 0) {
           setAddress(accounts[0]);
@@ -84,6 +91,7 @@ export function EthersProvider({ children }: { children: ReactNode }) {
         signer,
         status,
         address,
+        networkId,
         connect,
         disconnect,
       }}

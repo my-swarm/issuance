@@ -1,11 +1,12 @@
 import React, { ReactNode, useState } from 'react';
-import { Button, Layout, PageHeader } from 'antd';
+import { Button, Layout, PageHeader, Modal } from 'antd';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import { PageProps } from '@types';
 import { Logo, MetamaskStatus } from '@components';
 import { MainMenu } from '@components/layout/MainMenu';
+import { useStateValue } from '@app';
 
 const { Content, Sider } = Layout;
 
@@ -16,6 +17,7 @@ interface DefaultLayoutProps extends PageProps {
 
 export function DefaultLayout({ title, headExtra, children, headTableAligned = false }: DefaultLayoutProps) {
   const [siderCollapsed, setSiderCollapsed] = useState(false);
+  const [{ error }, dispatch] = useStateValue();
 
   function renderLogoutLink(disconnect: () => void) {
     return (
@@ -46,6 +48,17 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
         />
         {children}
       </Content>
+      {error && (
+        <Modal
+          title={error.message}
+          visible={true}
+          onOk={() => dispatch({ type: 'hideError' })}
+          destroyOnClose={true}
+          cancelText={null}
+        >
+          {typeof error.description === 'string' ? <p>{error.description}</p> : error.description}
+        </Modal>
+      )}
     </Layout>
   );
 }

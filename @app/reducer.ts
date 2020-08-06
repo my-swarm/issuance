@@ -51,5 +51,17 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
         isSaving: false,
         isSynced: true,
       };
+    case 'showError': {
+      return {
+        ...state,
+        error: action.error,
+      };
+    }
+    case 'hideError': {
+      return {
+        ...state,
+        error: undefined,
+      };
+    }
   }
 };

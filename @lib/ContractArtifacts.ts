@@ -6,18 +6,18 @@ interface ContractArtifactsNetworks {
   };
 }
 
-export interface ContractArtifacts {
+export interface RawContractArtifacts {
   abi: EthereumAbi;
-  bytecode: string;
+  bytecode: EthereumBytecode;
   networks: ContractArtifactsNetworks;
 }
 
-export class Contract {
+export class ContractArtifacts {
   private _abi: EthereumAbi;
   private _bytecode: EthereumBytecode;
   private _address: EthereumAddress;
 
-  constructor(artifacts: ContractArtifacts, networkId: EthereumNetwork) {
+  constructor(artifacts: RawContractArtifacts, networkId: EthereumNetwork) {
     this._abi = artifacts.abi;
     this._bytecode = artifacts.bytecode;
     if (artifacts.networks && artifacts.networks[networkId]) {

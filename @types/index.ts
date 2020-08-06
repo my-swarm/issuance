@@ -5,3 +5,5 @@ export * from './Page';
 export * from './app';
 export * from './AppFile';
 export * from './actions';
+export * from './deployer';
+export * from './transaction';

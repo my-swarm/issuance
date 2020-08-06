@@ -68,12 +68,12 @@ export default function Tokens() {
   };
 
   const getEditTitle = () => {
-    switch (editMode) {
-      case EditMode.Add:
-        return 'Create new token';
-      case EditMode.Edit:
-        const currentToken = getCurrentToken();
-        return `Edit token '${currentToken ? currentToken.name : '??'}'`;
+    if (editMode === EditMode.Add) {
+      return 'Create new token';
+    }
+    if (editMode === EditMode.Edit) {
+      const currentToken = getCurrentToken();
+      return `Edit token '${currentToken ? currentToken.name : '??'}'`;
     }
   };
 

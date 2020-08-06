@@ -1,14 +1,25 @@
-import React, { ReactElement, createContext, useContext, useReducer, Reducer, ReactNode, useEffect } from 'react';
+import React, {
+  ReactElement,
+  createContext,
+  useContext,
+  useReducer,
+  Reducer,
+  ReactNode,
+  useEffect,
+  Dispatch,
+} from 'react';
 
 import { Action, AppState } from '@types';
 import { useStorage } from '@app';
 
-export const StateContext = createContext({});
+export const StateContext = createContext(undefined);
 
 interface StateProviderProps {
   reducer: Reducer<AppState, Action>;
   children: ReactNode;
 }
+
+type StateValue = [AppState, Dispatch<any>];
 
 export const StateProvider = ({ reducer, children }: StateProviderProps): ReactElement => {
   const initialState: AppState = {
@@ -22,7 +33,7 @@ export const StateProvider = ({ reducer, children }: StateProviderProps): ReactE
 
   const storage = useStorage();
 
-  const [appState, dispatch] = useReducer(reducer, initialState);
+  const [appState, dispatch]: StateValue = useReducer(reducer, initialState);
   useEffect(() => {
     storage.load().then((storedState) => {
       if (storedState) {
@@ -37,4 +48,4 @@ export const StateProvider = ({ reducer, children }: StateProviderProps): ReactE
   return <StateContext.Provider value={[appState, dispatch]}>{children}</StateContext.Provider>;
 };
 
-export const useStateValue = () => useContext(StateContext);
+export const useStateValue: () => StateValue = () => useContext(StateContext);

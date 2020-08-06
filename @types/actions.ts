@@ -1,4 +1,4 @@
-import { ColdState, Token, Uuid } from '.';
+import { AppError, ColdState, Token, Uuid } from '.';
 
 interface resetDataAction {
   type: 'restoreState';
@@ -33,6 +33,15 @@ interface EndSavingAction {
   type: 'endSaving';
 }
 
+interface ShowErrorAction {
+  type: 'showError';
+  error: AppError;
+}
+
+interface HideErrorAction {
+  type: 'hideError';
+}
+
 export type Action =
   | resetDataAction
   | AddTokenAction
@@ -40,4 +49,6 @@ export type Action =
   | UpdateTokenAction
   | IncrementVersonAction
   | StartSavingAction
-  | EndSavingAction;
+  | EndSavingAction
+  | ShowErrorAction
+  | HideErrorAction;

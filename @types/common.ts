@@ -11,5 +11,14 @@ export enum EthereumNetwork {
   Rinkeby = 4,
   Goerli = 5,
   Kovan = 42,
-  Local = -1,
+  Local = 9999,
 }
+
+export enum Src20FeaturesBitmask {
+  allowForceTransfer = 1,
+  allowContractFreeze = 2,
+  allowBurn = 4,
+  allowAccountFreeze = 8,
+}
+
+export const ZeroAddress = '0x0000000000000000000000000000000000000000';

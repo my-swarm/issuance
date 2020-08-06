@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { Button, Layout, PageHeader, Modal } from 'antd';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -18,6 +18,18 @@ interface DefaultLayoutProps extends PageProps {
 export function DefaultLayout({ title, headExtra, children, headTableAligned = false }: DefaultLayoutProps) {
   const [siderCollapsed, setSiderCollapsed] = useState(false);
   const [{ error }, dispatch] = useStateValue();
+
+  useEffect(() => {
+    if (error) {
+      Modal.error({
+        title: error.message,
+        content: typeof error.description === 'string' ? <p>{error.description}</p> : error.description,
+        onOk: () => {
+          dispatch({ type: 'hideError' });
+        },
+      });
+    }
+  }, [error]);
 
   function renderLogoutLink(disconnect: () => void) {
     return (
@@ -48,17 +60,6 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
         />
         {children}
       </Content>
-      {error && (
-        <Modal
-          title={error.message}
-          visible={true}
-          onOk={() => dispatch({ type: 'hideError' })}
-          destroyOnClose={true}
-          cancelText={null}
-        >
-          {typeof error.description === 'string' ? <p>{error.description}</p> : error.description}
-        </Modal>
-      )}
     </Layout>
   );
 }

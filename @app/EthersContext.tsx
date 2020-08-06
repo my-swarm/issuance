@@ -25,7 +25,7 @@ export const EthersContext = React.createContext<Partial<ContextProps>>({});
 export function EthersProvider({ children }: { children: ReactNode }): ReactElement {
   const [provider, setProvider] = useState<Web3Provider | undefined>(undefined);
   const [signer, setSigner] = useState<Signer>();
-  const [networkId, setNetworkId] = useState<Signer>();
+  const [networkId, setNetworkId] = useState<EthereumNetwork>();
   const [status, setStatus] = useState<EthersStatus>(EthersStatus.DISCONNECTED);
   const [address, setAddress] = useState<string>();
 
@@ -50,28 +50,31 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
     metamask = new Metamask(window['ethereum']);
   }
 
-  async function connect(silent: boolean): Promise<void> {
-    if (!metamask) {
+  async function resetProvider(ethereum) {
+    if (!ethereum) {
+      setStatus(EthersStatus.FAILED);
       return;
     }
-    const ethereum = await metamask.initAndConnect(silent);
-    if (ethereum) {
-      const _provider = new ethers.providers.Web3Provider(ethereum);
-      setProvider(_provider);
-      if (_provider) {
-        const signer = _provider.getSigner();
-        setSigner(signer);
-        const networkId = (await this._signer.getChainId()) as EthereumNetwork;
-        setNetworkId(networkId);
-        const accounts = await _provider.listAccounts();
-        if (accounts && accounts.length > 0) {
-          setAddress(accounts[0]);
-          setStatus(EthersStatus.CONNECTED);
-        }
-      }
-    } else {
-      setStatus(EthersStatus.FAILED);
+
+    const _provider = new ethers.providers.Web3Provider(ethereum);
+    setProvider(_provider);
+    if (!_provider) return;
+
+    const _signer = _provider.getSigner();
+    setSigner(_signer);
+    const _networkId = (await _signer.getChainId()) as EthereumNetwork;
+    setNetworkId(_networkId);
+    const accounts = await _provider.listAccounts();
+    if (accounts && accounts.length > 0) {
+      setAddress(accounts[0]);
+      setStatus(EthersStatus.CONNECTED);
     }
+  }
+
+  async function connect(silent: boolean): Promise<void> {
+    if (!metamask) return;
+    metamask.onStateUpdate(resetProvider);
+    await metamask.initAndConnect(silent);
   }
 
   async function disconnect() {

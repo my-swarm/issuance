@@ -194,6 +194,15 @@ export class Deployer {
     this._addresses = addresses;
   }
 
+  public resume(state: DeployerState, addresses: TokenAddresses) {
+    if (state) {
+      this.state = state;
+    }
+    if (addresses) {
+      this.addresses = addresses;
+    }
+  }
+
   private getContractArtifacts(contractName: string): ContractArtifacts {
     const artifacts = new ContractArtifacts(contracts[contractName], this.networkId);
     if (this.contractAddresses[contractName]) {

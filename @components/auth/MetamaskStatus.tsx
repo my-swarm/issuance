@@ -1,11 +1,24 @@
 import React, { useContext } from 'react';
-import { Card } from 'antd';
+import { EthereumNetwork } from '@types';
+import { Card, Alert, Tooltip } from 'antd';
+import { ExclamationCircleTwoTone } from '@ant-design/icons';
 
 import { EthersContext, EthersStatus } from '@app';
-import { MetamaskConnect, Address } from '@components';
+import { Address, MetamaskConnect } from '@components';
 
 export function MetamaskStatus() {
-  const { status, address, connect } = useContext(EthersContext);
+  const { status, address, networkId } = useContext(EthersContext);
+
+  const networkNames = {
+    [EthereumNetwork.Main]: 'Mainnet',
+    [EthereumNetwork.Ropsten]: 'Ropsten',
+    [EthereumNetwork.Rinkeby]: 'Rinkeby',
+    [EthereumNetwork.Goerli]: 'Goerli',
+    [EthereumNetwork.Kovan]: 'Kovan',
+    [EthereumNetwork.Local]: 'Local',
+  };
+
+  const supportedNetworks = [EthereumNetwork.Main, EthereumNetwork.Ropsten];
 
   let cardTitle, cardBody;
   switch (status) {
@@ -19,7 +32,13 @@ export function MetamaskStatus() {
         <div>
           {address ? <Address>{address}</Address> : 'unknown address'}
           <br />
-          detect network (tbd)
+          network:{' '}
+          {supportedNetworks.indexOf(networkId) === -1 && (
+            <Tooltip title={`Unsupported network. Please use Ropsten for testing`}>
+              <ExclamationCircleTwoTone twoToneColor="red" />
+            </Tooltip>
+          )}{' '}
+          <strong>{networkNames[networkId] ?? 'Unknown'}</strong>
         </div>
       );
       break;

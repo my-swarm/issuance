@@ -22,9 +22,14 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       };
     }
     case 'updateToken': {
+      const updatedToken = {
+        ...state.tokens.find((token) => token.id === action.token.id),
+        ...action.token,
+      };
+
       const newState = {
         ...state,
-        tokens: state.tokens.map((token) => (token.id === action.token.id ? action.token : token)),
+        tokens: state.tokens.map((token) => (token.id === updatedToken.id ? updatedToken : token)),
         isSynced: false,
       };
       return newState;
@@ -52,6 +57,7 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
         isSynced: true,
       };
     case 'showError': {
+      console.log('showerror', action.error);
       return {
         ...state,
         error: action.error,

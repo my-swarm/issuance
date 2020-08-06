@@ -5,7 +5,7 @@ import { EditOutlined, DeleteOutlined, RocketOutlined } from '@ant-design/icons'
 import { useStateValue } from '@app';
 import { BaseError } from '@lib';
 import { DefaultLayout, TokenForm, TokenDeploy } from '@components';
-import { Token, Uuid, transferRestrictionsTypes } from '@types';
+import { Token, Uuid, transferRestrictionsTypes, TokenState, tokenStates, DeployerState } from '@types';
 
 enum EditMode {
   None,
@@ -18,14 +18,22 @@ enum EditMode {
 export default function Tokens() {
   const columns = [
     {
-      title: 'Token name',
-      dataIndex: 'name',
+      title: 'Token',
       key: 'name',
+      render: (token) => `${token.name} (${token.symbol})`,
     },
     {
-      title: 'Symbol',
-      dataIndex: 'symbol',
-      key: 'symbol',
+      title: 'Status',
+      render: (token) => {
+        const state = token.state || TokenState.Created;
+        const deployerState = token.deployerState || DeployerState.None;
+        return (
+          <div>
+            {tokenStates[state] || 'Unknown state'}
+            {state === TokenState.Deploying && <div></div>}
+          </div>
+        );
+      },
     },
     {
       title: 'Transfer restrictions',
@@ -68,12 +76,23 @@ export default function Tokens() {
   };
 
   const getEditTitle = () => {
+    const currentToken = getCurrentToken();
+
     if (editMode === EditMode.Add) {
       return 'Create new token';
     }
     if (editMode === EditMode.Edit) {
-      const currentToken = getCurrentToken();
       return `Edit token '${currentToken ? currentToken.name : '??'}'`;
+    }
+    if (editMode === EditMode.Deploy) {
+      return (
+        <>
+          Deploy{' '}
+          <strong>
+            {currentToken.name} ({currentToken.symbol})
+          </strong>
+        </>
+      );
     }
   };
 

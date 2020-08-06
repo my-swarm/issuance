@@ -1,12 +1,17 @@
 import { MetamaskNotReadyError } from '@lib';
 import { ExternalProvider } from '@ethersproject/providers';
 
+type Ethereum = any;
+
 export class Metamask {
-  private readonly ethereum: any;
+  private readonly ethereum: Ethereum;
   private _currentChainId?: number = undefined;
   private _currentAccount?: string = undefined;
 
-  constructor(ethereum: any) {
+  private stateUpdateCallback: (ethereum: Ethereum) => void;
+
+  constructor(ethereum: Ethereum) {
+    ethereum.autoRefreshOnNetworkChange = false;
     this.ethereum = ethereum;
   }
 
@@ -17,22 +22,23 @@ export class Metamask {
     if (this._currentChainId !== chainId) {
       this._currentChainId = chainId;
       // Run any other necessary logic...
+      this.stateUpdateCallback(this.ethereum);
     }
   };
 
   // For now, 'eth_accounts' will continue to always return an array
   private handleAccountsChanged = (accounts: string[]) => {
-    console.log('handleAccountsChanged', accounts);
     if (accounts.length === 0) {
       // MetaMask is locked or the user has not connected any accounts
       throw new MetamaskNotReadyError('Please connect to MetaMask.');
     } else if (accounts[0] !== this._currentAccount) {
       this._currentAccount = accounts[0];
       // Run any other necessary logic...
+      this.stateUpdateCallback(this.ethereum);
     }
   };
 
-  public async init(): Promise<void> {
+  public init(): void {
     const { ethereum } = this;
     if (!ethereum || !ethereum.isMetaMask) {
       console.log('Please install MetaMask.');
@@ -40,9 +46,9 @@ export class Metamask {
     }
 
     try {
-      const chainId = await ethereum.send('eth_chainId');
+      const chainId = ethereum.sendAsync('eth_chainId');
       this.handleChainChanged(chainId);
-      const accounts = await ethereum.send('eth_accounts');
+      const accounts = ethereum.sendAsync('eth_accounts');
       this.handleAccountsChanged(accounts);
     } catch (err) {
       // In the future, maybe in 2020, this will return a 4100 error if
@@ -60,11 +66,10 @@ export class Metamask {
     ethereum.on('accountsChanged', this.handleAccountsChanged);
   }
 
-  public async connect(): Promise<void> {
-    console.log('metamask connect');
+  public connect(): void {
     // This is equivalent to ethereum.enable()
     try {
-      const accounts = await this.ethereum.send('eth_requestAccounts');
+      const accounts = this.ethereum.sendAsync('eth_requestAccounts');
       this.handleAccountsChanged(accounts);
     } catch (err) {
       if (err.code === 4001) {
@@ -72,15 +77,13 @@ export class Metamask {
         throw new MetamaskNotReadyError('Please connect to MetaMask.');
       }
     }
+    this.stateUpdateCallback(this.ethereum);
   }
 
-  public async initAndConnect(silent = false): Promise<ExternalProvider> {
-    console.log('metamas initAndConnect', silent);
+  public initAndConnect(silent = false): Promise<ExternalProvider> {
     try {
-      await this.init();
-      if (!silent) {
-        await this.connect();
-      }
+      this.init();
+      this.connect();
       return this.ethereum;
     } catch (err) {
       console.log(err);
@@ -94,13 +97,8 @@ export class Metamask {
     this.ethereum.disable();
   }
 
-  get currentChainId(): number {
-    return this._currentChainId;
-  }
-
-  get currentAccount(): string {
-    console.log('metamask current account');
-    return this._currentAccount;
+  public onStateUpdate(callback: (ethereum: Ethereum) => void): void {
+    this.stateUpdateCallback = callback;
   }
 
   get connected(): boolean {

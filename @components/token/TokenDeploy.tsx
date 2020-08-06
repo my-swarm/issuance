@@ -1,8 +1,10 @@
 import React, { ReactElement, useContext, useState } from 'react';
-import { Button, Progress } from 'antd';
-import { ProgressProps } from 'antd/lib/progress';
+import { Button, Progress, Space } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
-import { Uuid, TransactionState, DeployerState } from '@types';
+import { deployerStateMeta, transactionStateMeta } from '@app/const';
+
+import { Uuid, TransactionState, DeployerState, TokenAddresses } from '@types';
 import { EthersContext, useStateValue } from '@app';
 import { Deployer } from '@lib';
 
@@ -10,108 +12,76 @@ interface TokenDeployProps {
   id: Uuid;
 }
 
-const stateMeta = {
-  [DeployerState.None]: {
-    message: 'Ready to deploy',
-    description:
-      "To start the deployment process, just click the button. You'll be asked for signatures when necessary",
-    percent: 0,
-  },
-  [DeployerState.TransferRulesStarted]: {
-    message: 'Deploying transfer rules contract',
-    description: 'Transfer rules define the restrictions on who may transfer your token to whom',
-    percent: 10,
-  },
-  [DeployerState.FeaturesStarted]: {
-    message: 'Deploying token features contract',
-    description: 'This contract stores your token configuration',
-    percent: 20,
-  },
-  [DeployerState.FeaturesFinished]: {
-    message: 'Token features contract deployed',
-    percent: 30,
-  },
-  [DeployerState.RolesStarted]: {
-    message: 'Deploying roles contract',
-    percent: 20,
-  },
-  [DeployerState.RolesFinished]: {
-    message: 'Roles contract deployed',
-    percent: 30,
-  },
-  [DeployerState.DeployFinished]: {
-    message: "Deployment hasn't started yet",
-    percent: 30,
-  },
-  [DeployerState.Error]: {
-    message: "Deployment hasn't started yet",
-    percent: 30,
-  },
-};
-
-export const transactionStateMeta = {
-  [TransactionState.None]: {
-    message: "Transaction hasn't been initiated yet",
-  },
-  [TransactionState.Signing]: {
-    message: 'Waiting for transaction signature',
-  },
-  [TransactionState.Confirming]: {
-    message: 'Waiting for network confirmation',
-  },
-  [TransactionState.Confirmed]: {
-    message: 'Done',
-  },
-};
-
 export function TokenDeploy({ id }: TokenDeployProps): ReactElement {
-  const [state, setState] = useState<DeployerState>(DeployerState.None);
+  const [isDeploying, setIsDeploying] = useState<boolean>(false);
   const [transactionState, setTransactionState] = useState<TransactionState>(TransactionState.None);
   const [{ tokens }, dispatch] = useStateValue();
   const { signer, networkId } = useContext(EthersContext);
-
+  console.log({ signer, networkId });
   const token = tokens.find((t) => t.id === id);
+  const [state, setState] = useState<DeployerState>(token.deployerState || DeployerState.None);
+  const [visualState, setVisualState] = useState<DeployerState>(token.deployerState || DeployerState.None);
+  const [addresses, setAddresses] = useState<TokenAddresses>(
+    (token.addresses && token.addresses[networkId]) || undefined,
+  );
 
   const handleDeploy = async () => {
     const deployer = new Deployer(signer);
+    deployer.resume(state, addresses);
     deployer.onProgress((state: DeployerState) => {
       console.log('onProgress event', state);
-      if (stateMeta[state]) {
-        setState(state);
+      const meta = deployerStateMeta[state];
+      if (meta.visual) {
+        setVisualState(state);
       }
-      token.deployerState = state;
-      token.addresses[this.networkId] = deployer.addresses;
+      if (meta.persistent) {
+        setState(state);
+        setAddresses(deployer.addresses);
+        console.log('persisting', state, deployer.addresses);
+      }
     });
     deployer.contractProxy.onProgress((event: TransactionState) => {
       setTransactionState(event);
     });
     try {
+      setIsDeploying(true);
       await deployer.deploy(token);
     } catch (e) {
-      dispatch({ type: 'showError', message: 'Your token could not be deployed' });
+      let error;
+      if (e.code === 4001) {
+        error = {
+          message: 'Transaction canceled',
+          description: 'Please confirm the transaction in your metamask popup',
+        };
+      } else {
+        console.error(e);
+        error = { message: 'Error during deployment', description: e.message };
+      }
+      dispatch({ type: 'showError', error });
     }
+    setIsDeploying(false);
   };
 
   function getProgressStatus() {
-    if (state === DeployerState.Error) {
+    if (visualState === DeployerState.Error) {
       return 'exception';
     }
-    if (state !== DeployerState.DeployFinished) {
+    if (visualState !== DeployerState.DeployFinished) {
       return 'active';
     }
     return 'normal';
   }
 
   function getPercent() {
-    return stateMeta[state].percent;
+    return deployerStateMeta[visualState].percent;
   }
 
   function getMessage() {
-    return stateMeta[state].message;
+    return deployerStateMeta[visualState].message;
   }
 
   function getDescription() {
-    const meta = stateMeta[state];
+    const meta = deployerStateMeta[visualState];
     if (!meta) {
       return null;
     }
@@ -124,15 +94,20 @@ export function TokenDeploy({ id }: TokenDeployProps): ReactElement {
 
   return (
     <>
-      <p>So you want to deploy a token, right?</p>
-      <p>Good luck, mate!</p>
-      <Button onClick={handleDeploy}>Deploy the shit</Button>
-
-      <h2>Deployment progress</h2>
       <Progress percent={getPercent()} status={getProgressStatus()} />
-      <h3>{getMessage()}</h3>
+      <h3 className="mt-3">{getMessage()}</h3>
       {getDescription()}
-      <p>{getTransactionMessage()}</p>
+      {visualState !== DeployerState.None && <p>{getTransactionMessage()}</p>}
+
+      {isDeploying ? (
+        <Button disabled>
+          <LoadingOutlined /> deploying your token
+        </Button>
+      ) : (
+        <Button onClick={handleDeploy}>
+          {visualState === DeployerState.None ? 'Deploy your token' : 'Resume deployment'}
+        </Button>
+      )}
     </>
   );
 }

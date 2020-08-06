@@ -14,7 +14,7 @@ export enum DeployerState {
   MintStarted,
   MintFinished,
   DeployFinished,
-  Error,
+  Error, // todo: this one might be unnecessary. Error are handled on component level
 }
 
 export type DeployerEventCallback = (state: DeployerState) => void;

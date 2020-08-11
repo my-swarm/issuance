@@ -6,7 +6,7 @@ import { Token, TransferRestrictionsTypes } from '@types';
 import { tokenFormRules as rules } from './tokenFormRules';
 import { Help, HelpLabel, SingleFileUpload, MultipleFilesUpload } from '@components/index';
 
-interface EditFormProps {
+interface TokenFormProps {
   onCancel: () => void;
   onSubmit: (token: Token) => void;
   formData?: Token;
@@ -29,7 +29,7 @@ const sampleFormData: Token = {
   assetDescription: 'Love my condo',
 };
 
-export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: EditFormProps): ReactElement {
+export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: TokenFormProps): ReactElement {
   const [form] = Form.useForm();
 
   const handleCancel = () => {

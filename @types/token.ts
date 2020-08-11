@@ -17,7 +17,19 @@ export enum TokenState {
   Deploying,
   Deployed,
   Fundraising,
+  Minted,
   Deleted,
+}
+
+export enum TokenAction {
+  Create,
+  Edit,
+  Deploy,
+  StakeAndMint,
+  StartFundraise,
+  ManageFundraise,
+  ManageToken,
+  Delete,
 }
 
 export const tokenStates: { [key: number]: string } = {

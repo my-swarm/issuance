@@ -43,8 +43,8 @@ export class Deployer {
     if (token.deployerState) this.state = token.deployerState;
     if (token.addresses && token.addresses[this.networkId]) this.addresses = token.addresses[this.networkId];
 
-    if (this.state < DeployerState.DeployStarted) {
-      this.handleStateChange(DeployerState.DeployStarted);
+    if (this.state < DeployerState.Started) {
+      this.handleStateChange(DeployerState.Started);
     }
     await this.deployTransferRules();
     await this.deployFeatures();
@@ -52,12 +52,12 @@ export class Deployer {
     await this.createToken();
     await this.approveStake();
     await this.mint();
-    this.handleStateChange(DeployerState.DeployFinished);
+    this.handleStateChange(DeployerState.Finished);
   }
 
   private async deployTransferRules(): Promise<void> {
     if (this.state >= DeployerState.TransferRulesFinished) return;
-    if (this.state === DeployerState.DeployFinished) {
+    if (this.state === DeployerState.Finished) {
       throw new InvalidStateError('Cannot deploy a finished contract.');
     }
 

@@ -4,21 +4,20 @@ import { LoadingOutlined } from '@ant-design/icons';
 
 import { deployerStateMeta, transactionStateMeta } from '@app/const';
 
-import { Uuid, TransactionState, DeployerState, TokenAddresses } from '@types';
+import { TransactionState, DeployerState, TokenAddresses, Token } from '@types';
 import { EthersContext, useStateValue } from '@app';
 import { Deployer } from '@lib';
 
 interface TokenDeployProps {
-  id: Uuid;
+  token: Token;
 }
 
-export function TokenDeploy({ id }: TokenDeployProps): ReactElement {
+export function TokenDeploy({ token }: TokenDeployProps): ReactElement {
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
   const [transactionState, setTransactionState] = useState<TransactionState>(TransactionState.None);
-  const [{ tokens }, dispatch] = useStateValue();
+  const [, dispatch] = useStateValue();
   const { signer, networkId } = useContext(EthersContext);
   console.log({ signer, networkId });
-  const token = tokens.find((t) => t.id === id);
   const [state, setState] = useState<DeployerState>(token.deployerState || DeployerState.None);
   const [visualState, setVisualState] = useState<DeployerState>(token.deployerState || DeployerState.None);
   const [addresses, setAddresses] = useState<TokenAddresses>(
@@ -66,7 +65,7 @@ export function TokenDeploy({ id }: TokenDeployProps): ReactElement {
     if (visualState === DeployerState.Error) {
       return 'exception';
     }
-    if (visualState !== DeployerState.DeployFinished) {
+    if (visualState !== DeployerState.Finished) {
       return 'active';
     }
     return 'normal';

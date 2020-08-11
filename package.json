@@ -11,12 +11,14 @@
     "start": "next start",
     "test": "jest",
     "test:watch": "jest --watch",
-    "lint": "eslint @app @components @lib @types"
+    "lint": "eslint @app @components @lib @types",
+    "docs:plantuml": "xvfb-run plantuml docs/plantuml/*.plantuml"
   },
   "license": "ISC",
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
     "@types/lodash": "^4.14.158",
+    "@types/recharts": "^1.8.14",
     "@types/uuid": "^8.0.0",
     "antd": "^4.0.3",
     "babel-plugin-import": "^1.13.0",
@@ -27,6 +29,7 @@
     "parse-data-url": "^2.0.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
+    "recharts": "^1.8.5",
     "sass": "^1.26.10",
     "uuid": "^8.2.0"
   },

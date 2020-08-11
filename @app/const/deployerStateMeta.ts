@@ -17,7 +17,7 @@ export const deployerStateMeta: { [index in DeployerState]: DeployerStateMeta } 
       "To start the deployment process, just click the button. You'll be asked for signatures when necessary",
     percent: 0,
   },
-  [DeployerState.DeployStarted]: {
+  [DeployerState.Started]: {
     visual: false,
     persistent: false,
   },
@@ -83,7 +83,7 @@ export const deployerStateMeta: { [index in DeployerState]: DeployerStateMeta } 
     visual: false,
     persistent: true,
   },
-  [DeployerState.DeployFinished]: {
+  [DeployerState.Finished]: {
     visual: true,
     persistent: true,
     message: "Deployment hasn't started yet",

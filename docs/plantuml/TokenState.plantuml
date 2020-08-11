@@ -1,0 +1,22 @@
+@startuml
+scale 600 width
+
+Created: setup prepared locally, blockchain not involved
+Deploying: may be interrupted by failing a transaction
+Deployed: all contracts are on-chain
+Fundraising: collecting funds
+Staked: SWM has been staked
+Minted: Token has been minted
+
+[*] --> Created: create
+Created --> Deploying: start deploy
+Deploying --> Deployed: finish deploy
+Deploying --> Deploying: resume deploy
+Deployed --> Fundraising: [needs fundraiser]\nstart fundraiser
+Deployed --> Staked: [has existing asset]\nstake & mint
+Fundraising -> Staked: [fundraiser finished]\nstake with raised funds
+Staked --> Minted: mint
+Minted --> Fundraising: raise more funds
+Minted --> [*]
+
+@enduml

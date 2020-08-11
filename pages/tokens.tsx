@@ -1,21 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Button, Drawer, Space, Popconfirm } from 'antd';
-import { EditOutlined, DeleteOutlined, RocketOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Button, Drawer, Table } from 'antd';
 
 import { useStateValue } from '@app';
 import { BaseError } from '@lib';
-import { DefaultLayout, TokenForm, TokenDeploy } from '@components';
-import { Token, Uuid, transferRestrictionsTypes, TokenState, tokenStates, DeployerState } from '@types';
-
-enum EditMode {
-  None,
-  Add,
-  Edit,
-  Deploy,
-  Manage,
-}
+import {
+  DefaultLayout,
+  TokenDeploy,
+  TokenForm,
+  TokenActions,
+  TokenActionTitle,
+  TokenStartFundraise,
+  TokenManage,
+  TokenManageFundraise,
+  TokenStakeAndMint,
+  FundraiserForm,
+} from '@components';
+import { Token, TokenAction, TokenState, tokenStates, transferRestrictionsTypes } from '@types';
 
 export default function Tokens() {
+  const [token, setToken] = useState<Token>();
+  const [action, setAction] = useState<TokenAction>();
+  const [{ tokens }, dispatch] = useStateValue();
+
   const columns = [
     {
       title: 'Token',
@@ -26,7 +32,6 @@ export default function Tokens() {
       title: 'Status',
       render: (token) => {
         const state = token.state || TokenState.Created;
-        const deployerState = token.deployerState || DeployerState.None;
         return (
           <div>
             {tokenStates[state] || 'Unknown state'}
@@ -46,78 +51,38 @@ export default function Tokens() {
     {
       title: 'Action',
       key: 'action',
-      render: (text: string, token: Token) => (
-        <Space size="small">
-          <Button size="small" onClick={() => handleEdit(token.id)} icon={<EditOutlined />}>
-            Edit
-          </Button>
-          <Button size="small" onClick={() => handleDeploy(token.id)} icon={<RocketOutlined />}>
-            Deploy
-          </Button>
-          <Popconfirm title={`Are you sure you want to delete '${token.name}`} onConfirm={() => handleDelete(token.id)}>
-            <Button size="small" icon={<DeleteOutlined />}>
-              Delete
-            </Button>
-          </Popconfirm>
-        </Space>
-      ),
+      render: (token: Token) => <TokenActions token={token} onAction={(action) => handleAction(action, token)} />,
     },
   ];
 
-  const [id, setId] = useState<Uuid>();
-  const [editMode, setEditMode] = useState<EditMode>(EditMode.None);
-  const [state, dispatch] = useStateValue();
-  const { tokens } = state;
-
   const dataSource = tokens.map((token: Token, key: number) => ({ key, ...token }));
 
-  const getCurrentToken = () => {
-    return tokens.find((token: Token) => token.id === id);
-  };
-
-  const getEditTitle = () => {
-    const currentToken = getCurrentToken();
-
-    if (editMode === EditMode.Add) {
-      return 'Create new token';
-    }
-    if (editMode === EditMode.Edit) {
-      return `Edit token '${currentToken ? currentToken.name : '??'}'`;
-    }
-    if (editMode === EditMode.Deploy) {
-      return (
-        <>
-          Deploy{' '}
-          <strong>
-            {currentToken.name} ({currentToken.symbol})
-          </strong>
-        </>
-      );
+  const handleAction = (action: TokenAction, token: Token) => {
+    if (action === TokenAction.Delete) {
+      handleDelete(token);
+    } else {
+      setToken(token);
+      setAction(action);
     }
   };
 
-  const handleEdit = (id?: Uuid) => {
-    setId(id);
-    setEditMode(id ? EditMode.Edit : EditMode.Add);
-  };
-
-  const handleDeploy = (id: Uuid) => {
-    setId(id);
-    setEditMode(EditMode.Deploy);
+  const handleCreate = () => {
+    setToken(undefined);
+    setAction(TokenAction.Create);
   };
 
   const handleCancelEdit = () => {
-    setId(undefined);
-    setEditMode(EditMode.None);
+    setToken(undefined);
+    setAction(undefined);
   };
 
-  const handleSubmit = (token: Token) => {
-    switch (editMode) {
-      case EditMode.Add:
-        dispatch({ type: 'addToken', token });
+  const handleSubmit = (newToken: Token) => {
+    switch (action) {
+      case TokenAction.Create:
+        dispatch({ type: 'addToken', token: newToken });
         break;
-      case EditMode.Edit:
-        dispatch({ type: 'updateToken', token: { ...token, id } });
+      case TokenAction.Edit:
+        dispatch({ type: 'updateToken', token: { id: token.id, ...newToken } });
         break;
       default:
         throw new BaseError('Cannot submit when not editing');
@@ -125,31 +90,38 @@ export default function Tokens() {
     handleCancelEdit();
   };
 
-  const handleDelete = (id: Uuid) => {
-    dispatch({ type: 'deleteToken', id });
+  const handleDelete = (token) => {
+    dispatch({ type: 'deleteToken', id: token.id });
   };
 
   const renderHeadExtra = () => (
-    <Button key="1" type="primary" onClick={() => handleEdit()}>
-      Add token
+    <Button key="1" type="primary" onClick={() => handleCreate()}>
+      Create token
     </Button>
   );
+
+  function renderAction() {
+    if (action === TokenAction.Create || action === TokenAction.Edit)
+      return <TokenForm onSubmit={handleSubmit} onCancel={handleCancelEdit} formData={token} />;
+    if (action === TokenAction.Deploy) return <TokenDeploy token={token} />;
+    if (action === TokenAction.StartFundraise)
+      return <FundraiserForm onCancel={handleCancelEdit} onSubmit={() => console.log('submit')} />;
+    if (action === TokenAction.ManageToken) return <TokenManage token={token} />;
+    if (action === TokenAction.ManageFundraise) return <TokenManageFundraise token={token} />;
+    if (action === TokenAction.StakeAndMint) return <TokenStakeAndMint token={token} />;
+  }
 
   return (
     <DefaultLayout title="My Tokens" headExtra={renderHeadExtra()} headTableAligned={true}>
       <Table columns={columns} dataSource={dataSource} />
       <Drawer
-        title={getEditTitle()}
-        visible={editMode !== EditMode.None}
+        title={<TokenActionTitle token={token} action={action} />}
+        visible={action !== undefined}
         width="50%"
         closable={true}
         onClose={() => handleCancelEdit()}
       >
-        {editMode === EditMode.Add || editMode === EditMode.Edit ? (
-          <TokenForm onSubmit={handleSubmit} onCancel={() => handleCancelEdit()} formData={getCurrentToken()} />
-        ) : editMode === EditMode.Deploy ? (
-          <TokenDeploy id={getCurrentToken().id} />
-        ) : null}
+        {renderAction()}
       </Drawer>
     </DefaultLayout>
   );

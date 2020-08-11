@@ -2,6 +2,7 @@ import React, { ReactElement, useEffect } from 'react';
 import { Card, Button, Spin, Space, Tooltip } from 'antd';
 import _ from 'lodash';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons/lib';
+import * as devData from 'dev_data';
 
 import { useStateValue, useStorage } from '@app';
 
@@ -9,8 +10,13 @@ export function StateStorageSync(): ReactElement {
   const [state, dispatch] = useStateValue();
   const { isLoaded, isSaving, isSynced, version } = state;
 
-  const handleSave = function () {
+  const handleSave = () => {
     dispatch({ type: 'incrementVersion' });
+  };
+
+  const handleResetDev = () => {
+    console.log('reseting to', devData);
+    dispatch({ type: 'restoreState', data: { ...devData, version: 0 } });
   };
 
   const { save, isWorking } = useStorage();
@@ -54,6 +60,9 @@ export function StateStorageSync(): ReactElement {
         <p>Data version: {version}</p>
         <Button size="small" onClick={handleSave}>
           Save
+        </Button>
+        <Button size="small" onClick={handleResetDev}>
+          Reset Dev
         </Button>
       </Card>
     </div>

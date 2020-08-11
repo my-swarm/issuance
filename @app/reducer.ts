@@ -27,12 +27,11 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
         ...action.token,
       };
 
-      const newState = {
+      return {
         ...state,
         tokens: state.tokens.map((token) => (token.id === updatedToken.id ? updatedToken : token)),
         isSynced: false,
       };
-      return newState;
     }
     case 'deleteToken':
       return {

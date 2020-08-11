@@ -1,6 +1,6 @@
 export enum DeployerState {
   None,
-  DeployStarted,
+  Started,
   TransferRulesStarted,
   TransferRulesFinished,
   FeaturesStarted,
@@ -13,7 +13,7 @@ export enum DeployerState {
   StakeApproveFinished,
   MintStarted,
   MintFinished,
-  DeployFinished,
+  Finished,
   Error, // todo: this one might be unnecessary. Error are handled on component level
 }
 

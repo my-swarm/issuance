@@ -2,9 +2,11 @@ import React from 'react';
 import { Button, Space, Table } from 'antd';
 import { EyeOutlined, EditOutlined } from '@ant-design/icons';
 
-import { DefaultLayout } from '@components';
+import { DefaultLayout, FundraiserCard } from '@components';
 import { Fundraiser, FundraiserState, fundraiserStates } from '@types';
 import { formatDate, createDate } from '@lib';
+import { useStateValue } from '../@app';
+import Link from 'next/link';
 
 export default function Fundraisers() {
   const columns = [
@@ -53,17 +55,31 @@ export default function Fundraisers() {
       status: FundraiserState.Running,
       startDate: createDate('2020-07-20'),
       endDate: createDate('2021-03-20'),
+      softCap: 500000,
+      hardCap: 1000000,
+      statusText: 'Fundraising in progress',
     },
   ];
 
+  const [{ tokens }, dispatch] = useStateValue();
+  const fundraisingTokens = tokens.map;
+
   const renderHeadExtra = () => (
-    <Button key="1" type="primary" onClick={() => {}}>
-      Add token
-    </Button>
+    <Space>
+      <Button type="primary">Start new Fundraiser</Button>
+      <Link href="/tokens">
+        <Button>Manage my Tokens</Button>
+      </Link>
+    </Space>
   );
   return (
     <DefaultLayout title="My fundraisers" headExtra={renderHeadExtra()} headTableAligned={true}>
-      <Table columns={columns} dataSource={dataSource} />
+      {tokens.map((token, index) => (
+        <div className="mb-3">
+          <FundraiserCard token={token} key={index} />
+        </div>
+      ))}
+      {/*<Table columns={columns} dataSource={dataSource} />*/}
     </DefaultLayout>
   );
 }

@@ -1,4 +1,4 @@
-import { AppError, ColdState, Token, Uuid } from '.';
+import { AppError, ColdState, EthereumNetwork, Token, TokenNetworkData, TokenState, Uuid } from '.';
 
 interface resetDataAction {
   type: 'restoreState';
@@ -19,6 +19,13 @@ interface UpdateTokenAction {
   type: 'updateToken';
   token: Token;
   id: Uuid;
+}
+
+interface UpdateTokenNetworkAction {
+  type: 'updateTokenNetwork';
+  id: Uuid;
+  networkId: EthereumNetwork;
+  networkData: TokenNetworkData;
 }
 
 interface IncrementVersonAction {
@@ -42,13 +49,22 @@ interface HideErrorAction {
   type: 'hideError';
 }
 
+interface SetTokenStateAction {
+  type: 'setTokenState';
+  id: Uuid;
+  networkId: EthereumNetwork;
+  state: TokenState;
+}
+
 export type Action =
   | resetDataAction
   | AddTokenAction
   | DeleteTokenAction
   | UpdateTokenAction
+  | UpdateTokenNetworkAction
   | IncrementVersonAction
   | StartSavingAction
   | EndSavingAction
   | ShowErrorAction
-  | HideErrorAction;
+  | HideErrorAction
+  | SetTokenStateAction;

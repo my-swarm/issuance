@@ -10,87 +10,35 @@ interface DeployerStateMeta {
 
 export const deployerStateMeta: { [index in DeployerState]: DeployerStateMeta } = {
   [DeployerState.None]: {
-    visual: true,
-    persistent: true,
     message: 'Ready to deploy',
-    description:
-      "To start the deployment process, just click the button. You'll be asked for signatures when necessary",
+    description: 'To start the deployment process, just click the button.',
     percent: 0,
   },
-  [DeployerState.Started]: {
-    visual: false,
-    persistent: false,
-  },
-  [DeployerState.TransferRulesStarted]: {
-    visual: true,
-    persistent: false,
+  [DeployerState.TransferRules]: {
     message: 'Deploying transfer rules contract',
     description: 'Transfer rules define the restrictions on who may transfer your token to whom',
-    percent: 10,
-  },
-  [DeployerState.TransferRulesFinished]: {
-    visual: false,
-    persistent: true,
-  },
-  [DeployerState.FeaturesStarted]: {
-    visual: true,
-    persistent: false,
-    message: 'Deploying token features contract',
-    description: 'This contract stores your token configuration',
     percent: 20,
   },
-  [DeployerState.FeaturesFinished]: {
-    visual: false,
-    persistent: true,
-  },
-  [DeployerState.RolesStarted]: {
-    visual: true,
-    persistent: false,
-    message: 'Deploying roles contract',
-    percent: 30,
-  },
-  [DeployerState.RolesFinished]: {
-    visual: false,
-    persistent: true,
-  },
-  [DeployerState.TokenStarted]: {
-    visual: true,
-    persistent: false,
-    message: 'Deploying your SRC20 token',
+  [DeployerState.Features]: {
+    message: 'Deploying token features contract',
+    description: 'This contract stores your token configuration',
     percent: 40,
   },
-  [DeployerState.TokenFinished]: {
-    visual: false,
-    persistent: true,
-  },
-  [DeployerState.StakeApproveStarted]: {
-    visual: true,
-    persistent: false,
-    message: 'Approving SWM spending for your stake',
-    percent: 50,
-  },
-  [DeployerState.StakeApproveFinished]: {
-    visual: false,
-    persistent: true,
-  },
-  [DeployerState.MintStarted]: {
-    visual: true,
-    persistent: false,
-    message: 'Minting your token',
+  [DeployerState.Roles]: {
+    message: 'Deploying roles contract',
+    description: 'This contract remembers your token features and enables you to use them',
     percent: 60,
   },
-  [DeployerState.MintFinished]: {
-    visual: false,
-    persistent: true,
+  [DeployerState.Token]: {
+    message: 'Deploying your SRC20 token',
+    descriptiption: 'This is your actual SRC20 token. Use it well!',
+    percent: 80,
   },
   [DeployerState.Finished]: {
     visual: true,
     persistent: true,
-    message: "Deployment hasn't started yet",
+    message: 'Token deployment is finished',
+    description: 'You can now mint or start a fundraiser',
     percent: 100,
-  },
-  [DeployerState.Error]: {
-    visual: true,
-    persistent: false,
   },
 };

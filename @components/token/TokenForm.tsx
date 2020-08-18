@@ -1,5 +1,6 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { Form, Input, InputNumber, Button, Checkbox, Popover, Space, Radio, Upload } from 'antd';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { Store } from 'rc-field-form/lib/interface';
 
 import { Token, TransferRestrictionsTypes } from '@types';
@@ -19,6 +20,7 @@ const sampleFormData: Token = {
   decimals: 18,
   description: 'Completely new token',
   initialSupply: 1000000,
+  totalSupply: 5000000,
   transferRestrictionsType: TransferRestrictionsTypes.Whitelist,
   allowAccountFreeze: true,
   allowContractFreeze: false,
@@ -27,9 +29,14 @@ const sampleFormData: Token = {
   allowMint: false,
   assetName: 'Luxury Mediterranean Condo',
   assetDescription: 'Love my condo',
+  networks: {},
+  assetNetValue: 500000,
 };
 
 export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: TokenFormProps): ReactElement {
+  const [initialSupply, setInitialSupply] = useState<number>(formData.initialSupply || 0);
+  const [showMintSection, setShowMintSection] = useState<boolean>(formData.allowMint || false);
+  const [allowUnlimitedSupply, setallowUnlimitedSupply] = useState<boolean>(formData.allowUnlimitedSupply || false);
   const [form] = Form.useForm();
 
   const handleCancel = () => {
@@ -38,7 +45,16 @@ export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: Tok
   };
 
   const handleSubmit = (token: Store) => {
+    console.log('submit', token);
     onSubmit(token as Token);
+  };
+
+  const handleToggleAdditionalMinting = (e: CheckboxChangeEvent) => {
+    setShowMintSection(e.target.checked);
+  };
+
+  const handleToggleallowUnlimitedSupply = (e: CheckboxChangeEvent) => {
+    setallowUnlimitedSupply(e.target.checked);
   };
 
   useEffect(() => {
@@ -62,7 +78,7 @@ export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: Tok
         <InputNumber min={0} max={36} placeholder="18" />
       </Form.Item>
       <Form.Item name="initialSupply" label="Initial Supply" rules={rules.decimals}>
-        <InputNumber min={0} placeholder="Gazillion" />
+        <InputNumber min={0} placeholder="Gazillion" onChange={(x) => setInitialSupply(parseInt(x.toString()))} />
       </Form.Item>
       <Form.Item name="image" label="Image/logo" rules={rules.image}>
         <SingleFileUpload image />
@@ -116,11 +132,26 @@ export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: Tok
           </Checkbox>
         </Form.Item>
         <Form.Item name="allowMint" valuePropName="checked" className="no-margin">
-          <Checkbox>
+          <Checkbox onChange={handleToggleAdditionalMinting}>
             <HelpLabel name="allowMint" />
           </Checkbox>
         </Form.Item>
       </Form.Item>
+
+      {showMintSection && (
+        <div>
+          <h3>Additional minting setup</h3>
+          <p>Set the maximum possible number of tokens that can ever be minted.</p>
+          <Space size="large">
+            <Form.Item name="totalSupply">
+              <InputNumber min={initialSupply} disabled={allowUnlimitedSupply} />
+            </Form.Item>
+            <Form.Item name="allowUnlimitedSupply" valuePropName="checked">
+              <Checkbox onChange={handleToggleallowUnlimitedSupply}>Unlimited total supply</Checkbox>
+            </Form.Item>
+          </Space>
+        </div>
+      )}
 
       <h3>Asset details</h3>
       <p>Define your asset, it's value and other information in detail.</p>

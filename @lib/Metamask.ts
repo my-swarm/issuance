@@ -29,13 +29,14 @@ export class Metamask {
   // For now, 'eth_accounts' will continue to always return an array
   private handleAccountsChanged = (accounts: string[]) => {
     if (accounts.length === 0) {
-      // MetaMask is locked or the user has not connected any accounts
-      throw new MetamaskNotReadyError('Please connect to MetaMask.');
+      // This means the user has locked metamask (analogy to logout)
+      // so we don't do anything
+      this._currentAccount = undefined;
     } else if (accounts[0] !== this._currentAccount) {
       this._currentAccount = accounts[0];
-      // Run any other necessary logic...
-      this.stateUpdateCallback(this.ethereum);
     }
+    // Run any other necessary logic...
+    this.stateUpdateCallback(this.ethereum);
   };
 
   public init(): void {
@@ -46,9 +47,9 @@ export class Metamask {
     }
 
     try {
-      const chainId = ethereum.sendAsync('eth_chainId');
+      const chainId = ethereum.send('eth_chainId');
       this.handleChainChanged(chainId);
-      const accounts = ethereum.sendAsync('eth_accounts');
+      const accounts = ethereum.send('eth_accounts');
       this.handleAccountsChanged(accounts);
     } catch (err) {
       // In the future, maybe in 2020, this will return a 4100 error if
@@ -69,9 +70,10 @@ export class Metamask {
   public connect(): void {
     // This is equivalent to ethereum.enable()
     try {
-      const accounts = this.ethereum.sendAsync('eth_requestAccounts');
+      const accounts = this.ethereum.send('eth_requestAccounts');
       this.handleAccountsChanged(accounts);
     } catch (err) {
+      console.error(err);
       if (err.code === 4001) {
         // EIP 1193 userRejectedRequest error
         throw new MetamaskNotReadyError('Please connect to MetaMask.');
@@ -83,7 +85,9 @@ export class Metamask {
   public initAndConnect(silent = false): Promise<ExternalProvider> {
     try {
       this.init();
-      this.connect();
+      if (!silent) {
+        this.connect();
+      }
       return this.ethereum;
     } catch (err) {
       console.log(err);

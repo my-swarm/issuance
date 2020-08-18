@@ -14,7 +14,7 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
         isSynced: true,
       };
     case 'addToken': {
-      const token = { ...action.token, id: uuid() };
+      const token = { ...action.token, id: uuid(), networks: {} };
       return {
         ...state,
         tokens: [...state.tokens, token],
@@ -22,9 +22,14 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       };
     }
     case 'updateToken': {
+      if (!action.token.id) {
+        throw new Error('Token ID not provided');
+      }
+      // we don't wanna overwrite some properties, like networks - network related stuff is set with different action
+      const { id, networks, ...tokenUpdate } = action.token;
       const updatedToken = {
-        ...state.tokens.find((token) => token.id === action.token.id),
-        ...action.token,
+        ...state.tokens.find((token) => token.id === id),
+        ...tokenUpdate,
       };
 
       return {
@@ -33,6 +38,34 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
         isSynced: false,
       };
     }
+    case 'updateTokenNetwork': {
+      const { id, networkId, networkData } = action;
+      const updatedToken = state.tokens.find((t) => t.id === id);
+      if (!updatedToken) {
+        throw new Error('Token not found');
+      }
+      updatedToken.networks[networkId] = networkData;
+      return {
+        ...state,
+        tokens: state.tokens.map((token) => (token.id === updatedToken.id ? updatedToken : token)),
+        isSynced: false,
+      };
+    }
+
+    case 'setTokenState': {
+      const { id, networkId, state: tokenState } = action;
+      const updatedToken = state.tokens.find((t) => t.id === id);
+      if (!updatedToken) {
+        throw new Error('Token not found');
+      }
+      updatedToken.networks[networkId].state = tokenState;
+      return {
+        ...state,
+        tokens: state.tokens.map((token) => (token.id === updatedToken.id ? updatedToken : token)),
+        isSynced: false,
+      };
+    }
+
     case 'deleteToken':
       return {
         ...state,

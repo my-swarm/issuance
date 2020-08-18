@@ -75,8 +75,8 @@ export default function Fundraisers() {
   return (
     <DefaultLayout title="My fundraisers" headExtra={renderHeadExtra()} headTableAligned={true}>
       {tokens.map((token, index) => (
-        <div className="mb-3">
-          <FundraiserCard token={token} key={index} />
+        <div className="mb-3" key={index}>
+          <FundraiserCard token={token} />
         </div>
       ))}
       {/*<Table columns={columns} dataSource={dataSource} />*/}

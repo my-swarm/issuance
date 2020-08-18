@@ -1,8 +1,9 @@
-import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
+import React, { ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
 import { Web3Provider } from '@ethersproject/providers';
-import { ethers, Signer } from 'ethers';
-import { Metamask } from '@lib';
+import { Contract, ethers, Signer } from 'ethers';
+import { ContractArtifacts, Metamask } from '@lib';
 import { EthereumNetwork } from '@types';
+import { contracts } from '../@contracts';
 
 export enum EthersStatus {
   DISCONNECTED,
@@ -17,7 +18,9 @@ interface ContextProps {
   address: string | undefined;
   networkId: EthereumNetwork;
   connect: (silent: boolean) => void;
+  connected: boolean;
   disconnect: () => void;
+  contract: (name: string) => Contract;
 }
 
 export const EthersContext = React.createContext<Partial<ContextProps>>({});
@@ -58,7 +61,10 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
 
     const _provider = new ethers.providers.Web3Provider(ethereum);
     setProvider(_provider);
-    if (!_provider) return;
+    if (!_provider) {
+      setStatus(EthersStatus.FAILED);
+      return;
+    }
 
     const _signer = _provider.getSigner();
     setSigner(_signer);
@@ -68,6 +74,9 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
     if (accounts && accounts.length > 0) {
       setAddress(accounts[0]);
       setStatus(EthersStatus.CONNECTED);
+    } else {
+      setAddress(undefined);
+      setStatus(EthersStatus.DISCONNECTED);
     }
   }
 
@@ -93,6 +102,7 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
         provider,
         signer,
         status,
+        connected: status === EthersStatus.CONNECTED,
         address,
         networkId,
         connect,
@@ -103,3 +113,5 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
     </EthersContext.Provider>
   );
 }
+
+export const useEthers = () => useContext(EthersContext);

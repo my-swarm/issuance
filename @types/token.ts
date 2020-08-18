@@ -24,6 +24,7 @@ export enum TokenState {
 export enum TokenAction {
   Create,
   Edit,
+  Info,
   Deploy,
   StakeAndMint,
   StartFundraise,
@@ -33,22 +34,31 @@ export enum TokenAction {
 }
 
 export const tokenStates: { [key: number]: string } = {
-  [TokenState.Created]: 'Created',
+  [TokenState.Created]: 'Created, not deployed',
   [TokenState.Deployed]: 'Deployed',
   [TokenState.Fundraising]: 'Fundraising',
+  [TokenState.Deploying]: 'Deployment in progress',
+  [TokenState.Fundraising]: 'Fundraiser in progress',
+  [TokenState.Minted]: 'Minted',
   [TokenState.Deleted]: 'Deleted',
 };
 
 export interface TokenAddresses {
-  features: EthereumAddress;
-  transferRules: EthereumAddress;
-  roles: EthereumAddress;
-  token: EthereumAddress;
+  features?: EthereumAddress;
+  transferRules?: EthereumAddress;
+  roles?: EthereumAddress;
+  src20?: EthereumAddress;
   // factory: EthereumAddress;
   // registry: EthereumAddress;
 }
 
-type TokenNetworkAddresses = { [index in EthereumNetwork]: TokenAddresses };
+export interface TokenNetworkData {
+  state?: TokenState;
+  deployerState?: DeployerState;
+  addresses?: TokenAddresses;
+}
+
+type TokenNetworksData = { [index in EthereumNetwork]?: TokenNetworkData };
 
 export interface TokenDeployState {
   state: DeployerState;
@@ -60,10 +70,12 @@ export interface Token {
   id: Uuid;
   name: string;
   symbol: string;
+  description: string;
   decimals: number;
   initialSupply: number;
+  totalSupply?: number;
+  allowUnlimitedSupply?: boolean;
   image?: AppImage;
-  description: string;
   transferRestrictionsType: TransferRestrictionsTypes;
 
   allowAccountFreeze: boolean;
@@ -79,9 +91,7 @@ export interface Token {
   assetImage?: AppImage;
   assetLegalDocuments?: AppFile[];
 
-  state?: TokenState;
-  deployerState: DeployerState;
-  addresses?: TokenNetworkAddresses;
+  networks: TokenNetworksData;
 }
 
 export interface StoredToken {

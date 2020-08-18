@@ -16,5 +16,5 @@ export interface AppState extends ColdState {
   isSaving: boolean;
   isLoaded: boolean;
   isSynced: boolean;
-  error: AppError;
+  error?: AppError;
 }

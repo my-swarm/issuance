@@ -1,7 +1,15 @@
 import React from 'react';
 import { Token, TokenState, TokenAction, Uuid } from '@types';
 import { Button, Popconfirm, Space } from 'antd';
-import { EditOutlined, DeleteOutlined, RocketOutlined, FundOutlined, DollarCircleOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  InfoCircleOutlined,
+  DeleteOutlined,
+  RocketOutlined,
+  FundOutlined,
+  DollarCircleOutlined,
+} from '@ant-design/icons';
+import { useEthers } from '@app';
 
 interface TokenActionsProps {
   token: Token;
@@ -14,23 +22,30 @@ interface TokenActionsProps {
 
 export function TokenActions({ token, onAction }: TokenActionsProps): React.ReactElement {
   const actions = [];
+  const { connected, networkId } = useEthers();
 
-  if (token.state === TokenState.Created) {
+  if (!connected) {
+    return <div>Not connected</div>;
+  }
+
+  const state = (token.networks && token.networks[networkId]?.state) || TokenState.Created;
+
+  if (state === TokenState.Created) {
     actions.push(
       <Button key="edit" size="small" onClick={() => onAction(TokenAction.Edit)} icon={<EditOutlined />}>
         Edit
       </Button>,
     );
   }
-  if (token.state === TokenState.Created || token.state === TokenState.Deploying) {
+  if (state === TokenState.Created || state === TokenState.Deploying) {
     actions.push(
       <Button key="deploy" size="small" onClick={() => onAction(TokenAction.Deploy)} icon={<RocketOutlined />}>
-        {token.state === TokenState.Deploying ? 'Resume Deploy' : 'Deploy'}
+        {state === TokenState.Deploying ? 'Resume Deploy' : 'Deploy'}
       </Button>,
     );
   }
 
-  if (token.state === TokenState.Deployed) {
+  if (state === TokenState.Deployed) {
     actions.push(
       <Button
         key="fundraiser"
@@ -54,7 +69,7 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     );
   }
 
-  if (token.state === TokenState.Fundraising) {
+  if (state === TokenState.Fundraising) {
     actions.push(
       <Button
         key="manageFundraise"
@@ -67,13 +82,19 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     );
   }
 
-  if (token.state === TokenState.Minted) {
+  if (state === TokenState.Deployed || state === TokenState.Minted) {
     actions.push(
       <Button key="manageToken" size="small" onClick={() => onAction(TokenAction.ManageToken)} icon={<EditOutlined />}>
         Manage token
       </Button>,
     );
   }
+
+  actions.push(
+    <Button key="info" size="small" onClick={() => onAction(TokenAction.Info)} icon={<InfoCircleOutlined />}>
+      Info
+    </Button>,
+  );
 
   actions.push(
     <Popconfirm

@@ -1,5 +1,5 @@
 import { EthereumNetwork } from '@types';
-import ethers from 'ethers';
+import { SWM_TOKEN_DECIMALS } from '@const';
 import { getBnSupply } from '@lib';
 
 export const GANACHE = {
@@ -28,7 +28,6 @@ export const GANACHE = {
   },
 };
 
-const SWM_TOKEN_DECIMALS = 18;
 const SWM_TOKEN_SUPPLY = 10000000;
 
 export const SWM_TOKEN = {

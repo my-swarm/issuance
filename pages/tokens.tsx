@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Drawer, Table } from 'antd';
 
-import { useStateValue } from '@app';
+import { useEthers, useStateValue } from '@app';
 import { BaseError } from '@lib';
 import {
   DefaultLayout,
@@ -9,15 +9,16 @@ import {
   TokenForm,
   TokenActions,
   TokenActionTitle,
-  TokenStartFundraise,
+  TokenStartFundraiser,
   TokenManage,
-  TokenManageFundraise,
+  TokenManageFundraiser,
   TokenStakeAndMint,
-  FundraiserForm,
+  TokenInfo,
 } from '@components';
 import { Token, TokenAction, TokenState, tokenStates, transferRestrictionsTypes } from '@types';
 
 export default function Tokens() {
+  const { connected, networkId } = useEthers();
   const [token, setToken] = useState<Token>();
   const [action, setAction] = useState<TokenAction>();
   const [{ tokens }, dispatch] = useStateValue();
@@ -31,7 +32,10 @@ export default function Tokens() {
     {
       title: 'Status',
       render: (token) => {
-        const state = token.state || TokenState.Created;
+        if (!connected) {
+          return <div>Unknown state (not connected)</div>;
+        }
+        const state = (token.networks && token.networks[networkId]?.state) || TokenState.Created;
         return (
           <div>
             {tokenStates[state] || 'Unknown state'}
@@ -94,6 +98,11 @@ export default function Tokens() {
     dispatch({ type: 'deleteToken', id: token.id });
   };
 
+  const handleSwitchActionAnimated = (action: TokenAction) => {
+    setAction(undefined);
+    window.setTimeout(() => setAction(action), 200);
+  };
+
   const renderHeadExtra = () => (
     <Button key="1" type="primary" onClick={() => handleCreate()}>
       Create token
@@ -103,12 +112,20 @@ export default function Tokens() {
   function renderAction() {
     if (action === TokenAction.Create || action === TokenAction.Edit)
       return <TokenForm onSubmit={handleSubmit} onCancel={handleCancelEdit} formData={token} />;
-    if (action === TokenAction.Deploy) return <TokenDeploy token={token} />;
+    if (action === TokenAction.Deploy)
+      return (
+        <TokenDeploy
+          token={token}
+          onCancel={handleCancelEdit}
+          onReview={() => handleSwitchActionAnimated(TokenAction.Edit)}
+        />
+      );
     if (action === TokenAction.StartFundraise)
-      return <FundraiserForm onCancel={handleCancelEdit} onSubmit={() => console.log('submit')} />;
+      return <TokenStartFundraiser token={token} onCancel={handleCancelEdit} />;
     if (action === TokenAction.ManageToken) return <TokenManage token={token} />;
-    if (action === TokenAction.ManageFundraise) return <TokenManageFundraise token={token} />;
-    if (action === TokenAction.StakeAndMint) return <TokenStakeAndMint token={token} />;
+    if (action === TokenAction.ManageFundraise) return <TokenManageFundraiser token={token} />;
+    if (action === TokenAction.StakeAndMint) return <TokenStakeAndMint token={token} onCancel={handleCancelEdit} />;
+    if (action === TokenAction.Info) return <TokenInfo token={token} />;
   }
 
   return (

@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Card, Space, Descriptions } from 'antd';
-import { Token } from '../../@types';
+import { Token } from '@types';
 import { LineChart, CartesianGrid, XAxis, YAxis, Line, Legend, Tooltip } from 'recharts';
 
 interface FundraiserCardProps {
@@ -45,6 +45,7 @@ export function FundraiserCard({ token }: FundraiserCardProps): ReactElement {
           <Descriptions.Item label="End Date">20.8.2020</Descriptions.Item>
           <Descriptions.Item label="Soft cap">500,000 USD</Descriptions.Item>
           <Descriptions.Item label="Hard cap">1,000,000 USD</Descriptions.Item>
+          <Descriptions.Item label="Raised so far">320,000 USD (32%)</Descriptions.Item>
         </Descriptions>
       </Space>
     </Card>

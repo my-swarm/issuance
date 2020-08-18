@@ -1,5 +1,5 @@
 import { ContractArtifacts } from '@lib/ContractArtifacts';
-import { Contract, ContractFactory, Signer, Transaction } from 'ethers';
+import { Contract, ContractFactory, Signer, Transaction, Event } from 'ethers';
 import { TransactionEventCallback, TransactionState } from '@types';
 
 export class ContractProxy {
@@ -32,7 +32,7 @@ export class ContractProxy {
     artifacts,
     method: string,
     args: Array<any> = [],
-    events: { [index: string]: (value: any) => void } = {},
+    events: { [index: string]: (event: Event) => void } = {},
   ): Promise<Transaction> {
     this.handleStateChange(TransactionState.None);
     const contract = new Contract(artifacts.address, artifacts.abi, this.signer);

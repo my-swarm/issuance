@@ -7,6 +7,7 @@ import _Src20Registry from './SRC20Registry.json';
 import _SwmToken from './SwmToken.json';
 import _TransferRules from './TransferRules.json';
 import _SwmPriceOracle from './SWMPriceOracle.json';
+import _Src20 from './SRC20.json';
 
 export const transferRulesContract = _TransferRules;
 export const featuresContract = _Features;
@@ -17,6 +18,7 @@ export const factoryContract = _Src20Factory;
 export const registryContract = _Src20Registry;
 export const swmTokenContract = _SwmToken;
 export const priceOracleContract = _SwmPriceOracle;
+export const src20Contract = _Src20;
 
 export const contracts = {
   transferRules: transferRulesContract,
@@ -28,4 +30,5 @@ export const contracts = {
   registry: registryContract,
   swmToken: swmTokenContract,
   priceOracle: priceOracleContract,
+  src20: src20Contract,
 };

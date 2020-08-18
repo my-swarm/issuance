@@ -118,6 +118,9 @@
     },
     "42": {
       "address": null
+    },
+    "1337": {
+      "address": "0xc83c164dD98378D89c0DdF47B62606Bd50E28f42"
     }
   }
 }

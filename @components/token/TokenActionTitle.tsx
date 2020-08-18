@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Token, TokenAction } from '../../@types';
+import { Token, TokenAction } from '@types';
 
 interface TokenActionTitleProps {
   action: TokenAction;
@@ -15,10 +15,15 @@ const tokenActionTitle = {
   [TokenAction.StartFundraise]: 'Start fundraiser for',
   [TokenAction.ManageToken]: 'Manage',
   [TokenAction.ManageFundraise]: 'Manage fundraiser for',
+  [TokenAction.Info]: 'Token information',
 };
 
 export function TokenActionTitle({ action, token }: TokenActionTitleProps): ReactElement {
-  const tokenName = token ? <strong>{token.name}</strong> : null;
+  const tokenName = token ? (
+    <strong>
+      {token.name} ({token.symbol})
+    </strong>
+  ) : null;
   const actionTitle = tokenActionTitle[action];
 
   if (action === TokenAction.Create) {

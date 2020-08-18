@@ -1,46 +1,6 @@
 @import '~antd/dist/antd.css';
+@import 'ant-hacks';
 @import 'utility';
-
-.ant-layout-content {
-	padding: 1rem 1.5rem;
-}
-
-.ant-popover {
-  width: 24rem;
-}
-
-.ant-form-item.no-margin {
-  margin-bottom: 0;
-}
-
-.ant-upload.ant-upload-drag {
-  .ant-upload {
-    padding: 12px 0;
-  }
-
-  p.ant-upload-drag-icon {
-    margin-bottom: 0;
-
-    .anticon {
-      font-size: 32px;
-    }
-  }
-  p.ant-upload-hint {
-    font-size: 12px;
-  }
-}
-
-.ant-page-header {
-  padding-left: 0;
-  &.table-aligned {
-    padding-left: 16px;
-  }
-}
-
-.c-logo {
-  padding: 1rem 1.5rem;
-}
-
 
 .c-metamask-connect-button {
   img {
@@ -66,4 +26,27 @@
 
 .c-help {
   cursor: help;
+}
+
+.image-preview {
+  height: 2rem;
+  min-width: 4rem;
+  width: auto;
+  position: relative;
+
+  img {
+    display: block;
+    position: absolute;
+    height: 2rem;
+    width: auto;
+    &:hover {
+      height: 8rem;
+    }
+  }
+}
+
+.has-dark-background {
+  &, h1, h2, h3 {
+    color: rgba(255, 255, 255, .8);
+  }
 }

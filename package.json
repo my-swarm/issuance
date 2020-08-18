@@ -6,7 +6,7 @@
   "keywords": [],
   "author": "Max Choi",
   "scripts": {
-    "dev": "next -p 5070",
+    "dev": "yarn && next -p 5070",
     "build": "next build",
     "start": "next start",
     "test": "jest",
@@ -20,6 +20,7 @@
     "@types/lodash": "^4.14.158",
     "@types/recharts": "^1.8.14",
     "@types/uuid": "^8.0.0",
+    "@zeit/next-source-maps": "^0.0.3",
     "antd": "^4.0.3",
     "babel-plugin-import": "^1.13.0",
     "babel-plugin-inline-import": "^3.0.0",

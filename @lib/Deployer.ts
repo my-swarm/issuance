@@ -6,105 +6,121 @@ import {
   Src20FeaturesBitmask,
   Token,
   TokenAddresses,
+  TokenState,
+  TransactionEventCallback,
   ZeroAddress,
 } from '@types';
-import { Contract, Signer, utils } from 'ethers';
+import { BigNumber, Contract, Signer, utils } from 'ethers';
 
-import { contracts } from '../contracts';
-
-import { ContractArtifacts, ContractProxy, InvalidStateError } from '.';
+import { ContractProxy, InvalidStateError, ContractArtifacts, getBnSupply } from '.';
+import { contracts } from '@contracts';
+import assert from 'assert';
 
 export class Deployer {
-  private readonly _signer: Signer;
-  private readonly _contractProxy: ContractProxy;
-  private _token: Token;
+  private readonly signer: Signer;
+  private readonly contractProxy: ContractProxy;
+  private readonly token: Token;
   private state: DeployerState = DeployerState.None;
   private callbacks: DeployerEventCallback[] = [];
-  private networkId: EthereumNetwork;
-  private owner: EthereumAddress;
   private contractAddresses: { [index: string]: EthereumAddress } = {}; // override the artifacts addresses
+  private owner: EthereumAddress;
+  private networkId: EthereumNetwork;
+
   private _addresses: TokenAddresses = {
     transferRules: null,
     features: null,
     roles: null,
-    token: null,
+    src20: null,
   };
 
-  constructor(signer: Signer) {
-    this._signer = signer;
-    this._contractProxy = new ContractProxy(signer);
+  constructor(signer: Signer, token: Token) {
+    this.signer = signer;
+    this.contractProxy = new ContractProxy(signer);
+    this.token = token;
   }
 
-  public async deploy(token: Token): Promise<void> {
-    this.owner = await this._signer.getAddress();
-    this.networkId = (await this._signer.getChainId()) as EthereumNetwork;
+  public async setup(): Promise<void> {
+    this.owner = await this.signer.getAddress();
+    this.networkId = (await this.signer.getChainId()) as EthereumNetwork;
+    this.addresses = this.token.networks[this.networkId]?.addresses || {};
+  }
 
-    this._token = token;
-    if (token.deployerState) this.state = token.deployerState;
-    if (token.addresses && token.addresses[this.networkId]) this.addresses = token.addresses[this.networkId];
-
-    if (this.state < DeployerState.Started) {
-      this.handleStateChange(DeployerState.Started);
+  public async deploy(): Promise<void> {
+    if (this.state > DeployerState.None) {
+      this.handleStateChange(DeployerState.None);
     }
     await this.deployTransferRules();
     await this.deployFeatures();
     await this.deployRoles();
     await this.createToken();
-    await this.approveStake();
-    await this.mint();
+    console.log('deployed');
     this.handleStateChange(DeployerState.Finished);
   }
 
   private async deployTransferRules(): Promise<void> {
-    if (this.state >= DeployerState.TransferRulesFinished) return;
+    if (this.state > DeployerState.TransferRules) return;
     if (this.state === DeployerState.Finished) {
       throw new InvalidStateError('Cannot deploy a finished contract.');
     }
 
-    this.handleStateChange(DeployerState.TransferRulesStarted);
-    const instance = await this._contractProxy.deploy(this.getContractArtifacts('transferRules'), [this.owner]);
-    console.log('transferRules deployed at', instance.address);
+    this.handleStateChange(DeployerState.TransferRules);
+    const instance = await this.contractProxy.deploy(this.getContractArtifacts('transferRules'), [this.owner]);
     this._addresses.transferRules = instance.address;
-    this.handleStateChange(DeployerState.TransferRulesFinished);
   }
 
   private async deployFeatures(): Promise<void> {
-    if (this.state >= DeployerState.FeaturesFinished) return;
+    if (this.state > DeployerState.Features) return;
 
-    this.handleStateChange(DeployerState.FeaturesStarted);
+    this.handleStateChange(DeployerState.Features);
     const features = this.getFeaturesAsContractValue();
-    const instance = await this._contractProxy.deploy(this.getContractArtifacts('features'), [this.owner, features]);
-    console.log('features deployed at', instance.address);
+    const instance = await this.contractProxy.deploy(this.getContractArtifacts('features'), [this.owner, features]);
     this._addresses.features = instance.address;
-    this.handleStateChange(DeployerState.FeaturesFinished);
   }
 
   private async deployRoles(): Promise<void> {
-    if (this.state >= DeployerState.RolesFinished) return;
+    if (this.state > DeployerState.Roles) return;
+    const registryAddress = this.getContractArtifacts('registry').address;
 
-    this.handleStateChange(DeployerState.RolesStarted);
-    const instance = await this._contractProxy.deploy(this.getContractArtifacts('roles'), [
-      this.owner,
-      this.owner,
-      this._addresses.features,
+    this.handleStateChange(DeployerState.Roles);
+    const instance = await this.contractProxy.deploy(this.getContractArtifacts('roles'), [
+      this.owner, // owner
+      registryAddress, // manager: the SRC20 registry contract
+      this._addresses.transferRules, // rules
     ]);
     this._addresses.roles = instance.address;
-    console.log('roles deployed at', instance.address);
-    this.handleStateChange(DeployerState.RolesFinished);
   }
 
-  private async createToken(): Promise<Contract> {
-    if (this.state >= DeployerState.TokenFinished) return;
+  private async createToken(): Promise<void> {
+    if (this.state > DeployerState.Token) return;
 
-    this.handleStateChange(DeployerState.TokenStarted);
-    const { name, symbol, decimals, initialSupply, assetNetValue } = this.token;
-    const kyaHash = utils.formatBytes32String('abcd1234abcd1234');
-    const kyaUrl = 'http://kya.com';
-    const params = [
+    this.handleStateChange(DeployerState.Token);
+    const {
       name,
       symbol,
       decimals,
       initialSupply,
+      allowUnlimitedSupply,
+      totalSupply,
+      allowMint,
+      assetNetValue,
+    } = this.token;
+    const kyaHash = utils.formatBytes32String('abcd1234abcd1234');
+    const kyaUrl = 'http://kya.com';
+    let supply = initialSupply;
+    if (allowMint) {
+      if (allowUnlimitedSupply) {
+        supply = 0;
+      } else if (totalSupply > initialSupply) {
+        supply = totalSupply;
+      }
+    }
+
+    console.log({ allowMint, initialSupply, totalSupply, allowUnlimitedSupply, supply });
+    const params = [
+      name,
+      symbol,
+      decimals,
+      getBnSupply(supply, decimals),
       kyaHash,
       kyaUrl,
       assetNetValue,
@@ -118,53 +134,67 @@ export class Deployer {
         this.getContractArtifacts('getRateMinter').address,
       ],
     ];
-    console.log('deploying using factory', params);
-    console.log('deploying with params', params);
+    // console.log({ params });
     return new Promise((resolve, reject) => {
-      try {
-        const events = {
-          SRC20Created: (token) => {
-            this.handleStateChange(DeployerState.TokenFinished);
-            this.addresses.token = token.address;
-            resolve(token);
-          },
-        };
-        this.contractProxy.call(this.getContractArtifacts('factory'), 'create', params, events);
-      } catch (e) {
-        reject(e);
-      }
+      const events = {
+        SRC20Created: (event) => {
+          const { args } = event;
+          this.addresses.src20 = args.token;
+          console.log('resolve');
+          resolve();
+        },
+      };
+      this.contractProxy.call(this.getContractArtifacts('factory'), 'create', params, events).catch((e) => reject(e));
     });
   }
 
-  private async approveStake(): Promise<void> {
-    if (this.state >= DeployerState.StakeApproveFinished) return;
+  public async stakeAndMint(): Promise<void> {
+    const canMint = this.token.networks[this.networkId]?.state === TokenState.Deployed;
+    assert(canMint, "Cannot mint a token that's not deplyed");
 
-    this.handleStateChange(DeployerState.StakeApproveStarted);
-    const spender = this.getContractArtifacts('registry').address;
-    const value = await this.contractProxy.get(this.getContractArtifacts('getRateMinter'), 'calcStake', [
+    await this.approveStake();
+    await this.mint();
+  }
+
+  private async approveStake(): Promise<void> {
+    const registryAddress = this.getContractArtifacts('registry').address;
+    const stakeAmount = await this.getStakeAmount();
+    const swmTokenArtifacts = this.getContractArtifacts('swmToken');
+    const owner = await this.signer.getAddress();
+    const currentlyApproved = await this.contractProxy.get(swmTokenArtifacts, 'allowance', [owner, registryAddress]);
+    console.log({ currentlyApproved: currentlyApproved.toString(), stakeAmount: stakeAmount.toString() });
+    if (currentlyApproved.lt(stakeAmount)) {
+      console.log('approving', stakeAmount.sub(currentlyApproved).toString());
+      const result = await this.contractProxy.call(swmTokenArtifacts, 'approve', [
+        registryAddress, // param: spender
+        stakeAmount.sub(currentlyApproved), // param: value
+      ]);
+      console.log({ result });
+      const currentlyApproved2 = await this.contractProxy.get(swmTokenArtifacts, 'allowance', [owner, registryAddress]);
+      console.log('approved potom', currentlyApproved2.toString());
+    }
+  }
+
+  public async getStakeAmount(): Promise<BigNumber> {
+    return await this.contractProxy.get(this.getContractArtifacts('getRateMinter'), 'calcStake', [
       this.token.assetNetValue,
     ]);
-    console.log('approving', { spender, value });
-    await this.contractProxy.call(this.getContractArtifacts('swmToken'), 'approve', [spender, value]);
-    this.handleStateChange(DeployerState.StakeApproveFinished);
   }
 
   private async mint(): Promise<void> {
-    if (this.state >= DeployerState.MintFinished) return;
-
-    this.handleStateChange(DeployerState.MintStarted);
-    const tokenAddress = this.addresses.token;
-    const totalSupply = this.token.initialSupply; // todo: convert to 'wei'
-    console.log('stake and mint', [tokenAddress, totalSupply]);
-    await this.contractProxy.call(this.getContractArtifacts('getRateMinter'), 'stakeAndMint', [
-      tokenAddress,
-      totalSupply,
-    ]);
-    this.handleStateChange(DeployerState.MintFinished);
+    const params = [
+      this.addresses.src20, // param: src20
+      getBnSupply(this.token.initialSupply, this.token.decimals), // param: numSRC20TOkens
+    ];
+    await this.contractProxy.call(this.getContractArtifacts('getRateMinter'), 'stakeAndMint', params);
   }
 
   public onProgress(callback: DeployerEventCallback): void {
     this.callbacks.push(callback);
+  }
+
+  public onTransactionProgress(callback: TransactionEventCallback): void {
+    this.contractProxy.onProgress(callback);
   }
 
   private handleStateChange(state: DeployerState): void {
@@ -174,27 +204,7 @@ export class Deployer {
     }
   }
 
-  get token(): Token {
-    return this._token;
-  }
-
-  get signer(): Signer {
-    return this._signer;
-  }
-
-  get contractProxy(): ContractProxy {
-    return this._contractProxy;
-  }
-
-  get addresses(): TokenAddresses {
-    return this._addresses;
-  }
-
-  set addresses(addresses: TokenAddresses) {
-    this._addresses = addresses;
-  }
-
-  public resume(state: DeployerState, addresses: TokenAddresses) {
+  public resume(state: DeployerState, addresses: TokenAddresses): void {
     if (state) {
       this.state = state;
     }
@@ -206,7 +216,6 @@ export class Deployer {
   private getContractArtifacts(contractName: string): ContractArtifacts {
     const artifacts = new ContractArtifacts(contracts[contractName], this.networkId);
     if (this.contractAddresses[contractName]) {
-      console.log(`using explicit address for ${contractName}: ${this.contractAddresses[contractName]}`);
       artifacts.address = this.contractAddresses[contractName];
     }
     return artifacts;
@@ -218,7 +227,6 @@ export class Deployer {
    * @param address
    */
   public setContractAddress(contractName: string, address: EthereumAddress): void {
-    console.log('setting address', contractName, address);
     this.contractAddresses[contractName] = address;
   }
 
@@ -229,5 +237,13 @@ export class Deployer {
       (this.token.allowBurn ? Src20FeaturesBitmask.allowBurn : 0) +
       (this.token.allowAccountFreeze ? Src20FeaturesBitmask.allowAccountFreeze : 0)
     );
+  }
+
+  get addresses(): TokenAddresses {
+    return this._addresses;
+  }
+
+  set addresses(addresses: TokenAddresses) {
+    this._addresses = addresses;
   }
 }

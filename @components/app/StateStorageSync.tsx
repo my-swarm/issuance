@@ -55,16 +55,17 @@ export function StateStorageSync(): ReactElement {
   }
 
   return (
-    <div className="c-storage-state-sync">
-      <Card size="small" title={renderCardTitle()}>
-        <p>Data version: {version}</p>
-        <Button size="small" onClick={handleSave}>
+    <div className="c-storage-state-sync has-dark-background">
+      <h3>{renderCardTitle()}</h3>
+      <p>Data version: {version}</p>
+      <Space size="small">
+        <Button size="small" onClick={handleSave} ghost>
           Save
         </Button>
-        <Button size="small" onClick={handleResetDev}>
-          Reset Dev
+        <Button size="small" onClick={handleResetDev} ghost>
+          Reset
         </Button>
-      </Card>
+      </Space>
     </div>
   );
 }

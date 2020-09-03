@@ -596,7 +596,7 @@
       "address": "0x90D5a4e236F21a1b8c540011415709540104b981"
     },
     "3": {
-      "address": "0xb461a8606ab5f5822d72874d698deaa966e0789e"
+      "address": "0xF7457cd9d8Fc951d3FF7E3A26A6376690b220d57"
     },
     "4": {
       "address": "0x77197DA9189f4e68D3d1d22fEd294983b0efb54d"
@@ -606,6 +606,9 @@
     },
     "1337": {
       "address": "0x30853afb7dB4E6d861648780931EFb1f9C656D95"
+    },
+    "31337": {
+      "address": "0x7c2C195CD6D34B8F845992d380aADB2730bB9C6F"
     }
   }
 }

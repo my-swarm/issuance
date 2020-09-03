@@ -78,7 +78,7 @@
       "address": "0x1953D641aD8b2d060ceE858065c3883Fe5Cc7C2a"
     },
     "3": {
-      "address": "0x7395FDfa173067638D141E2f3FD57b8D761dbBaC"
+      "address": "0x546E9Fc6582b249d609Ad7Aec100EBb195714AB3"
     },
     "4": {
       "address": "0x2b437267B00E204020f7e31Be9DBB42641bD423c"
@@ -88,6 +88,9 @@
     },
     "1337": {
       "address": "0x4A2a8aEdfC38c0e95363273247d7aE0b38767099"
+    },
+    "31337": {
+      "address": "0xf4e77E5Da47AC3125140c470c71cBca77B5c638c"
     }
   }
 }

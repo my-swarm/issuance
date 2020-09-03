@@ -21,4 +21,4 @@ export enum Src20FeaturesBitmask {
   allowAccountFreeze = 8,
 }
 
-export const ZeroAddress = '0x0000000000000000000000000000000000000000';
+export const zeroAddress = '0x0000000000000000000000000000000000000000';

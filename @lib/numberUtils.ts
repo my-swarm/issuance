@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
 
-export function getBnSupply(intSupply: number, decimals: number): BigNumber {
-  return BigNumber.from(`${intSupply}${'0'.repeat(decimals)}`);
+export function getBnSupply(intSupply: string | number, decimals: number): BigNumber {
+  return BigNumber.from(`${intSupply.toString()}${'0'.repeat(decimals)}`);
 }
 
 export function getTokenAmount(bnAmount: BigNumber, decimals: number): number {

@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Token, transferRestrictionsTypes } from '@types';
+import { Token, transferRules } from '@types';
 import { Descriptions } from 'antd';
 import { formatNumber } from '@lib';
 import { tokenFeatures } from '@app/const';
@@ -23,9 +23,7 @@ export function TokenInfoBasics({ token }: { token: Token }): ReactElement {
       <Descriptions.Item label="Initial Token supply">
         {formatNumber(token.initialSupply)} {token.symbol}
       </Descriptions.Item>
-      <Descriptions.Item label="Transfer restrictions">
-        {transferRestrictionsTypes[token.transferRestrictionsType]}
-      </Descriptions.Item>
+      <Descriptions.Item label="Transfer restrictions">{transferRules[token.transferRules]}</Descriptions.Item>
       <Descriptions.Item label="Features">{features.join(', ')}</Descriptions.Item>
     </Descriptions>
   );

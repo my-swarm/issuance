@@ -1,4 +1,4 @@
-import { Uuid, AppFile, AppImage, EthereumAddress, TransferRestrictionsTypes } from '.';
+import { Uuid, AppFile, AppImage, EthereumAddress, TransferRules } from '.';
 
 export enum FundraiserState {
   Unlaunched,

@@ -8,11 +8,12 @@ import {
   TokenAddresses,
   TokenState,
   TransactionEventCallback,
-  ZeroAddress,
+  TransferRules,
+  zeroAddress,
 } from '@types';
-import { BigNumber, Contract, Signer, utils } from 'ethers';
+import { BigNumber, Signer, utils } from 'ethers';
 
-import { ContractProxy, InvalidStateError, ContractArtifacts, getBnSupply } from '.';
+import { ContractArtifacts, ContractProxy, getBnSupply, InvalidStateError } from '.';
 import { contracts } from '@contracts';
 import assert from 'assert';
 
@@ -58,6 +59,7 @@ export class Deployer {
   }
 
   private async deployTransferRules(): Promise<void> {
+    if (this.token.transferRules === TransferRules.None) return;
     if (this.state > DeployerState.TransferRules) return;
     if (this.state === DeployerState.Finished) {
       throw new InvalidStateError('Cannot deploy a finished contract.');
@@ -85,7 +87,7 @@ export class Deployer {
     const instance = await this.contractProxy.deploy(this.getContractArtifacts('roles'), [
       this.owner, // owner
       registryAddress, // manager: the SRC20 registry contract
-      this._addresses.transferRules, // rules
+      this._addresses.transferRules || zeroAddress, // rules
     ]);
     this._addresses.roles = instance.address;
   }
@@ -126,8 +128,8 @@ export class Deployer {
       assetNetValue,
       [
         this.owner,
-        ZeroAddress, // restrictions - not implemented (yet?)
-        this.addresses.transferRules,
+        zeroAddress, // restrictions - not implemented (yet?)
+        this.addresses.transferRules || zeroAddress,
         this.addresses.roles,
         this.addresses.features,
         this.getContractArtifacts('assetRegistry').address,

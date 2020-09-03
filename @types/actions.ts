@@ -1,4 +1,14 @@
-import { AppError, ColdState, EthereumNetwork, Token, TokenNetworkData, TokenState, Uuid } from '.';
+import {
+  AccountList,
+  AppError,
+  ColdState,
+  EthereumNetwork,
+  Token,
+  TokenAccountListType,
+  TokenNetworkData,
+  TokenState,
+  Uuid,
+} from '.';
 
 interface resetDataAction {
   type: 'restoreState';
@@ -56,6 +66,20 @@ interface SetTokenStateAction {
   state: TokenState;
 }
 
+interface AddToTokenAccountListAction {
+  type: 'addToTokenAccountList';
+  id: Uuid;
+  listType: TokenAccountListType;
+  addItems: AccountList;
+}
+
+interface DeleteFromTokenAccountListAction {
+  type: 'deleteFromTokenAccountList';
+  id: Uuid;
+  listType: TokenAccountListType;
+  deleteItems: AccountList;
+}
+
 export type Action =
   | resetDataAction
   | AddTokenAction
@@ -67,4 +91,6 @@ export type Action =
   | EndSavingAction
   | ShowErrorAction
   | HideErrorAction
-  | SetTokenStateAction;
+  | SetTokenStateAction
+  | AddToTokenAccountListAction
+  | DeleteFromTokenAccountListAction;

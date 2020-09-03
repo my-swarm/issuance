@@ -7,6 +7,7 @@
   "author": "Max Choi",
   "scripts": {
     "dev": "yarn && next -p 5070",
+    "dev:deploy": "node scripts/deploy-requirements.js",
     "build": "next build",
     "start": "next start",
     "test": "jest",

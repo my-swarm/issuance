@@ -4,7 +4,7 @@ import { Contract, ContractFactory, providers, Wallet } from 'ethers';
 
 import { contracts } from '@contracts';
 import { Deployer } from '@lib';
-import { DeployerState, Token, TokenState, TransferRestrictionsTypes } from '@types';
+import { DeployerState, Token, TokenState, TransferRules } from '@types';
 
 import { GANACHE, SWM_TOKEN } from '../config';
 
@@ -44,7 +44,7 @@ export function getTestingToken(): Token {
     allowBurn: true,
     allowMint: true,
     assetNetValue: 1000000,
-    transferRestrictionsType: TransferRestrictionsTypes.Whitelist,
+    transferRules: TransferRules.WhitelistOrGraylist,
     networks: {
       [GANACHE.networkId]: {
         state: TokenState.Created,

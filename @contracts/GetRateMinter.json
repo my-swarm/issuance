@@ -111,7 +111,7 @@
       "address": "0x50876971D968e523Dc9Df59867536402a0b5C5Be"
     },
     "3": {
-      "address": "0xe0E57388e696C4Db04643147070532111b21B8e8"
+      "address": "0x63c4693A1C574ea3A40EdC60f0BAe3E18A7F3044"
     },
     "4": {
       "address": "0x78aD2aF67c31AD9B430d2714cB460826AF5F92bD"
@@ -121,6 +121,9 @@
     },
     "1337": {
       "address": "0xc83c164dD98378D89c0DdF47B62606Bd50E28f42"
+    },
+    "31337": {
+      "address": "0x038B86d9d8FAFdd0a02ebd1A476432877b0107C8"
     }
   }
 }

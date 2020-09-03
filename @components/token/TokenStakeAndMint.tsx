@@ -23,6 +23,7 @@ export function TokenStakeAndMint({ token, onCancel }: TokenStakeAndMintProps): 
     await deployer.setup();
     try {
       await deployer.stakeAndMint();
+      setTokenMinted();
     } catch (e) {
       let error;
       if (e.code === 4001) {
@@ -31,11 +32,16 @@ export function TokenStakeAndMint({ token, onCancel }: TokenStakeAndMintProps): 
           description:
             'You need to confirm both transactions (SWM spending and minting) in the Metamask popups. Note: SWM spending approval not required if you already have high enough allowance.',
         };
+      } else if (e.code === -32000) {
+        error = {
+          message: 'Cannot stake SWM',
+          description: "It appears your SWM balance is lower than what's required to stake",
+        };
       } else if (e.code === -32603) {
         if (e.data.message.match(/trying to mint too many tokens/)) {
           error = {
             message: 'Cannot mint',
-            description: 'It apears you have aleready minted your tokens.',
+            description: 'It appears you have aleready minted your tokens.',
           };
           setTokenMinted();
         }
@@ -44,8 +50,6 @@ export function TokenStakeAndMint({ token, onCancel }: TokenStakeAndMintProps): 
         error = { message: 'Error during deployment', description: e.message };
       }
       dispatch({ type: 'showError', error });
-    } finally {
-      setTokenMinted();
     }
     setIsDeploying(false);
   };

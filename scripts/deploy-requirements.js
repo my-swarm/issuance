@@ -23,16 +23,16 @@ const GANACHE = {
   mnemonic: 'screen crop flip clean airport example clip envelope faint infant limit stay',
   hdPath: "m/44'/60'/0'/0/",
   host: '127.0.0.1',
-  port: 7546,
-  networkId: 1337,
+  port: 7545,
+  networkId: 31337,
   accounts: [
     {
-      address: '0x34039dDd52ea8fFD1056B1025dF51Ef0c65fFc9d',
-      privateKey: '0x6e547a6928202f8c1f404040ada7d127cad59a7550823e95a5b0c87ea5b00714',
+      address: '0xc783df8a850f42e7f7e57013759c285caa701eb6',
+      privateKey: '0xc5e8f61d1ab959b397eecc0a37a6517b8e67a0e7cf1f4bce5591f3ed80199122',
     },
     {
-      address: '0xc117F45Eacf32DB7374f3d6f1F3e6dDEF9C08975',
-      privateKey: '0xa8b591e1e4bb5511448c00c73d8890e827665e440978d54be5b5ff55a7c93de9',
+      address: '0xead9c93b79ae7c1591b1fb5323bd777e86e150d4',
+      privateKey: '0xd49743deccbccc5dc7baa8e69e5be03298da8688a15dd202e20f15d5e0e9a9fb',
     },
   ],
 };
@@ -46,7 +46,7 @@ const SWM_TOKEN = {
 
 const TOKEN_PRICE = [5, 10]; // the token price ~ 0.5 USD
 
-const provider = new providers.JsonRpcProvider('http://127.0.0.1:7545');
+const provider = new providers.JsonRpcProvider('http://192.168.137.100:7545');
 
 const swmOwner = new Wallet(GANACHE.accounts[0].privateKey, provider);
 const tokenManager = new Wallet(GANACHE.accounts[1].privateKey, provider);

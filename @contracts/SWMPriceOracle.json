@@ -187,7 +187,7 @@
       "address": null
     },
     "3": {
-      "address": "0x7BB104516EDD2722EA39443372Da5F09C7C02410"
+      "address": "0x6a8D2580048B5299ee29266CC6cbC154494F78C4"
     },
     "4": {
       "address": null
@@ -197,6 +197,9 @@
     },
     "1337": {
       "address": "0xc2a0FcDaA72c485C2883d79022B3b047401a1497"
+    },
+    "31337": {
+      "address": "0x8858eeB3DfffA017D4BCE9801D340D36Cf895CCf"
     }
   }
 }

@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Token, transferRestrictionsTypes } from '@types';
+import { Token, transferRules } from '@types';
 import { Descriptions } from 'antd';
 import { formatNumber } from '@lib';
 import { tokenFeatures } from '@app/const';

@@ -8,3 +8,4 @@ export * from './ContractArtifacts';
 export * from './ContractProxy';
 export * from './Deployer';
 export * from './stake';
+export * from './accountList';

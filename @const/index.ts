@@ -9,3 +9,4 @@ export const navToStakeBase = [
 ];
 
 export const SWM_TOKEN_DECIMALS = 18;
+export const MANAGE_TABLE_PER_PAGE = 10;

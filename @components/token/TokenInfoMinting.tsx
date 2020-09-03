@@ -11,7 +11,8 @@ export function TokenInfoMinting({ token }: { token: Token }) {
       </Descriptions.Item>
       <Descriptions.Item label="Future minting allowed">{token.allowMint ? 'Yes' : 'No'}</Descriptions.Item>
       <Descriptions.Item label="Maximum supply">
-        {token.allowUnlimitedSupply ? 'Unlimited' : formatNumber(token.totalSupply)} {token.symbol}
+        {token.allowUnlimitedSupply ? 'Unlimited' : formatNumber(token.totalSupply || token.initialSupply)}{' '}
+        {token.symbol}
       </Descriptions.Item>
     </Descriptions>
   );

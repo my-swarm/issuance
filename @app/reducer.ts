@@ -2,9 +2,30 @@ import { Reducer } from 'react';
 import { v4 as uuid } from 'uuid';
 import _ from 'lodash';
 
-import { AppState, Action } from '@types';
+import { AppState, Action, Uuid, Token } from '@types';
+import { mergeAccountLists, subtractAccountLists } from '../@lib';
 
 export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
+  function findToken(id: Uuid) {
+    const token = state.tokens.find((t) => t.id === id);
+    if (!token) {
+      throw new Error(`Token not found: ${id}`);
+    }
+    return { ...token };
+  }
+
+  function withUpdatedToken(updatedToken: Token) {
+    return state.tokens.map((token) => (token.id === updatedToken.id ? updatedToken : token));
+  }
+
+  function unsynced(stateUpdate) {
+    return {
+      ...state,
+      ...stateUpdate,
+      isSynced: false,
+    };
+  }
+
   switch (action.type) {
     case 'restoreState':
       return {
@@ -15,11 +36,9 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       };
     case 'addToken': {
       const token = { ...action.token, id: uuid(), networks: {} };
-      return {
-        ...state,
+      return unsynced({
         tokens: [...state.tokens, token],
-        isSynced: false,
-      };
+      });
     }
     case 'updateToken': {
       if (!action.token.id) {
@@ -28,50 +47,57 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       // we don't wanna overwrite some properties, like networks - network related stuff is set with different action
       const { id, networks, ...tokenUpdate } = action.token;
       const updatedToken = {
-        ...state.tokens.find((token) => token.id === id),
+        ...findToken(id),
         ...tokenUpdate,
       };
 
-      return {
-        ...state,
-        tokens: state.tokens.map((token) => (token.id === updatedToken.id ? updatedToken : token)),
-        isSynced: false,
-      };
+      return unsynced({
+        tokens: withUpdatedToken(updatedToken),
+      });
     }
     case 'updateTokenNetwork': {
       const { id, networkId, networkData } = action;
-      const updatedToken = state.tokens.find((t) => t.id === id);
-      if (!updatedToken) {
-        throw new Error('Token not found');
-      }
+      const updatedToken = findToken(id);
       updatedToken.networks[networkId] = networkData;
-      return {
-        ...state,
-        tokens: state.tokens.map((token) => (token.id === updatedToken.id ? updatedToken : token)),
-        isSynced: false,
-      };
+      return unsynced({
+        tokens: withUpdatedToken(updatedToken),
+      });
     }
 
     case 'setTokenState': {
       const { id, networkId, state: tokenState } = action;
-      const updatedToken = state.tokens.find((t) => t.id === id);
-      if (!updatedToken) {
-        throw new Error('Token not found');
-      }
+      const updatedToken = findToken(id);
       updatedToken.networks[networkId].state = tokenState;
-      return {
-        ...state,
-        tokens: state.tokens.map((token) => (token.id === updatedToken.id ? updatedToken : token)),
-        isSynced: false,
-      };
+      return unsynced({
+        tokens: withUpdatedToken(updatedToken),
+      });
+    }
+
+    case 'addToTokenAccountList': {
+      const { id, listType, addItems } = action;
+
+      const updatedToken = findToken(id);
+      updatedToken[listType] = mergeAccountLists(updatedToken[listType] || [], addItems);
+      console.log({ addItems, updatedToken });
+      return unsynced({
+        tokens: withUpdatedToken(updatedToken),
+      });
+    }
+
+    case 'deleteFromTokenAccountList': {
+      const { id, listType, deleteItems } = action;
+      const updatedToken = findToken(id);
+      updatedToken[listType] = subtractAccountLists(updatedToken[listType] || [], deleteItems);
+      return unsynced({
+        tokens: withUpdatedToken(updatedToken),
+      });
     }
 
     case 'deleteToken':
-      return {
-        ...state,
+      return unsynced({
         tokens: state.tokens.filter((token) => token.id !== action.id),
-        isSynced: false,
-      };
+      });
+
     case 'incrementVersion':
       return {
         ...state,

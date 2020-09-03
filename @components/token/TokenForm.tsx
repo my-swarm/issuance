@@ -3,7 +3,7 @@ import { Form, Input, InputNumber, Button, Checkbox, Popover, Space, Radio, Uplo
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { Store } from 'rc-field-form/lib/interface';
 
-import { Token, TransferRestrictionsTypes } from '@types';
+import { Token, TransferRules } from '@types';
 import { tokenFormRules as rules } from './tokenFormRules';
 import { Help, HelpLabel, SingleFileUpload, MultipleFilesUpload } from '@components/index';
 
@@ -19,18 +19,18 @@ const sampleFormData: Token = {
   symbol: 'NWT',
   decimals: 18,
   description: 'Completely new token',
-  initialSupply: 1000000,
-  totalSupply: 5000000,
-  transferRestrictionsType: TransferRestrictionsTypes.Whitelist,
+  initialSupply: 1000,
+  totalSupply: 5000,
+  transferRules: TransferRules.None,
   allowAccountFreeze: true,
-  allowContractFreeze: false,
-  allowForceTransfer: false,
+  allowContractFreeze: true,
+  allowForceTransfer: true,
   allowBurn: true,
-  allowMint: false,
+  allowMint: true,
   assetName: 'Luxury Mediterranean Condo',
   assetDescription: 'Love my condo',
   networks: {},
-  assetNetValue: 500000,
+  assetNetValue: 50,
 };
 
 export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: TokenFormProps): ReactElement {
@@ -90,7 +90,7 @@ export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: Tok
 
       <div style={{ marginBottom: '1rem' }}>
         <Space>
-          Select how do you wanna restrict token transfers
+          Select if you want to be able to restrict token transfers.
           <Help name="transferRestrictions" />
         </Space>
       </div>
@@ -98,13 +98,10 @@ export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: Tok
       <Form.Item name="transferRestrictionsType" rules={rules.transferRestrictionsType}>
         <Radio.Group>
           <div>
-            <Radio value={TransferRestrictionsTypes.None}>No transfer restrictions</Radio>
+            <Radio value={TransferRules.None}>No transfer restrictions</Radio>
           </div>
           <div>
-            <Radio value={TransferRestrictionsTypes.Whitelist}>Whitelist</Radio>
-          </div>
-          <div>
-            <Radio value={TransferRestrictionsTypes.Graylist}>Graylist</Radio>
+            <Radio value={TransferRules.WhitelistOrGraylist}>Whitelist or Graylist</Radio>
           </div>
         </Radio.Group>
       </Form.Item>

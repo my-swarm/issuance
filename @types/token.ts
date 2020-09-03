@@ -1,15 +1,15 @@
 import { Uuid, AppFile, AppImage, EthereumAddress, EthereumNetwork, DeployerState } from '.';
 
-export enum TransferRestrictionsTypes {
+export enum TransferRules {
   None,
-  Whitelist,
-  Graylist,
+  WhitelistOrGraylist,
+  // Graylist, // graylist distinction isn't really implemented in the contracts!
 }
 
-export const transferRestrictionsTypes: { [key: number]: string } = {
-  [TransferRestrictionsTypes.None]: 'None',
-  [TransferRestrictionsTypes.Whitelist]: 'Whitelist',
-  [TransferRestrictionsTypes.Graylist]: 'Graylist',
+export const transferRules: { [key: number]: string } = {
+  [TransferRules.None]: 'None',
+  [TransferRules.WhitelistOrGraylist]: 'Whitelist or Graylist',
+  // [TransferRules.Graylist]: 'Graylist',
 };
 
 export enum TokenState {
@@ -48,8 +48,6 @@ export interface TokenAddresses {
   transferRules?: EthereumAddress;
   roles?: EthereumAddress;
   src20?: EthereumAddress;
-  // factory: EthereumAddress;
-  // registry: EthereumAddress;
 }
 
 export interface TokenNetworkData {
@@ -66,6 +64,16 @@ export interface TokenDeployState {
   featuresAddress: EthereumAddress;
 }
 
+export interface AccountListRecord {
+  address: EthereumAddress;
+  name: string;
+  note: string;
+}
+
+export type AccountList = AccountListRecord[];
+
+export type TokenAccountListType = 'whitelist' | 'graylist';
+
 export interface Token {
   id: Uuid;
   name: string;
@@ -76,7 +84,7 @@ export interface Token {
   totalSupply?: number;
   allowUnlimitedSupply?: boolean;
   image?: AppImage;
-  transferRestrictionsType: TransferRestrictionsTypes;
+  transferRules: TransferRules;
 
   allowAccountFreeze: boolean;
   allowContractFreeze: boolean;
@@ -92,6 +100,8 @@ export interface Token {
   assetLegalDocuments?: AppFile[];
 
   networks: TokenNetworksData;
+  whitelist?: AccountList;
+  graylist?: AccountList;
 }
 
 export interface StoredToken {

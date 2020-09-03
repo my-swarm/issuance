@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { DeployerState, EthereumNetwork, Token, TokenState, TransferRestrictionsTypes } from '../@types';
+import { DeployerState, EthereumNetwork, Token, TokenState, TransferRules } from '../@types';
 
 function createFile(name) {
   return {
@@ -26,7 +26,7 @@ const tokenDefaults: Partial<Token> = {
   decimals: 18,
   initialSupply: 1000000,
   description: 'Testing token',
-  transferRestrictionsType: TransferRestrictionsTypes.None,
+  transferRules: TransferRules.None,
   allowAccountFreeze: true,
   allowContractFreeze: true,
   allowForceTransfer: true,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Drawer, Table } from 'antd';
 
 import { useEthers, useStateValue } from '@app';
@@ -15,13 +15,20 @@ import {
   TokenStakeAndMint,
   TokenInfo,
 } from '@components';
-import { Token, TokenAction, TokenState, tokenStates, transferRestrictionsTypes } from '@types';
+import { Token, TokenAction, TokenState, tokenStates, transferRules } from '@types';
 
 export default function Tokens() {
   const { connected, networkId } = useEthers();
   const [token, setToken] = useState<Token>();
   const [action, setAction] = useState<TokenAction>();
   const [{ tokens }, dispatch] = useStateValue();
+
+  // reloads current token if tokens update
+  useEffect(() => {
+    if (token) {
+      setToken(tokens.find((t) => t.id === token.id));
+    }
+  }, [tokens]);
 
   const columns = [
     {
@@ -49,7 +56,7 @@ export default function Tokens() {
       dataIndex: 'transferRestrictionsType',
       key: 'transferRestrictionsType',
       render: (type) => {
-        return transferRestrictionsTypes[type];
+        return transferRules[type];
       },
     },
     {

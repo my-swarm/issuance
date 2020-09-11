@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { DeployerState, EthereumNetwork, Token, TokenState, TransferRules } from '../@types';
+import { TokenDeployerState, EthereumNetwork, Token, TokenState, TransferRules } from '@types';
 
 function createFile(name) {
   return {
@@ -26,7 +26,7 @@ const tokenDefaults: Partial<Token> = {
   decimals: 18,
   initialSupply: 1000000,
   description: 'Testing token',
-  transferRules: TransferRules.None,
+  transferRestrictionsType: TransferRules.None,
   allowAccountFreeze: true,
   allowContractFreeze: true,
   allowForceTransfer: true,
@@ -42,7 +42,7 @@ const tokenDefaults: Partial<Token> = {
   networks: {
     [EthereumNetwork.Ropsten]: {
       state: TokenState.Created,
-      deployerState: DeployerState.None,
+      deployerState: TokenDeployerState.None,
       addresses: {},
     },
   },
@@ -64,7 +64,7 @@ export const tokens = [
     networks: {
       [EthereumNetwork.Ropsten]: {
         state: TokenState.Deploying,
-        deployerState: DeployerState.Token,
+        deployerState: TokenDeployerState.Token,
         addresses: {
           features: '0xf70E639F5124f28461D6148B1C52399671622E4E',
           roles: '0x460A760D887050dE52DE6826975c5B9a60A123E8',
@@ -73,7 +73,7 @@ export const tokens = [
       },
       [EthereumNetwork.Local]: {
         state: TokenState.Deploying,
-        deployerState: DeployerState.Roles,
+        deployerState: TokenDeployerState.Roles,
         addresses: {
           features: '0x121e494110a3E888164333A2Bc0A14Dc9412efE1',
           transferRules: '0x06710aefdEe4ECe448ca3e7c3A8A5E4fdE5e6F7e',
@@ -87,13 +87,13 @@ export const tokens = [
     name: 'Deployed Token',
     symbol: 'DET',
     state: TokenState.Deployed,
-    deployerState: DeployerState.Finished,
+    deployerState: TokenDeployerState.Finished,
     allowBurn: false,
     allowContractFreeze: false,
     networks: {
       [EthereumNetwork.Ropsten]: {
         state: TokenState.Deployed,
-        deployerState: DeployerState.Finished,
+        deployerState: TokenDeployerState.Finished,
         addresses: {
           features: '0x5009c7e35D47590c82908F5eCa70041dAefBcC7A',
           roles: '0x81Fc79B0c2B49c41b631D0956D29bDf6d50ef6B5',
@@ -103,7 +103,7 @@ export const tokens = [
       },
       [EthereumNetwork.Local]: {
         state: TokenState.Deployed,
-        deployerState: DeployerState.Finished,
+        deployerState: TokenDeployerState.Finished,
         addresses: {
           features: '0xC23822F8c26bFd8e99A32e625537883B7F7EBACA',
           roles: '0xC6CfB9182C8EAd35a8Df7791417c0123CB963f2f',
@@ -119,16 +119,16 @@ export const tokens = [
     name: 'Fundraising Token',
     symbol: 'FUT',
     state: TokenState.Fundraising,
-    deployerState: DeployerState.Finished,
+    deployerState: TokenDeployerState.Finished,
     networks: {
       [EthereumNetwork.Ropsten]: {
         state: TokenState.Fundraising,
-        deployerState: DeployerState.Finished,
+        deployerState: TokenDeployerState.Finished,
         addresses: {},
       },
       [EthereumNetwork.Local]: {
         state: TokenState.Fundraising,
-        deployerState: DeployerState.Finished,
+        deployerState: TokenDeployerState.Finished,
         addresses: {},
       },
     },
@@ -141,12 +141,12 @@ export const tokens = [
     networks: {
       [EthereumNetwork.Ropsten]: {
         state: TokenState.Created,
-        deployerState: DeployerState.None,
+        deployerState: TokenDeployerState.None,
         addresses: {},
       },
       [EthereumNetwork.Local]: {
         state: TokenState.Created,
-        deployerState: DeployerState.None,
+        deployerState: TokenDeployerState.None,
         addresses: {},
       },
     },

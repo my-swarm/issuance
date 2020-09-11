@@ -82,7 +82,7 @@ export default function Tokens() {
     setAction(TokenAction.Create);
   };
 
-  const handleCancelEdit = () => {
+  const handleClearAction = () => {
     setToken(undefined);
     setAction(undefined);
   };
@@ -98,7 +98,7 @@ export default function Tokens() {
       default:
         throw new BaseError('Cannot submit when not editing');
     }
-    handleCancelEdit();
+    handleClearAction();
   };
 
   const handleDelete = (token) => {
@@ -118,20 +118,20 @@ export default function Tokens() {
 
   function renderAction() {
     if (action === TokenAction.Create || action === TokenAction.Edit)
-      return <TokenForm onSubmit={handleSubmit} onCancel={handleCancelEdit} formData={token} />;
+      return <TokenForm onSubmit={handleSubmit} onCancel={handleClearAction} formData={token} />;
     if (action === TokenAction.Deploy)
       return (
         <TokenDeploy
           token={token}
-          onCancel={handleCancelEdit}
+          onCancel={handleClearAction}
           onReview={() => handleSwitchActionAnimated(TokenAction.Edit)}
         />
       );
     if (action === TokenAction.StartFundraise)
-      return <TokenStartFundraiser token={token} onCancel={handleCancelEdit} />;
+      return <TokenStartFundraiser token={token} onClose={handleClearAction} />;
     if (action === TokenAction.ManageToken) return <TokenManage token={token} />;
     if (action === TokenAction.ManageFundraise) return <TokenManageFundraiser token={token} />;
-    if (action === TokenAction.StakeAndMint) return <TokenStakeAndMint token={token} onCancel={handleCancelEdit} />;
+    if (action === TokenAction.StakeAndMint) return <TokenStakeAndMint token={token} onCancel={handleClearAction} />;
     if (action === TokenAction.Info) return <TokenInfo token={token} />;
   }
 
@@ -143,7 +143,7 @@ export default function Tokens() {
         visible={action !== undefined}
         width="50%"
         closable={true}
-        onClose={() => handleCancelEdit()}
+        onClose={() => handleClearAction()}
       >
         {renderAction()}
       </Drawer>

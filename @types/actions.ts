@@ -27,7 +27,7 @@ interface DeleteTokenAction {
 
 interface UpdateTokenAction {
   type: 'updateToken';
-  token: Token;
+  token: Partial<Token>;
   id: Uuid;
 }
 

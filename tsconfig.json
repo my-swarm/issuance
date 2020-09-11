@@ -18,7 +18,13 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": ".",
-    "sourceMap": true
+    "sourceMap": true,
+    "paths": {
+      "@app": ["@app"],
+      "@types": ["@types"],
+      "@components": ["@components"],
+      "@const": ["@const"]
+    }
   },
   "exclude": [
     "node_modules"

@@ -21,7 +21,7 @@ const sampleFormData: Token = {
   description: 'Completely new token',
   initialSupply: 1000,
   totalSupply: 5000,
-  transferRules: TransferRules.None,
+  transferRestrictionsType: TransferRules.None,
   allowAccountFreeze: true,
   allowContractFreeze: true,
   allowForceTransfer: true,
@@ -57,16 +57,8 @@ export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: Tok
     setallowUnlimitedSupply(e.target.checked);
   };
 
-  useEffect(() => {
-    if (formData) {
-      form.setFieldsValue(formData);
-    } else {
-      form.resetFields();
-    }
-  }, [formData]);
-
   return (
-    <Form form={form} onFinish={handleSubmit} onReset={handleCancel} layout="vertical">
+    <Form form={form} onFinish={handleSubmit} onReset={handleCancel} layout="vertical" initialValues={formData}>
       <h3>Token basics</h3>
       <Form.Item name="name" label="Token name" rules={rules.name}>
         <Input placeholder="Your token name" />

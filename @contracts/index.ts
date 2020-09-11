@@ -8,6 +8,9 @@ import _SwmToken from './SwmToken.json';
 import _TransferRules from './TransferRules.json';
 import _SwmPriceOracle from './SWMPriceOracle.json';
 import _Src20 from './SRC20.json';
+import _SwarmPoweredFundraise from './SwarmPoweredFundraise.json';
+import _ContributorRestrictions from './ContributorRestrictions.json';
+import _AffiliateManager from './AffiliateManager.json';
 
 export const transferRulesContract = _TransferRules;
 export const featuresContract = _Features;
@@ -19,6 +22,9 @@ export const registryContract = _Src20Registry;
 export const swmTokenContract = _SwmToken;
 export const priceOracleContract = _SwmPriceOracle;
 export const src20Contract = _Src20;
+export const fundraiserContract = _SwarmPoweredFundraise;
+export const contributorRestrictionsContract = _ContributorRestrictions;
+export const affiliateManagerContract = _AffiliateManager;
 
 export const contracts = {
   transferRules: transferRulesContract,
@@ -31,4 +37,7 @@ export const contracts = {
   swmToken: swmTokenContract,
   priceOracle: priceOracleContract,
   src20: src20Contract,
+  fundraiser: fundraiserContract,
+  contributorRestrictions: contributorRestrictionsContract,
+  affiliateManager: affiliateManagerContract,
 };

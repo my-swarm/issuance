@@ -58,7 +58,8 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
     case 'updateTokenNetwork': {
       const { id, networkId, networkData } = action;
       const updatedToken = findToken(id);
-      updatedToken.networks[networkId] = networkData;
+      const oldNetworkData = updatedToken.networks[networkId] || {};
+      updatedToken.networks[networkId] = { ...oldNetworkData, ...networkData };
       return unsynced({
         tokens: withUpdatedToken(updatedToken),
       });

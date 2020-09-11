@@ -3,8 +3,8 @@ import ganache from 'ganache-cli';
 import { Contract, ContractFactory, providers, Wallet } from 'ethers';
 
 import { contracts } from '@contracts';
-import { Deployer } from '@lib';
-import { DeployerState, Token, TokenState, TransferRules } from '@types';
+import { TokenDeployer } from '@lib';
+import { TokenDeployerState, Token, TokenState, TransferRules } from '@types';
 
 import { GANACHE, SWM_TOKEN } from '../config';
 
@@ -44,11 +44,11 @@ export function getTestingToken(): Token {
     allowBurn: true,
     allowMint: true,
     assetNetValue: 1000000,
-    transferRules: TransferRules.WhitelistOrGraylist,
+    transferRestrictionsType: TransferRules.WhitelistOrGraylist,
     networks: {
       [GANACHE.networkId]: {
         state: TokenState.Created,
-        deployerState: DeployerState.None,
+        deployerState: TokenDeployerState.None,
         addresses: {},
       },
     },
@@ -112,8 +112,12 @@ export const deployRequiredContracts = async (): Promise<ContractInstances> => {
   return { swmToken, priceOracle, registry, assetRegistry, factory, getRateMinter };
 };
 
-export const setupDeployer = async (wallet: Wallet, instances: ContractInstances, token: Token): Promise<Deployer> => {
-  const deployer = new Deployer(wallet, token);
+export const setupDeployer = async (
+  wallet: Wallet,
+  instances: ContractInstances,
+  token: Token,
+): Promise<TokenDeployer> => {
+  const deployer = new TokenDeployer(wallet, token);
   await deployer.setup();
   deployer.setContractAddress('registry', instances.registry.address);
   deployer.setContractAddress('assetRegistry', instances.assetRegistry.address);
@@ -126,7 +130,7 @@ export const setupDeployer = async (wallet: Wallet, instances: ContractInstances
 
 export async function getDeployedToken(
   wallet: Wallet,
-): Promise<{ token: Token; deployer: Deployer; instances: ContractInstances }> {
+): Promise<{ token: Token; deployer: TokenDeployer; instances: ContractInstances }> {
   const instances = await deployRequiredContracts();
   const token = getTestingToken();
   const deployer = await setupDeployer(wallet, instances, token);
@@ -135,7 +139,7 @@ export async function getDeployedToken(
   token.networks = {
     [GANACHE.networkId]: {
       state: TokenState.Deployed,
-      deployerState: DeployerState.Finished,
+      deployerState: TokenDeployerState.Finished,
       addresses,
     },
   };
@@ -146,12 +150,12 @@ export async function getDeployedToken(
   return { token, deployer, instances };
 }
 
-export async function getDeployedAndMintedToken(wallet: Wallet): Promise<{ token: Token; deployer: Deployer }> {
+export async function getDeployedAndMintedToken(wallet: Wallet): Promise<{ token: Token; deployer: TokenDeployer }> {
   const { token, deployer } = await getDeployedToken(wallet);
   await deployer.stakeAndMint();
   token.networks[GANACHE.networkId] = {
     state: TokenState.Minted,
-    deployerState: DeployerState.Finished,
+    deployerState: TokenDeployerState.Finished,
     addresses: deployer.addresses,
   };
   return { token, deployer };

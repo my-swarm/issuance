@@ -17,12 +17,12 @@ export function TokenManage({ token }: TokenManageProps): ReactElement {
         <Collapse.Panel header="Token supply (Mint & Burn)" key="2">
           <ManageSupply token={token} />
         </Collapse.Panel>
-        {token.transferRules !== TransferRules.None && (
+        {token.transferRestrictionsType !== TransferRules.None && (
           <Collapse.Panel header="Whitelist management" key="3">
             <ManageAccountList token={token} type="whitelist" />
           </Collapse.Panel>
         )}
-        {token.transferRules !== TransferRules.None && (
+        {token.transferRestrictionsType !== TransferRules.None && (
           <Collapse.Panel header="Graylist management" key="4"></Collapse.Panel>
         )}
         <Collapse.Panel header="Update Asset" key="5"></Collapse.Panel>

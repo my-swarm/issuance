@@ -65,5 +65,5 @@ test('does not deploy without eher', () => {
   const { deployer, contract } = setupDeployer(wrongAccount);
   expect(async () => {
     await deployer.deploy(contract, [wrongAccount.address]);
-  }).rejects.toThrow("sender doesn't have enough funds to send tx.");
+  }).rejects.toThrow('sender doesn’t have enough funds to send tx.');
 });

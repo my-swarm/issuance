@@ -7,5 +7,7 @@ export * from './errors';
 export * from './ContractArtifacts';
 export * from './ContractProxy';
 export * from './Deployer';
+export * from './TokenDeployer';
+export * from './FundraiserDeployer';
 export * from './stake';
 export * from './accountList';

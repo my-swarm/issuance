@@ -1,3 +1,5 @@
+export * from './deploy';
+
 export const navToStakeBase = [
   { to: 500000, absolute: 2500 },
   { to: 1000000, relative: 0.005 },

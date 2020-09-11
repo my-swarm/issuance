@@ -11,7 +11,7 @@ export enum EthereumNetwork {
   Rinkeby = 4,
   Goerli = 5,
   Kovan = 42,
-  Local = 1337, // there's a bug in ganache and it's always 1337. Don't change it here mate!
+  Local = 31337, // buidler node
 }
 
 export enum Src20FeaturesBitmask {
@@ -22,3 +22,9 @@ export enum Src20FeaturesBitmask {
 }
 
 export const zeroAddress = '0x0000000000000000000000000000000000000000';
+
+export interface EthereumToken {
+  name: string;
+  symbol: string;
+  addresses: { [index in EthereumNetwork]?: EthereumAddress };
+}

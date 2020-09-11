@@ -1,4 +1,12 @@
-import { Uuid, AppFile, AppImage, EthereumAddress, EthereumNetwork, DeployerState } from '.';
+import {
+  Uuid,
+  AppFile,
+  AppImage,
+  EthereumAddress,
+  EthereumNetwork,
+  TokenDeployerState,
+  FundraiserDeployerState,
+} from '.';
 
 export enum TransferRules {
   None,
@@ -16,6 +24,7 @@ export enum TokenState {
   Created,
   Deploying,
   Deployed,
+  DeployingFundraiser,
   Fundraising,
   Minted,
   Deleted,
@@ -35,9 +44,10 @@ export enum TokenAction {
 
 export const tokenStates: { [key: number]: string } = {
   [TokenState.Created]: 'Created, not deployed',
-  [TokenState.Deployed]: 'Deployed',
   [TokenState.Fundraising]: 'Fundraising',
   [TokenState.Deploying]: 'Deployment in progress',
+  [TokenState.Deployed]: 'Deployed',
+  [TokenState.DeployingFundraiser]: 'Fundraiser deployment in progress',
   [TokenState.Fundraising]: 'Fundraiser in progress',
   [TokenState.Minted]: 'Minted',
   [TokenState.Deleted]: 'Deleted',
@@ -48,18 +58,21 @@ export interface TokenAddresses {
   transferRules?: EthereumAddress;
   roles?: EthereumAddress;
   src20?: EthereumAddress;
+  fundraiser?: EthereumAddress;
+  contributorRestrictions?: EthereumAddress;
 }
 
 export interface TokenNetworkData {
   state?: TokenState;
-  deployerState?: DeployerState;
+  deployerState?: TokenDeployerState;
+  fundraiserDeployerState?: FundraiserDeployerState;
   addresses?: TokenAddresses;
 }
 
 type TokenNetworksData = { [index in EthereumNetwork]?: TokenNetworkData };
 
 export interface TokenDeployState {
-  state: DeployerState;
+  state: TokenDeployerState;
   transferRulesAddress: EthereumAddress;
   featuresAddress: EthereumAddress;
 }
@@ -74,8 +87,21 @@ export type AccountList = AccountListRecord[];
 
 export type TokenAccountListType = 'whitelist' | 'graylist';
 
+export interface TokenFundraiser {
+  label: string;
+  baseCurrency: string;
+  contributionsLocked: boolean;
+  tokensToMint: number | null;
+  tokenPrice: number | null;
+  startDate: string;
+  endDate: string;
+  softCap: number;
+  hardCap: number;
+}
+
 export interface Token {
   id: Uuid;
+
   name: string;
   symbol: string;
   description: string;
@@ -84,7 +110,7 @@ export interface Token {
   totalSupply?: number;
   allowUnlimitedSupply?: boolean;
   image?: AppImage;
-  transferRules: TransferRules;
+  transferRestrictionsType: TransferRules;
 
   allowAccountFreeze: boolean;
   allowContractFreeze: boolean;
@@ -102,6 +128,7 @@ export interface Token {
   networks: TokenNetworksData;
   whitelist?: AccountList;
   graylist?: AccountList;
+  fundraiser?: TokenFundraiser;
 }
 
 export interface StoredToken {

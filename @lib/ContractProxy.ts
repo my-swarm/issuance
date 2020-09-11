@@ -37,7 +37,7 @@ export class ContractProxy {
     this.handleStateChange(TransactionState.None);
     const contract = new Contract(artifacts.address, artifacts.abi, this.signer);
     for (const [eventName, eventHandler] of Object.entries(events)) {
-      contract.once(eventName, (oldValue, newValue, event) => eventHandler(newValue));
+      contract.once(eventName, (oldValue, newValue) => eventHandler(newValue));
     }
     this.handleStateChange(TransactionState.Signing);
     const transaction = await contract[method](...args);

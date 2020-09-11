@@ -2,8 +2,8 @@ import React, { ReactElement, useState } from 'react';
 import { Button, Divider } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 
-import { DeployerState, Token, TokenState } from '@types';
-import { Deployer } from '@lib';
+import { TokenDeployerState, Token, TokenState } from '@types';
+import { TokenDeployer } from '@lib';
 import { useEthers, useStateValue } from '@app';
 import { StakeTable, TokenInfoStaking, TokenInfoMinting } from '..';
 
@@ -19,7 +19,7 @@ export function TokenStakeAndMint({ token, onCancel }: TokenStakeAndMintProps): 
 
   const handleStakeAndMint = async () => {
     setIsDeploying(true);
-    const deployer = new Deployer(signer, token);
+    const deployer = new TokenDeployer(signer, token);
     await deployer.setup();
     try {
       await deployer.stakeAndMint();

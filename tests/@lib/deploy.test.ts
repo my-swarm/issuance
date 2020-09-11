@@ -1,8 +1,8 @@
 import { BigNumber, Contract, ContractFactory, providers, Wallet } from 'ethers';
 import { GANACHE, SWM_TOKEN } from '../config';
 import { contracts } from '@contracts';
-import { DeployerState, Token, TokenState } from '@types';
-import { Deployer, getBnSupply, getStakeFromNav } from '@lib';
+import { TokenDeployerState, Token, TokenState } from '@types';
+import { TokenDeployer, getBnSupply, getStakeFromNav } from '@lib';
 import {
   getTestingToken,
   getTestingWallets,

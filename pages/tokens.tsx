@@ -42,7 +42,7 @@ export default function Tokens() {
         if (!connected) {
           return <div>Unknown state (not connected)</div>;
         }
-        const state = (token.networks && token.networks[networkId]?.state) || TokenState.Created;
+        const state = token.networks[networkId]?.state || TokenState.Created;
         return (
           <div>
             {tokenStates[state] || 'Unknown state'}
@@ -52,11 +52,10 @@ export default function Tokens() {
       },
     },
     {
-      title: 'Transfer restrictions',
-      dataIndex: 'transferRestrictionsType',
-      key: 'transferRestrictionsType',
-      render: (type) => {
-        return transferRules[type];
+      title: 'Address',
+      key: 'address',
+      render: (token) => {
+        return token.networks[networkId]?.addresses?.token || '-';
       },
     },
     {

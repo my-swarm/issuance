@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { Token, transferRules } from '@types';
 import { Descriptions } from 'antd';
 import { formatNumber } from '@lib';
-import { tokenFeatures } from '@app/const';
+import { tokenFeatures } from '@const';
 import { FilePreview } from '@components';
 
 export function TokenInfoAsset({ token }: { token: Token }): ReactElement {

@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactNode } from 'react';
-import { etherscanDomains } from '@app/const';
+import { etherscanDomains } from '@const';
 import { EthereumNetwork } from '@types';
 import { useEthers } from '@app';
 

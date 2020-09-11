@@ -3,7 +3,7 @@ import { Upload } from 'antd';
 import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface';
 
 import { convertFileToUpload, convertUploadToFile } from '@lib';
-import { FORM } from '@app/const';
+import { FORM } from '@const';
 import { AppFile } from '@types';
 import { UploadDraggerContent } from '@components';
 

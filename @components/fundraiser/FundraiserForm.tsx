@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { Form, DatePicker, Input, InputNumber, Button, Space, Select, Row, Col, Checkbox } from 'antd';
 import { Token, TokenFundraiser } from '@types';
-import { BASE_CURRENCIES } from '@app/const';
+import { BASE_CURRENCIES } from '@const';
 import { useEthers } from '@app';
 import { Help, HelpLabel } from '../utility';
 import moment from 'moment';

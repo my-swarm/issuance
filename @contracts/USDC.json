@@ -423,10 +423,10 @@
       "address": null
     },
     "42": {
-      "address": null
+      "address": "0x45f6ebD6332Be48704fd3BeeDC0238652aDf68ac"
     },
     "31337": {
-      "address": "0xD6C850aeBFDC46D7F4c207e445cC0d6B0919BDBe"
+      "address": "0x500D1d6A4c7D8Ae28240b47c8FCde034D827fD5e"
     }
   }
 }

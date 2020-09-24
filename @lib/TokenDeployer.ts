@@ -26,12 +26,10 @@ export class TokenDeployer extends Deployer {
     await this.deployFeatures();
     await this.deployRoles();
     await this.createToken();
-    console.log('Deploy before end - token deployed');
     this.handleStateChange(TokenDeployerState.Finished);
   }
 
   private async deployTransferRules(): Promise<void> {
-    console.log('transfer rules', this.token.transferRestrictionsType);
     if (this.token.transferRestrictionsType === TransferRules.None) return;
     if (this.state > TokenDeployerState.TransferRules) return;
     if (this.state === TokenDeployerState.Finished) {
@@ -90,7 +88,6 @@ export class TokenDeployer extends Deployer {
       }
     }
 
-    console.log({ allowMint, initialSupply, totalSupply, allowUnlimitedSupply, supply });
     const params = [
       name,
       symbol,
@@ -109,14 +106,11 @@ export class TokenDeployer extends Deployer {
         this.getContractArtifacts('getRateMinter').address,
       ],
     ];
-    console.log('create token', { params });
     return new Promise((resolve, reject) => {
       const events = {
         SRC20Created: (event) => {
-          console.log({ event });
           const { args } = event;
           this.addresses.src20 = args.token;
-          console.log('resolve');
           resolve();
         },
       };

@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { TokenDeployerState, EthereumNetwork, Token, TokenState, TransferRules } from '@types';
+import { TokenDeployerState, EthereumNetwork, Token, TokenState, TransferRules, DeployerStateFinished } from '@types';
 
 function createFile(name) {
   return {
@@ -24,7 +24,7 @@ function createImage(name) {
 
 const tokenDefaults: Partial<Token> = {
   decimals: 18,
-  initialSupply: 1000000,
+  initialSupply: 10000,
   description: 'Testing token',
   transferRestrictionsType: TransferRules.None,
   allowAccountFreeze: true,
@@ -36,11 +36,11 @@ const tokenDefaults: Partial<Token> = {
   assetName: 'Some valuable asset',
   navSupportingDocument: createFile('NAV supporting document.txt'),
   assetLegalDocuments: [createFile('First legal document.txt'), createFile('Second legal document.txt')],
-  assetNetValue: 10000000,
+  assetNetValue: 500,
   assetImage: createImage('Asset image.jpg'),
   assetDescription: `It's an asset all right`,
   networks: {
-    [EthereumNetwork.Ropsten]: {
+    [EthereumNetwork.Kovan]: {
       state: TokenState.Created,
       deployerState: TokenDeployerState.None,
       addresses: {},
@@ -62,13 +62,12 @@ export const tokens = [
     name: 'Partially Deployed Token',
     symbol: 'PDT',
     networks: {
-      [EthereumNetwork.Ropsten]: {
+      [EthereumNetwork.Kovan]: {
         state: TokenState.Deploying,
-        deployerState: TokenDeployerState.Token,
+        deployerState: TokenDeployerState.Roles,
         addresses: {
-          features: '0xf70E639F5124f28461D6148B1C52399671622E4E',
-          roles: '0x460A760D887050dE52DE6826975c5B9a60A123E8',
-          transferRules: '0x78Fe25172257b35E410631DCbAEa9a3371862AEa',
+          transferRules: '0xdEbEEed4Ea259dd1EAaf668A5bEc795c2AF296f3',
+          features: '0x4434520aB271BC6cD4fEeD1C506BD6fE9bff3BA5',
         },
       },
       [EthereumNetwork.Local]: {
@@ -87,23 +86,23 @@ export const tokens = [
     name: 'Deployed Token',
     symbol: 'DET',
     state: TokenState.Deployed,
-    deployerState: TokenDeployerState.Finished,
+    deployerState: DeployerStateFinished,
     allowBurn: false,
     allowContractFreeze: false,
     networks: {
-      [EthereumNetwork.Ropsten]: {
+      [EthereumNetwork.Kovan]: {
         state: TokenState.Deployed,
-        deployerState: TokenDeployerState.Finished,
+        deployerState: DeployerStateFinished,
         addresses: {
-          features: '0x5009c7e35D47590c82908F5eCa70041dAefBcC7A',
-          roles: '0x81Fc79B0c2B49c41b631D0956D29bDf6d50ef6B5',
-          src20: '0x7395FDfa173067638D141E2f3FD57b8D761dbBaC',
-          transferRules: '0xeC8F03E1D7FA2Fd3aeC17b208EAeBCB0B9CaffF8',
+          transferRules: '0x69D411437fc017eb85a541ACc94c5Edf6d3a1eC7',
+          features: '0xc0E56cf36f20137e9083A85241Ac633Cca7EE735',
+          roles: '0x040b8EB60cc739D51837A6ca1160E1f44f4e4573',
+          src20: '0x7EF604Fc7AC7e39c2634f9F832FD7aCb8e7B6422',
         },
       },
       [EthereumNetwork.Local]: {
         state: TokenState.Deployed,
-        deployerState: TokenDeployerState.Finished,
+        deployerState: DeployerStateFinished,
         addresses: {
           features: '0xC23822F8c26bFd8e99A32e625537883B7F7EBACA',
           roles: '0xC6CfB9182C8EAd35a8Df7791417c0123CB963f2f',
@@ -119,16 +118,24 @@ export const tokens = [
     name: 'Fundraising Token',
     symbol: 'FUT',
     state: TokenState.Fundraising,
-    deployerState: TokenDeployerState.Finished,
+    deployerState: DeployerStateFinished,
     networks: {
-      [EthereumNetwork.Ropsten]: {
+      [EthereumNetwork.Kovan]: {
         state: TokenState.Fundraising,
-        deployerState: TokenDeployerState.Finished,
-        addresses: {},
+        deployerState: DeployerStateFinished,
+        fundraiserDeployerState: DeployerStateFinished,
+        addresses: {
+          transferRules: '0x8B10F3Dc66f16a40488ed106FA77a5d6415671a1',
+          features: '0x618061312CB45660C282A072c66dA8B06627e85D',
+          roles: '0xbAeA93C612280c8d1E7963EC7E8E20C39dEBe07d',
+          src20: '0x492F369bA917A10bAfe39aA506C079F21Ff0dA42',
+          fundraiser: '0x72bfFb83931a49d8dBD89e4B1c9C06186dd2d14b',
+          contributorRestrictions: '0x7e85391544eb1Ac887c68a515FB84bf72379C6c2',
+        },
       },
       [EthereumNetwork.Local]: {
         state: TokenState.Fundraising,
-        deployerState: TokenDeployerState.Finished,
+        deployerState: DeployerStateFinished,
         addresses: {},
       },
     },
@@ -139,10 +146,15 @@ export const tokens = [
     name: 'Minted Token',
     symbol: 'MIT',
     networks: {
-      [EthereumNetwork.Ropsten]: {
-        state: TokenState.Created,
-        deployerState: TokenDeployerState.None,
-        addresses: {},
+      [EthereumNetwork.Kovan]: {
+        state: TokenState.Minted,
+        deployerState: DeployerStateFinished,
+        addresses: {
+          transferRules: '0x72Bb56d564297821cC975ee5D08420d42FbAfe29',
+          features: '0x272a514734d3BE4b23e2afABB4dD28A3cab9b29E',
+          roles: '0x5532d9a3E40CC27cb149FcD3602E79617867AF77',
+          src20: '0xb2c167F2f43a7A6d4cf93772a9C2134641D9f0f0',
+        },
       },
       [EthereumNetwork.Local]: {
         state: TokenState.Created,

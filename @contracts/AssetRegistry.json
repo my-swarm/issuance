@@ -2,100 +2,9 @@
   "contractName": "Asset Registry",
   "abi": [
     {
-      "constant": false,
-      "inputs": [],
-      "name": "renounceOwnership",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "_src20Factory",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "owner",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "isOwner",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
       "inputs": [
         {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "assetList",
-      "outputs": [
-        {
-          "name": "kyaHash",
-          "type": "bytes32"
-        },
-        {
-          "name": "kyaUrl",
-          "type": "string"
-        },
-        {
-          "name": "netAssetValueUSD",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "newOwner",
-          "type": "address"
-        }
-      ],
-      "name": "transferOwnership",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
+          "internalType": "address",
           "name": "src20Factory",
           "type": "address"
         }
@@ -109,38 +18,25 @@
       "inputs": [
         {
           "indexed": true,
-          "name": "previousOwner",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "newOwner",
-          "type": "address"
-        }
-      ],
-      "name": "OwnershipTransferred",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
+          "internalType": "address",
           "name": "src20",
           "type": "address"
         },
         {
           "indexed": false,
+          "internalType": "bytes32",
           "name": "kyaHash",
           "type": "bytes32"
         },
         {
           "indexed": false,
+          "internalType": "string",
           "name": "kyaUrl",
           "type": "string"
         },
         {
           "indexed": false,
+          "internalType": "uint256",
           "name": "AssetValueUSD",
           "type": "uint256"
         }
@@ -153,11 +49,38 @@
       "inputs": [
         {
           "indexed": true,
+          "internalType": "address",
           "name": "src20",
           "type": "address"
         },
         {
           "indexed": false,
+          "internalType": "bytes32",
+          "name": "kyaHash",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "kyaUrl",
+          "type": "string"
+        }
+      ],
+      "name": "AssetKYAUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "src20",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
           "name": "AssetValueUSD",
           "type": "uint256"
         }
@@ -170,39 +93,55 @@
       "inputs": [
         {
           "indexed": true,
-          "name": "src20",
+          "internalType": "address",
+          "name": "previousOwner",
           "type": "address"
         },
         {
-          "indexed": false,
-          "name": "kyaHash",
-          "type": "bytes32"
-        },
-        {
-          "indexed": false,
-          "name": "kyaUrl",
-          "type": "string"
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
         }
       ],
-      "name": "AssetKYAUpdated",
+      "name": "OwnershipTransferred",
       "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "_src20Factory",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "constant": false,
       "inputs": [
         {
+          "internalType": "address",
           "name": "src20",
           "type": "address"
         },
         {
+          "internalType": "bytes32",
           "name": "kyaHash",
           "type": "bytes32"
         },
         {
+          "internalType": "string",
           "name": "kyaUrl",
           "type": "string"
         },
         {
+          "internalType": "uint256",
           "name": "netAssetValueUSD",
           "type": "uint256"
         }
@@ -210,6 +149,7 @@
       "name": "addAsset",
       "outputs": [
         {
+          "internalType": "bool",
           "name": "",
           "type": "bool"
         }
@@ -222,14 +162,26 @@
       "constant": true,
       "inputs": [
         {
-          "name": "src20",
+          "internalType": "address",
+          "name": "",
           "type": "address"
         }
       ],
-      "name": "getNetAssetValueUSD",
+      "name": "assetList",
       "outputs": [
         {
-          "name": "",
+          "internalType": "bytes32",
+          "name": "kyaHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "string",
+          "name": "kyaUrl",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "netAssetValueUSD",
           "type": "uint256"
         }
       ],
@@ -238,32 +190,10 @@
       "type": "function"
     },
     {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "src20",
-          "type": "address"
-        },
-        {
-          "name": "netAssetValueUSD",
-          "type": "uint256"
-        }
-      ],
-      "name": "updateNetAssetValueUSD",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "constant": true,
       "inputs": [
         {
+          "internalType": "address",
           "name": "src20",
           "type": "address"
         }
@@ -271,10 +201,12 @@
       "name": "getKYA",
       "outputs": [
         {
+          "internalType": "bytes32",
           "name": "",
           "type": "bytes32"
         },
         {
+          "internalType": "string",
           "name": "",
           "type": "string"
         }
@@ -284,17 +216,95 @@
       "type": "function"
     },
     {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "src20",
+          "type": "address"
+        }
+      ],
+      "name": "getNetAssetValueUSD",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "constant": false,
       "inputs": [
         {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
           "name": "src20",
           "type": "address"
         },
         {
+          "internalType": "bytes32",
           "name": "kyaHash",
           "type": "bytes32"
         },
         {
+          "internalType": "string",
           "name": "kyaUrl",
           "type": "string"
         }
@@ -302,6 +312,33 @@
       "name": "updateKYA",
       "outputs": [
         {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "src20",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "netAssetValueUSD",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateNetAssetValueUSD",
+      "outputs": [
+        {
+          "internalType": "bool",
           "name": "",
           "type": "bool"
         }
@@ -316,10 +353,10 @@
       "address": "0x30b32447137DddF089b327085D2026eaF2eaF65A"
     },
     "42": {
-      "address": null
+      "address": "0x4d850bC816040d5C7Bd53740f2CBD0f921222e64"
     },
     "31337": {
-      "address": "0x3619DbE27d7c1e7E91aA738697Ae7Bc5FC3eACA5"
+      "address": "0xf784709d2317D872237C4bC22f867d1BAe2913AB"
     }
   }
 }

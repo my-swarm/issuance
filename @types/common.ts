@@ -26,5 +26,6 @@ export const zeroAddress = '0x0000000000000000000000000000000000000000';
 export interface EthereumToken {
   name: string;
   symbol: string;
+  decimals: number;
   addresses: { [index in EthereumNetwork]?: EthereumAddress };
 }

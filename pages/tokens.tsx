@@ -55,7 +55,7 @@ export default function Tokens() {
       title: 'Address',
       key: 'address',
       render: (token) => {
-        return token.networks[networkId]?.addresses?.token || '-';
+        return token.networks[networkId]?.addresses?.src20 || '-';
       },
     },
     {

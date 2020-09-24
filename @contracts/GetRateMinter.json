@@ -2,25 +2,34 @@
   "contractName": "Get Rate Minter",
   "abi": [
     {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "registry",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "asset",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "SWMRate",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
       "constant": true,
       "inputs": [],
       "name": "_SWMPriceOracle",
       "outputs": [
         {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "_registry",
-      "outputs": [
-        {
+          "internalType": "contract IPriceUSD",
           "name": "",
           "type": "address"
         }
@@ -35,6 +44,7 @@
       "name": "_asset",
       "outputs": [
         {
+          "internalType": "contract INetAssetValueUSD",
           "name": "",
           "type": "address"
         }
@@ -44,28 +54,25 @@
       "type": "function"
     },
     {
-      "inputs": [
+      "constant": true,
+      "inputs": [],
+      "name": "_registry",
+      "outputs": [
         {
-          "name": "registry",
-          "type": "address"
-        },
-        {
-          "name": "asset",
-          "type": "address"
-        },
-        {
-          "name": "SWMRate",
+          "internalType": "contract IManager",
+          "name": "",
           "type": "address"
         }
       ],
       "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "constructor"
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "constant": true,
       "inputs": [
         {
+          "internalType": "uint256",
           "name": "netAssetValueUSD",
           "type": "uint256"
         }
@@ -73,6 +80,7 @@
       "name": "calcStake",
       "outputs": [
         {
+          "internalType": "uint256",
           "name": "",
           "type": "uint256"
         }
@@ -85,10 +93,12 @@
       "constant": false,
       "inputs": [
         {
+          "internalType": "address",
           "name": "src20",
           "type": "address"
         },
         {
+          "internalType": "uint256",
           "name": "numSRC20Tokens",
           "type": "uint256"
         }
@@ -96,6 +106,7 @@
       "name": "stakeAndMint",
       "outputs": [
         {
+          "internalType": "bool",
           "name": "",
           "type": "bool"
         }
@@ -110,10 +121,10 @@
       "address": "0x50876971D968e523Dc9Df59867536402a0b5C5Be"
     },
     "42": {
-      "address": null
+      "address": "0xdEB1F05C668C185f43A2E5fF40950E8aAC828825"
     },
     "31337": {
-      "address": "0x038B86d9d8FAFdd0a02ebd1A476432877b0107C8"
+      "address": "0x3619DbE27d7c1e7E91aA738697Ae7Bc5FC3eACA5"
     }
   }
 }

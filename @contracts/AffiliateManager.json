@@ -205,10 +205,10 @@
       "address": null
     },
     "42": {
-      "address": null
+      "address": "0xA13B9d84DBB9927621DBAB1dFa0d2bfd33A81A9a"
     },
     "31337": {
-      "address": "0xc4905364b78a742ccce7B890A89514061E47068D"
+      "address": "0x1A1FEe7EeD918BD762173e4dc5EfDB8a78C924A8"
     }
   }
 }

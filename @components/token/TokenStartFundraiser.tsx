@@ -15,12 +15,16 @@ export function TokenStartFundraiser({ token, onClose }: TokenManageProps): Reac
   const deployerState = token.networks[networkId]?.fundraiserDeployerState || FundraiserDeployerState.None;
   const isDeploying = deployerState !== FundraiserDeployerState.None;
 
-  console.log({ deployerState, isDeploying, isStarted });
-
   const handleSave = async (values: TokenFundraiser) => {
     saveToken(values);
     onClose();
   };
+
+  const handleStart = async (values: TokenFundraiser) => {
+    saveToken(values);
+    setIsStarted(true);
+  };
+
   function saveToken(fundraiser) {
     dispatch({
       type: 'updateToken',
@@ -34,7 +38,7 @@ export function TokenStartFundraiser({ token, onClose }: TokenManageProps): Reac
         tokenName={token.name}
         onCancel={onClose}
         onSave={handleSave}
-        onStart={() => setIsStarted(true)}
+        onStart={handleStart}
         formData={token.fundraiser}
         disabled={isDeploying || isStarted}
       />

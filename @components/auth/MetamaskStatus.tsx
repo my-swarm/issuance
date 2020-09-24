@@ -18,7 +18,7 @@ export function MetamaskStatus() {
     [EthereumNetwork.Local]: 'Local',
   };
 
-  const supportedNetworks = [EthereumNetwork.Main, EthereumNetwork.Ropsten];
+  const supportedNetworks = [EthereumNetwork.Main, EthereumNetwork.Kovan];
 
   let cardTitle, cardBody;
   switch (status) {

@@ -5,6 +5,7 @@ import { BASE_CURRENCIES } from '@const';
 import { useEthers } from '@app';
 import { Help, HelpLabel } from '../utility';
 import moment from 'moment';
+import { getNetwork } from '@ethersproject/networks';
 
 interface FundraiserFormProps {
   tokenName: string;
@@ -17,14 +18,15 @@ interface FundraiserFormProps {
 
 const sampleFormData: TokenFundraiser = {
   label: 'Christmas fundraiser',
-  baseCurrency: '0x500D1d6A4c7D8Ae28240b47c8FCde034D827fD5e',
+  baseCurrency: 'USDC',
   contributionsLocked: false,
   tokensToMint: 100000,
   tokenPrice: null,
-  startDate: '2020-09-01',
-  endDate: '2020-12-24',
+  startDate: moment().format('YYYY-MM-DD'),
+  endDate: moment().add(1, 'M').format('YYYY-MM-DD'),
   softCap: 500000,
   hardCap: 1000000,
+  startNow: true,
 };
 
 export function FundraiserForm({
@@ -35,9 +37,14 @@ export function FundraiserForm({
   formData = sampleFormData,
   disabled = false,
 }: FundraiserFormProps): ReactElement {
+  const [startNow, setStartNow] = useState(sampleFormData.startNow);
   const [form] = Form.useForm();
   const [submitButton, setSubmitButton] = useState<string>();
-  const { networkId } = useEthers();
+  const { networkId, network } = useEthers();
+
+  const handleToggleStartNow = () => {
+    setStartNow(!startNow);
+  };
 
   const handleCancel = () => {
     form.resetFields();
@@ -45,6 +52,7 @@ export function FundraiserForm({
   };
 
   const handleSubmit = (values) => {
+    values.startNow = startNow;
     if (submitButton === 'start') {
       onStart(values);
     } else {
@@ -66,11 +74,11 @@ export function FundraiserForm({
       </Form.Item>
       <Form.Item name="baseCurrency" label="Base currency">
         <Select defaultActiveFirstOption disabled={disabled}>
-          {BASE_CURRENCIES.map((currency) => {
+          {Object.entries(BASE_CURRENCIES).map(([key, currency]) => {
             const address = currency.addresses[networkId] || undefined;
             return (
-              <Select.Option value={address} key={address}>
-                {currency.symbol}: {address || 'unknown address'}
+              <Select.Option value={key} key={key}>
+                {currency.symbol}: {address || 'unknown address'} ({network.name})
               </Select.Option>
             );
           })}
@@ -113,8 +121,18 @@ export function FundraiserForm({
       <h3>Dates</h3>
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item name="startDate" label="Start date">
-            <DatePicker className="w-full" disabled={disabled} />
+          <Form.Item
+            name="startDate"
+            label={
+              <Space size="large">
+                <span>Start date</span>
+                <Checkbox checked={startNow} onChange={handleToggleStartNow}>
+                  Start now
+                </Checkbox>
+              </Space>
+            }
+          >
+            <DatePicker className="w-full" disabled={disabled || startNow} />
           </Form.Item>
         </Col>
         <Col span={12}>

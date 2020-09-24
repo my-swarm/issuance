@@ -5,7 +5,6 @@ import {
   EthereumNetwork,
   Token,
   DeployerEventCallback,
-  TokenDeployerState,
   TransactionEventCallback,
   DeployerState,
   TokenAddresses,
@@ -44,7 +43,6 @@ export abstract class Deployer {
   }
 
   protected handleStateChange(state: DeployerState): void {
-    console.log('Deployer.handleStateChange', state);
     this.state = state;
     for (const callback of this.callbacks) {
       callback(state);
@@ -61,6 +59,7 @@ export abstract class Deployer {
   }
 
   protected getContractArtifacts(contractName: string): ContractArtifacts {
+    console.log('get artifacts', contractName);
     const artifacts = new ContractArtifacts(contracts[contractName], this.networkId);
     if (this.contractAddresses[contractName]) {
       artifacts.address = this.contractAddresses[contractName];

@@ -82,6 +82,19 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     );
   }
 
+  if (state === TokenState.DeployingFundraiser) {
+    actions.push(
+      <Button
+        key="startFundraise"
+        size="small"
+        onClick={() => onAction(TokenAction.StartFundraise)}
+        icon={<EditOutlined />}
+      >
+        Resume fundraiser deploy
+      </Button>,
+    );
+  }
+
   if (state === TokenState.Deployed || state === TokenState.Minted) {
     actions.push(
       <Button key="manageToken" size="small" onClick={() => onAction(TokenAction.ManageToken)} icon={<EditOutlined />}>

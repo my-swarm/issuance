@@ -26,6 +26,14 @@ export function TokenInfoDeployed({ token }: { token: Token }): ReactElement {
       <Descriptions.Item label="Features Contract">{printAddress('features')}</Descriptions.Item>
       <Descriptions.Item label="Roles Contract">{printAddress('roles')}</Descriptions.Item>
       <Descriptions.Item label="Transfer Rules Contract">{printAddress('transferRules')}</Descriptions.Item>
+      {addresses.fundraiser && (
+        <Descriptions.Item label="Fundraiser Contract">{printAddress('fundraiser')}</Descriptions.Item>
+      )}
+      {addresses.contributorRestrictions && (
+        <Descriptions.Item label="Contributor Restrictions Contract">
+          {printAddress('contributorRestrictions')}
+        </Descriptions.Item>
+      )}
     </Descriptions>
   );
 }

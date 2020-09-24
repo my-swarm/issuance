@@ -26,6 +26,7 @@ export enum TokenState {
   Deployed,
   DeployingFundraiser,
   Fundraising,
+  // FundraisingFinished = 5,
   Minted,
   Deleted,
 }
@@ -94,6 +95,7 @@ export interface TokenFundraiser {
   tokensToMint: number | null;
   tokenPrice: number | null;
   startDate: string;
+  startNow: boolean;
   endDate: string;
   softCap: number;
   hardCap: number;

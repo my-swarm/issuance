@@ -1,18 +1,21 @@
+export const DeployerStateNone = 0;
+export const DeployerStateFinished = -1;
+
 export enum TokenDeployerState {
-  None,
-  TransferRules,
+  None = DeployerStateNone,
+  TransferRules = 1,
   Features,
   Roles,
   Token,
-  Finished,
+  Finished = DeployerStateFinished,
 }
 
 export enum FundraiserDeployerState {
-  None,
-  Fundraiser,
+  None = DeployerStateNone,
+  Fundraiser = 1,
   ContributorRestrictions,
   Setup,
-  Finished,
+  Finished = DeployerStateFinished,
 }
 
 export type DeployerState = TokenDeployerState | FundraiserDeployerState;

@@ -2,10 +2,11 @@ import { Button, Progress } from 'antd';
 import React, { MouseEventHandler, ReactElement, useState } from 'react';
 import {
   DeployerState,
+  DeployerStateFinished,
+  DeployerStateNone,
   DeployerStatesMeta,
   FundraiserDeployerState,
   Token,
-  TokenDeployerState,
   TokenState,
   TransactionState,
 } from '@types';
@@ -35,7 +36,7 @@ export function DeployProgress({ token, type, onClose }: DeployProgressProps): R
   let deployerStatesMeta: DeployerStatesMeta;
   if (type === 'token') {
     stateField = 'deployerState';
-    deployerState = tokenNetwork?.deployerState || TokenDeployerState.None;
+    deployerState = tokenNetwork?.deployerState || DeployerStateNone;
     deployerStatesMeta = tokenDeployerStatesMeta;
   } else if (type === 'fundraiser') {
     stateField = 'fundraiserDeployerState';
@@ -43,7 +44,6 @@ export function DeployProgress({ token, type, onClose }: DeployProgressProps): R
     deployerStatesMeta = fundraiserDeployerStatesMeta;
   }
   const deployerStateMeta = deployerStatesMeta[deployerState];
-  console.log({ deployerState, deployerStatesMeta, deployerStateMeta });
   const transactionStateMeta = transactionStatesMeta[transactionState];
 
   const handleDeploy = async () => {
@@ -61,7 +61,10 @@ export function DeployProgress({ token, type, onClose }: DeployProgressProps): R
         };
       } else {
         console.error(e);
-        error = { message: 'Error during deployment', description: e.message };
+        error = {
+          message: 'Error during deployment',
+          description: `${e.message} - ${e.reason} - If the error message makes no sense to you, contact us!`,
+        };
       }
       dispatch({ type: 'showError', error });
     }
@@ -81,14 +84,16 @@ export function DeployProgress({ token, type, onClose }: DeployProgressProps): R
     deployer.onTransactionProgress(handleTransactionProgress);
   }
 
-  const handleDeployProgress = (newState: TokenDeployerState) => {
+  const handleDeployProgress = (newState: DeployerState) => {
     console.log('handleDeployProgress', newState);
+    const deployingState = type === 'token' ? TokenState.Deployed : TokenState.DeployingFundraiser;
+    const deployedState = type === 'token' ? TokenState.Deployed : TokenState.Fundraising;
     dispatch({
       type: 'updateTokenNetwork',
       id: token.id,
       networkId: networkId,
       networkData: {
-        state: newState === TokenDeployerState.Finished ? TokenState.Deployed : TokenState.Deploying,
+        state: newState === DeployerStateFinished ? deployedState : deployingState,
         [stateField]: newState,
         addresses: deployer.addresses,
       },
@@ -106,7 +111,7 @@ export function DeployProgress({ token, type, onClose }: DeployProgressProps): R
       {deployerStateMeta.description && <p>{deployerStateMeta.description}</p>}
       {deployerStateMeta.percent > 0 && deployerStateMeta.percent < 100 && <p>{transactionStateMeta.message}</p>}
 
-      {deployerState === TokenDeployerState.Finished ? (
+      {deployerState === DeployerStateFinished ? (
         <Button onClick={onClose} size="large">
           Close
         </Button>
@@ -118,7 +123,7 @@ export function DeployProgress({ token, type, onClose }: DeployProgressProps): R
         </>
       ) : (
         <Button onClick={handleDeploy} type="primary" size="large">
-          {deployerState === TokenDeployerState.None ? 'Start deployment now!' : 'Resume deployment'}
+          {deployerState === DeployerStateNone ? 'Start deployment now!' : 'Resume deployment'}
         </Button>
       )}
     </RequireEthers>

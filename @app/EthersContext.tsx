@@ -1,9 +1,8 @@
 import React, { ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
-import { Web3Provider } from '@ethersproject/providers';
+import { getNetwork, Network, Web3Provider } from '@ethersproject/providers';
 import { Contract, ethers, Signer } from 'ethers';
-import { ContractArtifacts, Metamask } from '@lib';
+import { Metamask } from '@lib';
 import { EthereumNetwork } from '@types';
-import { contracts } from '../@contracts';
 
 export enum EthersStatus {
   DISCONNECTED,
@@ -17,6 +16,7 @@ interface ContextProps {
   signer: Signer | undefined;
   address: string | undefined;
   networkId: EthereumNetwork;
+  network: Network;
   connect: (silent: boolean) => void;
   connected: boolean;
   disconnect: () => void;
@@ -105,6 +105,7 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
         connected: status === EthersStatus.CONNECTED,
         address,
         networkId,
+        network: getNetwork(networkId),
         connect,
         disconnect,
       }}

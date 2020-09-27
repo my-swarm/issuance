@@ -28,9 +28,12 @@ export function SingleFileUpload({ image = false, value, onChange }: ImageUpload
 
   const handleChange = async (info: UploadChangeParam) => {
     const [lastFile] = info.fileList.slice(-1);
-    setFileList([lastFile]);
-    if (onChange) {
-      onChange(lastFile ? await convertUploadToFile(lastFile) : undefined);
+    if (lastFile) {
+      setFileList([lastFile]);
+      onChange(await convertUploadToFile(lastFile));
+    } else {
+      setFileList([]);
+      onChange(undefined);
     }
   };
 

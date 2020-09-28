@@ -125,7 +125,7 @@ export interface Token {
   navSupportingDocument?: AppFile;
   assetDescription?: string;
   assetImage?: AppImage;
-  assetLegalDocuments?: AppFile[];
+  assetLegalDocuments: AppFile[];
 
   networks: TokenNetworksData;
   whitelist?: AccountList;

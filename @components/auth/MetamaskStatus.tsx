@@ -53,8 +53,7 @@ export function MetamaskStatus() {
       size="small"
       title={
         <div>
-          <img src="/images/metamask-fox.svg" alt="Metamask icon" style={{ width: '1rem', height: '1rem' }} />{' '}
-          {cardTitle}
+          <img src="/images/metamask-fox.svg" alt="Metamask icon" className="image-1" /> {cardTitle}
         </div>
       }
     >

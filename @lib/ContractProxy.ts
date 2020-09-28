@@ -39,7 +39,7 @@ export class ContractProxy {
     args: Array<any> = [],
     events: { [index: string]: (event: Event) => void } = {},
   ): Promise<Transaction> {
-    // console.log('call', { artifacts, method, args, events });
+    console.log('call', { artifacts, method, args, events });
     this.handleStateChange(TransactionState.None);
     const contract = new Contract(artifacts.address, artifacts.abi, this.signer);
     for (const [eventName, eventHandler] of Object.entries(events)) {

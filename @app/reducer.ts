@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import _ from 'lodash';
 
 import { AppState, Action, Uuid, Token } from '@types';
-import { mergeAccountLists, subtractAccountLists } from '../@lib';
+import { ContractProxy, mergeAccountLists, subtractAccountLists } from '../@lib';
 
 export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
   function findToken(id: Uuid) {
@@ -126,6 +126,20 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       return {
         ...state,
         error: undefined,
+      };
+    }
+
+    case 'startTransaction': {
+      return {
+        ...state,
+        transaction: action.transaction,
+      };
+    }
+
+    case 'resetTransaction': {
+      return {
+        ...state,
+        transaction: undefined,
       };
     }
   }

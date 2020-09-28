@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import { FundraiserDeployerState, Token, TokenFundraiser } from '@types';
 import { FundraiserForm, DeployProgress } from '..';
-import { useEthers, useStateValue } from '@app';
+import { useEthers, useAppState } from '@app';
 
 interface TokenManageProps {
   token: Token;
@@ -11,7 +11,7 @@ interface TokenManageProps {
 export function TokenStartFundraiser({ token, onClose }: TokenManageProps): ReactElement {
   const [isStarted, setIsStarted] = useState<boolean>(false);
   const { networkId } = useEthers();
-  const [, dispatch] = useStateValue();
+  const [, dispatch] = useAppState();
   const deployerState = token.networks[networkId]?.fundraiserDeployerState || FundraiserDeployerState.None;
   const isDeploying = deployerState !== FundraiserDeployerState.None;
 

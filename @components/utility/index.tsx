@@ -5,3 +5,4 @@ export * from './UploadDraggerContent';
 export * from './RequireEthers';
 export * from './FilePreview';
 export * from './DeployProgress';
+export * from './TransactionModal';

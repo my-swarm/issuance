@@ -48,4 +48,4 @@ export const StateProvider = ({ reducer, children }: StateProviderProps): ReactE
   return <StateContext.Provider value={[appState, dispatch]}>{children}</StateContext.Provider>;
 };
 
-export const useStateValue: () => StateValue = () => useContext(StateContext);
+export const useAppState: () => StateValue = () => useContext(StateContext);

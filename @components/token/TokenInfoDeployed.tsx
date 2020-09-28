@@ -7,7 +7,7 @@ import { Address } from '@components/utility';
 export function TokenInfoDeployed({ token }: { token: Token }): ReactElement {
   const { networkId } = useEthers();
 
-  const addresses = token.networks[networkId].addresses;
+  const addresses = token.networks[networkId]?.addresses || undefined;
   if (!addresses) {
     return null;
   }

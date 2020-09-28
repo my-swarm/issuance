@@ -13,7 +13,7 @@ interface DocumentsUploadProps {
 }
 
 export function MultipleFilesUpload({ value, onChange }: DocumentsUploadProps): ReactElement {
-  const [fileList, setFileList] = useState<UploadFile[]>();
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const hint = `You can upload multiple documents. All common types are accepted. Maximum file size: ${FORM.maxDocumentSize}`;
 

@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { Token } from '@types';
-import { useContract, useEthers, useStateValue } from '../../@app';
+import { useContract, useEthers, useAppState } from '../../@app';
 import { Button, Collapse, Descriptions, Form, InputNumber } from 'antd';
 import { formatInt, formatNumber, formatTokenAmount, getBnSupply, getTokenAmount } from '../../@lib';
 import { SWM_TOKEN_DECIMALS } from '../../@const';
@@ -21,7 +21,7 @@ export function ManageSupply({ token }: { token: Token }): ReactElement {
   const swmToken = useContract('swmToken');
   const [increaseForm] = Form.useForm();
   const [decreaseForm] = Form.useForm();
-  const [, dispatch] = useStateValue();
+  const [, dispatch] = useAppState();
 
   const reloadSupply = () => {
     src20.totalSupply().then((x) => setCurrentSupply(formatTokenAmount(x, token.decimals)));

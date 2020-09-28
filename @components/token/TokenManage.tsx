@@ -23,7 +23,9 @@ export function TokenManage({ token }: TokenManageProps): ReactElement {
           </Collapse.Panel>
         )}
         {token.transferRestrictionsType !== TransferRules.None && (
-          <Collapse.Panel header="Graylist management" key="4"></Collapse.Panel>
+          <Collapse.Panel header="Graylist management" key="4">
+            <ManageAccountList token={token} type="graylist" />
+          </Collapse.Panel>
         )}
         <Collapse.Panel header="Update Asset" key="5"></Collapse.Panel>
         <Collapse.Panel header="Manage token roles" key="6"></Collapse.Panel>

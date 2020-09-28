@@ -22,6 +22,18 @@
   margin-top: 1rem;
 }
 
+.mr-1 {
+  margin-right: .25rem;
+}
+
+.mr-2 {
+  margin-right: .5rem;
+}
+
+.mr-3 {
+  margin-right: 1rem;
+}
+
 .text-right {
   text-align: right;
 }
@@ -39,5 +51,10 @@
 }
 
 .w-auto {
+  width: auto;
+}
+
+.image-1 {
+  height: 1.5rem;
   width: auto;
 }

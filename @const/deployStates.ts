@@ -17,7 +17,10 @@ export const transactionStatesMeta: { [index in TransactionState]: TransactionSt
     message: 'Waiting for network confirmation',
   },
   [TransactionState.Confirmed]: {
-    message: 'Done',
+    message: 'Transaction has finished',
+  },
+  [TransactionState.Error]: {
+    message: 'Error when processing transaction',
   },
 };
 

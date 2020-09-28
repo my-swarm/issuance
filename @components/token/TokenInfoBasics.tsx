@@ -17,7 +17,9 @@ export function TokenInfoBasics({ token }: { token: Token }): ReactElement {
       <Descriptions.Item label="Token symbol">{token.symbol}</Descriptions.Item>
       <Descriptions.Item label="Token description">{token.description}</Descriptions.Item>
       <Descriptions.Item label="Token image">
-        <div className="image-preview">{token.image?.content && <img src={token.image.content} alt="Token" />}</div>
+        <div className="image-preview">
+          {token.image?.content ? <img src={token.image.content} alt="Token" /> : '-'}
+        </div>
       </Descriptions.Item>
       <Descriptions.Item label="Decimals">{token.decimals}</Descriptions.Item>
       <Descriptions.Item label="Initial Token supply">

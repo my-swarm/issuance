@@ -7,6 +7,7 @@ import {
   TokenAccountListType,
   TokenNetworkData,
   TokenState,
+  Transaction,
   Uuid,
 } from '.';
 
@@ -80,6 +81,15 @@ interface DeleteFromTokenAccountListAction {
   deleteItems: AccountList;
 }
 
+interface StartTransaction {
+  type: 'startTransaction';
+  transaction: Transaction;
+}
+
+interface ResetTransaction {
+  type: 'resetTransaction';
+}
+
 export type Action =
   | resetDataAction
   | AddTokenAction
@@ -93,4 +103,6 @@ export type Action =
   | HideErrorAction
   | SetTokenStateAction
   | AddToTokenAccountListAction
-  | DeleteFromTokenAccountListAction;
+  | DeleteFromTokenAccountListAction
+  | StartTransaction
+  | ResetTransaction;

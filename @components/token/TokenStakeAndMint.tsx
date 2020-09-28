@@ -4,7 +4,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 
 import { TokenDeployerState, Token, TokenState } from '@types';
 import { TokenDeployer } from '@lib';
-import { useEthers, useStateValue } from '@app';
+import { useEthers, useAppState } from '@app';
 import { StakeTable, TokenInfoStaking, TokenInfoMinting } from '..';
 
 interface TokenStakeAndMintProps {
@@ -15,7 +15,7 @@ interface TokenStakeAndMintProps {
 export function TokenStakeAndMint({ token, onCancel }: TokenStakeAndMintProps): ReactElement {
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
   const { signer, networkId } = useEthers();
-  const [, dispatch] = useStateValue();
+  const [, dispatch] = useAppState();
 
   const handleStakeAndMint = async () => {
     setIsDeploying(true);

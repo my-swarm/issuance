@@ -4,10 +4,10 @@ import _ from 'lodash';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons/lib';
 import * as devData from 'dev_data';
 
-import { useStateValue, useStorage } from '@app';
+import { useAppState, useStorage } from '@app';
 
 export function StateStorageSync(): ReactElement {
-  const [state, dispatch] = useStateValue();
+  const [state, dispatch] = useAppState();
   const { isLoaded, isSaving, isSynced, version } = state;
 
   const handleSave = () => {

@@ -31,6 +31,7 @@ const sampleFormData: Token = {
   assetDescription: 'Love my condo',
   networks: {},
   assetNetValue: 50,
+  assetLegalDocuments: [],
 };
 
 export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: TokenFormProps): ReactElement {

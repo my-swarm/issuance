@@ -14,7 +14,7 @@ import { fundraiserDeployerStatesMeta, tokenDeployerStatesMeta, transactionState
 import { Deployer, TokenDeployer, FundraiserDeployer } from '../../@lib';
 import { LoadingOutlined } from '@ant-design/icons';
 import { RequireEthers } from './RequireEthers';
-import { useEthers, useStateValue } from '@app';
+import { useEthers, useAppState } from '@app';
 
 interface DeployProgressProps {
   token: Token;
@@ -24,7 +24,7 @@ interface DeployProgressProps {
 
 export function DeployProgress({ token, type, onClose }: DeployProgressProps): ReactElement {
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
-  const [, dispatch] = useStateValue();
+  const [, dispatch] = useAppState();
   const { signer, networkId } = useEthers();
   const tokenNetwork = token.networks[networkId];
   let deployerState: DeployerState;

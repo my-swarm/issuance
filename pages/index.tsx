@@ -2,7 +2,7 @@ import React from 'react';
 import { DefaultLayout, MetamaskConnect } from '@components';
 import { Row, Col, Card } from 'antd';
 import Link from 'next/link';
-import { useStateValue } from '@app';
+import { useAppState } from '@app';
 import { tokenStates } from '@types';
 
 interface IndexProps {
@@ -10,7 +10,7 @@ interface IndexProps {
 }
 
 export default function Index({ title }: IndexProps) {
-  const [{ tokens }] = useStateValue();
+  const [{ tokens }] = useAppState();
 
   return (
     <DefaultLayout title="Home">

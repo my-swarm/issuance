@@ -3,6 +3,7 @@ export enum TransactionState {
   Signing,
   Confirming,
   Confirmed,
+  Error = -1,
 }
 
 export type TransactionEventCallback = (event: TransactionState) => void;

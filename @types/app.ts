@@ -11,10 +11,20 @@ export interface AppError {
   description: string | ReactElement;
 }
 
+export interface Transaction {
+  contract: string;
+  address: string;
+  method: string;
+  arguments: any[];
+  description?: string;
+  onSuccess?: () => void;
+}
+
 export interface AppState extends ColdState {
   isLoading: boolean;
   isSaving: boolean;
   isLoaded: boolean;
   isSynced: boolean;
   error?: AppError;
+  transaction?: Transaction;
 }

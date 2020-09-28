@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Drawer, Table } from 'antd';
 
-import { useEthers, useStateValue } from '@app';
+import { useEthers, useAppState } from '@app';
 import { BaseError } from '@lib';
 import {
   DefaultLayout,
@@ -21,7 +21,7 @@ export default function Tokens() {
   const { connected, networkId } = useEthers();
   const [token, setToken] = useState<Token>();
   const [action, setAction] = useState<TokenAction>();
-  const [{ tokens }, dispatch] = useStateValue();
+  const [{ tokens }, dispatch] = useAppState();
 
   // reloads current token if tokens update
   useEffect(() => {

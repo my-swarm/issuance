@@ -5,7 +5,7 @@ import { EyeOutlined, EditOutlined } from '@ant-design/icons';
 import { DefaultLayout, FundraiserCard } from '@components';
 import { Fundraiser, FundraiserState, fundraiserStates } from '@types';
 import { formatDate, createDate } from '@lib';
-import { useStateValue } from '../@app';
+import { useAppState } from '../@app';
 import Link from 'next/link';
 
 export default function Fundraisers() {
@@ -61,7 +61,7 @@ export default function Fundraisers() {
     },
   ];
 
-  const [{ tokens }, dispatch] = useStateValue();
+  const [{ tokens }, dispatch] = useAppState();
   const fundraisingTokens = tokens.map;
 
   const renderHeadExtra = () => (

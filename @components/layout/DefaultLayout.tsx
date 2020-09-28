@@ -4,9 +4,9 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import { PageProps } from '@types';
-import { Logo, MetamaskStatus } from '@components';
+import { Logo, MetamaskStatus, TransactionModal } from '@components';
 import { MainMenu } from '@components/layout/MainMenu';
-import { useStateValue } from '@app';
+import { useAppState } from '@app';
 
 const { Content, Sider } = Layout;
 
@@ -17,7 +17,7 @@ interface DefaultLayoutProps extends PageProps {
 
 export function DefaultLayout({ title, headExtra, children, headTableAligned = false }: DefaultLayoutProps) {
   const [siderCollapsed, setSiderCollapsed] = useState(false);
-  const [{ error }, dispatch] = useStateValue();
+  const [{ error }, dispatch] = useAppState();
 
   useEffect(() => {
     if (error) {
@@ -59,6 +59,7 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
           className={headTableAligned ? `table-aligned` : ``}
         />
         {children}
+        <TransactionModal />
       </Content>
     </Layout>
   );

@@ -22,13 +22,13 @@ export function TokenInfoAsset({ token }: { token: Token }): ReactElement {
       <Descriptions.Item label="Asset Description">{token.assetDescription}</Descriptions.Item>
       <Descriptions.Item label="Asset image">
         <div className="image-preview">
-          {token.assetImage?.content && <img src={token.assetImage.content} alt="Asset" />}
+          {token.assetImage?.content ? <img src={token.assetImage.content} alt="Asset" /> : '-'}
         </div>
       </Descriptions.Item>
       <Descriptions.Item label="Legal documents">
-        {token.assetLegalDocuments.map((document, key) => (
-          <FilePreview file={document} key={key} />
-        ))}
+        {token.assetLegalDocuments.length
+          ? token.assetLegalDocuments.map((document, key) => <FilePreview file={document} key={key} />)
+          : '-'}
       </Descriptions.Item>
     </Descriptions>
   );

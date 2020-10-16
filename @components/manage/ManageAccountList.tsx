@@ -1,20 +1,32 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useRef, useState } from 'react';
 import ethers from 'ethers';
-import { Button, Table, Input, Space, Checkbox, Row, Col, Popconfirm } from 'antd';
-import { SearchOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import moment from 'moment';
+import { Button, Checkbox, Col, Input, Popconfirm, Row, Space, Table } from 'antd';
+import { CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
 
-import { AccountList, AccountListRecord, Token, TokenAction } from '@types';
-import { useContract, useEthers, useAppState, useDispatch } from '@app';
+import { AccountList, AccountListRecord } from '@types';
+import { useAppState, useContractAddress, useDispatch, useEthers } from '@app';
 import { MANAGE_TABLE_PER_PAGE } from '@const';
-import { Help } from '../utility';
+import { Help, Loading } from '../utility';
+import { GreylistedAccount, useWhitelistGreylistQuery, WhitelistedAccount } from '../../@graphql';
 
 interface ManageAccountListProps {
-  token: Token;
   type: 'whitelist' | 'graylist';
 }
 
-export function ManageAccountList({ token, type }: ManageAccountListProps): ReactElement {
+interface AccountListRecord {
+  address: string;
+  name: string;
+  note: string;
+  createdAt: Date;
+}
+
+type RawAccountList = Array<{ address: string; createdAt: number }>;
+type AccountList = AccountListRecord[];
+
+export function ManageAccountList({ type }: ManageAccountListProps): ReactElement {
   const { address: myAddress, networkId } = useEthers();
+  const [{ token }] = useAppState();
   const searchInput = useRef<Input>();
   const [searchText, setSearchText] = useState<string>('');
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
@@ -22,18 +34,28 @@ export function ManageAccountList({ token, type }: ManageAccountListProps): Reac
   const [showAll, setShowAll] = useState<boolean>(false);
   const [, dispatch] = useAppState();
   const { dispatchError, dispatchTransaction } = useDispatch();
+  const { src20: src20Address } = useContractAddress();
+  const { loading, error, data } = useWhitelistGreylistQuery({
+    variables: { token: src20Address },
+  });
+  if (loading) return <Loading />;
+  console.log({ data });
 
   const addMethod = type === 'whitelist' ? 'bulkWhitelistAccount' : 'bulkGreyListAccount';
   const removeMethod = type === 'whitelist' ? 'bulkUnWhitelistAccount' : 'bulkUnGreyListAccount';
+  const rawAccounts: RawAccountList = type === 'whitelist' ? data.whitelistedAccounts : data.greylistedAccounts;
+  console.log({ rawAccounts });
+  const accounts: AccountList = rawAccounts.map((a) => {
+    const tokenAccountList = token[type] || [];
+    return {
+      key: a.address, // for the table
+      ...a,
+      createdAt: moment(a.createdAt).toDate(),
+      ...tokenAccountList.find((ta) => a.address === ta.address),
+    };
+  });
 
-  const accounts = token[type] || [];
-
-  const tableData = accounts
-    .filter((a) => a.address.toLowerCase().includes(searchText.toLowerCase()))
-    .map((account) => ({
-      key: account.address,
-      ...account,
-    }));
+  const tableData: AccountList = accounts.filter((a) => a.address.toLowerCase().includes(searchText.toLowerCase()));
 
   const filterDropdown = (
     <div style={{ padding: 8 }}>
@@ -108,18 +130,12 @@ export function ManageAccountList({ token, type }: ManageAccountListProps): Reac
     const data = parseAddressesInput(newAddresses);
     if (data.length === 0) return;
 
-    try {
-      dispatchTransaction({
-        contract: 'transferRules',
-        address: token.networks[networkId].addresses.transferRules,
-        method: addMethod,
-        arguments: [data.map((record) => record.address)],
-        description: `Adding ${data.length} addresses to your ${type}`,
-        onSuccess: () => handleAddToLocalState(data),
-      });
-    } catch (e) {
-      dispatchContractError(e);
-    }
+    dispatchTransaction({
+      method: `transferRules.${addMethod}`,
+      arguments: [data.map((record) => record.address)],
+      description: `Adding ${data.length} addresses to your ${type}`,
+      onSuccess: () => handleAddToLocalState(data),
+    });
   };
 
   const handleAddToLocalState = (accountList: AccountList) => {
@@ -136,18 +152,12 @@ export function ManageAccountList({ token, type }: ManageAccountListProps): Reac
     const addressList = selectedRows;
     if (addressList.length === 0) return;
 
-    try {
-      dispatchTransaction({
-        contract: 'transferRules',
-        address: token.networks[networkId].addresses.transferRules,
-        method: removeMethod,
-        arguments: [addressList],
-        description: `Removing ${addressList.length} addresses from your ${type}`,
-        onSuccess: () => handleDeleteFromLocalState(addressList),
-      });
-    } catch (e) {
-      dispatchContractError(e);
-    }
+    dispatchTransaction({
+      method: `transferRules.${removeMethod}`,
+      arguments: [addressList],
+      description: `Removing ${addressList.length} addresses from your ${type}`,
+      onSuccess: () => handleDeleteFromLocalState(addressList),
+    });
   };
 
   const handleDeleteFromLocalState = (addressList: string[]) => {

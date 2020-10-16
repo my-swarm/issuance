@@ -2,27 +2,24 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { Space, Modal, Alert, Button } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { useAppState, useEthers } from '@app';
-import { ContractArtifacts, ContractProxy } from '../../@lib';
+import { ContractProxy } from '../../@lib';
 import { TransactionState } from '@types';
-import { contracts } from '@contracts';
 import { transactionStatesMeta } from '@const';
 
 export function TransactionModal(): ReactElement {
   const { signer, networkId } = useEthers();
-  const [{ transaction }, dispatch] = useAppState();
+  const [{ transaction, token }, dispatch] = useAppState();
   const [transactionState, setTransactionState] = useState<TransactionState>(TransactionState.None);
   const [error, setError] = useState<string>();
   const [retry, setRetry] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log('use effect', { signer, transaction, retry });
     if ((signer && transaction) || retry) {
-      const proxy = new ContractProxy(signer);
+      const proxy = new ContractProxy(signer, token);
       proxy.onProgress(handleTransactionProgress);
-      const artifacts = new ContractArtifacts(contracts[transaction.contract], networkId);
-      artifacts.address = transaction.address;
       setRetry(false);
-      proxy.call(artifacts, transaction.method, transaction.arguments).catch((e) => {
+      console.log('prosy call', token, transaction);
+      proxy.call(transaction.contract, transaction.method, transaction.arguments).catch((e) => {
         console.log('set error');
         setTransactionState(TransactionState.Error);
         if (e.code === 4001) {

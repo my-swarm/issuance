@@ -1,30 +1,28 @@
 import React, { ReactElement } from 'react';
 import { Collapse } from 'antd';
-import { Token, TransferRules } from '@types';
-import { ManageSupply, ManageTransfer, ManageAccountList } from '../manage';
+import { TransferRules } from '@types';
+import { useAppState } from '@app';
+import { ManageAccountList, ManageSupply, ManageTransfer } from '../manage';
 
-interface TokenManageProps {
-  token: Token;
-}
-
-export function TokenManage({ token }: TokenManageProps): ReactElement {
+export function TokenManage(): ReactElement {
+  const [{ token }] = useAppState();
   return (
     <div>
       <Collapse defaultActiveKey={[]}>
         <Collapse.Panel header="Transfer token" key="1">
-          <ManageTransfer token={token} />
+          <ManageTransfer />
         </Collapse.Panel>
         <Collapse.Panel header="Token supply (Mint & Burn)" key="2">
-          <ManageSupply token={token} />
+          <ManageSupply />
         </Collapse.Panel>
         {token.transferRestrictionsType !== TransferRules.None && (
           <Collapse.Panel header="Whitelist management" key="3">
-            <ManageAccountList token={token} type="whitelist" />
+            <ManageAccountList type="whitelist" />
           </Collapse.Panel>
         )}
         {token.transferRestrictionsType !== TransferRules.None && (
           <Collapse.Panel header="Graylist management" key="4">
-            <ManageAccountList token={token} type="graylist" />
+            <ManageAccountList type="graylist" />
           </Collapse.Panel>
         )}
         <Collapse.Panel header="Update Asset" key="5"></Collapse.Panel>

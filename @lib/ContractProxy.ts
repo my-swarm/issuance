@@ -1,6 +1,6 @@
-import { ContractArtifacts } from '@lib/ContractArtifacts';
 import { Contract, ContractFactory, Signer, Transaction, Event } from 'ethers';
-import { EthereumNetwork, TransactionEventCallback, TransactionState } from '@types';
+import { EthereumNetwork, Token, TransactionEventCallback, TransactionState } from '@types';
+import { getContractFactory, getContract } from './contracts';
 
 interface ContractOptions {
   gasPrice?: number;
@@ -9,11 +9,13 @@ interface ContractOptions {
 
 export class ContractProxy {
   private _signer: Signer;
+  private _token: Token;
   private callbacks: TransactionEventCallback[] = [];
   private state: TransactionState = TransactionState.None;
 
-  constructor(signer: Signer) {
+  constructor(signer: Signer, token?: Token) {
     this._signer = signer;
+    this._token = token;
   }
 
   private handleStateChange(state: TransactionState): void {
@@ -23,8 +25,8 @@ export class ContractProxy {
     }
   }
 
-  public async deploy(artifacts: ContractArtifacts, args: Array<any> = []): Promise<Contract> {
-    const contractFactory = new ContractFactory(artifacts.abi, artifacts.bytecode, this.signer);
+  public async deploy(contractName: string, args: Array<any> = []): Promise<Contract> {
+    const contractFactory = getContractFactory(contractName, this.signer);
     this.handleStateChange(TransactionState.Signing);
     const contractInstance = await contractFactory.deploy(...args, await this.getOptions());
     this.handleStateChange(TransactionState.Confirming);
@@ -34,14 +36,13 @@ export class ContractProxy {
   }
 
   public async call(
-    artifacts,
+    contractName: string,
     method: string,
     args: Array<any> = [],
     events: { [index: string]: (event: Event) => void } = {},
   ): Promise<Transaction> {
-    console.log('call', { artifacts, method, args, events });
     this.handleStateChange(TransactionState.None);
-    const contract = new Contract(artifacts.address, artifacts.abi, this.signer);
+    const contract = getContract(contractName, this.signer, await this.signer.getChainId(), this._token);
     for (const [eventName, eventHandler] of Object.entries(events)) {
       contract.once(eventName, (oldValue, newValue) => eventHandler(newValue));
     }
@@ -53,8 +54,8 @@ export class ContractProxy {
     return transaction;
   }
 
-  public async get(artifacts, method: string, args: Array<any> = []): Promise<any> {
-    const contract = new Contract(artifacts.address, artifacts.abi, this.signer);
+  public async get(contractName: string, method: string, args: Array<any> = []): Promise<any> {
+    const contract = getContract(contractName, this.signer, await this.signer.getChainId());
     return await contract[method](...args);
   }
 

@@ -1,0 +1,6 @@
+query Tokens {
+  tokens {
+    id
+    name
+  }
+}

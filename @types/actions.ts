@@ -81,6 +81,11 @@ interface DeleteFromTokenAccountListAction {
   deleteItems: AccountList;
 }
 
+interface SetToken {
+  type: 'setToken';
+  token: Token | undefined;
+}
+
 interface StartTransaction {
   type: 'startTransaction';
   transaction: Transaction;
@@ -104,5 +109,6 @@ export type Action =
   | SetTokenStateAction
   | AddToTokenAccountListAction
   | DeleteFromTokenAccountListAction
+  | SetToken
   | StartTransaction
   | ResetTransaction;

@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
+import React, { ReactElement, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { getNetwork, Network, Web3Provider } from '@ethersproject/providers';
 import { Contract, ethers, Signer } from 'ethers';
 import { Metamask } from '@lib';
@@ -31,11 +31,33 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
   const [networkId, setNetworkId] = useState<EthereumNetwork>();
   const [status, setStatus] = useState<EthersStatus>(EthersStatus.DISCONNECTED);
   const [address, setAddress] = useState<string>();
+  const [metamask, setMetamask] = useState<Metamask>();
 
   useEffect(() => {
-    connect(true);
+    if (process.browser && window['ethereum']) {
+      const m = new Metamask(window['ethereum']);
+      setMetamask(m);
+    }
   }, []);
 
+  const connect = useCallback(
+    async (silent: boolean): Promise<void> => {
+      if (!metamask) return;
+      metamask.onStateUpdate((e) => {
+        console.log('metemask state update', e);
+        resetProvider(e);
+      });
+      await metamask.initAndConnect(silent);
+    },
+    [metamask],
+  );
+
+  useEffect(() => {
+    if (metamask) {
+      connect(true).then();
+    }
+  }, [metamask, connect]);
+  /*
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const updateAddress = async () => {
@@ -47,11 +69,7 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
       }
     };
   });
-
-  let metamask: Metamask;
-  if (process.browser && window['ethereum']) {
-    metamask = new Metamask(window['ethereum']);
-  }
+*/
 
   async function resetProvider(ethereum) {
     if (!ethereum) {
@@ -80,12 +98,6 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
     }
   }
 
-  async function connect(silent: boolean): Promise<void> {
-    if (!metamask) return;
-    metamask.onStateUpdate(resetProvider);
-    await metamask.initAndConnect(silent);
-  }
-
   async function disconnect() {
     if (!metamask) {
       return;
@@ -96,6 +108,7 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
     setAddress(undefined);
   }
 
+  console.log('render ethers context');
   return (
     <EthersContext.Provider
       value={{

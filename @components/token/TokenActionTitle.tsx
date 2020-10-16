@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
-import { Token, TokenAction } from '@types';
+import { TokenAction } from '@types';
+import { useAppState } from '@app';
 
 interface TokenActionTitleProps {
   action: TokenAction;
-  token?: Token;
 }
 
 const tokenActionTitle = {
@@ -18,7 +18,9 @@ const tokenActionTitle = {
   [TokenAction.Info]: 'Token information',
 };
 
-export function TokenActionTitle({ action, token }: TokenActionTitleProps): ReactElement {
+export function TokenActionTitle({ action }: TokenActionTitleProps): ReactElement {
+  const [{ token }] = useAppState();
+
   const tokenName = token ? (
     <strong>
       {token.name} ({token.symbol})

@@ -76,7 +76,7 @@ export interface ContractInstances {
   registry: Contract;
   assetRegistry: Contract;
   factory: Contract;
-  getRateMinter: Contract;
+  minter: Contract;
   features?: Contract;
   transferRules?: Contract;
   roles?: Contract;
@@ -99,17 +99,17 @@ export const deployRequiredContracts = async (): Promise<ContractInstances> => {
   const factory = await deployContract('factory', [registry.address], wallets.swmOwner);
   await registry.addFactory(factory.address);
   const assetRegistry = await deployContract('assetRegistry', [factory.address], wallets.swmOwner);
-  const getRateMinter = await deployContract(
-    'getRateMinter',
+  const minter = await deployContract(
+    'minter',
     [registry.address, assetRegistry.address, priceOracle.address],
     wallets.swmOwner,
   );
-  await registry.addMinter(getRateMinter.address);
+  await registry.addMinter(minter.address);
 
   // send myself some SWM, so that I can stake
   await swmToken.transfer(wallets.tokenManager.address, SWM_TOKEN.totalSupply.div(10));
 
-  return { swmToken, priceOracle, registry, assetRegistry, factory, getRateMinter };
+  return { swmToken, priceOracle, registry, assetRegistry, factory, minter };
 };
 
 export const setupDeployer = async (
@@ -122,7 +122,7 @@ export const setupDeployer = async (
   deployer.setContractAddress('registry', instances.registry.address);
   deployer.setContractAddress('assetRegistry', instances.assetRegistry.address);
   deployer.setContractAddress('factory', instances.factory.address);
-  deployer.setContractAddress('getRateMinter', instances.getRateMinter.address);
+  deployer.setContractAddress('minter', instances.minter.address);
   deployer.setContractAddress('swmToken', instances.swmToken.address);
 
   return deployer;

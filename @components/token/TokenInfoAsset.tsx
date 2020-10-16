@@ -1,12 +1,12 @@
 import React, { ReactElement } from 'react';
-import { Token, transferRules } from '@types';
 import { Descriptions } from 'antd';
 import { formatNumber } from '@lib';
 import { tokenFeatures } from '@const';
 import { FilePreview } from '@components';
+import { useAppState } from '@app';
 
-export function TokenInfoAsset({ token }: { token: Token }): ReactElement {
-  console.log({ token });
+export function TokenInfoAsset(): ReactElement {
+  const [{ token }] = useAppState();
 
   const features = Object.entries(tokenFeatures)
     .filter(([key, value]) => token[key])

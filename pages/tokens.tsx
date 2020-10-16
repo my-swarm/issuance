@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Drawer, Table } from 'antd';
 
-import { useEthers, useAppState } from '@app';
+import { useEthers, useAppState, useDispatch } from '@app';
 import { BaseError } from '@lib';
 import {
   DefaultLayout,
@@ -14,14 +14,15 @@ import {
   TokenManageFundraiser,
   TokenStakeAndMint,
   TokenInfo,
+  Address,
 } from '@components';
 import { Token, TokenAction, TokenState, tokenStates, transferRules } from '@types';
 
 export default function Tokens() {
   const { connected, networkId } = useEthers();
-  const [token, setToken] = useState<Token>();
+  const { setToken } = useDispatch();
   const [action, setAction] = useState<TokenAction>();
-  const [{ tokens }, dispatch] = useAppState();
+  const [{ tokens, token }, dispatch] = useAppState();
 
   // reloads current token if tokens update
   useEffect(() => {
@@ -55,7 +56,8 @@ export default function Tokens() {
       title: 'Address',
       key: 'address',
       render: (token) => {
-        return token.networks[networkId]?.addresses?.src20 || '-';
+        const address = token.networks[networkId]?.addresses?.src20;
+        return address ? <Address>{address}</Address> : '-';
       },
     },
     {
@@ -119,26 +121,19 @@ export default function Tokens() {
     if (action === TokenAction.Create || action === TokenAction.Edit)
       return <TokenForm onSubmit={handleSubmit} onCancel={handleClearAction} formData={token} />;
     if (action === TokenAction.Deploy)
-      return (
-        <TokenDeploy
-          token={token}
-          onCancel={handleClearAction}
-          onReview={() => handleSwitchActionAnimated(TokenAction.Edit)}
-        />
-      );
-    if (action === TokenAction.StartFundraise)
-      return <TokenStartFundraiser token={token} onClose={handleClearAction} />;
-    if (action === TokenAction.ManageToken) return <TokenManage token={token} />;
-    if (action === TokenAction.ManageFundraise) return <TokenManageFundraiser token={token} />;
-    if (action === TokenAction.StakeAndMint) return <TokenStakeAndMint token={token} onCancel={handleClearAction} />;
-    if (action === TokenAction.Info) return <TokenInfo token={token} />;
+      return <TokenDeploy onCancel={handleClearAction} onReview={() => handleSwitchActionAnimated(TokenAction.Edit)} />;
+    if (action === TokenAction.StartFundraise) return <TokenStartFundraiser onClose={handleClearAction} />;
+    if (action === TokenAction.ManageToken) return <TokenManage />;
+    if (action === TokenAction.ManageFundraise) return <TokenManageFundraiser />;
+    if (action === TokenAction.StakeAndMint) return <TokenStakeAndMint onCancel={handleClearAction} />;
+    if (action === TokenAction.Info) return <TokenInfo />;
   }
 
   return (
     <DefaultLayout title="My Tokens" headExtra={renderHeadExtra()} headTableAligned={true}>
       <Table columns={columns} dataSource={dataSource} />
       <Drawer
-        title={<TokenActionTitle token={token} action={action} />}
+        title={<TokenActionTitle action={action} />}
         visible={action !== undefined}
         width="50%"
         closable={true}

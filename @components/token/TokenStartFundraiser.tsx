@@ -1,17 +1,16 @@
 import React, { ReactElement, useState } from 'react';
-import { FundraiserDeployerState, Token, TokenFundraiser } from '@types';
+import { FundraiserDeployerState, TokenFundraiser } from '@types';
 import { FundraiserForm, DeployProgress } from '..';
 import { useEthers, useAppState } from '@app';
 
 interface TokenManageProps {
-  token: Token;
   onClose: () => void;
 }
 
-export function TokenStartFundraiser({ token, onClose }: TokenManageProps): ReactElement {
-  const [isStarted, setIsStarted] = useState<boolean>(false);
+export function TokenStartFundraiser({ onClose }: TokenManageProps): ReactElement {
+  const [{ token }, dispatch] = useAppState();
   const { networkId } = useEthers();
-  const [, dispatch] = useAppState();
+  const [isStarted, setIsStarted] = useState<boolean>(false);
   const deployerState = token.networks[networkId]?.fundraiserDeployerState || FundraiserDeployerState.None;
   const isDeploying = deployerState !== FundraiserDeployerState.None;
 
@@ -45,7 +44,7 @@ export function TokenStartFundraiser({ token, onClose }: TokenManageProps): Reac
       {(isDeploying || isStarted) && (
         <>
           <h2>Fundraiser contract deployment</h2>
-          <DeployProgress token={token} type="fundraiser" onClose={onClose} />
+          <DeployProgress type="fundraiser" onClose={onClose} />
         </>
       )}
     </div>

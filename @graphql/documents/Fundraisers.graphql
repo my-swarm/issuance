@@ -1,0 +1,49 @@
+fragment Contributor on Contributor {
+  address
+  status
+  amount
+  contributions {
+    timestamp
+    type
+    amount
+  }
+}
+
+fragment FundraiserContributors on Fundraiser {
+  contributors {
+    ...Contributor
+  }
+}
+
+fragment Fundraiser on Fundraiser {
+  id
+  label
+  startDate,
+  endDate,
+  softCap,
+  hardCap,
+  supply
+
+  baseCurrency
+  tokenPrice
+  affiliateManager
+  contributorRestrictions
+  minter
+  contributionsLocked
+
+  amountQualified
+  amountPending
+  amountRefunded
+  amountWithdrawn
+  status
+  ...FundraiserContributors
+  token {
+    id
+  }
+}
+
+query Fundraisers($owner: Bytes!) {
+  fundraisers(where: { owner: $owner }) {
+    ...Fundraiser
+  }
+}

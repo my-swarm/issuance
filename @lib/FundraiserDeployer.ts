@@ -7,6 +7,7 @@ import { BASE_CURRENCIES } from '@const';
 import { Deployer } from './Deployer';
 import { getBnSupply } from './numberUtils';
 import { getUnixTimestamp } from './dateUtils';
+import { getContractAddress } from './contracts';
 
 export class FundraiserDeployer extends Deployer {
   private fundraiserContract: Contract;
@@ -40,7 +41,7 @@ export class FundraiserDeployer extends Deployer {
     ];
     console.log('deploy fundraiser', params, startDate);
     this.handleStateChange(FundraiserDeployerState.Fundraiser);
-    const instance = await this.contractProxy.deploy(this.getContractArtifacts('fundraiser'), params);
+    const instance = await this.contractProxy.deploy('fundraiser', params);
     this._addresses.fundraiser = instance.address;
     this.fundraiserContract = instance;
     console.log('fundraiser deployed', instance.address);
@@ -57,7 +58,7 @@ export class FundraiserDeployer extends Deployer {
       0, // minAmount
       0, // maxAmount
     ];
-    const instance = await this.contractProxy.deploy(this.getContractArtifacts('contributorRestrictions'), params);
+    const instance = await this.contractProxy.deploy('contributorRestrictions', params);
     this._addresses.contributorRestrictions = instance.address;
   }
 
@@ -77,14 +78,12 @@ export class FundraiserDeployer extends Deployer {
     const args = [
       baseCurrency.addresses[this.networkId], // address _baseCurrency
       tokenPrice, // uint _tokenPrice
-      this.getContractArtifacts('affiliateManager').address, // address _affiliateManager
-      this._addresses.contributorRestrictions, // address _contributorRestrictions
-      this.getContractArtifacts('getRateMinter').address, // address _minter
+      this.getAddress('affiliateManager'), // address _affiliateManager
+      this.getAddress('contributorRestrictions'), // address _contributorRestrictions
+      this.getAddress('minter'), // address _minter
       fundraiser.contributionsLocked, // bool _contributionsLocked
     ];
     console.log('setupContract', args);
-    const artifacts = this.getContractArtifacts('fundraiser');
-    artifacts.address = this.fundraiserContract.address;
-    await this.contractProxy.call(artifacts, 'setupContract', args);
+    await this.contractProxy.call('fundraiser', 'setupContract', args);
   }
 }

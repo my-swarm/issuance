@@ -6,7 +6,6 @@ import {
   DeployerStateNone,
   DeployerStatesMeta,
   FundraiserDeployerState,
-  Token,
   TokenState,
   TransactionState,
 } from '@types';
@@ -17,15 +16,14 @@ import { RequireEthers } from './RequireEthers';
 import { useEthers, useAppState } from '@app';
 
 interface DeployProgressProps {
-  token: Token;
   type: 'token' | 'fundraiser';
   onClose: MouseEventHandler;
 }
 
-export function DeployProgress({ token, type, onClose }: DeployProgressProps): ReactElement {
-  const [isDeploying, setIsDeploying] = useState<boolean>(false);
-  const [, dispatch] = useAppState();
+export function DeployProgress({ type, onClose }: DeployProgressProps): ReactElement {
   const { signer, networkId } = useEthers();
+  const [{ token }, dispatch] = useAppState();
+  const [isDeploying, setIsDeploying] = useState<boolean>(false);
   const tokenNetwork = token.networks[networkId];
   let deployerState: DeployerState;
   const [transactionState, setTransactionState] = useState<TransactionState>(TransactionState.None);

@@ -2,9 +2,8 @@ import React, { ChangeEventHandler, ReactElement, useState } from 'react';
 import { Form, Input, InputNumber, Button } from 'antd';
 import ethers from 'ethers';
 
-import { Token } from '@types';
 import { getTokenAmount } from '@lib';
-import { useContract, useEthers } from '@app';
+import { useAppState, useContract, useEthers } from '@app';
 
 const formLayout = {
   labelCol: { span: 6 },
@@ -12,15 +11,16 @@ const formLayout = {
 };
 const formTailLayout = { wrapperCol: { offset: 6, span: 18 } };
 
-export function ManageTransfer({ token }: { token: Token }): ReactElement {
+export function ManageTransfer(): ReactElement {
   const { address } = useEthers();
+  const [{ token }] = useAppState();
   const [from, setFrom] = useState<string>('');
   const [errorFrom, setErrorFrom] = useState<string>();
   const [balanceFrom, setBalanceFrom] = useState<number>(0);
   const [to, setTo] = useState<string>('');
   const [errorTo, setErrorTo] = useState<string>();
   const [balanceTo, setBalanceTo] = useState<number>(0);
-  const src20 = useContract('src20', token);
+  const src20 = useContract('src20');
   const [form] = Form.useForm();
 
   const handleSetFrom = (address: string) => {

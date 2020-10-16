@@ -1,30 +1,31 @@
 import React, { ReactElement } from 'react';
 import { Button, Divider } from 'antd';
 
-import { TokenDeployerState, Token } from '@types';
-import { useEthers } from '@app';
+import { TokenDeployerState } from '@types';
+import { useAppState, useEthers } from '@app';
 import { TokenInfoGeneral, DeployProgress } from '..';
 
 interface TokenDeployProps {
-  token: Token;
   onReview: () => void;
   onCancel: () => void;
 }
 
-export function TokenDeploy({ token, onReview, onCancel }: TokenDeployProps): ReactElement {
+export function TokenDeploy({ onReview, onCancel }: TokenDeployProps): ReactElement {
   const { networkId } = useEthers();
+  const [{ token }] = useAppState();
+
   const deployerState = token.networks[networkId]?.deployerState;
 
   return (
     <>
-      <TokenInfoGeneral token={token} />
+      <TokenInfoGeneral />
 
       <Button onClick={onReview} disabled={deployerState != TokenDeployerState.None}>
         Review/edit the token
       </Button>
 
       <Divider />
-      <DeployProgress token={token} type="token" onClose={onCancel} />
+      <DeployProgress type="token" onClose={onCancel} />
       <Divider />
 
       <h3>How does this work</h3>

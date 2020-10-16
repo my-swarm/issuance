@@ -1,42 +1,30 @@
-import React, { ReactElement, useEffect, useState } from 'react';
-import { Token } from '@types';
-import { useContract, useEthers, useAppState } from '../../@app';
-import { Button, Collapse, Descriptions, Form, InputNumber } from 'antd';
-import { formatInt, formatNumber, formatTokenAmount, getBnSupply, getTokenAmount } from '../../@lib';
-import { SWM_TOKEN_DECIMALS } from '../../@const';
+import React, { ReactElement, useState } from 'react';
+import { useAppState, useContract, useDispatch, useEthers, useSwmAllowance } from '@app';
+import { Button, Descriptions, Form, InputNumber } from 'antd';
+import { formatInt, formatNumber, formatTokenAmount, getBnSupply, getTokenAmount } from '@lib';
+import { useTokenSupplyQuery } from '../../@graphql';
+import { Loading } from '@components';
 
-export function ManageSupply({ token }: { token: Token }): ReactElement {
+export function ManageSupply(): ReactElement {
   const { address } = useEthers();
-  const [currentSupply, setCurrentSupply] = useState<string>();
-  const [maxSupply, setMaxSupply] = useState<string>();
-  const [availableSupply, setAvailableSupply] = useState<string>();
-  const [currentStake, setCurrentStake] = useState<string>();
-  const [currentAllowance, setCurrentAllowance] = useState<string>();
-  const [currentNav, setCurrentNav] = useState<string>();
+  const [{ token }] = useAppState();
+  const [swmAllowance] = useSwmAllowance();
+
   const [stakeRequired, setStakeRequired] = useState<number>();
   const [stakeReturned, setStakeReturned] = useState<number>();
-  const src20 = useContract('src20', token);
-  const registry = useContract('registry');
-  const assetRegistry = useContract('assetRegistry');
-  const swmToken = useContract('swmToken');
+  const { src20, registry, swmToken } = useContract();
   const [increaseForm] = Form.useForm();
   const [decreaseForm] = Form.useForm();
   const [, dispatch] = useAppState();
+  const { dispatchTransaction } = useDispatch();
 
-  const reloadSupply = () => {
-    src20.totalSupply().then((x) => setCurrentSupply(formatTokenAmount(x, token.decimals)));
-    src20._maxTotalSupply().then((x) => setMaxSupply(formatTokenAmount(x, token.decimals)));
-    src20.balanceOf(address).then((x) => setAvailableSupply(formatTokenAmount(x, token.decimals)));
-    src20
-      .allowance(address, registry.address)
-      .then((x) => setCurrentAllowance(formatTokenAmount(x, SWM_TOKEN_DECIMALS)));
-    registry.getStake(src20.address).then((x) => setCurrentStake(formatTokenAmount(x, token.decimals)));
-  };
+  const { loading, error, data } = useTokenSupplyQuery({
+    variables: { id: '0x63e00e15ec3f75dc4ef547ea86ecd2ae323e2f32' },
+  });
+  if (loading) return <Loading />;
 
-  useEffect(() => {
-    reloadSupply();
-    assetRegistry.getNetAssetValueUSD(src20.address).then((x) => setCurrentNav(formatNumber(x)));
-  }, [src20]);
+  const gToken = data?.tokens[0] || undefined;
+  console.log({ loading, error, data, gToken });
 
   const handleSupplyChange = (newSupply: number | string | undefined, returned = false) => {
     const method = returned ? setStakeReturned : setStakeRequired;
@@ -45,17 +33,30 @@ export function ManageSupply({ token }: { token: Token }): ReactElement {
       method(0);
       return;
     }
-    const newSupplyBn = getBnSupply(newSupply.toString(), token.decimals);
-    registry.swmNeeded(src20.address, newSupplyBn).then((x) => method(getTokenAmount(x, SWM_TOKEN_DECIMALS)));
+    // contractMethods('swmNeeded', [src20.address, getBnSupply(newSupply.toString(), token.decimals)]).then((x) =>
+    //   method(getTokenAmount(x, SWM_TOKEN_DECIMALS)),
+    // );
   };
 
   const handleIncreaseSupply = async () => {
-    const supply = getBnSupply(increaseForm.getFieldValue('supply'), token.decimals);
-    const allowance = await src20.allowance(address, registry.address);
-    const swmNeeded = await registry.swmNeeded(src20.address, supply);
+    const additionalSupply = getBnSupply(increaseForm.getFieldValue('supply'), token.decimals);
+    const swmNeeded = await registry.swmNeeded(src20.address, additionalSupply);
+
+    dispatchTransaction({
+      method: 'swmToken.approve',
+      arguments: [registry.address, swmNeeded.sub(swmAllowance)],
+      description: 'Approving SWM spending. Confirm transaction to be albe to stake your SWM',
+      onSuccess: () => {
+        dispatchTransaction({
+          method: 'registry.increaseSupply',
+          arguments: [src20.address, address, additionalSupply],
+          description: 'Increasing token supply and staking your SWM tokens',
+        });
+      },
+    });
     try {
-      await swmToken.approve(registry.address, swmNeeded.sub(allowance));
-      const transaction = await registry.increaseSupply(src20.address, address, supply);
+      await swmToken.approve(registry.address, swmNeeded.sub(swmAllowance));
+      const transaction = await registry.increaseSupply(src20.address, address, additionalSupply);
       await transaction.wait();
     } catch (e) {
       let error;
@@ -74,31 +75,29 @@ export function ManageSupply({ token }: { token: Token }): ReactElement {
       }
       dispatch({ type: 'showError', error });
     }
-    reloadSupply();
   };
 
   const handleDecreaseSupply = async () => {
     const supply = getBnSupply(decreaseForm.getFieldValue('supply'), token.decimals);
     const transaction = await registry.decreaseSupply(src20.address, address, supply);
     await transaction.wait();
-    reloadSupply();
   };
 
   return (
     <>
       <Descriptions title="Current supply and stake">
         <Descriptions.Item label="Supply">
-          {currentSupply} {token.symbol}
+          {formatTokenAmount(gToken.supply, token.decimals)} {token.symbol}
         </Descriptions.Item>
         <Descriptions.Item label="Max Supply">
-          {maxSupply} {token.symbol}
+          {formatTokenAmount(gToken.maxSupply, token.decimals)} {token.symbol}
         </Descriptions.Item>
         <Descriptions.Item label="Available">
-          {availableSupply} {token.symbol}
+          {formatTokenAmount(gToken.availableSupply, token.decimals)} {token.symbol}
         </Descriptions.Item>
-        <Descriptions.Item label="Stake">{currentStake} SWM</Descriptions.Item>
-        <Descriptions.Item label="Allowance">{currentAllowance} SWM</Descriptions.Item>
-        <Descriptions.Item label="Asset Value">{currentNav} USD</Descriptions.Item>
+        <Descriptions.Item label="Stake">{gToken.stake} SWM</Descriptions.Item>
+        <Descriptions.Item label="Allowance">{swmAllowance.nice} SWM</Descriptions.Item>
+        <Descriptions.Item label="Asset Value">{10000} USD</Descriptions.Item>
       </Descriptions>
 
       <h3>Increase supply</h3>

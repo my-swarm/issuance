@@ -129,7 +129,15 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       };
     }
 
+    case 'setToken': {
+      return {
+        ...state,
+        token: action.token,
+      };
+    }
+
     case 'startTransaction': {
+      console.log('reducer start', action);
       return {
         ...state,
         transaction: action.transaction,

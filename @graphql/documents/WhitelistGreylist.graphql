@@ -1,0 +1,10 @@
+query WhitelistGreylist($token: String!) {
+  whitelistedAccounts(where: { token: $token }) {
+    address
+    createdAt
+  },
+  greylistedAccounts(where: { token: $token }) {
+    address
+    createdAt
+  },
+}

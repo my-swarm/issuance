@@ -12,12 +12,12 @@ const { Content, Sider } = Layout;
 
 interface DefaultLayoutProps extends PageProps {
   headExtra?: ReactNode;
-  headTableAligned: boolean;
+  headTableAligned?: boolean;
 }
 
 export function DefaultLayout({ title, headExtra, children, headTableAligned = false }: DefaultLayoutProps) {
   const [siderCollapsed, setSiderCollapsed] = useState(false);
-  const [{ error }, dispatch] = useAppState();
+  const [{ error, transaction }, dispatch] = useAppState();
 
   useEffect(() => {
     if (error) {
@@ -59,7 +59,7 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
           className={headTableAligned ? `table-aligned` : ``}
         />
         {children}
-        <TransactionModal />
+        {transaction && <TransactionModal />}
       </Content>
     </Layout>
   );

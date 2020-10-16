@@ -1,11 +1,12 @@
 import React, { ReactElement } from 'react';
-import { Token, transferRules } from '@types';
+import { transferRules } from '@types';
 import { Descriptions } from 'antd';
 import { formatNumber } from '@lib';
 import { tokenFeatures } from '@const';
+import { useAppState } from '@app';
 
-export function TokenInfoBasics({ token }: { token: Token }): ReactElement {
-  console.log({ token });
+export function TokenInfoBasics(): ReactElement {
+  const [{ token }] = useAppState();
 
   const features = Object.entries(tokenFeatures)
     .filter(([key, value]) => token[key])

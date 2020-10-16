@@ -1,9 +1,11 @@
 import React, { ReactElement } from 'react';
-import { Token } from '@types';
 import { Descriptions } from 'antd';
 import { formatNumber } from '@lib';
+import { useAppState } from '@app';
 
-export function TokenInfoGeneral({ token }: { token: Token }): ReactElement {
+export function TokenInfoGeneral(): ReactElement {
+  const [{ token }] = useAppState();
+
   return (
     <Descriptions title="General token info" layout="vertical" size="small" className="mb-3">
       <Descriptions.Item label="Initial Token supply">

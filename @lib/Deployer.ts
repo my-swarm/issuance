@@ -9,11 +9,10 @@ import {
   DeployerState,
   TokenAddresses,
 } from '@types';
-import { ContractArtifacts } from './ContractArtifacts';
-import { contracts } from '../@contracts';
+import { getContractAddress } from './contracts';
 
 export abstract class Deployer {
-  protected contractAddresses: { [index: string]: EthereumAddress } = {}; // override the artifacts addresses
+  protected contractAddresses: { [index: string]: EthereumAddress } = {}; // overrides of base contracts
   protected _addresses: TokenAddresses;
 
   protected readonly signer: Signer;
@@ -58,15 +57,6 @@ export abstract class Deployer {
     this.addresses = addresses;
   }
 
-  protected getContractArtifacts(contractName: string): ContractArtifacts {
-    console.log('get artifacts', contractName);
-    const artifacts = new ContractArtifacts(contracts[contractName], this.networkId);
-    if (this.contractAddresses[contractName]) {
-      artifacts.address = this.contractAddresses[contractName];
-    }
-    return artifacts;
-  }
-
   /**
    * Normally the address is read from the artifacts file. But we might want to override that (e.g. when testing).
    * @param contractName
@@ -84,5 +74,13 @@ export abstract class Deployer {
 
   set addresses(addresses: TokenAddresses) {
     this._addresses = addresses;
+  }
+
+  public getAddress(contractName: string): string {
+    return (
+      this._addresses[contractName] ||
+      this.contractAddresses[contractName] ||
+      getContractAddress(contractName, this.networkId)
+    );
   }
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Token, TokenState, TokenAction, Uuid } from '@types';
 import { Button, Popconfirm, Space } from 'antd';
 import {
@@ -21,7 +21,7 @@ interface TokenActionsProps {
 // }
 
 export function TokenActions({ token, onAction }: TokenActionsProps): React.ReactElement {
-  const actions = [];
+  const actions: ReactElement[] = [];
   const { connected, networkId } = useEthers();
 
   if (!connected) {
@@ -121,5 +121,13 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     </Popconfirm>,
   );
 
-  return <Space size="small">{actions}</Space>;
+  return (
+    <>
+      {actions.map((action, key) => (
+        <span className="mr-1 lh-2" key={key}>
+          {action}
+        </span>
+      ))}
+    </>
+  );
 }

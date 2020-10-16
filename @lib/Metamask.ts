@@ -18,11 +18,13 @@ export class Metamask {
   /**
    * Handle chain (network) and chainChanged, per EIP 1193
    */
-  private handleChainChanged = (chainId: number) => {
+  private handleChainChanged = (chainId: number, skipCallback = false) => {
     if (this._currentChainId !== chainId) {
       this._currentChainId = chainId;
       // Run any other necessary logic...
-      this.stateUpdateCallback(this.ethereum);
+      if (!skipCallback) {
+        this.stateUpdateCallback(this.ethereum);
+      }
     }
   };
 
@@ -48,7 +50,7 @@ export class Metamask {
 
     try {
       const chainId = ethereum.send('eth_chainId');
-      this.handleChainChanged(chainId);
+      this.handleChainChanged(chainId, true);
       const accounts = ethereum.send('eth_accounts');
       this.handleAccountsChanged(accounts);
     } catch (err) {

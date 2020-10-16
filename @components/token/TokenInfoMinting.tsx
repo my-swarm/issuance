@@ -1,9 +1,11 @@
-import React from 'react';
-import { Token } from '@types';
+import React, { ReactElement } from 'react';
 import { Descriptions } from 'antd';
 import { formatNumber } from '@lib';
+import { useAppState } from '@app';
 
-export function TokenInfoMinting({ token }: { token: Token }) {
+export function TokenInfoMinting(): ReactElement {
+  const [{ token }] = useAppState();
+
   return (
     <Descriptions title="Minting information" layout="vertical" size="small" className="mb-3">
       <Descriptions.Item label="Initial Token supply">

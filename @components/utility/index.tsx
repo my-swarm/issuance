@@ -6,3 +6,4 @@ export * from './RequireEthers';
 export * from './FilePreview';
 export * from './DeployProgress';
 export * from './TransactionModal';
+export * from './Loading';

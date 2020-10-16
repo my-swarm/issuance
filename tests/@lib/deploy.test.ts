@@ -35,7 +35,7 @@ it('can can deploy or required contracts', async () => {
   expect(instances.priceOracle.address).toMatch(REGEX_ADDRESS);
   expect(instances.registry.address).toMatch(REGEX_ADDRESS);
   expect(instances.assetRegistry.address).toMatch(REGEX_ADDRESS);
-  expect(instances.getRateMinter.address).toMatch(REGEX_ADDRESS);
+  expect(instances.minter.address).toMatch(REGEX_ADDRESS);
 });
 
 it(

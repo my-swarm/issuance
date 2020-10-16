@@ -1,0 +1,8 @@
+query TokenSupply($id: ID!) {
+  tokens(where: { id: $id }) {
+    supply
+    maxSupply
+    availableSupply
+    stake
+  }
+}

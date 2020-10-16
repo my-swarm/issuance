@@ -12,8 +12,7 @@ export interface AppError {
 }
 
 export interface Transaction {
-  contract: string;
-  address: string;
+  contract?: string;
   method: string;
   arguments: any[];
   description?: string;
@@ -26,5 +25,6 @@ export interface AppState extends ColdState {
   isLoaded: boolean;
   isSynced: boolean;
   error?: AppError;
+  token?: Token;
   transaction?: Transaction;
 }

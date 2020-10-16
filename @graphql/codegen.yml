@@ -1,0 +1,18 @@
+overwrite: true
+schema:
+  - "http://localhost:8000/subgraphs/name/my-swarm/issuance"
+documents: "./@graphql/documents/*.graphql"
+config:
+  scalars:
+    Datetime: "string"
+    JSON: "{ [key: string]: any }"
+  noGraphQLTag: false
+  withHOC: false
+  withComponent: false
+  withHooks: true
+generates:
+  "./@graphql/index.tsx":
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"

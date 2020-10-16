@@ -2,20 +2,19 @@ import React, { ReactElement, useState } from 'react';
 import { Button, Divider } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 
-import { TokenDeployerState, Token, TokenState } from '@types';
+import { TokenState } from '@types';
 import { TokenDeployer } from '@lib';
-import { useEthers, useAppState } from '@app';
-import { StakeTable, TokenInfoStaking, TokenInfoMinting } from '..';
+import { useAppState, useEthers } from '@app';
+import { StakeTable, TokenInfoMinting, TokenInfoStaking } from '..';
 
 interface TokenStakeAndMintProps {
-  token: Token;
   onCancel: () => void;
 }
 
-export function TokenStakeAndMint({ token, onCancel }: TokenStakeAndMintProps): ReactElement {
-  const [isDeploying, setIsDeploying] = useState<boolean>(false);
+export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactElement {
   const { signer, networkId } = useEthers();
-  const [, dispatch] = useAppState();
+  const [{ token }, dispatch] = useAppState();
+  const [isDeploying, setIsDeploying] = useState<boolean>(false);
 
   const handleStakeAndMint = async () => {
     setIsDeploying(true);
@@ -67,8 +66,8 @@ export function TokenStakeAndMint({ token, onCancel }: TokenStakeAndMintProps): 
 
   return (
     <div>
-      <TokenInfoStaking token={token} />
-      <TokenInfoMinting token={token} />
+      <TokenInfoStaking />
+      <TokenInfoMinting />
       <div className="mb-3">
         {tokenState === TokenState.Minted ? (
           <Button size="large" onClick={onCancel}>

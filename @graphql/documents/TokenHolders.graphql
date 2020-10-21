@@ -1,0 +1,11 @@
+fragment TokenHolder on TokenHolder {
+  address
+  balance
+  createdAt
+}
+
+query TokenHolders($token: String!) {
+  tokenHolders(where: { token: $token }) {
+    ...TokenHolder
+  },
+}

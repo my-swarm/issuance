@@ -1,80 +1,63 @@
 import React, { ReactElement, useState } from 'react';
 import moment from 'moment';
-import { Button, Checkbox, Col, Popconfirm, Row, Table } from 'antd';
+import { Button, Checkbox, Col, Popconfirm, Row, Select, Space, Table } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
 import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';
-import { useWhitelistGreylistQuery } from '@graphql';
+import { TokenHolderFragment, useTokenHoldersQuery, useWhitelistGreylistQuery } from '@graphql';
 import { Loading, FilterDropdown, AccountsAddModal, EditableCell, Address } from '@components';
 import { createPagination } from './listUtils';
 import { ColumnType } from 'antd/lib/table';
+import { formatDate, formatDatetime } from '../../@lib';
+import { formatUnits } from 'ethers/lib/utils';
 
-interface ManageAccountListProps {
-  type: 'whitelist' | 'greylist';
-}
-
-interface AccountRecord {
+interface TableRecord {
   address: string;
   name: string;
   note: string;
   createdAt: Date;
 }
 
-type RawAccount = { address: string; createdAt: number };
+type RawAccount = TokenHolderFragment;
 type RawAccountList = RawAccount[];
-type AccountList = AccountRecord[];
 
-function tableColumns(columns: ColumnType<AccountRecord>[]): ColumnType<AccountRecord>[] {
+type TableList = TableRecord[];
+
+function tableColumns(columns: ColumnType<TableRecord>[]): ColumnType<TableRecord>[] {
   return columns.map((column) => ({ ...column, dataIndex: column.key }));
 }
 
-export function ManageAccountList({ type }: ManageAccountListProps): ReactElement {
+const sortOptions = ['address', 'createdAt', 'balance'];
+
+export function ManageTokenHolders(): ReactElement {
   const { reset } = useGraphql();
   const [{ token }] = useAppState();
+  const [sort, setSort] = useState<string>('balance');
   const [searchText, setSearchText] = useState<string>('');
-  const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [paginate, setPaginate] = useState<boolean>(true);
-  const [batchAdding, setBatchAdding] = useState<boolean>(false);
-  const [, dispatch] = useAppState();
   const { networkId } = useEthers();
   const { dispatchTransaction, setAccountProp } = useDispatch();
   const { src20: src20Address } = useContractAddress();
-  const { loading, error, data } = useWhitelistGreylistQuery({
+  const { loading, error, data } = useTokenHoldersQuery({
     variables: { token: src20Address },
   });
   if (loading) return <Loading />;
 
-  const handleBatchDelete = async (): Promise<void> => {
-    const addressList = selectedRows;
-    if (addressList.length === 0) return;
-
-    dispatchTransaction({
-      method: `transferRules.${removeMethod}`,
-      arguments: [addressList],
-      description: `Removing ${addressList.length} addresses from your ${type}`,
-      onSuccess: reset,
-    });
-  };
-
-  const handleAddModalClosed = () => {
-    setBatchAdding(false);
-    reset();
-  };
-
-  const removeMethod = type === 'whitelist' ? 'bulkUnWhitelistAccount' : 'bulkUnGreyListAccount';
-  const rawAccounts: RawAccountList = type === 'whitelist' ? data.whitelistedAccounts : data.greylistedAccounts;
-  const tableData: AccountList = rawAccounts
+  let tableData: TableList = data.tokenHolders
     .map((a) => {
       const tokenAccountList = token.networks[networkId].accounts || {};
-      console.log({ networkId, type, tokenAccountList });
       return {
-        key: a.address, // for the table
         ...a,
-        createdAt: moment(a.createdAt).toDate(),
+        key: a.address, // for the table
+        balance: parseFloat(formatUnits(a.balance, token.decimals)),
         ...tokenAccountList[a.address],
       };
     })
     .filter((a) => `${a.address} ${a.name} ${a.note}`.toLowerCase().includes(searchText.toLowerCase()));
+
+  console.log({ tableData });
+
+  tableData = _.sortBy(tableData, [sort]);
 
   const columns = tableColumns([
     {
@@ -85,6 +68,16 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
           {value}
         </Address>
       ),
+    },
+    {
+      title: 'First transaction',
+      key: 'createdAt',
+      render: formatDatetime,
+    },
+    {
+      title: 'Balance',
+      key: 'balance',
+      align: 'right',
     },
     {
       title: 'Name',
@@ -107,34 +100,25 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
     },
   ]);
 
-  const rowSelection = {
-    selectedRows,
-    onChange: (rowKeys) => setSelectedRows(rowKeys),
-  };
-
   return (
     <>
       {tableData.length > 0 && (
-        <Row className="mb-3">
-          <Col span={12}>
-            <Popconfirm
-              disabled={selectedRows.length === 0}
-              key="delete"
-              title={`Are you sure you want to remove ${selectedRows.length} accounts from your ${type}?`}
-              onConfirm={handleBatchDelete}
-            >
-              <Button size="small" disabled={selectedRows.length === 0}>
-                Delete selected
-              </Button>
-            </Popconfirm>
-          </Col>
-          <Col span={12} className="text-right">
+        <div className="text-right mb-2">
+          <Space>
+            sort by:{' '}
+            <Select
+              options={sortOptions.map((x) => ({ label: x, value: x }))}
+              value={sort}
+              onChange={(val) => setSort(val)}
+              size="small"
+              dropdownMatchSelectWidth={false}
+            />
             <Checkbox onChange={(e) => setPaginate(e.target.checked)} checked={paginate}>
               {' '}
               paginate
             </Checkbox>
-          </Col>
-        </Row>
+          </Space>
+        </div>
       )}
 
       <div style={{ maxHeight: '40rem', overflowY: 'auto' }}>
@@ -142,17 +126,11 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
           size="small"
           columns={columns}
           dataSource={tableData}
-          rowSelection={rowSelection}
           className="mb-3"
           rowClassName="editable-row"
           pagination={createPagination(!paginate, tableData.length)}
         />
       </div>
-      <div>
-        <Button onClick={() => setBatchAdding(true)}>Batch add accounts</Button>
-      </div>
-
-      {batchAdding && <AccountsAddModal list={type} onClose={handleAddModalClosed} />}
     </>
   );
 }

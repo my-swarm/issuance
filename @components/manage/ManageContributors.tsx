@@ -201,11 +201,11 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
         <div className="text-right mb-2">
           <Space>
             <Select
-              onChange={(val) => setStatusFilter(val as string)}
+              options={statusFilterOptions.map((x) => ({ label: x, value: x }))}
               value={statusFilter}
+              onChange={(val) => setStatusFilter(val as string)}
               size="small"
               dropdownMatchSelectWidth={false}
-              options={statusFilterOptions.map((x) => ({ label: x, value: x }))}
             />
             <Checkbox onChange={(e) => setPaginate(e.target.checked)} checked={paginate}>
               paginate

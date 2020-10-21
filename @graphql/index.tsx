@@ -14,13 +14,10 @@ export type Scalars = {
   Bytes: any;
 };
 
-
-
 export type Block_Height = {
   hash?: Maybe<Scalars['Bytes']>;
   number?: Maybe<Scalars['Int']>;
 };
-
 
 export type Contribution = {
   __typename?: 'Contribution';
@@ -79,7 +76,7 @@ export enum Contribution_OrderBy {
   Contributor = 'contributor',
   Type = 'type',
   Timestamp = 'timestamp',
-  Amount = 'amount'
+  Amount = 'amount',
 }
 
 export type Contributor = {
@@ -91,7 +88,6 @@ export type Contributor = {
   amount: Scalars['BigInt'];
   contributions?: Maybe<Array<Contribution>>;
 };
-
 
 export type ContributorContributionsArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -105,7 +101,7 @@ export enum ContributorStatus {
   Pending = 'Pending',
   Qualified = 'Qualified',
   Removed = 'Removed',
-  Refunded = 'Refunded'
+  Refunded = 'Refunded',
 }
 
 export type Contributor_Filter = {
@@ -155,7 +151,7 @@ export enum Contributor_OrderBy {
   Status = 'status',
   Address = 'address',
   Amount = 'amount',
-  Contributions = 'contributions'
+  Contributions = 'contributions',
 }
 
 export type Fundraiser = {
@@ -183,7 +179,6 @@ export type Fundraiser = {
   contributors?: Maybe<Array<Contributor>>;
 };
 
-
 export type FundraiserContributorsArgs = {
   skip?: Maybe<Scalars['Int']>;
   first?: Maybe<Scalars['Int']>;
@@ -197,7 +192,7 @@ export enum FundraiserStatus {
   Setup = 'Setup',
   Running = 'Running',
   Finished = 'Finished',
-  Canceled = 'Canceled'
+  Canceled = 'Canceled',
 }
 
 export type Fundraiser_Filter = {
@@ -376,7 +371,7 @@ export enum Fundraiser_OrderBy {
   AmountRefunded = 'amountRefunded',
   AmountWithdrawn = 'amountWithdrawn',
   Status = 'status',
-  Contributors = 'contributors'
+  Contributors = 'contributors',
 }
 
 export type GreylistedAccount = {
@@ -430,12 +425,12 @@ export enum GreylistedAccount_OrderBy {
   Id = 'id',
   Address = 'address',
   CreatedAt = 'createdAt',
-  Token = 'token'
+  Token = 'token',
 }
 
 export enum OrderDirection {
   Asc = 'asc',
-  Desc = 'desc'
+  Desc = 'desc',
 }
 
 export type Query = {
@@ -461,12 +456,10 @@ export type Query = {
   contributions: Array<Contribution>;
 };
 
-
 export type QueryTokenArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type QueryTokensArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -477,12 +470,10 @@ export type QueryTokensArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type QueryWhitelistedAccountArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type QueryWhitelistedAccountsArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -493,12 +484,10 @@ export type QueryWhitelistedAccountsArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type QueryGreylistedAccountArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type QueryGreylistedAccountsArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -509,7 +498,6 @@ export type QueryGreylistedAccountsArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type QueryTransferRulesArgs = {
   skip?: Maybe<Scalars['Int']>;
   first?: Maybe<Scalars['Int']>;
@@ -519,12 +507,10 @@ export type QueryTransferRulesArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type QueryTransferRequestArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type QueryTransferRequestsArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -535,12 +521,10 @@ export type QueryTransferRequestsArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type QueryTransferArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type QueryTransfersArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -551,12 +535,10 @@ export type QueryTransfersArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type QueryTokenHolderArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type QueryTokenHoldersArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -567,12 +549,10 @@ export type QueryTokenHoldersArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type QueryFundraiserArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type QueryFundraisersArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -583,12 +563,10 @@ export type QueryFundraisersArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type QueryContributorArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type QueryContributorsArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -599,12 +577,10 @@ export type QueryContributorsArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type QueryContributionArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type QueryContributionsArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -638,12 +614,10 @@ export type Subscription = {
   contributions: Array<Contribution>;
 };
 
-
 export type SubscriptionTokenArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type SubscriptionTokensArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -654,12 +628,10 @@ export type SubscriptionTokensArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type SubscriptionWhitelistedAccountArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type SubscriptionWhitelistedAccountsArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -670,12 +642,10 @@ export type SubscriptionWhitelistedAccountsArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type SubscriptionGreylistedAccountArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type SubscriptionGreylistedAccountsArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -686,7 +656,6 @@ export type SubscriptionGreylistedAccountsArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type SubscriptionTransferRulesArgs = {
   skip?: Maybe<Scalars['Int']>;
   first?: Maybe<Scalars['Int']>;
@@ -696,12 +665,10 @@ export type SubscriptionTransferRulesArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type SubscriptionTransferRequestArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type SubscriptionTransferRequestsArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -712,12 +679,10 @@ export type SubscriptionTransferRequestsArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type SubscriptionTransferArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type SubscriptionTransfersArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -728,12 +693,10 @@ export type SubscriptionTransfersArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type SubscriptionTokenHolderArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type SubscriptionTokenHoldersArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -744,12 +707,10 @@ export type SubscriptionTokenHoldersArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type SubscriptionFundraiserArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type SubscriptionFundraisersArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -760,12 +721,10 @@ export type SubscriptionFundraisersArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type SubscriptionContributorArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type SubscriptionContributorsArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -776,12 +735,10 @@ export type SubscriptionContributorsArgs = {
   block?: Maybe<Block_Height>;
 };
 
-
 export type SubscriptionContributionArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
 };
-
 
 export type SubscriptionContributionsArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -817,7 +774,6 @@ export type Token = {
   transferRules?: Maybe<TransferRules>;
 };
 
-
 export type TokenWhitelistArgs = {
   skip?: Maybe<Scalars['Int']>;
   first?: Maybe<Scalars['Int']>;
@@ -825,7 +781,6 @@ export type TokenWhitelistArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<WhitelistedAccount_Filter>;
 };
-
 
 export type TokenGreylistArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -835,7 +790,6 @@ export type TokenGreylistArgs = {
   where?: Maybe<GreylistedAccount_Filter>;
 };
 
-
 export type TokenHoldersArgs = {
   skip?: Maybe<Scalars['Int']>;
   first?: Maybe<Scalars['Int']>;
@@ -843,7 +797,6 @@ export type TokenHoldersArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<TokenHolder_Filter>;
 };
-
 
 export type TokenTransferRequestsArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -853,7 +806,6 @@ export type TokenTransferRequestsArgs = {
   where?: Maybe<TransferRequest_Filter>;
 };
 
-
 export type TokenTransfersArgs = {
   skip?: Maybe<Scalars['Int']>;
   first?: Maybe<Scalars['Int']>;
@@ -861,7 +813,6 @@ export type TokenTransfersArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Transfer_Filter>;
 };
-
 
 export type TokenFundraisersArgs = {
   skip?: Maybe<Scalars['Int']>;
@@ -877,6 +828,7 @@ export type TokenHolder = {
   token: Token;
   address: Scalars['Bytes'];
   balance: Scalars['BigInt'];
+  createdAt: Scalars['Int'];
 };
 
 export type TokenHolder_Filter = {
@@ -916,13 +868,22 @@ export type TokenHolder_Filter = {
   balance_lte?: Maybe<Scalars['BigInt']>;
   balance_in?: Maybe<Array<Scalars['BigInt']>>;
   balance_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  createdAt?: Maybe<Scalars['Int']>;
+  createdAt_not?: Maybe<Scalars['Int']>;
+  createdAt_gt?: Maybe<Scalars['Int']>;
+  createdAt_lt?: Maybe<Scalars['Int']>;
+  createdAt_gte?: Maybe<Scalars['Int']>;
+  createdAt_lte?: Maybe<Scalars['Int']>;
+  createdAt_in?: Maybe<Array<Scalars['Int']>>;
+  createdAt_not_in?: Maybe<Array<Scalars['Int']>>;
 };
 
 export enum TokenHolder_OrderBy {
   Id = 'id',
   Token = 'token',
   Address = 'address',
-  Balance = 'balance'
+  Balance = 'balance',
+  CreatedAt = 'createdAt',
 }
 
 export type Token_Filter = {
@@ -1093,7 +1054,7 @@ export enum Token_OrderBy {
   Transfers = 'transfers',
   Fundraisers = 'fundraisers',
   CurrentFundraiser = 'currentFundraiser',
-  TransferRules = 'transferRules'
+  TransferRules = 'transferRules',
 }
 
 export type Transfer = {
@@ -1118,7 +1079,7 @@ export type TransferRequest = {
 export enum TransferRequestStatus {
   Pending = 'Pending',
   Approved = 'Approved',
-  Denied = 'Denied'
+  Denied = 'Denied',
 }
 
 export type TransferRequest_Filter = {
@@ -1190,7 +1151,7 @@ export enum TransferRequest_OrderBy {
   From = 'from',
   To = 'to',
   Value = 'value',
-  Status = 'status'
+  Status = 'status',
 }
 
 export type TransferRules = {
@@ -1226,7 +1187,7 @@ export type TransferRules_Filter = {
 
 export enum TransferRules_OrderBy {
   Id = 'id',
-  Token = 'token'
+  Token = 'token',
 }
 
 export type Transfer_Filter = {
@@ -1295,7 +1256,7 @@ export enum Transfer_OrderBy {
   Token = 'token',
   From = 'from',
   To = 'to',
-  Value = 'value'
+  Value = 'value',
 }
 
 export type WhitelistedAccount = {
@@ -1349,166 +1310,169 @@ export enum WhitelistedAccount_OrderBy {
   Id = 'id',
   Address = 'address',
   CreatedAt = 'createdAt',
-  Token = 'token'
+  Token = 'token',
 }
 
-export type ContributorFragment = (
-  { __typename?: 'Contributor' }
-  & Pick<Contributor, 'address' | 'status' | 'amount'>
-  & { contributions?: Maybe<Array<(
-    { __typename?: 'Contribution' }
-    & Pick<Contribution, 'timestamp' | 'type' | 'amount'>
-  )>> }
-);
+export type ContributorFragment = { __typename?: 'Contributor' } & Pick<
+  Contributor,
+  'address' | 'status' | 'amount'
+> & {
+    contributions?: Maybe<Array<{ __typename?: 'Contribution' } & Pick<Contribution, 'timestamp' | 'type' | 'amount'>>>;
+  };
 
-export type FundraiserContributorsFragment = (
-  { __typename?: 'Fundraiser' }
-  & { contributors?: Maybe<Array<(
-    { __typename?: 'Contributor' }
-    & ContributorFragment
-  )>> }
-);
+export type FundraiserContributorsFragment = { __typename?: 'Fundraiser' } & {
+  contributors?: Maybe<Array<{ __typename?: 'Contributor' } & ContributorFragment>>;
+};
 
-export type FundraiserInfoFragment = (
-  { __typename?: 'Fundraiser' }
-  & Pick<Fundraiser, 'startDate' | 'endDate' | 'softCap' | 'hardCap' | 'supply' | 'amountQualified' | 'amountPending' | 'amountRefunded' | 'amountWithdrawn' | 'status'>
-);
+export type FundraiserInfoFragment = { __typename?: 'Fundraiser' } & Pick<
+  Fundraiser,
+  | 'startDate'
+  | 'endDate'
+  | 'softCap'
+  | 'hardCap'
+  | 'supply'
+  | 'amountQualified'
+  | 'amountPending'
+  | 'amountRefunded'
+  | 'amountWithdrawn'
+  | 'status'
+>;
 
-export type FundraiserFragment = (
-  { __typename?: 'Fundraiser' }
-  & Pick<Fundraiser, 'id' | 'label' | 'baseCurrency' | 'tokenPrice' | 'affiliateManager' | 'contributorRestrictions' | 'minter' | 'contributionsLocked'>
-  & { token: (
-    { __typename?: 'Token' }
-    & Pick<Token, 'id'>
-  ) }
-  & FundraiserInfoFragment
-  & FundraiserContributorsFragment
-);
+export type FundraiserFragment = { __typename?: 'Fundraiser' } & Pick<
+  Fundraiser,
+  | 'id'
+  | 'label'
+  | 'baseCurrency'
+  | 'tokenPrice'
+  | 'affiliateManager'
+  | 'contributorRestrictions'
+  | 'minter'
+  | 'contributionsLocked'
+> & { token: { __typename?: 'Token' } & Pick<Token, 'id'> } & FundraiserInfoFragment &
+  FundraiserContributorsFragment;
 
 export type FundraisersQueryVariables = Exact<{
   owner: Scalars['Bytes'];
 }>;
 
-
-export type FundraisersQuery = (
-  { __typename?: 'Query' }
-  & { fundraisers: Array<(
-    { __typename?: 'Fundraiser' }
-    & FundraiserFragment
-  )> }
-);
+export type FundraisersQuery = { __typename?: 'Query' } & {
+  fundraisers: Array<{ __typename?: 'Fundraiser' } & FundraiserFragment>;
+};
 
 export type FundraiserQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
+export type FundraiserQuery = { __typename?: 'Query' } & {
+  fundraiser?: Maybe<{ __typename?: 'Fundraiser' } & FundraiserFragment>;
+};
 
-export type FundraiserQuery = (
-  { __typename?: 'Query' }
-  & { fundraiser?: Maybe<(
-    { __typename?: 'Fundraiser' }
-    & FundraiserFragment
-  )> }
-);
+export type TokenHolderFragment = { __typename?: 'TokenHolder' } & Pick<
+  TokenHolder,
+  'address' | 'balance' | 'createdAt'
+>;
+
+export type TokenHoldersQueryVariables = Exact<{
+  token: Scalars['String'];
+}>;
+
+export type TokenHoldersQuery = { __typename?: 'Query' } & {
+  tokenHolders: Array<{ __typename?: 'TokenHolder' } & TokenHolderFragment>;
+};
 
 export type TokenSupplyQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
+export type TokenSupplyQuery = { __typename?: 'Query' } & {
+  token?: Maybe<
+    { __typename?: 'Token' } & Pick<Token, 'id' | 'address' | 'supply' | 'maxSupply' | 'availableSupply' | 'stake'>
+  >;
+};
 
-export type TokenSupplyQuery = (
-  { __typename?: 'Query' }
-  & { token?: Maybe<(
-    { __typename?: 'Token' }
-    & Pick<Token, 'id' | 'address' | 'supply' | 'maxSupply' | 'availableSupply' | 'stake'>
-  )> }
-);
+export type TokensQueryVariables = Exact<{ [key: string]: never }>;
 
-export type TokensQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type TokensQuery = (
-  { __typename?: 'Query' }
-  & { tokens: Array<(
-    { __typename?: 'Token' }
-    & Pick<Token, 'id' | 'name'>
-  )> }
-);
+export type TokensQuery = { __typename?: 'Query' } & {
+  tokens: Array<{ __typename?: 'Token' } & Pick<Token, 'id' | 'name'>>;
+};
 
 export type WhitelistGreylistQueryVariables = Exact<{
   token: Scalars['String'];
 }>;
 
-
-export type WhitelistGreylistQuery = (
-  { __typename?: 'Query' }
-  & { whitelistedAccounts: Array<(
-    { __typename?: 'WhitelistedAccount' }
-    & Pick<WhitelistedAccount, 'address' | 'createdAt'>
-  )>, greylistedAccounts: Array<(
-    { __typename?: 'GreylistedAccount' }
-    & Pick<GreylistedAccount, 'address' | 'createdAt'>
-  )> }
-);
+export type WhitelistGreylistQuery = { __typename?: 'Query' } & {
+  whitelistedAccounts: Array<{ __typename?: 'WhitelistedAccount' } & Pick<WhitelistedAccount, 'address' | 'createdAt'>>;
+  greylistedAccounts: Array<{ __typename?: 'GreylistedAccount' } & Pick<GreylistedAccount, 'address' | 'createdAt'>>;
+};
 
 export const FundraiserInfoFragmentDoc = gql`
-    fragment FundraiserInfo on Fundraiser {
-  startDate
-  endDate
-  softCap
-  hardCap
-  supply
-  amountQualified
-  amountPending
-  amountRefunded
-  amountWithdrawn
-  status
-}
-    `;
+  fragment FundraiserInfo on Fundraiser {
+    startDate
+    endDate
+    softCap
+    hardCap
+    supply
+    amountQualified
+    amountPending
+    amountRefunded
+    amountWithdrawn
+    status
+  }
+`;
 export const ContributorFragmentDoc = gql`
-    fragment Contributor on Contributor {
-  address
-  status
-  amount
-  contributions {
-    timestamp
-    type
+  fragment Contributor on Contributor {
+    address
+    status
     amount
+    contributions {
+      timestamp
+      type
+      amount
+    }
   }
-}
-    `;
+`;
 export const FundraiserContributorsFragmentDoc = gql`
-    fragment FundraiserContributors on Fundraiser {
-  contributors {
-    ...Contributor
+  fragment FundraiserContributors on Fundraiser {
+    contributors {
+      ...Contributor
+    }
   }
-}
-    ${ContributorFragmentDoc}`;
+  ${ContributorFragmentDoc}
+`;
 export const FundraiserFragmentDoc = gql`
-    fragment Fundraiser on Fundraiser {
-  id
-  label
-  ...FundraiserInfo
-  baseCurrency
-  tokenPrice
-  affiliateManager
-  contributorRestrictions
-  minter
-  contributionsLocked
-  ...FundraiserContributors
-  token {
+  fragment Fundraiser on Fundraiser {
     id
+    label
+    ...FundraiserInfo
+    baseCurrency
+    tokenPrice
+    affiliateManager
+    contributorRestrictions
+    minter
+    contributionsLocked
+    ...FundraiserContributors
+    token {
+      id
+    }
   }
-}
-    ${FundraiserInfoFragmentDoc}
-${FundraiserContributorsFragmentDoc}`;
+  ${FundraiserInfoFragmentDoc}
+  ${FundraiserContributorsFragmentDoc}
+`;
+export const TokenHolderFragmentDoc = gql`
+  fragment TokenHolder on TokenHolder {
+    address
+    balance
+    createdAt
+  }
+`;
 export const FundraisersDocument = gql`
-    query Fundraisers($owner: Bytes!) {
-  fundraisers(where: {owner: $owner}) {
-    ...Fundraiser
+  query Fundraisers($owner: Bytes!) {
+    fundraisers(where: { owner: $owner }) {
+      ...Fundraiser
+    }
   }
-}
-    ${FundraiserFragmentDoc}`;
+  ${FundraiserFragmentDoc}
+`;
 
 /**
  * __useFundraisersQuery__
@@ -1526,22 +1490,27 @@ export const FundraisersDocument = gql`
  *   },
  * });
  */
-export function useFundraisersQuery(baseOptions?: Apollo.QueryHookOptions<FundraisersQuery, FundraisersQueryVariables>) {
-        return Apollo.useQuery<FundraisersQuery, FundraisersQueryVariables>(FundraisersDocument, baseOptions);
-      }
-export function useFundraisersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FundraisersQuery, FundraisersQueryVariables>) {
-          return Apollo.useLazyQuery<FundraisersQuery, FundraisersQueryVariables>(FundraisersDocument, baseOptions);
-        }
+export function useFundraisersQuery(
+  baseOptions?: Apollo.QueryHookOptions<FundraisersQuery, FundraisersQueryVariables>,
+) {
+  return Apollo.useQuery<FundraisersQuery, FundraisersQueryVariables>(FundraisersDocument, baseOptions);
+}
+export function useFundraisersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<FundraisersQuery, FundraisersQueryVariables>,
+) {
+  return Apollo.useLazyQuery<FundraisersQuery, FundraisersQueryVariables>(FundraisersDocument, baseOptions);
+}
 export type FundraisersQueryHookResult = ReturnType<typeof useFundraisersQuery>;
 export type FundraisersLazyQueryHookResult = ReturnType<typeof useFundraisersLazyQuery>;
 export type FundraisersQueryResult = Apollo.QueryResult<FundraisersQuery, FundraisersQueryVariables>;
 export const FundraiserDocument = gql`
-    query Fundraiser($id: ID!) {
-  fundraiser(id: $id) {
-    ...Fundraiser
+  query Fundraiser($id: ID!) {
+    fundraiser(id: $id) {
+      ...Fundraiser
+    }
   }
-}
-    ${FundraiserFragmentDoc}`;
+  ${FundraiserFragmentDoc}
+`;
 
 /**
  * __useFundraiserQuery__
@@ -1560,26 +1529,66 @@ export const FundraiserDocument = gql`
  * });
  */
 export function useFundraiserQuery(baseOptions?: Apollo.QueryHookOptions<FundraiserQuery, FundraiserQueryVariables>) {
-        return Apollo.useQuery<FundraiserQuery, FundraiserQueryVariables>(FundraiserDocument, baseOptions);
-      }
-export function useFundraiserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FundraiserQuery, FundraiserQueryVariables>) {
-          return Apollo.useLazyQuery<FundraiserQuery, FundraiserQueryVariables>(FundraiserDocument, baseOptions);
-        }
+  return Apollo.useQuery<FundraiserQuery, FundraiserQueryVariables>(FundraiserDocument, baseOptions);
+}
+export function useFundraiserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<FundraiserQuery, FundraiserQueryVariables>,
+) {
+  return Apollo.useLazyQuery<FundraiserQuery, FundraiserQueryVariables>(FundraiserDocument, baseOptions);
+}
 export type FundraiserQueryHookResult = ReturnType<typeof useFundraiserQuery>;
 export type FundraiserLazyQueryHookResult = ReturnType<typeof useFundraiserLazyQuery>;
 export type FundraiserQueryResult = Apollo.QueryResult<FundraiserQuery, FundraiserQueryVariables>;
-export const TokenSupplyDocument = gql`
-    query TokenSupply($id: ID!) {
-  token(id: $id) {
-    id
-    address
-    supply
-    maxSupply
-    availableSupply
-    stake
+export const TokenHoldersDocument = gql`
+  query TokenHolders($token: String!) {
+    tokenHolders(where: { token: $token }) {
+      ...TokenHolder
+    }
   }
+  ${TokenHolderFragmentDoc}
+`;
+
+/**
+ * __useTokenHoldersQuery__
+ *
+ * To run a query within a React component, call `useTokenHoldersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTokenHoldersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTokenHoldersQuery({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useTokenHoldersQuery(
+  baseOptions?: Apollo.QueryHookOptions<TokenHoldersQuery, TokenHoldersQueryVariables>,
+) {
+  return Apollo.useQuery<TokenHoldersQuery, TokenHoldersQueryVariables>(TokenHoldersDocument, baseOptions);
 }
-    `;
+export function useTokenHoldersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<TokenHoldersQuery, TokenHoldersQueryVariables>,
+) {
+  return Apollo.useLazyQuery<TokenHoldersQuery, TokenHoldersQueryVariables>(TokenHoldersDocument, baseOptions);
+}
+export type TokenHoldersQueryHookResult = ReturnType<typeof useTokenHoldersQuery>;
+export type TokenHoldersLazyQueryHookResult = ReturnType<typeof useTokenHoldersLazyQuery>;
+export type TokenHoldersQueryResult = Apollo.QueryResult<TokenHoldersQuery, TokenHoldersQueryVariables>;
+export const TokenSupplyDocument = gql`
+  query TokenSupply($id: ID!) {
+    token(id: $id) {
+      id
+      address
+      supply
+      maxSupply
+      availableSupply
+      stake
+    }
+  }
+`;
 
 /**
  * __useTokenSupplyQuery__
@@ -1597,23 +1606,27 @@ export const TokenSupplyDocument = gql`
  *   },
  * });
  */
-export function useTokenSupplyQuery(baseOptions?: Apollo.QueryHookOptions<TokenSupplyQuery, TokenSupplyQueryVariables>) {
-        return Apollo.useQuery<TokenSupplyQuery, TokenSupplyQueryVariables>(TokenSupplyDocument, baseOptions);
-      }
-export function useTokenSupplyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TokenSupplyQuery, TokenSupplyQueryVariables>) {
-          return Apollo.useLazyQuery<TokenSupplyQuery, TokenSupplyQueryVariables>(TokenSupplyDocument, baseOptions);
-        }
+export function useTokenSupplyQuery(
+  baseOptions?: Apollo.QueryHookOptions<TokenSupplyQuery, TokenSupplyQueryVariables>,
+) {
+  return Apollo.useQuery<TokenSupplyQuery, TokenSupplyQueryVariables>(TokenSupplyDocument, baseOptions);
+}
+export function useTokenSupplyLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<TokenSupplyQuery, TokenSupplyQueryVariables>,
+) {
+  return Apollo.useLazyQuery<TokenSupplyQuery, TokenSupplyQueryVariables>(TokenSupplyDocument, baseOptions);
+}
 export type TokenSupplyQueryHookResult = ReturnType<typeof useTokenSupplyQuery>;
 export type TokenSupplyLazyQueryHookResult = ReturnType<typeof useTokenSupplyLazyQuery>;
 export type TokenSupplyQueryResult = Apollo.QueryResult<TokenSupplyQuery, TokenSupplyQueryVariables>;
 export const TokensDocument = gql`
-    query Tokens {
-  tokens {
-    id
-    name
+  query Tokens {
+    tokens {
+      id
+      name
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useTokensQuery__
@@ -1631,26 +1644,26 @@ export const TokensDocument = gql`
  * });
  */
 export function useTokensQuery(baseOptions?: Apollo.QueryHookOptions<TokensQuery, TokensQueryVariables>) {
-        return Apollo.useQuery<TokensQuery, TokensQueryVariables>(TokensDocument, baseOptions);
-      }
+  return Apollo.useQuery<TokensQuery, TokensQueryVariables>(TokensDocument, baseOptions);
+}
 export function useTokensLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TokensQuery, TokensQueryVariables>) {
-          return Apollo.useLazyQuery<TokensQuery, TokensQueryVariables>(TokensDocument, baseOptions);
-        }
+  return Apollo.useLazyQuery<TokensQuery, TokensQueryVariables>(TokensDocument, baseOptions);
+}
 export type TokensQueryHookResult = ReturnType<typeof useTokensQuery>;
 export type TokensLazyQueryHookResult = ReturnType<typeof useTokensLazyQuery>;
 export type TokensQueryResult = Apollo.QueryResult<TokensQuery, TokensQueryVariables>;
 export const WhitelistGreylistDocument = gql`
-    query WhitelistGreylist($token: String!) {
-  whitelistedAccounts(where: {token: $token}) {
-    address
-    createdAt
+  query WhitelistGreylist($token: String!) {
+    whitelistedAccounts(where: { token: $token }) {
+      address
+      createdAt
+    }
+    greylistedAccounts(where: { token: $token }) {
+      address
+      createdAt
+    }
   }
-  greylistedAccounts(where: {token: $token}) {
-    address
-    createdAt
-  }
-}
-    `;
+`;
 
 /**
  * __useWhitelistGreylistQuery__
@@ -1668,12 +1681,22 @@ export const WhitelistGreylistDocument = gql`
  *   },
  * });
  */
-export function useWhitelistGreylistQuery(baseOptions?: Apollo.QueryHookOptions<WhitelistGreylistQuery, WhitelistGreylistQueryVariables>) {
-        return Apollo.useQuery<WhitelistGreylistQuery, WhitelistGreylistQueryVariables>(WhitelistGreylistDocument, baseOptions);
-      }
-export function useWhitelistGreylistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WhitelistGreylistQuery, WhitelistGreylistQueryVariables>) {
-          return Apollo.useLazyQuery<WhitelistGreylistQuery, WhitelistGreylistQueryVariables>(WhitelistGreylistDocument, baseOptions);
-        }
+export function useWhitelistGreylistQuery(
+  baseOptions?: Apollo.QueryHookOptions<WhitelistGreylistQuery, WhitelistGreylistQueryVariables>,
+) {
+  return Apollo.useQuery<WhitelistGreylistQuery, WhitelistGreylistQueryVariables>(
+    WhitelistGreylistDocument,
+    baseOptions,
+  );
+}
+export function useWhitelistGreylistLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<WhitelistGreylistQuery, WhitelistGreylistQueryVariables>,
+) {
+  return Apollo.useLazyQuery<WhitelistGreylistQuery, WhitelistGreylistQueryVariables>(
+    WhitelistGreylistDocument,
+    baseOptions,
+  );
+}
 export type WhitelistGreylistQueryHookResult = ReturnType<typeof useWhitelistGreylistQuery>;
 export type WhitelistGreylistLazyQueryHookResult = ReturnType<typeof useWhitelistGreylistLazyQuery>;
 export type WhitelistGreylistQueryResult = Apollo.QueryResult<WhitelistGreylistQuery, WhitelistGreylistQueryVariables>;

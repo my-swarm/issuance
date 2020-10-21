@@ -140,7 +140,6 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
     }
 
     case 'setAccountProp': {
-      console.log('setAccountProp', action);
       const { prop, value, address, networkId } = action;
       const id = state.token.id;
       const updatedToken = findToken(id);
@@ -154,10 +153,8 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       const { networkId, items } = action;
       const id = state.token.id;
 
-      console.log('batch SET', items);
       const updatedToken = findToken(id);
       for (const [address, { name, note }] of Object.entries(items)) {
-        console.log('batch set', networkId, address, { name, note });
         if (name) _.set(updatedToken, ['networks', networkId, 'accounts', address.toLowerCase(), 'name'], name);
         if (note) _.set(updatedToken, ['networks', networkId, 'accounts', address.toLowerCase(), 'note'], note);
       }

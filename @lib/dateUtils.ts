@@ -1,13 +1,18 @@
 import moment from 'moment';
 
 export function createDate(d: string | number): Date {
-  let m = typeof d === 'number' ? moment.unix(d) : moment(d);
+  const m = typeof d === 'number' ? moment.unix(d) : moment(d);
   return m.toDate();
 }
 
 export function formatDate(d: Date | number): string {
-  let m = typeof d === 'number' ? moment.unix(d) : moment(d);
+  const m = typeof d === 'number' ? moment.unix(d) : moment(d);
   return m.format('LL');
+}
+
+export function formatDatetime(d: Date | number): string {
+  const m = typeof d === 'number' ? moment.unix(d) : moment(d);
+  return m.format('lll');
 }
 
 export function getUnixTimestamp(d: Date | moment.Moment | string): number {

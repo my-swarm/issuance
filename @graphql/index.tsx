@@ -1418,9 +1418,9 @@ export type TokenSupplyQueryVariables = Exact<{
 
 export type TokenSupplyQuery = (
   { __typename?: 'Query' }
-  & { tokens: Array<(
+  & { token?: Maybe<(
     { __typename?: 'Token' }
-    & Pick<Token, 'supply' | 'maxSupply' | 'availableSupply' | 'stake'>
+    & Pick<Token, 'id' | 'address' | 'supply' | 'maxSupply' | 'availableSupply' | 'stake'>
   )> }
 );
 
@@ -1570,7 +1570,9 @@ export type FundraiserLazyQueryHookResult = ReturnType<typeof useFundraiserLazyQ
 export type FundraiserQueryResult = Apollo.QueryResult<FundraiserQuery, FundraiserQueryVariables>;
 export const TokenSupplyDocument = gql`
     query TokenSupply($id: ID!) {
-  tokens(where: {id: $id}) {
+  token(id: $id) {
+    id
+    address
     supply
     maxSupply
     availableSupply

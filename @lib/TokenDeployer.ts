@@ -1,7 +1,7 @@
 import { TokenDeployerState, Src20FeaturesBitmask, TokenState, TransferRules, zeroAddress } from '@types';
 import { BigNumber, utils } from 'ethers';
 
-import { Deployer, getBnSupply, getContractAddress, InvalidStateError } from '.';
+import { Deployer, parseUnits, getContractAddress, InvalidStateError } from '.';
 import assert from 'assert';
 
 export class TokenDeployer extends Deployer {
@@ -86,7 +86,7 @@ export class TokenDeployer extends Deployer {
       name,
       symbol,
       decimals,
-      getBnSupply(supply, decimals),
+      parseUnits(supply, decimals),
       kyaHash,
       kyaUrl,
       assetNetValue,
@@ -140,7 +140,7 @@ export class TokenDeployer extends Deployer {
   private async mint(): Promise<void> {
     const params = [
       this.addresses.src20, // param: src20
-      getBnSupply(this.token.initialSupply, this.token.decimals), // param: numSRC20TOkens
+      parseUnits(this.token.initialSupply, this.token.decimals), // param: numSRC20TOkens
     ];
     await this.contractProxy.call('minter', 'stakeAndMint', params);
   }

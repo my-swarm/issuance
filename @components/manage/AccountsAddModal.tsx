@@ -42,27 +42,23 @@ function listTitle(list: TokenAccountListType): string {
 
 export function AccountsAddModal({ list, onClose }: AccountsAddModalProps): ReactElement {
   const [input, setInput] = useState<string>('');
-  const [, dispatch] = useAppState();
-  const { dispatchTransaction, dispatchError } = useDispatch();
+  const { dispatchTransaction, dispatchError, batchSetAccountProp } = useDispatch();
 
   const handleAdd = async (): Promise<void> => {
     const data = parseAddressesInput(input);
-    if (Object.keys(data).length === 0) return;
+    const addresses = Object.keys(data);
+    if (addresses.length === 0) return;
 
     dispatchTransaction({
       method: listToContractMethod(list, 'add'),
-      arguments: [Object.keys(data)],
-      description: `Adding ${data.length} addresses to your ${listTitle(list)}`,
+      arguments: [addresses],
+      description: `Adding ${addresses.length} addresses to your ${listTitle(list)}`,
       onSuccess: () => handleAddToLocalState(data),
     });
   };
 
   const handleAddToLocalState = (items: AccountsMeta) => {
-    dispatch({
-      type: 'batchSetAccountProp',
-      list,
-      items,
-    });
+    batchSetAccountProp(list, items);
     handleCancel();
   };
 
@@ -99,7 +95,7 @@ export function AccountsAddModal({ list, onClose }: AccountsAddModalProps): Reac
   }
 
   return (
-    <Modal visible={true} title="Batch add contributors" onOk={handleAdd} onCancel={handleCancel}>
+    <Modal visible={true} title="Batch add accounts" onOk={handleAdd} onCancel={handleCancel}>
       <div className="mb-2">
         <Help name="batchAdd" type="render" />
         <br />

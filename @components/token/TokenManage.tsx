@@ -8,25 +8,28 @@ export function TokenManage(): ReactElement {
   const [{ token }] = useAppState();
   return (
     <div>
-      <Collapse defaultActiveKey={[]}>
-        <Collapse.Panel header="Transfer token" key="1">
-          <ManageTransfer />
-        </Collapse.Panel>
-        <Collapse.Panel header="Token supply (Mint & Burn)" key="2">
+      <Collapse defaultActiveKey={['whitelist']}>
+        <Collapse.Panel header="Token supply (Mint & Burn)" key="supply">
           <ManageSupply />
         </Collapse.Panel>
+        <Collapse.Panel header="Token holders" key="holders">
+          <ManageTransfer />
+        </Collapse.Panel>
+        <Collapse.Panel header="Transfer token" key="transfer">
+          <ManageTransfer />
+        </Collapse.Panel>
         {token.transferRestrictionsType !== TransferRules.None && (
-          <Collapse.Panel header="Whitelist management" key="3">
+          <Collapse.Panel header="Whitelist management" key="whitelist">
             <ManageAccountList type="whitelist" />
           </Collapse.Panel>
         )}
         {token.transferRestrictionsType !== TransferRules.None && (
-          <Collapse.Panel header="Greylist management" key="4">
+          <Collapse.Panel header="Greylist management" key="greylist">
             <ManageAccountList type="greylist" />
           </Collapse.Panel>
         )}
-        <Collapse.Panel header="Update Asset" key="5"></Collapse.Panel>
-        <Collapse.Panel header="Manage token roles" key="6"></Collapse.Panel>
+        <Collapse.Panel header="Update Asset" key="asset"></Collapse.Panel>
+        {/*<Collapse.Panel header="Manage token roles" key="roles"></Collapse.Panel>*/}
       </Collapse>
       <h2>Info</h2>
       <ul>

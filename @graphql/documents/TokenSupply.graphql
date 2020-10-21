@@ -1,5 +1,7 @@
 query TokenSupply($id: ID!) {
-  tokens(where: { id: $id }) {
+  token(id: $id) {
+    id
+    address
     supply
     maxSupply
     availableSupply

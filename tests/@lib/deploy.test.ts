@@ -2,7 +2,7 @@ import { BigNumber, Contract, ContractFactory, providers, Wallet } from 'ethers'
 import { GANACHE, SWM_TOKEN } from '../config';
 import { contracts } from '@contracts';
 import { TokenDeployerState, Token, TokenState } from '@types';
-import { TokenDeployer, getBnSupply, getStakeFromNav } from '@lib';
+import { TokenDeployer, parseUnits, getStakeFromNav } from '@lib';
 import {
   getTestingToken,
   getTestingWallets,
@@ -90,7 +90,7 @@ it(
     // 2. src 20 has all the tokens
     const src20Instance = new Contract(src20Address, contracts.src20.abi, wallets.tokenManager);
     const actualSupply = await src20Instance.totalSupply();
-    expect(actualSupply).toEqual(getBnSupply(token.initialSupply, token.decimals));
+    expect(actualSupply).toEqual(parseUnits(token.initialSupply, token.decimals));
   },
   TEST_TIMEOUT,
 );

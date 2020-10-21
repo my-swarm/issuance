@@ -5,7 +5,7 @@ import { FundraiserDeployerState } from '@types';
 import { BASE_CURRENCIES } from '@const';
 
 import { Deployer } from './Deployer';
-import { getBnSupply } from './numberUtils';
+import { parseUnits } from './numberUtils';
 import { getUnixTimestamp } from './dateUtils';
 import { getContractAddress } from './contracts';
 
@@ -33,11 +33,11 @@ export class FundraiserDeployer extends Deployer {
     const params = [
       fundraiser.label, // label
       this.addresses.src20, // token (address)
-      getBnSupply(fundraiser.tokensToMint, decimals), // tokensToMint
+      parseUnits(fundraiser.tokensToMint, decimals), // tokensToMint
       getUnixTimestamp(startDate), // startDate (int)
       getUnixTimestamp(fundraiser.endDate), // endDate (int)
-      getBnSupply(fundraiser.softCap, decimals), // softCap
-      getBnSupply(fundraiser.hardCap, decimals), // hardCap
+      parseUnits(fundraiser.softCap, decimals), // softCap
+      parseUnits(fundraiser.hardCap, decimals), // hardCap
     ];
     console.log('deploy fundraiser', params, startDate);
     this.handleStateChange(FundraiserDeployerState.Fundraiser);
@@ -73,7 +73,7 @@ export class FundraiserDeployer extends Deployer {
       throw new Error(`Base currency not defined: ${fundraiser.baseCurrency}`);
     }
 
-    const tokenPrice = getBnSupply(fundraiser.tokenPrice || 0, baseCurrency.decimals);
+    const tokenPrice = parseUnits(fundraiser.tokenPrice || 0, baseCurrency.decimals);
 
     const args = [
       baseCurrency.addresses[this.networkId], // address _baseCurrency

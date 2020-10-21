@@ -1,34 +1,44 @@
 import React, { ReactElement } from 'react';
 import Link from 'next/link';
 import { Menu } from 'antd';
-import { AppstoreOutlined, DashboardOutlined, UserOutlined, LineChartOutlined } from '@ant-design/icons';
+import {
+  AppstoreOutlined,
+  DollarCircleOutlined,
+  UserOutlined,
+  LineChartOutlined,
+  WalletOutlined,
+} from '@ant-design/icons';
 import { useRouter } from 'next/router';
 
 export function MainMenu(): ReactElement {
   const router = useRouter();
 
   return (
-    <Menu theme="dark" mode="inline" defaultSelectedKeys={[router.pathname]}>
-      <Menu.Item key="/" icon={<DashboardOutlined />}>
-        <Link href="/">
-          <a>Dashboard</a>
-        </Link>
-      </Menu.Item>
-      <Menu.Item key="/tokens" icon={<AppstoreOutlined />}>
-        <Link href="/tokens">
-          <a>My Tokens</a>
-        </Link>
-      </Menu.Item>
-      <Menu.Item key="/fundraisers" icon={<LineChartOutlined />}>
-        <Link href="/fundraisers">
-          <a>My Fundraisers</a>
-        </Link>
-      </Menu.Item>
-      <Menu.Item key="/account" icon={<UserOutlined />}>
-        <Link href="/account">
-          <a>My Account</a>
-        </Link>
-      </Menu.Item>
+    <Menu theme="dark" mode="inline" defaultOpenKeys={['investor', 'issuer']} defaultSelectedKeys={[router.pathname]}>
+      <Menu.SubMenu key="investor" title="Investor" icon={<UserOutlined />} popupOffset={[16, 0]}>
+        <Menu.Item key="/contribute" icon={<DollarCircleOutlined />}>
+          <Link href="/contribute">
+            <a>Contribute</a>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="/wallet" icon={<WalletOutlined />}>
+          <Link href="/wallet">
+            <a>Wallet</a>
+          </Link>
+        </Menu.Item>
+      </Menu.SubMenu>
+      <Menu.SubMenu key="issuer" title="Token Issuer" icon={<UserOutlined />}>
+        <Menu.Item key="/tokens" icon={<AppstoreOutlined />}>
+          <Link href="/tokens">
+            <a>Tokens</a>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="/fundraisers" icon={<LineChartOutlined />}>
+          <Link href="/fundraisers">
+            <a>Fundraisers</a>
+          </Link>
+        </Menu.Item>
+      </Menu.SubMenu>
     </Menu>
   );
 }

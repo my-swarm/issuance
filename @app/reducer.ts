@@ -140,10 +140,11 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
     }
 
     case 'setAccountProp': {
+      console.log('setAccountProp', action);
       const { list, prop, value, address, networkId } = action;
       const id = state.token.id;
       const updatedToken = findToken(id);
-      _.set(updatedToken, ['networks', networkId, list, address, prop], value);
+      _.set(updatedToken, ['networks', networkId, list, address.toLowerCase(), prop], value);
       return unsynced({
         tokens: withUpdatedToken(updatedToken),
       });
@@ -155,7 +156,7 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
 
       const updatedToken = findToken(id);
       for (const [address, item] of Object.entries(items)) {
-        _.set(updatedToken, ['networks', networkId, list, address], item);
+        _.set(updatedToken, ['networks', networkId, list, address.toLowerCase()], item);
       }
       return unsynced({
         tokens: withUpdatedToken(updatedToken),

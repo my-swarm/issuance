@@ -23,9 +23,9 @@ export function EditableCell({ value, onChange }: EditableCellProps): ReactEleme
 
   if (editing) {
     return (
-      <Form.Item style={{ margin: 0 }} name="val">
-        <Input ref={inputRef} onPressEnter={handleSave} onBlur={handleSave} />
-      </Form.Item>
+      <div>
+        <Input name="val" defaultValue={value} ref={inputRef} onPressEnter={handleSave} onBlur={handleSave} />
+      </div>
     );
   } else {
     return (

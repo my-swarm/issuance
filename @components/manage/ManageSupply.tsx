@@ -1,30 +1,41 @@
 import React, { ReactElement, useState } from 'react';
-import { useAppState, useContract, useDispatch, useEthers, useSwmAllowance } from '@app';
+import {
+  useAppState,
+  useContract,
+  useContractAddress,
+  useDispatch,
+  useEthers,
+  useGraphql,
+  useSwmAllowance,
+  useSwmBalance,
+} from '@app';
 import { Button, Descriptions, Form, InputNumber } from 'antd';
-import { formatInt, formatNumber, formatTokenAmount, getBnSupply, getTokenAmount } from '@lib';
+import { formatInt, formatNumber, formatTokenAmount, parseUnits, formatUnits } from '@lib';
 import { useTokenSupplyQuery } from '../../@graphql';
 import { Loading } from '@components';
+import { SWM_TOKEN_DECIMALS } from '@const';
 
 export function ManageSupply(): ReactElement {
+  const { reset } = useGraphql();
   const { address } = useEthers();
   const [{ token }] = useAppState();
-  const [swmAllowance] = useSwmAllowance();
+  const [swmAllowance, reloadSwmAllowance] = useSwmAllowance();
+  const [swmBalance, reloadSwmBalance] = useSwmBalance();
 
   const [stakeRequired, setStakeRequired] = useState<number>();
   const [stakeReturned, setStakeReturned] = useState<number>();
-  const { src20, registry, swmToken } = useContract();
+  const { src20, registry, swm } = useContract();
+  const { src20: src20Address } = useContractAddress();
   const [increaseForm] = Form.useForm();
   const [decreaseForm] = Form.useForm();
   const [, dispatch] = useAppState();
   const { dispatchTransaction } = useDispatch();
 
   const { loading, error, data } = useTokenSupplyQuery({
-    variables: { id: '0x63e00e15ec3f75dc4ef547ea86ecd2ae323e2f32' },
+    variables: { id: src20Address },
   });
-  if (loading) return <Loading />;
-
-  const gToken = data?.tokens[0] || undefined;
-  console.log({ loading, error, data, gToken });
+  const gToken = data?.token || undefined;
+  if (loading || !gToken) return <Loading />;
 
   const handleSupplyChange = (newSupply: number | string | undefined, returned = false) => {
     const method = returned ? setStakeReturned : setStakeRequired;
@@ -33,54 +44,48 @@ export function ManageSupply(): ReactElement {
       method(0);
       return;
     }
-    // contractMethods('swmNeeded', [src20.address, getBnSupply(newSupply.toString(), token.decimals)]).then((x) =>
-    //   method(getTokenAmount(x, SWM_TOKEN_DECIMALS)),
-    // );
+
+    registry
+      .swmNeeded(src20.address, parseUnits(newSupply.toString(), token.decimals))
+      .then((x) => method(formatUnits(x, SWM_TOKEN_DECIMALS)));
   };
 
   const handleIncreaseSupply = async () => {
-    const additionalSupply = getBnSupply(increaseForm.getFieldValue('supply'), token.decimals);
+    const additionalSupply = parseUnits(increaseForm.getFieldValue('supply'), token.decimals);
     const swmNeeded = await registry.swmNeeded(src20.address, additionalSupply);
 
     dispatchTransaction({
-      method: 'swmToken.approve',
-      arguments: [registry.address, swmNeeded.sub(swmAllowance)],
+      method: 'swm.approve',
+      arguments: [registry.address, swmNeeded.sub(swmAllowance.raw)],
       description: 'Approving SWM spending. Confirm transaction to be albe to stake your SWM',
       onSuccess: () => {
         dispatchTransaction({
           method: 'registry.increaseSupply',
           arguments: [src20.address, address, additionalSupply],
           description: 'Increasing token supply and staking your SWM tokens',
+          onSuccess: () => {
+            reset();
+            reloadSwmAllowance();
+            reloadSwmBalance();
+          },
         });
       },
     });
-    try {
-      await swmToken.approve(registry.address, swmNeeded.sub(swmAllowance));
-      const transaction = await registry.increaseSupply(src20.address, address, additionalSupply);
-      await transaction.wait();
-    } catch (e) {
-      let error;
-      if (e.code === -32603) {
-        if (e.data.message.match(/trying to mint too many tokens/)) {
-          error = {
-            message: 'Cannot mint',
-            description: 'It appears you have aleready minted your tokens.',
-          };
-        }
-      } else {
-        error = {
-          message: 'Error',
-          description: e.message,
-        };
-      }
-      dispatch({ type: 'showError', error });
-    }
   };
 
   const handleDecreaseSupply = async () => {
-    const supply = getBnSupply(decreaseForm.getFieldValue('supply'), token.decimals);
-    const transaction = await registry.decreaseSupply(src20.address, address, supply);
-    await transaction.wait();
+    const supply = parseUnits(decreaseForm.getFieldValue('supply'), token.decimals);
+
+    dispatchTransaction({
+      method: 'registry.decreaseSupply',
+      arguments: [src20.address, address, supply],
+      description: 'Decreasing token supply and returning SWM tokens',
+      onSuccess: () => {
+        reset();
+        reloadSwmAllowance();
+        reloadSwmBalance();
+      },
+    });
   };
 
   return (
@@ -95,9 +100,9 @@ export function ManageSupply(): ReactElement {
         <Descriptions.Item label="Available">
           {formatTokenAmount(gToken.availableSupply, token.decimals)} {token.symbol}
         </Descriptions.Item>
-        <Descriptions.Item label="Stake">{gToken.stake} SWM</Descriptions.Item>
-        <Descriptions.Item label="Allowance">{swmAllowance.nice} SWM</Descriptions.Item>
-        <Descriptions.Item label="Asset Value">{10000} USD</Descriptions.Item>
+        <Descriptions.Item label="Stake">{formatTokenAmount(gToken.stake, SWM_TOKEN_DECIMALS)} SWM</Descriptions.Item>
+        <Descriptions.Item label="SWM Balance">{swmBalance.nice} SWM</Descriptions.Item>
+        <Descriptions.Item label="SWM Allowance">{swmAllowance.nice} SWM</Descriptions.Item>
       </Descriptions>
 
       <h3>Increase supply</h3>

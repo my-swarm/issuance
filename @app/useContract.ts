@@ -193,11 +193,14 @@ interface ContractValue {
   nice?: string;
 }
 
-export function useSwmAllowance(): [ContractValue | undefined] {
+type UseContractValueResult = [ContractValue | undefined, () => void];
+
+export function useSwmAllowance(): UseContractValueResult {
   const { address } = useEthers();
   const { swm } = useContract();
   const { src20: src20Address } = useContractAddress();
   const [value, setValue] = useState<ContractValue>({});
+  const [timestamp, setTimestamp] = useState<number>(Date.now());
 
   useEffect(() => {
     if (swm && address && src20Address) {
@@ -205,7 +208,24 @@ export function useSwmAllowance(): [ContractValue | undefined] {
         setValue({ raw, nice: formatUnits(raw, SWM_TOKEN_DECIMALS) });
       });
     }
-  }, [swm, address, src20Address]);
+  }, [swm, address, src20Address, timestamp]);
 
-  return [value];
+  return [value, () => setTimestamp(Date.now())];
+}
+
+export function useSwmBalance(): UseContractValueResult {
+  const { address } = useEthers();
+  const { swm } = useContract();
+  const [value, setValue] = useState<ContractValue>({});
+  const [timestamp, setTimestamp] = useState<number>(Date.now());
+
+  useEffect(() => {
+    if (swm && address) {
+      swm.balanceOf(address).then((raw) => {
+        setValue({ raw, nice: formatUnits(raw, SWM_TOKEN_DECIMALS) });
+      });
+    }
+  }, [swm, address, timestamp]);
+
+  return [value, () => setTimestamp(Date.now())];
 }

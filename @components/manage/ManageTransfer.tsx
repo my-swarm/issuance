@@ -2,7 +2,7 @@ import React, { ChangeEventHandler, ReactElement, useState } from 'react';
 import { Form, Input, InputNumber, Button } from 'antd';
 import ethers from 'ethers';
 
-import { getTokenAmount } from '@lib';
+import { formatUnits } from '@lib';
 import { useAppState, useContract, useEthers } from '@app';
 
 const formLayout = {
@@ -37,7 +37,7 @@ export function ManageTransfer(): ReactElement {
     try {
       address = ethers.utils.getAddress(address);
       setErrorFrom(undefined);
-      src20.balanceOf(address).then((x) => setBalanceFrom(getTokenAmount(x, token.decimals)));
+      src20.balanceOf(address).then((x) => setBalanceFrom(formatUnits(x, token.decimals)));
     } catch (e) {
       if (true || e.message.match(/invalid address/)) {
         setErrorFrom('Invalid address');
@@ -59,7 +59,7 @@ export function ManageTransfer(): ReactElement {
     try {
       address = ethers.utils.getAddress(address);
       setErrorTo(undefined);
-      src20.balanceOf(address).then((x) => setBalanceTo(getTokenAmount(x, token.decimals)));
+      src20.balanceOf(address).then((x) => setBalanceTo(formatUnits(x, token.decimals)));
     } catch (e) {
       if (true || e.message.match(/invalid address/)) {
         setErrorTo('Invalid address');
@@ -115,8 +115,6 @@ export function ManageTransfer(): ReactElement {
           </Button>
         </Form.Item>
       </Form>
-
-      <h3>Transfer between any accounts</h3>
     </>
   );
 }

@@ -1,5 +1,4 @@
 import React, { ReactElement, useState } from 'react';
-import { useApolloClient } from '@apollo/client';
 import { formatUnits } from 'ethers/lib/utils';
 import {
   CheckCircleTwoTone,
@@ -13,7 +12,7 @@ import { ColumnType } from 'antd/lib/table';
 
 import { ContributorFragment, ContributorStatus } from '@graphql';
 import { BASE_CURRENCIES } from '@const';
-import { useAppState, useDispatch, useEthers } from '@app';
+import { useAppState, useDispatch, useEthers, useGraphql } from '@app';
 import { FilterDropdown, EditableCell, AccountsAddModal } from '@components';
 import { createPagination } from './listUtils';
 import { Address } from '@components';
@@ -21,6 +20,7 @@ import { Address } from '@components';
 interface ContributorRecord {
   address: string;
   amount: number;
+  status: ContributorStatus;
   name: string;
   note: string;
   createdAt: string;
@@ -37,27 +37,24 @@ interface ManageContributorsProps {
 }
 
 export function ManageContributors({ contributors }: ManageContributorsProps): ReactElement {
+  const { reset } = useGraphql();
   const [paginate, setPaginate] = useState<boolean>(true);
   const [batchAdding, setBatchAdding] = useState<boolean>(false);
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [searchText, setSearchText] = useState<string>('');
   const { networkId } = useEthers();
   const [{ token }, dispatch] = useAppState();
-  const { dispatchTransaction } = useDispatch();
-  const client = useApolloClient();
+  const { dispatchTransaction, setAccountProp } = useDispatch();
   const baseCurrency = BASE_CURRENCIES.USDC;
 
   const statusFilterOptions = ['all', 'live', 'qualified', 'pending', 'deleted'];
-
-  const handleSaveMeta = (address, prop, value) => {
-    dispatch({ type: 'setAccountProp', list: 'contributors', address, prop, value, networkId });
-  };
 
   const handleConfirm = (address) => {
     dispatchTransaction({
       method: 'contributorRestrictions.whitelistAccount',
       arguments: [address],
       description: 'Confirming contributor...',
-      onSuccess: () => client.resetStore(),
+      onSuccess: reset,
     });
   };
 
@@ -66,8 +63,13 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
       method: 'contributorRestrictions.unWhitelistAccount',
       arguments: [address],
       description: 'Removing contributor...',
-      onSuccess: () => client.resetStore(),
+      onSuccess: reset,
     });
+  };
+
+  const handleAddModalClosed = () => {
+    setBatchAdding(false);
+    reset();
   };
 
   const renderStatus = (status) => {
@@ -109,7 +111,7 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
     }
   };
 
-  function filterContributor(contributor: ContributorFragment): boolean {
+  function filterByStatus(contributor: ContributorRecord): boolean {
     const isPending = contributor.status === ContributorStatus.Pending;
     const isQualified = contributor.status === ContributorStatus.Qualified;
     const isRemoved = contributor.status === ContributorStatus.Removed;
@@ -126,6 +128,11 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
       case 'deleted':
         return isRemoved || isRefunded;
     }
+  }
+
+  function filterByText(contributor: ContributorRecord): boolean {
+    const text = searchText.toLowerCase();
+    return `${contributor.address} ${contributor.name} ${contributor.note}`.toLowerCase().includes(text);
   }
 
   const columns = tableColumns([
@@ -154,7 +161,7 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
       key: 'name',
       className: 'editable-cell',
       render: (value, row) => (
-        <EditableCell value={value} onChange={(value) => handleSaveMeta(row.address, 'name', value)} />
+        <EditableCell value={value} onChange={(value) => setAccountProp('contributors', row.address, 'name', value)} />
       ),
     },
     {
@@ -162,14 +169,14 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
       key: 'note',
       className: 'editable-cell',
       render: (value, row) => (
-        <EditableCell value={value} onChange={(value) => handleSaveMeta(row.address, 'note', value)} />
+        <EditableCell value={value} onChange={(value) => setAccountProp('contributors', row.address, 'note', value)} />
       ),
     },
     {
       title: 'Do',
       key: 'action',
       render: renderAction,
-      filterDropdown: <FilterDropdown onChange={(t) => console.log(t)} />,
+      filterDropdown: <FilterDropdown onChange={(t) => setSearchText(t)} />,
       filterIcon: <SearchOutlined />,
       // onFilterDropdownVisibleChange: (visible) => visible && setTimeout(() => searchInput.current.select(), 100),
     },
@@ -185,9 +192,8 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
         ...token.networks[networkId].contributors[contributor.address],
       };
     })
-    .filter(filterContributor);
-
-  console.log({ tableData });
+    .filter(filterByStatus)
+    .filter(filterByText);
 
   return (
     <>
@@ -222,7 +228,7 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
         <Button onClick={() => setBatchAdding(true)}>Batch add contributors</Button>
       </div>
 
-      {batchAdding && <AccountsAddModal list="contributors" onClose={() => setBatchAdding(false)} />}
+      {batchAdding && <AccountsAddModal list="contributors" onClose={handleAddModalClosed} />}
     </>
   );
 }

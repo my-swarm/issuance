@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Descriptions } from 'antd';
-import { formatNumber, formatTokenAmount, getTokenAmount } from '@lib';
+import { formatNumber, formatUnits } from '@lib';
 import { SWM_TOKEN_DECIMALS } from '@const';
 import { useAppState, useContract, useEthers } from '@app';
 
@@ -11,16 +11,14 @@ export function TokenInfoStaking() {
   const [stake, setStake] = useState<string>('calculating...');
   const [swmBalance, setSwmBalance] = useState<string>('calculating...');
   const [swmPrice, setSwmPrice] = useState<string>('calculating...');
-  const minter = useContract('minter');
-  const swmPriceOracle = useContract('priceOracle');
-  const swmToken = useContract('swmToken');
+  const { minter, swmPriceOracle, swmToken } = useContract();
 
   useEffect(() => {
-    minter.calcStake(token.assetNetValue).then((val) => setStake(formatTokenAmount(val, SWM_TOKEN_DECIMALS)));
+    minter.calcStake(token.assetNetValue).then((val) => setStake(formatUnits(val, SWM_TOKEN_DECIMALS)));
     swmPriceOracle.getPrice().then(({ priceNumerator, priceDenominator }) => {
       setSwmPrice(formatNumber(priceNumerator.toNumber() / priceDenominator.toNumber(), 4));
     });
-    swmToken.balanceOf(address).then((val) => setSwmBalance(formatTokenAmount(val, SWM_TOKEN_DECIMALS)));
+    swmToken.balanceOf(address).then((val) => setSwmBalance(formatUnits(val, SWM_TOKEN_DECIMALS)));
   }, [token, minter, swmPriceOracle, swmToken, address]);
 
   return (

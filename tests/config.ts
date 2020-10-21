@@ -1,6 +1,6 @@
 import { EthereumNetwork } from '@types';
 import { SWM_TOKEN_DECIMALS } from '@const';
-import { getBnSupply } from '@lib';
+import { parseUnits } from '@lib';
 
 export const GANACHE = {
   mnemonic: 'screen crop flip clean airport example clip envelope faint infant limit stay',
@@ -34,5 +34,5 @@ export const SWM_TOKEN = {
   name: 'Testing SWM token',
   symbol: 'SWM',
   decimals: SWM_TOKEN_DECIMALS,
-  totalSupply: getBnSupply(SWM_TOKEN_SUPPLY, SWM_TOKEN_DECIMALS),
+  totalSupply: parseUnits(SWM_TOKEN_SUPPLY, SWM_TOKEN_DECIMALS),
 };

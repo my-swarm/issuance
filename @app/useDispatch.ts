@@ -1,13 +1,13 @@
 import { useAppState } from './StateContext';
-import { AccountsMeta, Token, TokenAccountListType, Transaction } from '@types';
+import { AccountsMeta, Token, Transaction } from '@types';
 import { useEthers } from './EthersContext';
 
 interface UseDispatchResult {
   setToken: (token: Token) => void;
   dispatchError: (message: string, description: string) => void;
   dispatchTransaction: (transaction: Transaction) => void;
-  setAccountProp: (list: TokenAccountListType, address: string, prop: string, value: string) => void;
-  batchSetAccountProp: (list: TokenAccountListType, items: AccountsMeta) => void;
+  setAccountProp: (address: string, prop: string, value: string) => void;
+  batchSetAccountProp: (items: AccountsMeta) => void;
 }
 
 export function useDispatch(): UseDispatchResult {
@@ -43,15 +43,14 @@ export function useDispatch(): UseDispatchResult {
     });
   };
 
-  const setAccountProp = (list: TokenAccountListType, address, prop, value) => {
-    dispatch({ type: 'setAccountProp', list, address, prop, value, networkId });
+  const setAccountProp = (address, prop, value) => {
+    dispatch({ type: 'setAccountProp', address, prop, value, networkId });
   };
 
-  const batchSetAccountProp = (list: TokenAccountListType, items: AccountsMeta) => {
+  const batchSetAccountProp = (items: AccountsMeta) => {
     dispatch({
       type: 'batchSetAccountProp',
       networkId,
-      list,
       items,
     });
   };

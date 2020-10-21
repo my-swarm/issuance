@@ -161,7 +161,7 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
       key: 'name',
       className: 'editable-cell',
       render: (value, row) => (
-        <EditableCell value={value} onChange={(value) => setAccountProp('contributors', row.address, 'name', value)} />
+        <EditableCell value={value} onChange={(value) => setAccountProp(row.address, 'name', value)} />
       ),
     },
     {
@@ -169,7 +169,7 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
       key: 'note',
       className: 'editable-cell',
       render: (value, row) => (
-        <EditableCell value={value} onChange={(value) => setAccountProp('contributors', row.address, 'note', value)} />
+        <EditableCell value={value} onChange={(value) => setAccountProp(row.address, 'note', value)} />
       ),
     },
     {
@@ -189,7 +189,7 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
         name: '',
         note: '',
         key: contributor.address,
-        ...token.networks[networkId].contributors[contributor.address],
+        ...token.networks[networkId].accounts[contributor.address],
       };
     })
     .filter(filterByStatus)

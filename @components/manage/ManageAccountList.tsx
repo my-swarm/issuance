@@ -74,7 +74,7 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
   const removeMethod = type === 'whitelist' ? 'bulkUnWhitelistAccount' : 'bulkUnGreyListAccount';
   const rawAccounts: RawAccountList = type === 'whitelist' ? data.whitelistedAccounts : data.greylistedAccounts;
   const accounts: AccountList = rawAccounts.map((a) => {
-    const tokenAccountList = token.networks[networkId][type] || {};
+    const tokenAccountList = token.networks[networkId].accounts || {};
     console.log({ networkId, type, tokenAccountList });
     return {
       key: a.address, // for the table
@@ -103,7 +103,7 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
       key: 'name',
       className: 'editable-cell',
       render: (value, row) => (
-        <EditableCell value={value} onChange={(value) => setAccountProp(type, row.address, 'name', value)} />
+        <EditableCell value={value} onChange={(value) => setAccountProp(row.address, 'name', value)} />
       ),
     },
     {
@@ -111,7 +111,7 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
       key: 'note',
       className: 'editable-cell',
       render: (value, row) => (
-        <EditableCell value={value} onChange={(value) => setAccountProp(type, row.address, 'note', value)} />
+        <EditableCell value={value} onChange={(value) => setAccountProp(row.address, 'note', value)} />
       ),
       filterDropdown: <FilterDropdown onChange={(t) => setSearchText(t)} />,
       filterIcon: <SearchOutlined />,

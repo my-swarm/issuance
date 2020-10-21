@@ -5,7 +5,6 @@ import {
   ColdState,
   EthereumNetwork,
   Token,
-  TokenAccountListType,
   TokenNetworkData,
   TokenState,
   Transaction,
@@ -84,7 +83,6 @@ interface ResetTransactionAction {
 
 interface SetAccountPropAction {
   type: 'setAccountProp';
-  list: TokenAccountListType;
   prop: 'name' | 'note';
   address: string;
   // tokenId: string;
@@ -95,7 +93,6 @@ interface SetAccountPropAction {
 interface BatchSetAccountPropAction {
   type: 'batchSetAccountProp';
   networkId: EthereumNetwork;
-  list: TokenAccountListType;
   items: AccountsMeta;
 }
 /*

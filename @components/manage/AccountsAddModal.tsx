@@ -25,7 +25,7 @@ function listToContractMethod(list: TokenAccountListType, operation: 'add' | 're
     case 'whitelist':
       return `transferRules.${whitelistOperations[operation]}`;
     case 'greylist':
-      return `transferRules.${whitelistOperations[operation]}`;
+      return `transferRules.${greylistOperations[operation]}`;
   }
 }
 
@@ -58,7 +58,7 @@ export function AccountsAddModal({ list, onClose }: AccountsAddModalProps): Reac
   };
 
   const handleAddToLocalState = (items: AccountsMeta) => {
-    batchSetAccountProp(list, items);
+    batchSetAccountProp(items);
     handleCancel();
   };
 

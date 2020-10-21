@@ -77,9 +77,7 @@ export interface TokenNetworkData {
   deployerState?: TokenDeployerState;
   fundraiserDeployerState?: FundraiserDeployerState;
   addresses?: TokenAddresses;
-  contributors: AccountsMeta;
-  whitelist?: AccountsMeta;
-  greylist?: AccountsMeta;
+  accounts: AccountsMeta;
 }
 
 type TokenNetworksData = { [index in EthereumNetwork]?: TokenNetworkData };

@@ -21,8 +21,8 @@ export function TokenManage(): ReactElement {
           </Collapse.Panel>
         )}
         {token.transferRestrictionsType !== TransferRules.None && (
-          <Collapse.Panel header="Graylist management" key="4">
-            <ManageAccountList type="graylist" />
+          <Collapse.Panel header="Greylist management" key="4">
+            <ManageAccountList type="greylist" />
           </Collapse.Panel>
         )}
         <Collapse.Panel header="Update Asset" key="5"></Collapse.Panel>
@@ -35,7 +35,7 @@ export function TokenManage(): ReactElement {
       </ul>
       <h2>Operations</h2>
       <ul>
-        <li>?? Show pending graylist transfers, allow to execute [SRC20.executeTransfer]</li>
+        <li>?? Show pending greylist transfers, allow to execute [SRC20.executeTransfer]</li>
         <li>Update restrictions and rules [SRC20.updateRestrictionsAndRules]</li>
         <li>Transfer token [SRC20.transferTokenForced] - only if enabled</li>
         <li>Burn account [SRC20.burnAccount] - only if enabled</li>

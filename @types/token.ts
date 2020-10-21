@@ -10,14 +10,14 @@ import {
 
 export enum TransferRules {
   None,
-  WhitelistOrGraylist,
-  // Graylist, // graylist distinction isn't really implemented in the contracts!
+  WhitelistOrGreylist,
+  // Greylist, // greylist distinction isn't really implemented in the contracts!
 }
 
 export const transferRules: { [key: number]: string } = {
   [TransferRules.None]: 'None',
-  [TransferRules.WhitelistOrGraylist]: 'Whitelist or Graylist',
-  // [TransferRules.Graylist]: 'Graylist',
+  [TransferRules.WhitelistOrGreylist]: 'Whitelist or Greylist',
+  // [TransferRules.Greylist]: 'Greylist',
 };
 
 export enum TokenState {
@@ -63,11 +63,23 @@ export interface TokenAddresses {
   contributorRestrictions?: EthereumAddress;
 }
 
+export type AccountMeta = {
+  name: string;
+  note: string;
+};
+
+export type AccountsMeta = {
+  [key: string]: AccountMeta;
+};
+
 export interface TokenNetworkData {
   state?: TokenState;
   deployerState?: TokenDeployerState;
   fundraiserDeployerState?: FundraiserDeployerState;
   addresses?: TokenAddresses;
+  contributors: AccountsMeta;
+  whitelist?: AccountsMeta;
+  greylist?: AccountsMeta;
 }
 
 type TokenNetworksData = { [index in EthereumNetwork]?: TokenNetworkData };
@@ -86,7 +98,7 @@ export interface AccountListRecord {
 
 export type AccountList = AccountListRecord[];
 
-export type TokenAccountListType = 'whitelist' | 'graylist';
+export type TokenAccountListType = 'whitelist' | 'greylist' | 'contributors';
 
 export interface TokenFundraiser {
   label: string;
@@ -128,8 +140,6 @@ export interface Token {
   assetLegalDocuments: AppFile[];
 
   networks: TokenNetworksData;
-  whitelist?: AccountList;
-  graylist?: AccountList;
   fundraiser?: TokenFundraiser;
 }
 

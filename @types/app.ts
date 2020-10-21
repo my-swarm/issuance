@@ -14,7 +14,7 @@ export interface AppError {
 export interface Transaction {
   contract?: string;
   method: string;
-  arguments: any[];
+  arguments?: any[];
   description?: string;
   onSuccess?: () => void;
 }

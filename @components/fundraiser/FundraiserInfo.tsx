@@ -1,34 +1,33 @@
 import React, { ReactElement } from 'react';
 import { Token, transferRules } from '@types';
-import { Descriptions } from 'antd';
-import { formatNumber } from '@lib';
-import { tokenFeatures } from '@const';
+import { Descriptions, Space } from 'antd';
+import { formatDate, formatNumber } from '@lib';
+import { BASE_CURRENCIES, tokenFeatures } from '@const';
+import { formatUnits } from 'ethers/lib/utils';
+import { FundraiserInfoFragment } from '@graphql';
 
-export function TokenInfoBasics({ token }: { token: Token }): ReactElement {
-  console.log({ token });
+interface FundraiserInfoProps {
+  fundraiser: FundraiserInfoFragment;
+  column?: number;
+}
 
-  const features = Object.entries(tokenFeatures)
-    .filter(([key, value]) => token[key])
-    .map(([key, value]) => value);
+export function FundraiserInfo({ fundraiser, column = 1 }: FundraiserInfoProps): ReactElement {
+  const baseCurrency = BASE_CURRENCIES.USDC;
+
+  const softCap = parseFloat(formatUnits(fundraiser.softCap, baseCurrency.decimals));
+  const hardCap = parseFloat(formatUnits(fundraiser.hardCap, baseCurrency.decimals));
+  const amountQualified = parseFloat(formatUnits(fundraiser.amountQualified, baseCurrency.decimals));
+  const raisedPercent = (amountQualified / softCap) * 100;
 
   return (
-    <Descriptions title="Fundraiser info" layout="horizontal" bordered size="small" className="mb-3" column={2}>
-      <Descriptions.Item label="Token name">{token.name}</Descriptions.Item>
-      <Descriptions.Item label="Token symbol">{token.symbol}</Descriptions.Item>
-      <Descriptions.Item label="Token description">{token.description}</Descriptions.Item>
-      <Descriptions.Item label="Token image">
-        <div className="image-preview">
-          {token.image?.content ? <img src={token.image.content} alt="Token" /> : '-'}
-        </div>
+    <Descriptions title="Fundraiser Info" column={column} size="small">
+      <Descriptions.Item label="Start Date">{formatDate(fundraiser.startDate)}</Descriptions.Item>
+      <Descriptions.Item label="End Date">{formatDate(fundraiser.endDate)}</Descriptions.Item>
+      <Descriptions.Item label="Soft cap">{softCap} USD</Descriptions.Item>
+      <Descriptions.Item label="Hard cap">{hardCap} USD</Descriptions.Item>
+      <Descriptions.Item label="Raised so far">
+        {amountQualified} USD ({formatNumber(raisedPercent, 2)} %)
       </Descriptions.Item>
-      <Descriptions.Item label="Decimals">{token.decimals}</Descriptions.Item>
-      <Descriptions.Item label="Initial Token supply">
-        {formatNumber(token.initialSupply)} {token.symbol}
-      </Descriptions.Item>
-      <Descriptions.Item label="Transfer restrictions">
-        {transferRules[token.transferRestrictionsType]}
-      </Descriptions.Item>
-      <Descriptions.Item label="Features">{features.join(', ')}</Descriptions.Item>
     </Descriptions>
   );
 }

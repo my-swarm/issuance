@@ -12,7 +12,7 @@ export const transferRestrictions = {
           <strong>Whitelist</strong> - Tokens can be transfered between whitelisted addresses
         </li>
         <li>
-          <strong>Graylist</strong> - Each token transaction has to be explicitly confirmed by the token owner.
+          <strong>Greylist</strong> - Each token transaction has to be explicitly confirmed by the token owner.
         </li>
       </ul>
     </div>
@@ -36,8 +36,8 @@ export const trWhitelist = {
     </div>
   ),
 };
-export const trGraylist = {
-  title: 'Graylist',
+export const trGreylist = {
+  title: 'Greylist',
   content: (
     <div>
       <p>List which has a gray color</p>

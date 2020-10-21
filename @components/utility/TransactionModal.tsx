@@ -18,9 +18,8 @@ export function TransactionModal(): ReactElement {
       const proxy = new ContractProxy(signer, token);
       proxy.onProgress(handleTransactionProgress);
       setRetry(false);
-      console.log('prosy call', token, transaction);
       proxy.call(transaction.contract, transaction.method, transaction.arguments).catch((e) => {
-        console.log('set error');
+        console.error(e);
         setTransactionState(TransactionState.Error);
         if (e.code === 4001) {
           setError('Please confirm metamask signature popup');

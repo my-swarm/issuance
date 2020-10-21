@@ -17,7 +17,7 @@ type Token @entity {
   kyaUrl: String!
   deleted: Boolean!
 #  numWhitelisted: Int!
-#  numGraylisted: Int!
+#  numGreylisted: Int!
 #  numHolders: Int!
   whitelist: [WhitelistedAccount!]! @derivedFrom(field: "token")
   greylist: [GreylistedAccount!]! @derivedFrom(field: "token")

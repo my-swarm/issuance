@@ -1369,13 +1369,19 @@ export type FundraiserContributorsFragment = (
   )>> }
 );
 
+export type FundraiserInfoFragment = (
+  { __typename?: 'Fundraiser' }
+  & Pick<Fundraiser, 'startDate' | 'endDate' | 'softCap' | 'hardCap' | 'supply' | 'amountQualified' | 'amountPending' | 'amountRefunded' | 'amountWithdrawn' | 'status'>
+);
+
 export type FundraiserFragment = (
   { __typename?: 'Fundraiser' }
-  & Pick<Fundraiser, 'id' | 'label' | 'startDate' | 'endDate' | 'softCap' | 'hardCap' | 'supply' | 'baseCurrency' | 'tokenPrice' | 'affiliateManager' | 'contributorRestrictions' | 'minter' | 'contributionsLocked' | 'amountQualified' | 'amountPending' | 'amountRefunded' | 'amountWithdrawn' | 'status'>
+  & Pick<Fundraiser, 'id' | 'label' | 'baseCurrency' | 'tokenPrice' | 'affiliateManager' | 'contributorRestrictions' | 'minter' | 'contributionsLocked'>
   & { token: (
     { __typename?: 'Token' }
     & Pick<Token, 'id'>
   ) }
+  & FundraiserInfoFragment
   & FundraiserContributorsFragment
 );
 
@@ -1387,6 +1393,19 @@ export type FundraisersQueryVariables = Exact<{
 export type FundraisersQuery = (
   { __typename?: 'Query' }
   & { fundraisers: Array<(
+    { __typename?: 'Fundraiser' }
+    & FundraiserFragment
+  )> }
+);
+
+export type FundraiserQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type FundraiserQuery = (
+  { __typename?: 'Query' }
+  & { fundraiser?: Maybe<(
     { __typename?: 'Fundraiser' }
     & FundraiserFragment
   )> }
@@ -1432,6 +1451,20 @@ export type WhitelistGreylistQuery = (
   )> }
 );
 
+export const FundraiserInfoFragmentDoc = gql`
+    fragment FundraiserInfo on Fundraiser {
+  startDate
+  endDate
+  softCap
+  hardCap
+  supply
+  amountQualified
+  amountPending
+  amountRefunded
+  amountWithdrawn
+  status
+}
+    `;
 export const ContributorFragmentDoc = gql`
     fragment Contributor on Contributor {
   address
@@ -1455,28 +1488,20 @@ export const FundraiserFragmentDoc = gql`
     fragment Fundraiser on Fundraiser {
   id
   label
-  startDate
-  endDate
-  softCap
-  hardCap
-  supply
+  ...FundraiserInfo
   baseCurrency
   tokenPrice
   affiliateManager
   contributorRestrictions
   minter
   contributionsLocked
-  amountQualified
-  amountPending
-  amountRefunded
-  amountWithdrawn
-  status
   ...FundraiserContributors
   token {
     id
   }
 }
-    ${FundraiserContributorsFragmentDoc}`;
+    ${FundraiserInfoFragmentDoc}
+${FundraiserContributorsFragmentDoc}`;
 export const FundraisersDocument = gql`
     query Fundraisers($owner: Bytes!) {
   fundraisers(where: {owner: $owner}) {
@@ -1510,6 +1535,39 @@ export function useFundraisersLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type FundraisersQueryHookResult = ReturnType<typeof useFundraisersQuery>;
 export type FundraisersLazyQueryHookResult = ReturnType<typeof useFundraisersLazyQuery>;
 export type FundraisersQueryResult = Apollo.QueryResult<FundraisersQuery, FundraisersQueryVariables>;
+export const FundraiserDocument = gql`
+    query Fundraiser($id: ID!) {
+  fundraiser(id: $id) {
+    ...Fundraiser
+  }
+}
+    ${FundraiserFragmentDoc}`;
+
+/**
+ * __useFundraiserQuery__
+ *
+ * To run a query within a React component, call `useFundraiserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFundraiserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFundraiserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFundraiserQuery(baseOptions?: Apollo.QueryHookOptions<FundraiserQuery, FundraiserQueryVariables>) {
+        return Apollo.useQuery<FundraiserQuery, FundraiserQueryVariables>(FundraiserDocument, baseOptions);
+      }
+export function useFundraiserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FundraiserQuery, FundraiserQueryVariables>) {
+          return Apollo.useLazyQuery<FundraiserQuery, FundraiserQueryVariables>(FundraiserDocument, baseOptions);
+        }
+export type FundraiserQueryHookResult = ReturnType<typeof useFundraiserQuery>;
+export type FundraiserLazyQueryHookResult = ReturnType<typeof useFundraiserLazyQuery>;
+export type FundraiserQueryResult = Apollo.QueryResult<FundraiserQuery, FundraiserQueryVariables>;
 export const TokenSupplyDocument = gql`
     query TokenSupply($id: ID!) {
   tokens(where: {id: $id}) {

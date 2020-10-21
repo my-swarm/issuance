@@ -73,27 +73,16 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
         tokens: withUpdatedToken(updatedToken),
       });
     }
-
-    case 'addToTokenAccountList': {
-      const { id, listType, addItems } = action;
-
-      const updatedToken = findToken(id);
-      updatedToken[listType] = mergeAccountLists(updatedToken[listType] || [], addItems);
-      console.log({ addItems, updatedToken });
-      return unsynced({
-        tokens: withUpdatedToken(updatedToken),
-      });
-    }
-
+    /*
     case 'deleteFromTokenAccountList': {
-      const { id, listType, deleteItems } = action;
+      const { id, list, items } = action;
       const updatedToken = findToken(id);
-      updatedToken[listType] = subtractAccountLists(updatedToken[listType] || [], deleteItems);
+      updatedToken[list] = subtractAccountLists(updatedToken[list] || [], items);
       return unsynced({
         tokens: withUpdatedToken(updatedToken),
       });
     }
-
+*/
     case 'deleteToken':
       return unsynced({
         tokens: state.tokens.filter((token) => token.id !== action.id),
@@ -137,7 +126,6 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
     }
 
     case 'startTransaction': {
-      console.log('reducer start', action);
       return {
         ...state,
         transaction: action.transaction,
@@ -149,6 +137,29 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
         ...state,
         transaction: undefined,
       };
+    }
+
+    case 'setAccountProp': {
+      const { list, prop, value, address, networkId } = action;
+      const id = state.token.id;
+      const updatedToken = findToken(id);
+      _.set(updatedToken, ['networks', networkId, list, address, prop], value);
+      return unsynced({
+        tokens: withUpdatedToken(updatedToken),
+      });
+    }
+
+    case 'batchSetAccountProp': {
+      const { networkId, list, items } = action;
+      const id = state.token.id;
+
+      const updatedToken = findToken(id);
+      for (const [address, item] of Object.entries(items)) {
+        _.set(updatedToken, ['networks', networkId, list, address], item);
+      }
+      return unsynced({
+        tokens: withUpdatedToken(updatedToken),
+      });
     }
   }
 };

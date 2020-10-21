@@ -44,7 +44,7 @@ export function getTestingToken(): Token {
     allowBurn: true,
     allowMint: true,
     assetNetValue: 1000000,
-    transferRestrictionsType: TransferRules.WhitelistOrGraylist,
+    transferRestrictionsType: TransferRules.WhitelistOrGreylist,
     networks: {
       [GANACHE.networkId]: {
         state: TokenState.Created,

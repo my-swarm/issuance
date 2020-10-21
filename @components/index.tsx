@@ -6,3 +6,5 @@ export * from './app';
 export * from './token';
 export * from './fundraiser';
 export * from './misc';
+export * from './table';
+export * from './manage';

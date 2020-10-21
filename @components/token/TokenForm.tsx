@@ -94,7 +94,7 @@ export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: Tok
             <Radio value={TransferRules.None}>No transfer restrictions</Radio>
           </div>
           <div>
-            <Radio value={TransferRules.WhitelistOrGraylist}>Whitelist or Graylist</Radio>
+            <Radio value={TransferRules.WhitelistOrGreylist}>Whitelist or Greylist</Radio>
           </div>
         </Radio.Group>
       </Form.Item>

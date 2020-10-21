@@ -9,11 +9,6 @@ export function MainMenu(): ReactElement {
 
   return (
     <Menu theme="dark" mode="inline" defaultSelectedKeys={[router.pathname]}>
-      <Menu.Item key="/test" icon={<DashboardOutlined />}>
-        <Link href="/test">
-          <a>Test</a>
-        </Link>
-      </Menu.Item>
       <Menu.Item key="/" icon={<DashboardOutlined />}>
         <Link href="/">
           <a>Dashboard</a>

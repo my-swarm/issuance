@@ -29,6 +29,10 @@ export function useDispatch(): UseDispatchResult {
     }
     console.log('startTransaction', { contract, method });
 
+    if (!transaction.arguments) {
+      transaction.arguments = [];
+    }
+
     dispatch({
       type: 'startTransaction',
       transaction: { ...transaction, contract, method },

@@ -41,3 +41,23 @@
   padding: 1rem 1.5rem;
 }
 
+.ant-table.ant-table-small .ant-table-tbody > tr > td.editable-cell {
+  padding: 2px;
+  width: 128px;
+}
+
+.editable-cell-value-wrap {
+  padding: 4px 5px;
+}
+
+.editable-row:hover .editable-cell-value-wrap {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 4px;
+  width: 100%;
+}
+
+td.editable-cell input {
+  width: 100%;
+  padding: 4px;
+}

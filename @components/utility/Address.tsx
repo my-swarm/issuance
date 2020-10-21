@@ -6,39 +6,48 @@ import { useEthers } from '@app';
 interface AddressProps {
   children: ReactNode;
   link?: boolean;
+  short?: boolean;
 }
 
-export function Address({ children, link = false }: AddressProps): ReactElement | null {
+function getEtherscanUrl(networkId, address) {
+  return `https://${etherscanDomains[networkId]}/address/${address}`;
+}
+
+export function Address({ children, link = false, short = false }: AddressProps): ReactElement | null {
   const { networkId } = useEthers();
 
   if (typeof children !== 'string') {
-    return null;
+    return <>{children}</>;
   }
 
   if (link && !networkId) {
     throw new Error('Need to provide networkId to display as a link');
   }
 
-  const chunks = children.match(/.{1,4}/g);
-  if (!chunks || chunks.length <= 1) {
-    return <div className="c-address">children</div>;
-  }
+  let result;
 
-  function getEtherscanUrl(networkId, address) {
-    return `https://${etherscanDomains[networkId]}/address/${address}`;
+  if (short) {
+    result = (
+      <div className="c-address" title={children}>
+        <span>{children.substr(0, 8)}</span>
+        <span>…</span>
+        <span>{children.substr(-6)}</span>
+      </div>
+    );
+  } else {
+    const chunks = children.match(/.{1,8}/g);
+    result = (
+      <div className="c-address">
+        {chunks.map((part, key) => (
+          <span key={key}>{part}</span>
+        ))}
+      </div>
+    );
   }
-
-  let result = (
-    <div className="c-address">
-      {chunks.map((part, key) => (
-        <span key={key}>{part}</span>
-      ))}
-    </div>
-  );
 
   if (link) {
     result = (
-      <a href={getEtherscanUrl(networkId, children)} target="_blank">
+      <a href={getEtherscanUrl(networkId, children)} target="_blank" rel="noopener noreferrer">
         {result}
       </a>
     );

@@ -27,7 +27,7 @@ const tokenDefaults: Partial<Token> = {
   decimals: 18,
   initialSupply: 10000,
   description: 'Testing token',
-  transferRestrictionsType: TransferRules.WhitelistOrGraylist,
+  transferRestrictionsType: TransferRules.WhitelistOrGreylist,
   allowAccountFreeze: true,
   allowContractFreeze: true,
   allowForceTransfer: true,

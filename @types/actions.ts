@@ -1,5 +1,6 @@
 import {
   AccountList,
+  AccountsMeta,
   AppError,
   ColdState,
   EthereumNetwork,
@@ -67,33 +68,44 @@ interface SetTokenStateAction {
   state: TokenState;
 }
 
-interface AddToTokenAccountListAction {
-  type: 'addToTokenAccountList';
-  id: Uuid;
-  listType: TokenAccountListType;
-  addItems: AccountList;
-}
-
-interface DeleteFromTokenAccountListAction {
-  type: 'deleteFromTokenAccountList';
-  id: Uuid;
-  listType: TokenAccountListType;
-  deleteItems: AccountList;
-}
-
-interface SetToken {
+interface SetTokenAction {
   type: 'setToken';
   token: Token | undefined;
 }
 
-interface StartTransaction {
+interface StartTransactionAction {
   type: 'startTransaction';
   transaction: Transaction;
 }
 
-interface ResetTransaction {
+interface ResetTransactionAction {
   type: 'resetTransaction';
 }
+
+interface SetAccountPropAction {
+  type: 'setAccountProp';
+  list: TokenAccountListType;
+  prop: 'name' | 'note';
+  address: string;
+  // tokenId: string;
+  networkId: EthereumNetwork;
+  value: string;
+}
+
+interface BatchSetAccountPropAction {
+  type: 'batchSetAccountProp';
+  networkId: EthereumNetwork;
+  list: TokenAccountListType;
+  items: AccountsMeta;
+}
+/*
+interface DeleteFromTokenAccountListAction {
+  type: 'deleteFromTokenAccountList';
+  networkId: EthereumNetwork;
+  list: TokenAccountListType;
+  items: AccountList;
+}
+*/
 
 export type Action =
   | resetDataAction
@@ -107,8 +119,8 @@ export type Action =
   | ShowErrorAction
   | HideErrorAction
   | SetTokenStateAction
-  | AddToTokenAccountListAction
-  | DeleteFromTokenAccountListAction
-  | SetToken
-  | StartTransaction
-  | ResetTransaction;
+  | SetTokenAction
+  | StartTransactionAction
+  | ResetTransactionAction
+  | SetAccountPropAction
+  | BatchSetAccountPropAction;

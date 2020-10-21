@@ -5,12 +5,17 @@ import { QuestionCircleTwoTone as HelpIcon } from '@ant-design/icons/lib/icons';
 
 interface HelpProps {
   name: string;
+  type?: 'popover' | 'render';
 }
 
-export function Help({ name }: HelpProps): ReactElement {
-  return (
-    <Popover className="c-help" title={help[name].title} content={help[name].content} placement="top">
-      <HelpIcon />
-    </Popover>
-  );
+export function Help({ name, type = 'popover' }: HelpProps): ReactElement {
+  if (type === 'render') {
+    return help[name].content;
+  } else {
+    return (
+      <Popover className="c-help" title={help[name].title} content={help[name].content} placement="top">
+        <HelpIcon />
+      </Popover>
+    );
+  }
 }

@@ -1,18 +1,15 @@
 import React, { ReactElement, useEffect } from 'react';
-import { Card, Button, Spin, Space, Tooltip } from 'antd';
+import { Space, Tooltip } from 'antd';
 import _ from 'lodash';
-import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons/lib';
+import { SyncOutlined, CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons/lib';
 import * as devData from 'dev_data';
 
 import { useAppState, useStorage } from '@app';
+import { formatDatetime } from '@lib';
 
 export function StateStorageSync(): ReactElement {
   const [state, dispatch] = useAppState();
   const { isLoaded, isSaving, isSynced, version } = state;
-
-  const handleSave = () => {
-    dispatch({ type: 'incrementVersion' });
-  };
 
   const handleResetDev = () => {
     console.log('reseting to', devData);
@@ -31,7 +28,7 @@ export function StateStorageSync(): ReactElement {
     if (isWorking) {
       dispatch({ type: 'startSaving' });
     } else {
-      window.setTimeout(() => dispatch({ type: 'endSaving' }), 1000);
+      window.setTimeout(() => dispatch({ type: 'endSaving' }), 500);
     }
   }, [isWorking]);
 
@@ -39,7 +36,7 @@ export function StateStorageSync(): ReactElement {
     return (
       <Space>
         {isSaving ? (
-          <Spin size="small" />
+          <SyncOutlined spin />
         ) : isSynced ? (
           <Tooltip title="Synchronized with storage">
             <CheckCircleOutlined />
@@ -60,10 +57,11 @@ export function StateStorageSync(): ReactElement {
         {renderCardTitle()}
       </h3>
       <div className="side-box-body">
-        <div className="mb-1">Data version: {version}</div>
+        <div className="mb-1">{formatDatetime(Math.round(version / 1000))}</div>
         <Space size="small">
-          <span onClick={handleSave}>Save</span>
-          <span onClick={handleResetDev}>Reset</span>
+          <span onClick={handleResetDev} className="link">
+            Reset
+          </span>
         </Space>
       </div>
     </>

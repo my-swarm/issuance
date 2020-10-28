@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { EthereumNetwork } from '@types';
-import { Card, Alert, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
-import { EthersContext, EthersStatus } from '@app';
-import { Address, MetamaskConnect } from '@components';
+import { EthersStatus, useEthers } from '@app';
+import { Address } from '@components';
 
 export function MetamaskStatus() {
-  const { status, address, networkId } = useContext(EthersContext);
+  const { status, connect, address, networkId } = useEthers();
 
   const networkNames = {
     [EthereumNetwork.Main]: 'Mainnet',
@@ -24,7 +24,13 @@ export function MetamaskStatus() {
   switch (status) {
     case EthersStatus.DISCONNECTED:
       cardTitle = 'Disconnected';
-      cardBody = <MetamaskConnect label="Connect now" />;
+      cardBody = (
+        <div className="side-box-body">
+          <a onClick={() => connect(false)} className="link">
+            connect
+          </a>
+        </div>
+      );
       break;
     case EthersStatus.CONNECTED:
       cardTitle = 'Connected';

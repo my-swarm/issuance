@@ -39,10 +39,6 @@ interface UpdateTokenNetworkAction {
   networkData: TokenNetworkData;
 }
 
-interface IncrementVersonAction {
-  type: 'incrementVersion';
-}
-
 interface StartSavingAction {
   type: 'startSaving';
 }
@@ -110,7 +106,6 @@ export type Action =
   | DeleteTokenAction
   | UpdateTokenAction
   | UpdateTokenNetworkAction
-  | IncrementVersonAction
   | StartSavingAction
   | EndSavingAction
   | ShowErrorAction

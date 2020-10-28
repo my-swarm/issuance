@@ -23,6 +23,7 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       ...state,
       ...stateUpdate,
       isSynced: false,
+      version: Date.now(),
     };
   }
 
@@ -88,11 +89,6 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
         tokens: state.tokens.filter((token) => token.id !== action.id),
       });
 
-    case 'incrementVersion':
-      return {
-        ...state,
-        version: state.version + 1,
-      };
     case 'startSaving':
       return {
         ...state,

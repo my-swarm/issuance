@@ -2,6 +2,8 @@ fragment TokenHolder on TokenHolder {
   address
   balance
   createdAt
+  updatedAt
+  isFrozen
 }
 
 query TokenHolders($token: String!) {

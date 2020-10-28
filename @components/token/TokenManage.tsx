@@ -42,6 +42,7 @@ export function TokenManage(): ReactElement {
         <Collapse.Panel header="Manage asset information" key="asset"></Collapse.Panel>
 
         <Collapse.Panel header="Dividend distribution" key="asset"></Collapse.Panel>
+      </Collapse>
       <h2>Real fancy stuff, skipping in V1</h2>
       <ul>
         <li>Manage token roles</li>

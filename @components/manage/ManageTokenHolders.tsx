@@ -1,10 +1,16 @@
 import React, { ReactElement, useState } from 'react';
 import moment from 'moment';
-import { Button, Checkbox, Col, Popconfirm, Row, Select, Space, Table } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Col, Dropdown, Menu, Popconfirm, Row, Select, Space, Table } from 'antd';
+import { DownOutlined, SearchOutlined } from '@ant-design/icons';
 
 import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';
-import { TokenHolderFragment, useTokenHoldersQuery, useWhitelistGreylistQuery } from '@graphql';
+import {
+  ContributorFragment,
+  ContributorStatus,
+  TokenHolderFragment,
+  useTokenHoldersQuery,
+  useWhitelistGreylistQuery,
+} from '@graphql';
 import { Loading, FilterDropdown, AccountsAddModal, EditableCell, Address } from '@components';
 import { createPagination } from './listUtils';
 import { ColumnType } from 'antd/lib/table';
@@ -59,6 +65,30 @@ export function ManageTokenHolders(): ReactElement {
 
   tableData = _.sortBy(tableData, [sort]);
 
+  const renderAction = (text, record: TokenHolderFragment) => {
+    const enableFreeze = !record.isFrozen;
+    const enableUnfreeze = record.isFrozen;
+    const enableBurn =
+    const enableRemove = record.status === ContributorStatus.Pending || record.status === ContributorStatus.Qualified;
+    if (enableConfirm || enableRemove) {
+      const menu = (
+        <Menu>
+          {enableConfirm && <Menu.Item onClick={() => handleConfirm(record.address)}>Confirm</Menu.Item>}
+          {enableRemove && <Menu.Item onClick={() => handleRemove(record.address)}>Remove</Menu.Item>}
+        </Menu>
+      );
+      return (
+        <Dropdown overlay={menu} trigger={['click']}>
+          <span className="cursor-pointer">
+            action <DownOutlined />
+          </span>
+        </Dropdown>
+      );
+    } else {
+      return null;
+    }
+  };
+
   const columns = tableColumns([
     {
       title: 'Address',
@@ -94,6 +124,11 @@ export function ManageTokenHolders(): ReactElement {
       render: (value, row) => (
         <EditableCell value={value} onChange={(value) => setAccountProp(row.address, 'note', value)} />
       ),
+    },
+    {
+      title: 'Do',
+      key: 'action',
+      render: renderAction,
       filterDropdown: <FilterDropdown onChange={(t) => setSearchText(t)} />,
       filterIcon: <SearchOutlined />,
       // onFilterDropdownVisibleChange: (visible) => visible && setTimeout(() => searchInput.current.select(), 100),

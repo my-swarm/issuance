@@ -34,6 +34,12 @@
       },
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "features",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "string",
         "name": "name",
         "type": "string"

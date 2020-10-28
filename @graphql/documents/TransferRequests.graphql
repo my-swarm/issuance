@@ -1,0 +1,23 @@
+fragment TransferRequest on TransferRequest {
+  id
+  requestId
+  status
+  from {
+    address
+  }
+  to {
+    address
+  }
+  createdAt
+  updatedAt
+  value
+}
+
+query TransferRequests($token: ID!) {
+  token(id: $token) {
+    id
+    transferRequests {
+      ...TransferRequest
+    },
+  }
+}

@@ -1,0 +1,20 @@
+fragment Transfer on Transfer {
+  id
+  from {
+    address
+  }
+  to {
+    address
+  }
+  createdAt
+  value
+}
+
+query Transfers($token: ID!) {
+  token(id: $token) {
+    id
+    transfers {
+      ...Transfer
+    },
+  }
+}

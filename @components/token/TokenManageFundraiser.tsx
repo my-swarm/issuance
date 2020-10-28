@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { Collapse, Space } from 'antd';
 import { FundraiserCard, FundraiserChart } from '../fundraiser';
 import { useContractAddress } from '@app';
-import { useFundraiserQuery } from '../../@graphql';
+import { useFundraiserQuery } from '@graphql';
 import { Loading } from '../utility';
 import { FundraiserInfo } from '../fundraiser/FundraiserInfo';
 import { ManageContributors } from '../manage/ManageContributors';

@@ -6,8 +6,15 @@ fragment TokenHolder on TokenHolder {
   isFrozen
 }
 
-query TokenHolders($token: String!) {
-  tokenHolders(where: { token: $token }) {
-    ...TokenHolder
-  },
+query TokenHolders($token: ID!) {
+  token(id: $token) {
+    id
+    features {
+      accountBurn
+      accountFreeze
+    }
+    holders {
+      ...TokenHolder
+    },
+  }
 }

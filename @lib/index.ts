@@ -2,6 +2,7 @@ export * from './storage';
 export * from './Metamask';
 export * from './fileUtils';
 export * from './dateUtils';
+export * from './stringUtils';
 export * from './numberUtils';
 export * from './errors';
 export * from './ContractProxy';

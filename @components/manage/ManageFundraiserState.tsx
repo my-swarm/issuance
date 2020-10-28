@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Button, Popconfirm } from 'antd';
 import { useDispatch } from '@app';
-import { FundraiserInfoFragment } from '../../@graphql';
+import { FundraiserInfoFragment } from '@graphql';
 
 interface ManageFundraiserStateProps {
   fundraiser: FundraiserInfoFragment;

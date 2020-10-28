@@ -6,7 +6,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';
 import { useWhitelistGreylistQuery } from '@graphql';
 import { Loading, FilterDropdown, AccountsAddModal, EditableCell, Address } from '@components';
-import { createPagination } from './listUtils';
+import { createPagination, renderAddress, tableColumns } from './listUtils';
 import { ColumnType } from 'antd/lib/table';
 
 interface ManageAccountListProps {
@@ -23,10 +23,6 @@ interface AccountRecord {
 type RawAccount = { address: string; createdAt: number };
 type RawAccountList = RawAccount[];
 type AccountList = AccountRecord[];
-
-function tableColumns(columns: ColumnType<AccountRecord>[]): ColumnType<AccountRecord>[] {
-  return columns.map((column) => ({ ...column, dataIndex: column.key }));
-}
 
 export function ManageAccountList({ type }: ManageAccountListProps): ReactElement {
   const { reset } = useGraphql();
@@ -76,15 +72,11 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
     })
     .filter((a) => `${a.address} ${a.name} ${a.note}`.toLowerCase().includes(searchText.toLowerCase()));
 
-  const columns = tableColumns([
+  const columns = tableColumns<AccountRecord>([
     {
       title: 'Address',
       key: 'address',
-      render: (value) => (
-        <Address short link>
-          {value}
-        </Address>
-      ),
+      render: renderAddress,
     },
     {
       title: 'Name',

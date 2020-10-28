@@ -9,7 +9,7 @@ import {
   Tooltip,
   XAxis,
 } from 'recharts';
-import { ContributorFragment, FundraiserFragment } from '../../@graphql';
+import { ContributorFragment, FundraiserFragment } from '@graphql';
 import moment from 'moment';
 import _ from 'lodash';
 import { formatUnits } from 'ethers/lib/utils';

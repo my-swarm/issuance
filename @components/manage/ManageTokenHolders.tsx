@@ -1,55 +1,63 @@
 import React, { ReactElement, useState } from 'react';
-import moment from 'moment';
-import { Button, Checkbox, Col, Dropdown, Menu, Popconfirm, Row, Select, Space, Table } from 'antd';
-import { DownOutlined, SearchOutlined } from '@ant-design/icons';
+import { Checkbox, Dropdown, Menu, Space, Table, Tooltip } from 'antd';
+import { CheckCircleTwoTone, DownOutlined, ExclamationCircleTwoTone, SearchOutlined } from '@ant-design/icons';
 
 import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';
-import {
-  ContributorFragment,
-  ContributorStatus,
-  TokenHolderFragment,
-  useTokenHoldersQuery,
-  useWhitelistGreylistQuery,
-} from '@graphql';
-import { Loading, FilterDropdown, AccountsAddModal, EditableCell, Address } from '@components';
-import { createPagination } from './listUtils';
+import { useTokenHoldersQuery } from '@graphql';
+import { AccountBurnModal, Address, EditableCell, FilterDropdown, Loading } from '@components';
+import { createPagination, renderAddress, tableColumns } from './listUtils';
 import { ColumnType } from 'antd/lib/table';
-import { formatDate, formatDatetime } from '../../@lib';
+import { formatDatetime, strcmp } from '@lib';
 import { formatUnits } from 'ethers/lib/utils';
 
 interface TableRecord {
   address: string;
   name: string;
   note: string;
-  createdAt: Date;
+  balance: number;
+  isFrozen: boolean;
+  createdAt: number; // just keep it as unix timestamp and format on render
 }
-
-type RawAccount = TokenHolderFragment;
-type RawAccountList = RawAccount[];
-
-type TableList = TableRecord[];
-
-function tableColumns(columns: ColumnType<TableRecord>[]): ColumnType<TableRecord>[] {
-  return columns.map((column) => ({ ...column, dataIndex: column.key }));
-}
-
-const sortOptions = ['address', 'createdAt', 'balance'];
 
 export function ManageTokenHolders(): ReactElement {
   const { reset } = useGraphql();
   const [{ token }] = useAppState();
-  const [sort, setSort] = useState<string>('balance');
   const [searchText, setSearchText] = useState<string>('');
   const [paginate, setPaginate] = useState<boolean>(true);
+  const [burningAccount, setBurningAccount] = useState<string>();
   const { networkId } = useEthers();
   const { dispatchTransaction, setAccountProp } = useDispatch();
   const { src20: src20Address } = useContractAddress();
   const { loading, error, data } = useTokenHoldersQuery({
     variables: { token: src20Address },
   });
-  if (loading) return <Loading />;
+  if (loading || !data) return <Loading />;
+  const { features, holders } = data.token;
 
-  let tableData: TableList = data.tokenHolders
+  const handleFreeze = (account: string) => {
+    dispatchTransaction({
+      method: 'features.freezeAccount',
+      arguments: [account],
+      description: `Freezing account ${account}`,
+      onSuccess: reset,
+    });
+  };
+
+  const handleUnfreeze = (account: string) => {
+    dispatchTransaction({
+      method: 'features.unfreezeAccount',
+      arguments: [account],
+      description: `Unfreezing account ${account}`,
+      onSuccess: reset,
+    });
+  };
+
+  const handleBurnedAccount = () => {
+    setBurningAccount(undefined);
+    reset();
+  };
+
+  const tableData: TableRecord[] = holders
     .map((a) => {
       const tokenAccountList = token.networks[networkId].accounts || {};
       return {
@@ -61,25 +69,34 @@ export function ManageTokenHolders(): ReactElement {
     })
     .filter((a) => `${a.address} ${a.name} ${a.note}`.toLowerCase().includes(searchText.toLowerCase()));
 
-  console.log({ tableData });
+  const renderStatus = (isFrozen: boolean) => {
+    let icon: ReactElement;
+    let title: string;
+    if (isFrozen) {
+      icon = <ExclamationCircleTwoTone twoToneColor="red" />;
+      title = 'Frozen account';
+    } else {
+      icon = <CheckCircleTwoTone twoToneColor="green" />;
+      title = 'Active account';
+    }
+    return <Tooltip title={title}>{icon}</Tooltip>;
+  };
 
-  tableData = _.sortBy(tableData, [sort]);
-
-  const renderAction = (text, record: TokenHolderFragment) => {
-    const enableFreeze = !record.isFrozen;
-    const enableUnfreeze = record.isFrozen;
-    const enableBurn =
-    const enableRemove = record.status === ContributorStatus.Pending || record.status === ContributorStatus.Qualified;
-    if (enableConfirm || enableRemove) {
+  const renderAction = (value: any, record: TableRecord) => {
+    const enableFreeze = features.accountFreeze && !record.isFrozen;
+    const enableUnfreeze = features.accountFreeze && record.isFrozen;
+    const enableBurn = features.accountBurn && record.balance > 0;
+    if (enableFreeze || enableUnfreeze || enableBurn) {
       const menu = (
         <Menu>
-          {enableConfirm && <Menu.Item onClick={() => handleConfirm(record.address)}>Confirm</Menu.Item>}
-          {enableRemove && <Menu.Item onClick={() => handleRemove(record.address)}>Remove</Menu.Item>}
+          {enableFreeze && <Menu.Item onClick={() => handleFreeze(record.address)}>Freeze account</Menu.Item>}
+          {enableUnfreeze && <Menu.Item onClick={() => handleUnfreeze(record.address)}>Unfreeze account</Menu.Item>}
+          {enableBurn && <Menu.Item onClick={() => setBurningAccount(record.address)}>Burn tokens</Menu.Item>}
         </Menu>
       );
       return (
         <Dropdown overlay={menu} trigger={['click']}>
-          <span className="cursor-pointer">
+          <span className="cursor-pointer nowrap">
             action <DownOutlined />
           </span>
         </Dropdown>
@@ -89,25 +106,29 @@ export function ManageTokenHolders(): ReactElement {
     }
   };
 
-  const columns = tableColumns([
+  const columns = tableColumns<TableRecord>([
+    {
+      title: 'St.',
+      key: 'isFrozen',
+      render: renderStatus,
+    },
     {
       title: 'Address',
       key: 'address',
-      render: (value) => (
-        <Address short link>
-          {value}
-        </Address>
-      ),
+      render: renderAddress,
+      sorter: (a, b) => strcmp(a.address, b.address),
     },
     {
       title: 'First transaction',
       key: 'createdAt',
       render: formatDatetime,
+      sorter: (a, b) => a.createdAt - b.createdAt,
     },
     {
       title: 'Balance',
       key: 'balance',
       align: 'right',
+      sorter: (a, b) => a.balance - b.balance,
     },
     {
       title: 'Name',
@@ -116,6 +137,7 @@ export function ManageTokenHolders(): ReactElement {
       render: (value, row) => (
         <EditableCell value={value} onChange={(value) => setAccountProp(row.address, 'name', value)} />
       ),
+      sorter: (a, b) => strcmp(a.name, b.name),
     },
     {
       title: 'Note',
@@ -140,14 +162,6 @@ export function ManageTokenHolders(): ReactElement {
       {tableData.length > 0 && (
         <div className="text-right mb-2">
           <Space>
-            sort by:{' '}
-            <Select
-              options={sortOptions.map((x) => ({ label: x, value: x }))}
-              value={sort}
-              onChange={(val) => setSort(val)}
-              size="small"
-              dropdownMatchSelectWidth={false}
-            />
             <Checkbox onChange={(e) => setPaginate(e.target.checked)} checked={paginate}>
               {' '}
               paginate
@@ -166,6 +180,14 @@ export function ManageTokenHolders(): ReactElement {
           pagination={createPagination(!paginate, tableData.length)}
         />
       </div>
+
+      {burningAccount !== undefined && (
+        <AccountBurnModal
+          address={burningAccount}
+          currentBalance={tableData.find((x) => x.address === burningAccount).balance}
+          onClose={handleBurnedAccount}
+        />
+      )}
     </>
   );
 }

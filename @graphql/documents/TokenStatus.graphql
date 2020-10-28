@@ -1,0 +1,9 @@
+query TokenStatus($id: ID!) {
+  token(id: $id) {
+    id
+    isFrozen
+    features {
+      tokenFreeze
+    }
+  }
+}

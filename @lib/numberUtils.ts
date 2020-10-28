@@ -25,3 +25,9 @@ export function formatInt(n) {
 export function parseInt(n) {
   return n;
 }
+
+export function bnCompare(a: BigNumber, b: BigNumber) {
+  if (a.gt(b)) return -1;
+  if (b.gt(a)) return 1;
+  return 0;
+}

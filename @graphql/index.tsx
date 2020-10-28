@@ -158,6 +158,66 @@ export enum Contributor_OrderBy {
   Contributions = 'contributions'
 }
 
+export type Features = {
+  __typename?: 'Features';
+  id: Scalars['ID'];
+  token: Token;
+  forceTransfer: Scalars['Boolean'];
+  tokenFreeze: Scalars['Boolean'];
+  accountFreeze: Scalars['Boolean'];
+  accountBurn: Scalars['Boolean'];
+};
+
+export type Features_Filter = {
+  id?: Maybe<Scalars['ID']>;
+  id_not?: Maybe<Scalars['ID']>;
+  id_gt?: Maybe<Scalars['ID']>;
+  id_lt?: Maybe<Scalars['ID']>;
+  id_gte?: Maybe<Scalars['ID']>;
+  id_lte?: Maybe<Scalars['ID']>;
+  id_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  token?: Maybe<Scalars['String']>;
+  token_not?: Maybe<Scalars['String']>;
+  token_gt?: Maybe<Scalars['String']>;
+  token_lt?: Maybe<Scalars['String']>;
+  token_gte?: Maybe<Scalars['String']>;
+  token_lte?: Maybe<Scalars['String']>;
+  token_in?: Maybe<Array<Scalars['String']>>;
+  token_not_in?: Maybe<Array<Scalars['String']>>;
+  token_contains?: Maybe<Scalars['String']>;
+  token_not_contains?: Maybe<Scalars['String']>;
+  token_starts_with?: Maybe<Scalars['String']>;
+  token_not_starts_with?: Maybe<Scalars['String']>;
+  token_ends_with?: Maybe<Scalars['String']>;
+  token_not_ends_with?: Maybe<Scalars['String']>;
+  forceTransfer?: Maybe<Scalars['Boolean']>;
+  forceTransfer_not?: Maybe<Scalars['Boolean']>;
+  forceTransfer_in?: Maybe<Array<Scalars['Boolean']>>;
+  forceTransfer_not_in?: Maybe<Array<Scalars['Boolean']>>;
+  tokenFreeze?: Maybe<Scalars['Boolean']>;
+  tokenFreeze_not?: Maybe<Scalars['Boolean']>;
+  tokenFreeze_in?: Maybe<Array<Scalars['Boolean']>>;
+  tokenFreeze_not_in?: Maybe<Array<Scalars['Boolean']>>;
+  accountFreeze?: Maybe<Scalars['Boolean']>;
+  accountFreeze_not?: Maybe<Scalars['Boolean']>;
+  accountFreeze_in?: Maybe<Array<Scalars['Boolean']>>;
+  accountFreeze_not_in?: Maybe<Array<Scalars['Boolean']>>;
+  accountBurn?: Maybe<Scalars['Boolean']>;
+  accountBurn_not?: Maybe<Scalars['Boolean']>;
+  accountBurn_in?: Maybe<Array<Scalars['Boolean']>>;
+  accountBurn_not_in?: Maybe<Array<Scalars['Boolean']>>;
+};
+
+export enum Features_OrderBy {
+  Id = 'id',
+  Token = 'token',
+  ForceTransfer = 'forceTransfer',
+  TokenFreeze = 'tokenFreeze',
+  AccountFreeze = 'accountFreeze',
+  AccountBurn = 'accountBurn'
+}
+
 export type Fundraiser = {
   __typename?: 'Fundraiser';
   id: Scalars['ID'];
@@ -447,6 +507,7 @@ export type Query = {
   greylistedAccount?: Maybe<GreylistedAccount>;
   greylistedAccounts: Array<GreylistedAccount>;
   transferRules: Array<TransferRules>;
+  features: Array<Features>;
   transferRequest?: Maybe<TransferRequest>;
   transferRequests: Array<TransferRequest>;
   transfer?: Maybe<Transfer>;
@@ -516,6 +577,16 @@ export type QueryTransferRulesArgs = {
   orderBy?: Maybe<TransferRules_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<TransferRules_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryFeaturesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Features_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Features_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -624,6 +695,7 @@ export type Subscription = {
   greylistedAccount?: Maybe<GreylistedAccount>;
   greylistedAccounts: Array<GreylistedAccount>;
   transferRules: Array<TransferRules>;
+  features: Array<Features>;
   transferRequest?: Maybe<TransferRequest>;
   transferRequests: Array<TransferRequest>;
   transfer?: Maybe<Transfer>;
@@ -693,6 +765,16 @@ export type SubscriptionTransferRulesArgs = {
   orderBy?: Maybe<TransferRules_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<TransferRules_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionFeaturesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Features_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Features_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -807,6 +889,8 @@ export type Token = {
   nav?: Maybe<Scalars['Int']>;
   kyaHash?: Maybe<Scalars['Bytes']>;
   kyaUrl?: Maybe<Scalars['String']>;
+  isFrozen: Scalars['Boolean'];
+  isFrozenBy?: Maybe<Scalars['Bytes']>;
   whitelist: Array<WhitelistedAccount>;
   greylist: Array<GreylistedAccount>;
   holders: Array<TokenHolder>;
@@ -815,6 +899,7 @@ export type Token = {
   fundraisers: Array<Fundraiser>;
   currentFundraiser?: Maybe<Fundraiser>;
   transferRules?: Maybe<TransferRules>;
+  features?: Maybe<Features>;
 };
 
 
@@ -878,6 +963,8 @@ export type TokenHolder = {
   address: Scalars['Bytes'];
   balance: Scalars['BigInt'];
   createdAt: Scalars['Int'];
+  updatedAt: Scalars['Int'];
+  isFrozen: Scalars['Boolean'];
 };
 
 export type TokenHolder_Filter = {
@@ -925,6 +1012,18 @@ export type TokenHolder_Filter = {
   createdAt_lte?: Maybe<Scalars['Int']>;
   createdAt_in?: Maybe<Array<Scalars['Int']>>;
   createdAt_not_in?: Maybe<Array<Scalars['Int']>>;
+  updatedAt?: Maybe<Scalars['Int']>;
+  updatedAt_not?: Maybe<Scalars['Int']>;
+  updatedAt_gt?: Maybe<Scalars['Int']>;
+  updatedAt_lt?: Maybe<Scalars['Int']>;
+  updatedAt_gte?: Maybe<Scalars['Int']>;
+  updatedAt_lte?: Maybe<Scalars['Int']>;
+  updatedAt_in?: Maybe<Array<Scalars['Int']>>;
+  updatedAt_not_in?: Maybe<Array<Scalars['Int']>>;
+  isFrozen?: Maybe<Scalars['Boolean']>;
+  isFrozen_not?: Maybe<Scalars['Boolean']>;
+  isFrozen_in?: Maybe<Array<Scalars['Boolean']>>;
+  isFrozen_not_in?: Maybe<Array<Scalars['Boolean']>>;
 };
 
 export enum TokenHolder_OrderBy {
@@ -932,7 +1031,9 @@ export enum TokenHolder_OrderBy {
   Token = 'token',
   Address = 'address',
   Balance = 'balance',
-  CreatedAt = 'createdAt'
+  CreatedAt = 'createdAt',
+  UpdatedAt = 'updatedAt',
+  IsFrozen = 'isFrozen'
 }
 
 export type Token_Filter = {
@@ -1052,6 +1153,16 @@ export type Token_Filter = {
   kyaUrl_not_starts_with?: Maybe<Scalars['String']>;
   kyaUrl_ends_with?: Maybe<Scalars['String']>;
   kyaUrl_not_ends_with?: Maybe<Scalars['String']>;
+  isFrozen?: Maybe<Scalars['Boolean']>;
+  isFrozen_not?: Maybe<Scalars['Boolean']>;
+  isFrozen_in?: Maybe<Array<Scalars['Boolean']>>;
+  isFrozen_not_in?: Maybe<Array<Scalars['Boolean']>>;
+  isFrozenBy?: Maybe<Scalars['Bytes']>;
+  isFrozenBy_not?: Maybe<Scalars['Bytes']>;
+  isFrozenBy_in?: Maybe<Array<Scalars['Bytes']>>;
+  isFrozenBy_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  isFrozenBy_contains?: Maybe<Scalars['Bytes']>;
+  isFrozenBy_not_contains?: Maybe<Scalars['Bytes']>;
   currentFundraiser?: Maybe<Scalars['String']>;
   currentFundraiser_not?: Maybe<Scalars['String']>;
   currentFundraiser_gt?: Maybe<Scalars['String']>;
@@ -1080,6 +1191,20 @@ export type Token_Filter = {
   transferRules_not_starts_with?: Maybe<Scalars['String']>;
   transferRules_ends_with?: Maybe<Scalars['String']>;
   transferRules_not_ends_with?: Maybe<Scalars['String']>;
+  features?: Maybe<Scalars['String']>;
+  features_not?: Maybe<Scalars['String']>;
+  features_gt?: Maybe<Scalars['String']>;
+  features_lt?: Maybe<Scalars['String']>;
+  features_gte?: Maybe<Scalars['String']>;
+  features_lte?: Maybe<Scalars['String']>;
+  features_in?: Maybe<Array<Scalars['String']>>;
+  features_not_in?: Maybe<Array<Scalars['String']>>;
+  features_contains?: Maybe<Scalars['String']>;
+  features_not_contains?: Maybe<Scalars['String']>;
+  features_starts_with?: Maybe<Scalars['String']>;
+  features_not_starts_with?: Maybe<Scalars['String']>;
+  features_ends_with?: Maybe<Scalars['String']>;
+  features_not_ends_with?: Maybe<Scalars['String']>;
 };
 
 export enum Token_OrderBy {
@@ -1096,6 +1221,8 @@ export enum Token_OrderBy {
   Nav = 'nav',
   KyaHash = 'kyaHash',
   KyaUrl = 'kyaUrl',
+  IsFrozen = 'isFrozen',
+  IsFrozenBy = 'isFrozenBy',
   Whitelist = 'whitelist',
   Greylist = 'greylist',
   Holders = 'holders',
@@ -1103,12 +1230,14 @@ export enum Token_OrderBy {
   Transfers = 'transfers',
   Fundraisers = 'fundraisers',
   CurrentFundraiser = 'currentFundraiser',
-  TransferRules = 'transferRules'
+  TransferRules = 'transferRules',
+  Features = 'features'
 }
 
 export type Transfer = {
   __typename?: 'Transfer';
   id: Scalars['ID'];
+  createdAt: Scalars['Int'];
   token: Token;
   from: TokenHolder;
   to: TokenHolder;
@@ -1119,10 +1248,13 @@ export type TransferRequest = {
   __typename?: 'TransferRequest';
   id: Scalars['ID'];
   token: Token;
+  requestId: Scalars['Int'];
   from: TokenHolder;
   to: TokenHolder;
   value: Scalars['BigInt'];
   status: TransferRequestStatus;
+  createdAt: Scalars['Int'];
+  updatedAt: Scalars['Int'];
 };
 
 export enum TransferRequestStatus {
@@ -1154,6 +1286,14 @@ export type TransferRequest_Filter = {
   token_not_starts_with?: Maybe<Scalars['String']>;
   token_ends_with?: Maybe<Scalars['String']>;
   token_not_ends_with?: Maybe<Scalars['String']>;
+  requestId?: Maybe<Scalars['Int']>;
+  requestId_not?: Maybe<Scalars['Int']>;
+  requestId_gt?: Maybe<Scalars['Int']>;
+  requestId_lt?: Maybe<Scalars['Int']>;
+  requestId_gte?: Maybe<Scalars['Int']>;
+  requestId_lte?: Maybe<Scalars['Int']>;
+  requestId_in?: Maybe<Array<Scalars['Int']>>;
+  requestId_not_in?: Maybe<Array<Scalars['Int']>>;
   from?: Maybe<Scalars['String']>;
   from_not?: Maybe<Scalars['String']>;
   from_gt?: Maybe<Scalars['String']>;
@@ -1192,15 +1332,34 @@ export type TransferRequest_Filter = {
   value_not_in?: Maybe<Array<Scalars['BigInt']>>;
   status?: Maybe<TransferRequestStatus>;
   status_not?: Maybe<TransferRequestStatus>;
+  createdAt?: Maybe<Scalars['Int']>;
+  createdAt_not?: Maybe<Scalars['Int']>;
+  createdAt_gt?: Maybe<Scalars['Int']>;
+  createdAt_lt?: Maybe<Scalars['Int']>;
+  createdAt_gte?: Maybe<Scalars['Int']>;
+  createdAt_lte?: Maybe<Scalars['Int']>;
+  createdAt_in?: Maybe<Array<Scalars['Int']>>;
+  createdAt_not_in?: Maybe<Array<Scalars['Int']>>;
+  updatedAt?: Maybe<Scalars['Int']>;
+  updatedAt_not?: Maybe<Scalars['Int']>;
+  updatedAt_gt?: Maybe<Scalars['Int']>;
+  updatedAt_lt?: Maybe<Scalars['Int']>;
+  updatedAt_gte?: Maybe<Scalars['Int']>;
+  updatedAt_lte?: Maybe<Scalars['Int']>;
+  updatedAt_in?: Maybe<Array<Scalars['Int']>>;
+  updatedAt_not_in?: Maybe<Array<Scalars['Int']>>;
 };
 
 export enum TransferRequest_OrderBy {
   Id = 'id',
   Token = 'token',
+  RequestId = 'requestId',
   From = 'from',
   To = 'to',
   Value = 'value',
-  Status = 'status'
+  Status = 'status',
+  CreatedAt = 'createdAt',
+  UpdatedAt = 'updatedAt'
 }
 
 export type TransferRules = {
@@ -1248,6 +1407,14 @@ export type Transfer_Filter = {
   id_lte?: Maybe<Scalars['ID']>;
   id_in?: Maybe<Array<Scalars['ID']>>;
   id_not_in?: Maybe<Array<Scalars['ID']>>;
+  createdAt?: Maybe<Scalars['Int']>;
+  createdAt_not?: Maybe<Scalars['Int']>;
+  createdAt_gt?: Maybe<Scalars['Int']>;
+  createdAt_lt?: Maybe<Scalars['Int']>;
+  createdAt_gte?: Maybe<Scalars['Int']>;
+  createdAt_lte?: Maybe<Scalars['Int']>;
+  createdAt_in?: Maybe<Array<Scalars['Int']>>;
+  createdAt_not_in?: Maybe<Array<Scalars['Int']>>;
   token?: Maybe<Scalars['String']>;
   token_not?: Maybe<Scalars['String']>;
   token_gt?: Maybe<Scalars['String']>;
@@ -1302,6 +1469,7 @@ export type Transfer_Filter = {
 
 export enum Transfer_OrderBy {
   Id = 'id',
+  CreatedAt = 'createdAt',
   Token = 'token',
   From = 'from',
   To = 'to',
@@ -1423,19 +1591,43 @@ export type FundraiserQuery = (
 
 export type TokenHolderFragment = (
   { __typename?: 'TokenHolder' }
-  & Pick<TokenHolder, 'address' | 'balance' | 'createdAt'>
+  & Pick<TokenHolder, 'address' | 'balance' | 'createdAt' | 'updatedAt' | 'isFrozen'>
 );
 
 export type TokenHoldersQueryVariables = Exact<{
-  token: Scalars['String'];
+  token: Scalars['ID'];
 }>;
 
 
 export type TokenHoldersQuery = (
   { __typename?: 'Query' }
-  & { tokenHolders: Array<(
-    { __typename?: 'TokenHolder' }
-    & TokenHolderFragment
+  & { token?: Maybe<(
+    { __typename?: 'Token' }
+    & Pick<Token, 'id'>
+    & { features?: Maybe<(
+      { __typename?: 'Features' }
+      & Pick<Features, 'accountBurn' | 'accountFreeze'>
+    )>, holders: Array<(
+      { __typename?: 'TokenHolder' }
+      & TokenHolderFragment
+    )> }
+  )> }
+);
+
+export type TokenStatusQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type TokenStatusQuery = (
+  { __typename?: 'Query' }
+  & { token?: Maybe<(
+    { __typename?: 'Token' }
+    & Pick<Token, 'id' | 'isFrozen'>
+    & { features?: Maybe<(
+      { __typename?: 'Features' }
+      & Pick<Features, 'tokenFreeze'>
+    )> }
   )> }
 );
 
@@ -1460,6 +1652,64 @@ export type TokensQuery = (
   & { tokens: Array<(
     { __typename?: 'Token' }
     & Pick<Token, 'id' | 'name'>
+  )> }
+);
+
+export type TransferRequestFragment = (
+  { __typename?: 'TransferRequest' }
+  & Pick<TransferRequest, 'id' | 'requestId' | 'status' | 'createdAt' | 'updatedAt' | 'value'>
+  & { from: (
+    { __typename?: 'TokenHolder' }
+    & Pick<TokenHolder, 'address'>
+  ), to: (
+    { __typename?: 'TokenHolder' }
+    & Pick<TokenHolder, 'address'>
+  ) }
+);
+
+export type TransferRequestsQueryVariables = Exact<{
+  token: Scalars['ID'];
+}>;
+
+
+export type TransferRequestsQuery = (
+  { __typename?: 'Query' }
+  & { token?: Maybe<(
+    { __typename?: 'Token' }
+    & Pick<Token, 'id'>
+    & { transferRequests: Array<(
+      { __typename?: 'TransferRequest' }
+      & TransferRequestFragment
+    )> }
+  )> }
+);
+
+export type TransferFragment = (
+  { __typename?: 'Transfer' }
+  & Pick<Transfer, 'id' | 'createdAt' | 'value'>
+  & { from: (
+    { __typename?: 'TokenHolder' }
+    & Pick<TokenHolder, 'address'>
+  ), to: (
+    { __typename?: 'TokenHolder' }
+    & Pick<TokenHolder, 'address'>
+  ) }
+);
+
+export type TransfersQueryVariables = Exact<{
+  token: Scalars['ID'];
+}>;
+
+
+export type TransfersQuery = (
+  { __typename?: 'Query' }
+  & { token?: Maybe<(
+    { __typename?: 'Token' }
+    & Pick<Token, 'id'>
+    & { transfers: Array<(
+      { __typename?: 'Transfer' }
+      & TransferFragment
+    )> }
   )> }
 );
 
@@ -1535,6 +1785,37 @@ export const TokenHolderFragmentDoc = gql`
   address
   balance
   createdAt
+  updatedAt
+  isFrozen
+}
+    `;
+export const TransferRequestFragmentDoc = gql`
+    fragment TransferRequest on TransferRequest {
+  id
+  requestId
+  status
+  from {
+    address
+  }
+  to {
+    address
+  }
+  createdAt
+  updatedAt
+  value
+}
+    `;
+export const TransferFragmentDoc = gql`
+    fragment Transfer on Transfer {
+  id
+  from {
+    address
+  }
+  to {
+    address
+  }
+  createdAt
+  value
 }
     `;
 export const FundraisersDocument = gql`
@@ -1604,9 +1885,16 @@ export type FundraiserQueryHookResult = ReturnType<typeof useFundraiserQuery>;
 export type FundraiserLazyQueryHookResult = ReturnType<typeof useFundraiserLazyQuery>;
 export type FundraiserQueryResult = Apollo.QueryResult<FundraiserQuery, FundraiserQueryVariables>;
 export const TokenHoldersDocument = gql`
-    query TokenHolders($token: String!) {
-  tokenHolders(where: {token: $token}) {
-    ...TokenHolder
+    query TokenHolders($token: ID!) {
+  token(id: $token) {
+    id
+    features {
+      accountBurn
+      accountFreeze
+    }
+    holders {
+      ...TokenHolder
+    }
   }
 }
     ${TokenHolderFragmentDoc}`;
@@ -1636,6 +1924,43 @@ export function useTokenHoldersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type TokenHoldersQueryHookResult = ReturnType<typeof useTokenHoldersQuery>;
 export type TokenHoldersLazyQueryHookResult = ReturnType<typeof useTokenHoldersLazyQuery>;
 export type TokenHoldersQueryResult = Apollo.QueryResult<TokenHoldersQuery, TokenHoldersQueryVariables>;
+export const TokenStatusDocument = gql`
+    query TokenStatus($id: ID!) {
+  token(id: $id) {
+    id
+    isFrozen
+    features {
+      tokenFreeze
+    }
+  }
+}
+    `;
+
+/**
+ * __useTokenStatusQuery__
+ *
+ * To run a query within a React component, call `useTokenStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTokenStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTokenStatusQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useTokenStatusQuery(baseOptions?: Apollo.QueryHookOptions<TokenStatusQuery, TokenStatusQueryVariables>) {
+        return Apollo.useQuery<TokenStatusQuery, TokenStatusQueryVariables>(TokenStatusDocument, baseOptions);
+      }
+export function useTokenStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TokenStatusQuery, TokenStatusQueryVariables>) {
+          return Apollo.useLazyQuery<TokenStatusQuery, TokenStatusQueryVariables>(TokenStatusDocument, baseOptions);
+        }
+export type TokenStatusQueryHookResult = ReturnType<typeof useTokenStatusQuery>;
+export type TokenStatusLazyQueryHookResult = ReturnType<typeof useTokenStatusLazyQuery>;
+export type TokenStatusQueryResult = Apollo.QueryResult<TokenStatusQuery, TokenStatusQueryVariables>;
 export const TokenSupplyDocument = gql`
     query TokenSupply($id: ID!) {
   token(id: $id) {
@@ -1707,6 +2032,78 @@ export function useTokensLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Tok
 export type TokensQueryHookResult = ReturnType<typeof useTokensQuery>;
 export type TokensLazyQueryHookResult = ReturnType<typeof useTokensLazyQuery>;
 export type TokensQueryResult = Apollo.QueryResult<TokensQuery, TokensQueryVariables>;
+export const TransferRequestsDocument = gql`
+    query TransferRequests($token: ID!) {
+  token(id: $token) {
+    id
+    transferRequests {
+      ...TransferRequest
+    }
+  }
+}
+    ${TransferRequestFragmentDoc}`;
+
+/**
+ * __useTransferRequestsQuery__
+ *
+ * To run a query within a React component, call `useTransferRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTransferRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTransferRequestsQuery({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useTransferRequestsQuery(baseOptions?: Apollo.QueryHookOptions<TransferRequestsQuery, TransferRequestsQueryVariables>) {
+        return Apollo.useQuery<TransferRequestsQuery, TransferRequestsQueryVariables>(TransferRequestsDocument, baseOptions);
+      }
+export function useTransferRequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TransferRequestsQuery, TransferRequestsQueryVariables>) {
+          return Apollo.useLazyQuery<TransferRequestsQuery, TransferRequestsQueryVariables>(TransferRequestsDocument, baseOptions);
+        }
+export type TransferRequestsQueryHookResult = ReturnType<typeof useTransferRequestsQuery>;
+export type TransferRequestsLazyQueryHookResult = ReturnType<typeof useTransferRequestsLazyQuery>;
+export type TransferRequestsQueryResult = Apollo.QueryResult<TransferRequestsQuery, TransferRequestsQueryVariables>;
+export const TransfersDocument = gql`
+    query Transfers($token: ID!) {
+  token(id: $token) {
+    id
+    transfers {
+      ...Transfer
+    }
+  }
+}
+    ${TransferFragmentDoc}`;
+
+/**
+ * __useTransfersQuery__
+ *
+ * To run a query within a React component, call `useTransfersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTransfersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTransfersQuery({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useTransfersQuery(baseOptions?: Apollo.QueryHookOptions<TransfersQuery, TransfersQueryVariables>) {
+        return Apollo.useQuery<TransfersQuery, TransfersQueryVariables>(TransfersDocument, baseOptions);
+      }
+export function useTransfersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TransfersQuery, TransfersQueryVariables>) {
+          return Apollo.useLazyQuery<TransfersQuery, TransfersQueryVariables>(TransfersDocument, baseOptions);
+        }
+export type TransfersQueryHookResult = ReturnType<typeof useTransfersQuery>;
+export type TransfersLazyQueryHookResult = ReturnType<typeof useTransfersLazyQuery>;
+export type TransfersQueryResult = Apollo.QueryResult<TransfersQuery, TransfersQueryVariables>;
 export const WhitelistGreylistDocument = gql`
     query WhitelistGreylist($token: String!) {
   whitelistedAccounts(where: {token: $token}) {

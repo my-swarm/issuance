@@ -14,12 +14,13 @@ import { ContributorFragment, ContributorStatus } from '@graphql';
 import { BASE_CURRENCIES } from '@const';
 import { useAppState, useDispatch, useEthers, useGraphql } from '@app';
 import { FilterDropdown, EditableCell, AccountsAddModal } from '@components';
-import { createPagination } from './listUtils';
+import { createPagination, renderAddress, tableColumns } from './listUtils';
 import { Address } from '@components';
+import { BigNumber } from 'ethers';
 
 interface ContributorRecord {
   address: string;
-  amount: number;
+  amount: BigNumber;
   status: ContributorStatus;
   name: string;
   note: string;
@@ -27,10 +28,6 @@ interface ContributorRecord {
 }
 
 type ContributorList = ContributorRecord[];
-
-function tableColumns(columns: ColumnType<ContributorRecord>[]): ColumnType<ContributorRecord>[] {
-  return columns.map((column) => ({ ...column, dataIndex: column.key }));
-}
 
 interface ManageContributorsProps {
   contributors: ContributorFragment[];
@@ -135,7 +132,7 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
     return `${contributor.address} ${contributor.name} ${contributor.note}`.toLowerCase().includes(text);
   }
 
-  const columns = tableColumns([
+  const columns = tableColumns<ContributorRecord>([
     {
       title: 'St.',
       key: 'status',
@@ -144,17 +141,14 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
     {
       title: 'Address',
       key: 'address',
-      render: (value) => (
-        <Address short link>
-          {value}
-        </Address>
-      ),
+      render: renderAddress,
     },
     {
       title: 'Amount',
       key: 'amount',
       align: 'right',
       render: (value) => formatUnits(value, baseCurrency.decimals),
+      sorter: (a, b) => (b.amount.gt(a.amount) ? 1 : -1),
     },
     {
       title: 'Name',

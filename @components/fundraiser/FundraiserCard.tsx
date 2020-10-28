@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Card, Row, Col } from 'antd';
-import { FundraiserFragment } from '../../@graphql';
+import { FundraiserFragment } from '@graphql';
 import { useAppState, useEthers } from '@app';
 import { FundraiserChart } from './FundraiserChart';
 import { FundraiserInfo } from './FundraiserInfo';

@@ -11,7 +11,7 @@ import {
 } from '@app';
 import { Button, Descriptions, Form, InputNumber } from 'antd';
 import { formatInt, formatNumber, formatTokenAmount, parseUnits, formatUnits } from '@lib';
-import { useTokenSupplyQuery } from '../../@graphql';
+import { useTokenSupplyQuery } from '@graphql';
 import { Loading } from '@components';
 import { SWM_TOKEN_DECIMALS } from '@const';
 

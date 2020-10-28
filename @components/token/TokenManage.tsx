@@ -2,13 +2,25 @@ import React, { ReactElement } from 'react';
 import { Collapse } from 'antd';
 import { TransferRules } from '@types';
 import { useAppState } from '@app';
-import { ManageAccountList, ManageSupply, ManageTokenHolders, ManageTransfer } from '../manage';
+import {
+  ManageAccountList,
+  ManageSupply,
+  ManageTokenHolders,
+  ManageTransfer,
+  ManageTokenStatus,
+  ManageTransferHistory,
+  ManageTransferRequests,
+} from '../manage';
 
 export function TokenManage(): ReactElement {
   const [{ token }] = useAppState();
   return (
     <div>
-      <Collapse defaultActiveKey={['holders']}>
+      <Collapse defaultActiveKey={['requests']}>
+        <Collapse.Panel header="Token status" key="status">
+          <ManageTokenStatus />
+        </Collapse.Panel>
+
         <Collapse.Panel header="Token supply (Mint & Burn)" key="supply">
           <ManageSupply />
         </Collapse.Panel>
@@ -21,10 +33,14 @@ export function TokenManage(): ReactElement {
           <ManageTransfer />
         </Collapse.Panel>
 
-        <Collapse.Panel header="Transfer history" key="transfers"></Collapse.Panel>
+        <Collapse.Panel header="Transfer history" key="transfers">
+          <ManageTransferHistory />
+        </Collapse.Panel>
 
         {token.transferRestrictionsType !== TransferRules.None && (
-          <Collapse.Panel header="Transfer requests" key="requests"></Collapse.Panel>
+          <Collapse.Panel header="Transfer requests" key="requests">
+            <ManageTransferRequests />
+          </Collapse.Panel>
         )}
 
         {token.transferRestrictionsType !== TransferRules.None && (
@@ -41,7 +57,7 @@ export function TokenManage(): ReactElement {
 
         <Collapse.Panel header="Manage asset information" key="asset"></Collapse.Panel>
 
-        <Collapse.Panel header="Dividend distribution" key="asset"></Collapse.Panel>
+        <Collapse.Panel header="Dividend distribution" key="dividend"></Collapse.Panel>
       </Collapse>
       <h2>Real fancy stuff, skipping in V1</h2>
       <ul>

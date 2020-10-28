@@ -1,6 +1,7 @@
 @import '~antd/dist/antd.css';
 @import 'ant-hacks';
 @import 'utility';
+@import 'side-box';
 
 .c-metamask-connect-button {
   img {
@@ -16,12 +17,6 @@
   span {
     display: inline-block;
   }
-}
-
-.c-storage-state-sync {
-  position: fixed;
-  left: 1rem;
-  bottom: 1rem;
 }
 
 .c-help {
@@ -45,11 +40,6 @@
   }
 }
 
-.has-dark-background {
-  &, h1, h2, h3 {
-    color: rgba(255, 255, 255, .8);
-  }
-}
 
 .code-sample {
   font-size: 12px;

@@ -38,7 +38,6 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
       <EthersProvider>
         <ApolloProvider client={apolloClient}>
           <Component {...pageProps} />
-          <StateStorageSync />
         </ApolloProvider>
       </EthersProvider>
     </StateProvider>

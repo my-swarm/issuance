@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { EthereumNetwork } from '@types';
 import { Card, Alert, Tooltip } from 'antd';
-import { ExclamationCircleTwoTone } from '@ant-design/icons';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 import { EthersContext, EthersStatus } from '@app';
 import { Address, MetamaskConnect } from '@components';
@@ -28,17 +28,19 @@ export function MetamaskStatus() {
       break;
     case EthersStatus.CONNECTED:
       cardTitle = 'Connected';
+
       cardBody = (
-        <div>
-          {address ? <Address>{address}</Address> : 'unknown address'}
-          <br />
-          network:{' '}
-          {supportedNetworks.indexOf(networkId) === -1 && (
-            <Tooltip title={`Unsupported network. Please use Ropsten for testing`}>
-              <ExclamationCircleTwoTone twoToneColor="red" />
-            </Tooltip>
-          )}{' '}
-          <strong>{networkNames[networkId] ?? 'Unknown'}</strong>
+        <div className="side-box-body">
+          <div className="mb-1">{address ? <Address short>{address}</Address> : 'unknown address'}</div>
+          <div>
+            network:{' '}
+            {supportedNetworks.indexOf(networkId) === -1 && (
+              <Tooltip title={`Unsupported network. Please use Kovan for testing`}>
+                <ExclamationCircleOutlined twoToneColor="red" />
+              </Tooltip>
+            )}{' '}
+            <strong>{networkNames[networkId] ?? 'Unknown'}</strong>
+          </div>
         </div>
       );
       break;
@@ -49,15 +51,11 @@ export function MetamaskStatus() {
   }
 
   return (
-    <Card
-      size="small"
-      title={
-        <div>
-          <img src="/images/metamask-fox.svg" alt="Metamask icon" className="image-1" /> {cardTitle}
-        </div>
-      }
-    >
-      {cardBody}
-    </Card>
+    <>
+      <h3 className="side-box-title">
+        <img src="/images/metamask-fox.svg" alt="Metamask icon" className="image-1" /> {cardTitle}
+      </h3>
+      <div>{cardBody}</div>
+    </>
   );
 }

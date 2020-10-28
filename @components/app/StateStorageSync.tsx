@@ -38,7 +38,6 @@ export function StateStorageSync(): ReactElement {
   function renderCardTitle() {
     return (
       <Space>
-        <div>Data sync status</div>
         {isSaving ? (
           <Spin size="small" />
         ) : isSynced ? (
@@ -50,22 +49,23 @@ export function StateStorageSync(): ReactElement {
             <ExclamationCircleOutlined />
           </Tooltip>
         )}
+        <div style={{ marginLeft: '1px' }}>Data sync</div>
       </Space>
     );
   }
 
   return (
-    <div className="c-storage-state-sync has-dark-background">
-      <h3>{renderCardTitle()}</h3>
-      <p>Data version: {version}</p>
-      <Space size="small">
-        <Button size="small" onClick={handleSave} ghost>
-          Save
-        </Button>
-        <Button size="small" onClick={handleResetDev} ghost>
-          Reset
-        </Button>
-      </Space>
-    </div>
+    <>
+      <h3 className="side-box-title" style={{ marginLeft: '1px' }}>
+        {renderCardTitle()}
+      </h3>
+      <div className="side-box-body">
+        <div className="mb-1">Data version: {version}</div>
+        <Space size="small">
+          <span onClick={handleSave}>Save</span>
+          <span onClick={handleResetDev}>Reset</span>
+        </Space>
+      </div>
+    </>
   );
 }

@@ -18,7 +18,10 @@ export function TransactionModal(): ReactElement {
       const proxy = new ContractProxy(signer, token);
       proxy.onProgress(handleTransactionProgress);
       setRetry(false);
-      proxy.call(transaction.contract, transaction.method, transaction.arguments).catch((e) => {
+      const contract: string | [string, string] = transaction.address
+        ? [transaction.contract, transaction.address]
+        : transaction.contract;
+      proxy.call(contract, transaction.method, transaction.arguments).catch((e) => {
         console.error(e);
         setTransactionState(TransactionState.Error);
         if (e.code === 4001) {
@@ -51,6 +54,7 @@ export function TransactionModal(): ReactElement {
 
   const { description } = transaction;
   const transactionStateMeta = transactionStatesMeta[transactionState];
+  console.log({ transaction });
 
   function renderHeader() {
     return (

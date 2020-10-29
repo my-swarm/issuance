@@ -1589,6 +1589,19 @@ export type FundraiserQuery = (
   )> }
 );
 
+export type TokenAssetQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type TokenAssetQuery = (
+  { __typename?: 'Query' }
+  & { token?: Maybe<(
+    { __typename?: 'Token' }
+    & Pick<Token, 'id' | 'kyaHash' | 'kyaUrl'>
+  )> }
+);
+
 export type TokenHolderFragment = (
   { __typename?: 'TokenHolder' }
   & Pick<TokenHolder, 'address' | 'balance' | 'createdAt' | 'updatedAt' | 'isFrozen'>
@@ -1884,6 +1897,41 @@ export function useFundraiserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type FundraiserQueryHookResult = ReturnType<typeof useFundraiserQuery>;
 export type FundraiserLazyQueryHookResult = ReturnType<typeof useFundraiserLazyQuery>;
 export type FundraiserQueryResult = Apollo.QueryResult<FundraiserQuery, FundraiserQueryVariables>;
+export const TokenAssetDocument = gql`
+    query TokenAsset($id: ID!) {
+  token(id: $id) {
+    id
+    kyaHash
+    kyaUrl
+  }
+}
+    `;
+
+/**
+ * __useTokenAssetQuery__
+ *
+ * To run a query within a React component, call `useTokenAssetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTokenAssetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTokenAssetQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useTokenAssetQuery(baseOptions?: Apollo.QueryHookOptions<TokenAssetQuery, TokenAssetQueryVariables>) {
+        return Apollo.useQuery<TokenAssetQuery, TokenAssetQueryVariables>(TokenAssetDocument, baseOptions);
+      }
+export function useTokenAssetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TokenAssetQuery, TokenAssetQueryVariables>) {
+          return Apollo.useLazyQuery<TokenAssetQuery, TokenAssetQueryVariables>(TokenAssetDocument, baseOptions);
+        }
+export type TokenAssetQueryHookResult = ReturnType<typeof useTokenAssetQuery>;
+export type TokenAssetLazyQueryHookResult = ReturnType<typeof useTokenAssetLazyQuery>;
+export type TokenAssetQueryResult = Apollo.QueryResult<TokenAssetQuery, TokenAssetQueryVariables>;
 export const TokenHoldersDocument = gql`
     query TokenHolders($token: ID!) {
   token(id: $token) {

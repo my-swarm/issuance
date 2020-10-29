@@ -1,28 +1,24 @@
-import { AccountList } from '../@types';
+import ethers from 'ethers';
 
-export function mergeAccountLists(a: AccountList, b: AccountList): AccountList {
-  const result = [...a];
-  for (const bItem of b) {
-    const existingIndex = result.findIndex((resultItem) => resultItem.address === bItem.address);
-    if (existingIndex !== -1) {
-      result[existingIndex] = bItem;
-    } else {
-      result.push(bItem);
-    }
+export function parseAddressesInput<T>(input: string, convert: (meta: string[]) => T): { [key: string]: T } {
+  if (input.trim() === '') {
+    throw { message: 'Invalid input', description: 'Please provide an address list' };
   }
 
-  return result;
-}
+  const rawData: string[] = input.trim().split('\n');
 
-export function subtractAccountLists(a: AccountList, b: AccountList | string[]): AccountList {
-  let result = [...a];
-  for (const bItem of b) {
-    const address = typeof bItem === 'string' ? bItem : bItem.address;
-    const existingIndex = result.findIndex((resultItem) => resultItem.address === address);
-    if (existingIndex !== -1) {
-      result = [...result.slice(0, existingIndex), ...result.slice(existingIndex + 1)];
+  const data = {};
+  for (const rawRecord of rawData) {
+    const [uncheckedAddress, ...rest] = rawRecord.split(/[,;\t]/).map((x) => x.trim());
+    let address;
+
+    try {
+      address = ethers.utils.getAddress(uncheckedAddress);
+    } catch (e) {
+      throw { message: 'Error parsing address list', description: `${e.reason}: ${uncheckedAddress}` };
     }
+    data[address] = convert(rest);
   }
 
-  return result;
+  return data;
 }

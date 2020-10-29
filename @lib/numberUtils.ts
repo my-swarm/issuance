@@ -1,4 +1,4 @@
-import { BigNumber, utils } from 'ethers';
+import { BigNumber, BigNumberish, utils } from 'ethers';
 
 export function parseUnits(amount: string | number, decimals: number): BigNumber {
   if (typeof amount === 'number') amount = amount.toString();
@@ -30,4 +30,9 @@ export function bnCompare(a: BigNumber, b: BigNumber) {
   if (a.gt(b)) return -1;
   if (b.gt(a)) return 1;
   return 0;
+}
+
+export function bnRatio(a: BigNumberish, b: BigNumberish, precision = 16) {
+  const multiplier = BigNumber.from(10).pow(precision);
+  return BigNumber.from(a).mul(multiplier).div(BigNumber.from(b)).toNumber() / 10 ** precision;
 }

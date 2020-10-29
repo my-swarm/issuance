@@ -1,0 +1,7 @@
+query TokenAsset($id: ID!) {
+  token(id: $id) {
+    id
+    kyaHash
+    kyaUrl
+  }
+}

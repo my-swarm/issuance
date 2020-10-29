@@ -4,7 +4,7 @@ import { Alert, Button } from 'antd';
 import { useTokenStatusQuery } from '@graphql';
 import { Loading } from '@components';
 
-export function ManageTokenStatus(): ReactElement {
+export function ManageAsset(): ReactElement {
   const { reset } = useGraphql();
 
   const { src20: src20Address } = useContractAddress();
@@ -21,16 +21,9 @@ export function ManageTokenStatus(): ReactElement {
       method: 'features.freezeToken',
       description: 'Freezing token',
       onSuccess: reset,
-    });managetok
-  };
-
-  const handleUnfreeze = async () => {
-    dispatchTransaction({
-      method: 'features.unfreezeToken',
-      description: 'Unfreezing token',
-      onSuccess: reset,
     });
   };
+
 
   return (
     <>

@@ -10,13 +10,15 @@ import {
   ManageTokenStatus,
   ManageTransferHistory,
   ManageTransferRequests,
+  ManageDividends,
+  ManageAsset,
 } from '../manage';
 
 export function TokenManage(): ReactElement {
   const [{ token }] = useAppState();
   return (
     <div>
-      <Collapse defaultActiveKey={['requests']}>
+      <Collapse defaultActiveKey={['asset', 'dividend']}>
         <Collapse.Panel header="Token status" key="status">
           <ManageTokenStatus />
         </Collapse.Panel>
@@ -55,9 +57,13 @@ export function TokenManage(): ReactElement {
           </Collapse.Panel>
         )}
 
-        <Collapse.Panel header="Manage asset information" key="asset"></Collapse.Panel>
+        <Collapse.Panel header="Manage asset information" key="asset">
+          <ManageAsset />
+        </Collapse.Panel>
 
-        <Collapse.Panel header="Dividend distribution" key="dividend"></Collapse.Panel>
+        <Collapse.Panel header="Dividend distribution" key="dividend">
+          <ManageDividends />
+        </Collapse.Panel>
       </Collapse>
       <h2>Real fancy stuff, skipping in V1</h2>
       <ul>

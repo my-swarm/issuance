@@ -1,6 +1,6 @@
 import { Contract, ContractFactory, Signer, Transaction, Event } from 'ethers';
 import { EthereumNetwork, Token, TransactionEventCallback, TransactionState } from '@types';
-import { getContractFactory, getContract } from './contracts';
+import { getContractFactory, getContract, getContractAbi } from './contracts';
 
 interface ContractOptions {
   gasPrice?: number;
@@ -36,13 +36,20 @@ export class ContractProxy {
   }
 
   public async call(
-    contractName: string,
+    contractName: string | [string, string],
     method: string,
     args: Array<any> = [],
     events: { [index: string]: (event: Event) => void } = {},
   ): Promise<Transaction> {
+    console.log('call', { contractName, method, args });
     this.handleStateChange(TransactionState.None);
-    const contract = getContract(contractName, this.signer, await this.signer.getChainId(), this._token);
+    let contract;
+    if (typeof contractName === 'string') {
+      contract = getContract(contractName, this.signer, await this.signer.getChainId(), this._token);
+    } else {
+      contract = new Contract(contractName[1], getContractAbi(contractName[0]), this.signer);
+    }
+    console.log({ contract });
     for (const [eventName, eventHandler] of Object.entries(events)) {
       contract.once(eventName, (oldValue, newValue) => eventHandler(newValue));
     }

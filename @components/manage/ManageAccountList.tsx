@@ -7,7 +7,6 @@ import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } f
 import { useWhitelistGreylistQuery } from '@graphql';
 import { Loading, FilterDropdown, AccountsAddModal, EditableCell, Address } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
-import { ColumnType } from 'antd/lib/table';
 
 interface ManageAccountListProps {
   type: 'whitelist' | 'greylist';

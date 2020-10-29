@@ -22,6 +22,7 @@ export function useDispatch(): UseDispatchResult {
   };
 
   const dispatchTransaction = (transaction: Transaction) => {
+    console.log('dispatch', transaction);
     let { contract, method } = transaction;
     if (method.match(/\./)) {
       const parts = method.split('.');

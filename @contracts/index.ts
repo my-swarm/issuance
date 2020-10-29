@@ -17,6 +17,7 @@ export const contractsMeta: { [key: string]: ContractMeta } = {
   USDC: { shortName: 'usdc', isBase: true },
   SwmToken: { shortName: 'swm', isBase: true },
   AffiliateManager: { shortName: 'affiliateManager', isBase: true },
+  Disperse: { shortName: 'disperse', isBase: true },
 
   SRC20: { shortName: 'src20', isBase: false },
   Featured: { shortName: 'features', isBase: false },
@@ -24,6 +25,8 @@ export const contractsMeta: { [key: string]: ContractMeta } = {
   TransferRules: { shortName: 'transferRules', isBase: false },
   Fundraiser: { shortName: 'fundraiser', isBase: false },
   ContributorRestrictions: { shortName: 'contributorRestrictions', isBase: false },
+
+  ERC20: { shortName: 'erc20', isBase: false },
 };
 
 const nameMap = {};

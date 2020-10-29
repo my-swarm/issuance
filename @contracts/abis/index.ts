@@ -12,6 +12,8 @@ import Fundraiser from './Fundraiser.json';
 import ContributorRestrictions from './ContributorRestrictions.json';
 import AffiliateManager from './AffiliateManager.json';
 import USDC from './USDC.json';
+import Disperse from './Disperse.json';
+import ERC20 from './ERC20.json';
 
 export const abis = {
   TransferRules,
@@ -28,4 +30,6 @@ export const abis = {
   ContributorRestrictions,
   AffiliateManager,
   USDC,
+  Disperse,
+  ERC20,
 };

@@ -17,6 +17,7 @@ export interface Transaction {
   arguments?: any[];
   description?: string;
   onSuccess?: () => void;
+  address?: string;
 }
 
 export interface AppState extends ColdState {

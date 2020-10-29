@@ -1,9 +1,10 @@
 import React, { ReactElement, useState } from 'react';
 import { Input, Modal } from 'antd';
-import { AccountsMeta, TokenAccountListType } from '@types';
+import { AccountMeta, AccountsMeta, TokenAccountListType } from '@types';
 import ethers from 'ethers';
 import { useAppState, useDispatch } from '@app';
 import { Help } from '@components';
+import { parseAddressesInput } from '@lib';
 
 interface AccountsAddModalProps {
   list: TokenAccountListType;
@@ -45,16 +46,19 @@ export function AccountsAddModal({ list, onClose }: AccountsAddModalProps): Reac
   const { dispatchTransaction, dispatchError, batchSetAccountProp } = useDispatch();
 
   const handleAdd = async (): Promise<void> => {
-    const data = parseAddressesInput(input);
-    const addresses = Object.keys(data);
-    if (addresses.length === 0) return;
-
-    dispatchTransaction({
-      method: listToContractMethod(list, 'add'),
-      arguments: [addresses],
-      description: `Adding ${addresses.length} addresses to your ${listTitle(list)}`,
-      onSuccess: () => handleAddToLocalState(data),
-    });
+    try {
+      const data = parseAddressesInput<AccountMeta>(input, (meta) => ({ name: meta[0], note: meta[1] }));
+      const addresses = Object.keys(data);
+      dispatchTransaction({
+        method: listToContractMethod(list, 'add'),
+        arguments: [addresses],
+        description: `Adding ${addresses.length} addresses to your ${listTitle(list)}`,
+        onSuccess: () => handleAddToLocalState(data),
+      });
+    } catch (e) {
+      dispatchError(e.message, e.description);
+      return;
+    }
   };
 
   const handleAddToLocalState = (items: AccountsMeta) => {
@@ -66,33 +70,6 @@ export function AccountsAddModal({ list, onClose }: AccountsAddModalProps): Reac
     setInput('');
     onClose();
   };
-
-  function parseAddressesInput(input: string): AccountsMeta {
-    let hadError = false;
-
-    if (input.trim() === '') {
-      dispatchError('Invalid input', 'Please provide an address list');
-      return {};
-    }
-
-    const rawData: string[] = input.trim().split('\n');
-
-    const data = {};
-    for (const rawRecord of rawData) {
-      const [uncheckedAddress, name, note] = rawRecord.split(/[,;\t]/).map((x) => x.trim());
-      let address;
-
-      try {
-        address = ethers.utils.getAddress(uncheckedAddress);
-      } catch (e) {
-        hadError = true;
-        dispatchError('Error parsing address list', `${e.reason}: ${uncheckedAddress}`);
-      }
-      data[address] = { name, note };
-    }
-
-    return hadError ? [] : data;
-  }
 
   return (
     <Modal visible={true} title="Batch add accounts" onOk={handleAdd} onCancel={handleCancel}>

@@ -101,7 +101,6 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
         isSynced: true,
       };
     case 'showError': {
-      console.log('showerror', action.error);
       return {
         ...state,
         error: action.error,
@@ -132,6 +131,20 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       return {
         ...state,
         transaction: undefined,
+      };
+    }
+
+    case 'approveSpending': {
+      return {
+        ...state,
+        spendingApproval: action.spendingApproval,
+      };
+    }
+
+    case 'resetSpendingApproval': {
+      return {
+        ...state,
+        spendingApproval: undefined,
       };
     }
 

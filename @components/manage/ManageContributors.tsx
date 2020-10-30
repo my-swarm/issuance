@@ -8,7 +8,6 @@ import {
   SearchOutlined,
 } from '@ant-design/icons';
 import { Button, Checkbox, Dropdown, Menu, Select, Space, Table, Tooltip } from 'antd';
-import { ColumnType } from 'antd/lib/table';
 
 import { ContributorFragment, ContributorStatus } from '@graphql';
 import { BASE_CURRENCIES } from '@const';
@@ -16,18 +15,15 @@ import { useAppState, useDispatch, useEthers, useGraphql } from '@app';
 import { FilterDropdown, EditableCell, AccountsAddModal } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
 import { Address } from '@components';
-import { BigNumber } from 'ethers';
+import { strcmp } from '@lib';
 
-interface ContributorRecord {
+interface TableRecord {
   address: string;
-  amount: BigNumber;
+  amount: number;
   status: ContributorStatus;
   name: string;
   note: string;
-  createdAt: string;
 }
-
-type ContributorList = ContributorRecord[];
 
 interface ManageContributorsProps {
   contributors: ContributorFragment[];
@@ -98,7 +94,7 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
       );
       return (
         <Dropdown overlay={menu} trigger={['click']}>
-          <span className="cursor-pointer">
+          <span className="cursor-pointer nowrap">
             action <DownOutlined />
           </span>
         </Dropdown>
@@ -108,11 +104,11 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
     }
   };
 
-  function filterByStatus(contributor: ContributorRecord): boolean {
-    const isPending = contributor.status === ContributorStatus.Pending;
-    const isQualified = contributor.status === ContributorStatus.Qualified;
-    const isRemoved = contributor.status === ContributorStatus.Removed;
-    const isRefunded = contributor.status === ContributorStatus.Refunded;
+  function filterByStatus(record: TableRecord): boolean {
+    const isPending = record.status === ContributorStatus.Pending;
+    const isQualified = record.status === ContributorStatus.Qualified;
+    const isRemoved = record.status === ContributorStatus.Removed;
+    const isRefunded = record.status === ContributorStatus.Refunded;
     switch (statusFilter) {
       case 'all':
         return true;
@@ -127,12 +123,12 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
     }
   }
 
-  function filterByText(contributor: ContributorRecord): boolean {
+  function filterByText(record: TableRecord): boolean {
     const text = searchText.toLowerCase();
-    return `${contributor.address} ${contributor.name} ${contributor.note}`.toLowerCase().includes(text);
+    return `${record.address} ${record.name} ${record.note}`.toLowerCase().includes(text);
   }
 
-  const columns = tableColumns<ContributorRecord>([
+  const columns = tableColumns<TableRecord>([
     {
       title: 'St.',
       key: 'status',
@@ -142,13 +138,13 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
       title: 'Address',
       key: 'address',
       render: renderAddress,
+      sorter: (a, b) => strcmp(a.address, b.address),
     },
     {
       title: 'Amount',
       key: 'amount',
       align: 'right',
-      render: (value) => formatUnits(value, baseCurrency.decimals),
-      sorter: (a, b) => (b.amount.gt(a.amount) ? 1 : -1),
+      sorter: (a, b) => a.amount - b.amount,
     },
     {
       title: 'Name',
@@ -176,14 +172,14 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
     },
   ]);
 
-  const tableData: ContributorList = contributors
+  const tableData: TableRecord[] = contributors
     .map((contributor) => {
+      const tokenAccountList = token.networks[networkId].accounts || {};
       return {
         ...contributor,
-        name: '',
-        note: '',
         key: contributor.address,
-        ...token.networks[networkId].accounts[contributor.address],
+        amount: parseFloat(formatUnits(contributor.amount, baseCurrency.decimals)),
+        ...tokenAccountList[contributor.address],
       };
     })
     .filter(filterByStatus)

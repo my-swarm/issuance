@@ -11,7 +11,7 @@ import { ManageFundraiserState } from '../manage/ManageFundraiserState';
 export function TokenManageFundraiser(): ReactElement {
   const { fundraiser: fundraiserAddress } = useContractAddress();
   const { loading, error, data } = useFundraiserQuery({ variables: { id: fundraiserAddress } });
-  if (loading) return <Loading />;
+  if (loading || !data) return <Loading />;
 
   const fundraiser = data.fundraiser;
   if (!fundraiser) {
@@ -20,17 +20,17 @@ export function TokenManageFundraiser(): ReactElement {
 
   return (
     <div>
-      <Collapse defaultActiveKey={[1]}>
-        <Collapse.Panel header="Overview" key="1">
+      <Collapse defaultActiveKey={['status']}>
+        <Collapse.Panel header="Overview" key="overview">
           <Space direction="vertical">
             <FundraiserInfo fundraiser={fundraiser} column={2} />
             <FundraiserChart fundraiser={fundraiser} />
           </Space>
         </Collapse.Panel>
-        <Collapse.Panel header="Contributors" key="2">
+        <Collapse.Panel header="Contributors" key="contributors">
           <ManageContributors contributors={fundraiser.contributors} />
         </Collapse.Panel>
-        <Collapse.Panel header="Status control" key="3">
+        <Collapse.Panel header="Status control" key="status">
           <ManageFundraiserState fundraiser={fundraiser} />
         </Collapse.Panel>
       </Collapse>

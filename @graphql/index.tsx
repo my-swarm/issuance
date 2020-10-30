@@ -1530,6 +1530,23 @@ export enum WhitelistedAccount_OrderBy {
   Token = 'token'
 }
 
+export type DistrubuteQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DistrubuteQuery = (
+  { __typename?: 'Query' }
+  & { token?: Maybe<(
+    { __typename?: 'Token' }
+    & Pick<Token, 'id' | 'address' | 'availableSupply' | 'stake'>
+    & { currentFundraiser?: Maybe<(
+      { __typename?: 'Fundraiser' }
+      & FundraiserFragment
+    )> }
+  )> }
+);
+
 export type ContributorFragment = (
   { __typename?: 'Contributor' }
   & Pick<Contributor, 'address' | 'status' | 'amount'>
@@ -1831,6 +1848,45 @@ export const TransferFragmentDoc = gql`
   value
 }
     `;
+export const DistrubuteDocument = gql`
+    query Distrubute($id: ID!) {
+  token(id: $id) {
+    id
+    address
+    availableSupply
+    stake
+    currentFundraiser {
+      ...Fundraiser
+    }
+  }
+}
+    ${FundraiserFragmentDoc}`;
+
+/**
+ * __useDistrubuteQuery__
+ *
+ * To run a query within a React component, call `useDistrubuteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDistrubuteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDistrubuteQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDistrubuteQuery(baseOptions?: Apollo.QueryHookOptions<DistrubuteQuery, DistrubuteQueryVariables>) {
+        return Apollo.useQuery<DistrubuteQuery, DistrubuteQueryVariables>(DistrubuteDocument, baseOptions);
+      }
+export function useDistrubuteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DistrubuteQuery, DistrubuteQueryVariables>) {
+          return Apollo.useLazyQuery<DistrubuteQuery, DistrubuteQueryVariables>(DistrubuteDocument, baseOptions);
+        }
+export type DistrubuteQueryHookResult = ReturnType<typeof useDistrubuteQuery>;
+export type DistrubuteLazyQueryHookResult = ReturnType<typeof useDistrubuteLazyQuery>;
+export type DistrubuteQueryResult = Apollo.QueryResult<DistrubuteQuery, DistrubuteQueryVariables>;
 export const FundraisersDocument = gql`
     query Fundraisers($owner: Bytes!) {
   fundraisers(where: {owner: $owner}) {

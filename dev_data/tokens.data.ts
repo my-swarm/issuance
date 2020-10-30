@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { DeployerStateFinished, EthereumNetwork, Token, TokenDeployerState, TokenState, TransferRules } from '@types';
-import addresses from './addresses/local.json';
+import addressesLocal from './addresses/local.json';
+import addressesKovan from './addresses/kovan.json';
 
 function createFile(name) {
   return {
@@ -40,13 +41,6 @@ const tokenDefaults: Partial<Token> = {
   assetNetValue: 500,
   assetImage: createImage('Asset image.jpg'),
   assetDescription: `It's an asset all right`,
-  networks: {
-    [EthereumNetwork.Kovan]: {
-      state: TokenState.Created,
-      deployerState: TokenDeployerState.None,
-      addresses: {},
-    },
-  },
 };
 
 export const tokens = [
@@ -55,7 +49,18 @@ export const tokens = [
     ...tokenDefaults,
     name: 'Undeployed Token',
     symbol: 'UDT',
-    state: TokenState.Created,
+    networks: {
+      [EthereumNetwork.Kovan]: {
+        state: TokenState.Created,
+        deployerState: TokenDeployerState.None,
+        addresses: {},
+      },
+      [EthereumNetwork.Local]: {
+        state: TokenState.Created,
+        deployerState: TokenDeployerState.None,
+        addresses: {},
+      },
+    },
   },
   {
     id: uuid(),
@@ -67,15 +72,12 @@ export const tokens = [
       [EthereumNetwork.Kovan]: {
         state: TokenState.Deploying,
         deployerState: TokenDeployerState.Roles,
-        addresses: {
-          transferRules: '0xdEbEEed4Ea259dd1EAaf668A5bEc795c2AF296f3',
-          features: '0x4434520aB271BC6cD4fEeD1C506BD6fE9bff3BA5',
-        },
+        addresses: addressesKovan.token1,
       },
       [EthereumNetwork.Local]: {
         state: TokenState.Deploying,
         deployerState: TokenDeployerState.Roles,
-        addresses: addresses.token1,
+        addresses: addressesLocal.token1,
       },
     },
   },
@@ -84,23 +86,17 @@ export const tokens = [
     ...tokenDefaults,
     name: 'Testing Token: Minted with Whitelist',
     symbol: 'TT2',
-    state: TokenState.Deployed,
     deployerState: DeployerStateFinished,
     networks: {
       [EthereumNetwork.Kovan]: {
         state: TokenState.Deployed,
         deployerState: DeployerStateFinished,
-        addresses: {
-          transferRules: '0x69D411437fc017eb85a541ACc94c5Edf6d3a1eC7',
-          features: '0xc0E56cf36f20137e9083A85241Ac633Cca7EE735',
-          roles: '0x040b8EB60cc739D51837A6ca1160E1f44f4e4573',
-          src20: '0x7EF604Fc7AC7e39c2634f9F832FD7aCb8e7B6422',
-        },
+        addresses: addressesKovan.token2,
       },
       [EthereumNetwork.Local]: {
         state: TokenState.Deployed,
         deployerState: DeployerStateFinished,
-        addresses: addresses.token2,
+        addresses: addressesLocal.token2,
       },
     },
   },
@@ -109,23 +105,17 @@ export const tokens = [
     ...tokenDefaults,
     name: 'Testing Token: Minted with Greylist',
     symbol: 'TT3',
-    state: TokenState.Deployed,
     deployerState: DeployerStateFinished,
     networks: {
       [EthereumNetwork.Kovan]: {
         state: TokenState.Deployed,
         deployerState: DeployerStateFinished,
-        addresses: {
-          transferRules: '0x69D411437fc017eb85a541ACc94c5Edf6d3a1eC7',
-          features: '0xc0E56cf36f20137e9083A85241Ac633Cca7EE735',
-          roles: '0x040b8EB60cc739D51837A6ca1160E1f44f4e4573',
-          src20: '0x7EF604Fc7AC7e39c2634f9F832FD7aCb8e7B6422',
-        },
+        addresses: addressesKovan.token3,
       },
       [EthereumNetwork.Local]: {
         state: TokenState.Deployed,
         deployerState: DeployerStateFinished,
-        addresses: addresses.token3,
+        addresses: addressesLocal.token3,
       },
     },
   },
@@ -134,26 +124,36 @@ export const tokens = [
     ...tokenDefaults,
     name: 'Testing Token: Fundraising',
     symbol: 'TT4',
-    state: TokenState.Fundraising,
     deployerState: DeployerStateFinished,
     networks: {
       [EthereumNetwork.Kovan]: {
         state: TokenState.Fundraising,
         deployerState: DeployerStateFinished,
-        fundraiserDeployerState: DeployerStateFinished,
-        addresses: {
-          transferRules: '0x8B10F3Dc66f16a40488ed106FA77a5d6415671a1',
-          features: '0x618061312CB45660C282A072c66dA8B06627e85D',
-          roles: '0xbAeA93C612280c8d1E7963EC7E8E20C39dEBe07d',
-          src20: '0x492F369bA917A10bAfe39aA506C079F21Ff0dA42',
-          fundraiser: '0x72bfFb83931a49d8dBD89e4B1c9C06186dd2d14b',
-          contributorRestrictions: '0x7e85391544eb1Ac887c68a515FB84bf72379C6c2',
-        },
+        addresses: addressesKovan.token4,
       },
       [EthereumNetwork.Local]: {
         state: TokenState.Fundraising,
         deployerState: DeployerStateFinished,
-        addresses: addresses.token4,
+        addresses: addressesLocal.token4,
+      },
+    },
+  },
+  {
+    id: uuid(),
+    ...tokenDefaults,
+    name: 'Testing Token: Fundraised',
+    symbol: 'TT5',
+    deployerState: DeployerStateFinished,
+    networks: {
+      [EthereumNetwork.Kovan]: {
+        state: TokenState.Fundraising,
+        deployerState: DeployerStateFinished,
+        addresses: addressesKovan.token5,
+      },
+      [EthereumNetwork.Local]: {
+        state: TokenState.Minted,
+        deployerState: DeployerStateFinished,
+        addresses: addressesLocal.token5,
       },
     },
   },

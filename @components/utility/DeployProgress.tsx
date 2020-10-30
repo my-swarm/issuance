@@ -83,7 +83,6 @@ export function DeployProgress({ type, onClose }: DeployProgressProps): ReactEle
   }
 
   const handleDeployProgress = (newState: DeployerState) => {
-    console.log('handleDeployProgress', newState);
     const deployingState = type === 'token' ? TokenState.Deployed : TokenState.DeployingFundraiser;
     const deployedState = type === 'token' ? TokenState.Deployed : TokenState.Fundraising;
     dispatch({

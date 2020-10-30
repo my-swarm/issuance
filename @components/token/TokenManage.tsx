@@ -12,19 +12,24 @@ import {
   ManageTransferRequests,
   ManageDividends,
   ManageAsset,
+  ManageDistribute,
 } from '../manage';
 
 export function TokenManage(): ReactElement {
   const [{ token }] = useAppState();
   return (
     <div>
-      <Collapse defaultActiveKey={['asset', 'dividend']}>
+      <Collapse defaultActiveKey={['distribute']}>
         <Collapse.Panel header="Token status" key="status">
           <ManageTokenStatus />
         </Collapse.Panel>
 
         <Collapse.Panel header="Token supply (Mint & Burn)" key="supply">
           <ManageSupply />
+        </Collapse.Panel>
+
+        <Collapse.Panel header="Distribute token" key="distribute">
+          <ManageDistribute />
         </Collapse.Panel>
 
         <Collapse.Panel header="Token holders" key="holders">
@@ -57,9 +62,12 @@ export function TokenManage(): ReactElement {
           </Collapse.Panel>
         )}
 
-        <Collapse.Panel header="Manage asset information" key="asset">
-          <ManageAsset />
-        </Collapse.Panel>
+        {/* this is disabled before we figure out how to store KYA */}
+        {false && (
+          <Collapse.Panel header="Manage asset information" key="asset">
+            <ManageAsset />
+          </Collapse.Panel>
+        )}
 
         <Collapse.Panel header="Dividend distribution" key="dividend">
           <ManageDividends />

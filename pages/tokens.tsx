@@ -31,6 +31,8 @@ export default function Tokens() {
     }
   }, [tokens]);
 
+  console.log({ tokens });
+
   const columns = [
     {
       title: 'Token',

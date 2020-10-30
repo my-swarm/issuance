@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
 import { Token } from './token';
+import { BigNumber, Contract } from 'ethers';
 
 export interface ColdState {
   tokens: Token[];
@@ -20,6 +21,14 @@ export interface Transaction {
   address?: string;
 }
 
+export interface SpendingApproval {
+  contractName: string;
+  tokenContract: Contract;
+  amount: BigNumber;
+  currentAllowance: BigNumber;
+  onSuccess: () => void;
+}
+
 export interface AppState extends ColdState {
   isLoading: boolean;
   isSaving: boolean;
@@ -28,4 +37,5 @@ export interface AppState extends ColdState {
   error?: AppError;
   token?: Token;
   transaction?: Transaction;
+  spendingApproval?: SpendingApproval;
 }

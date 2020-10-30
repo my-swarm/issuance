@@ -1,0 +1,11 @@
+query Distrubute($id: ID!) {
+  token(id: $id) {
+    id
+    address
+    availableSupply
+    stake
+    currentFundraiser {
+      ...Fundraiser
+    }
+  }
+}

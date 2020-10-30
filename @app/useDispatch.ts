@@ -1,18 +1,21 @@
 import { useAppState } from './StateContext';
-import { AccountsMeta, Token, Transaction } from '@types';
+import { AccountsMeta, SpendingApproval, Token, Transaction } from '@types';
 import { useEthers } from './EthersContext';
+import { getContract, getContractAbi } from '@lib';
+import { BigNumber, Contract } from 'ethers';
 
 interface UseDispatchResult {
   setToken: (token: Token) => void;
   dispatchError: (message: string, description: string) => void;
   dispatchTransaction: (transaction: Transaction) => void;
+  checkAllowance: (contractName: string, tokenAddress: string, amount: BigNumber, onSuccess: () => void) => void;
   setAccountProp: (address: string, prop: string, value: string) => void;
   batchSetAccountProp: (items: AccountsMeta) => void;
 }
 
 export function useDispatch(): UseDispatchResult {
   const [, dispatch] = useAppState();
-  const { networkId } = useEthers();
+  const { networkId, address, signer } = useEthers();
 
   const dispatchError = (message: string, description: string) => {
     dispatch({
@@ -22,7 +25,6 @@ export function useDispatch(): UseDispatchResult {
   };
 
   const dispatchTransaction = (transaction: Transaction) => {
-    console.log('dispatch', transaction);
     let { contract, method } = transaction;
     if (method.match(/\./)) {
       const parts = method.split('.');
@@ -32,7 +34,6 @@ export function useDispatch(): UseDispatchResult {
     if (!contract) {
       throw new Error('Contract name not provided');
     }
-    console.log('startTransaction', { contract, method });
 
     if (!transaction.arguments) {
       transaction.arguments = [];
@@ -42,6 +43,31 @@ export function useDispatch(): UseDispatchResult {
       type: 'startTransaction',
       transaction: { ...transaction, contract, method },
     });
+  };
+
+  const checkAllowance = async (
+    contractName: string,
+    tokenAddress: string,
+    amount: BigNumber,
+    onSuccess: () => void,
+  ) => {
+    const contract = getContract(contractName, signer, networkId);
+    const tokenContract = new Contract(tokenAddress, getContractAbi('erc20'), signer);
+    const currentAllowance = await tokenContract.allowance(address, contract.address);
+    if (currentAllowance.lt(amount)) {
+      dispatch({
+        type: 'approveSpending',
+        spendingApproval: {
+          contractName,
+          tokenContract,
+          amount,
+          currentAllowance,
+          onSuccess,
+        },
+      });
+    } else {
+      onSuccess();
+    }
   };
 
   const setAccountProp = (address, prop, value) => {
@@ -64,6 +90,7 @@ export function useDispatch(): UseDispatchResult {
     setToken,
     dispatchError,
     dispatchTransaction,
+    checkAllowance,
     setAccountProp,
     batchSetAccountProp,
   };

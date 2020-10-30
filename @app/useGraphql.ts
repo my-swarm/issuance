@@ -13,7 +13,6 @@ export function useGraphql() {
     for (const timeout of timeouts) {
       window.setTimeout(() => {
         client.resetStore();
-        console.log('reset store after timeout ' + timeout);
       }, timeout);
     }
   };

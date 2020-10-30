@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import { PageProps } from '@types';
-import { Logo, MetamaskStatus, StateStorageSync, TransactionModal } from '@components';
+import { Logo, MetamaskStatus, StateStorageSync, TransactionModal, SpendingApprovalModal } from '@components';
 import { MainMenu } from '@components/layout/MainMenu';
 import { useAppState } from '@app';
 import { ApolloProvider } from '@apollo/client';
@@ -18,7 +18,7 @@ interface DefaultLayoutProps extends PageProps {
 
 export function DefaultLayout({ title, headExtra, children, headTableAligned = false }: DefaultLayoutProps) {
   const [siderCollapsed, setSiderCollapsed] = useState(false);
-  const [{ error, transaction }, dispatch] = useAppState();
+  const [{ error, transaction, spendingApproval }, dispatch] = useAppState();
 
   useEffect(() => {
     if (error) {
@@ -64,6 +64,7 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
         />
         {children}
         {transaction && <TransactionModal />}
+        {spendingApproval && <SpendingApprovalModal />}
       </Content>
     </Layout>
   );

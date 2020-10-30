@@ -4,6 +4,7 @@ import {
   AppError,
   ColdState,
   EthereumNetwork,
+  SpendingApproval,
   Token,
   TokenNetworkData,
   TokenState,
@@ -77,6 +78,15 @@ interface ResetTransactionAction {
   type: 'resetTransaction';
 }
 
+interface ApproveSpendingAction {
+  type: 'approveSpending';
+  spendingApproval: SpendingApproval;
+}
+
+interface ResetSpendingApprovalAction {
+  type: 'resetSpendingApproval';
+}
+
 interface SetAccountPropAction {
   type: 'setAccountProp';
   prop: 'name' | 'note';
@@ -114,5 +124,7 @@ export type Action =
   | SetTokenAction
   | StartTransactionAction
   | ResetTransactionAction
+  | ApproveSpendingAction
+  | ResetSpendingApprovalAction
   | SetAccountPropAction
   | BatchSetAccountPropAction;

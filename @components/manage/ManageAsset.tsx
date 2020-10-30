@@ -1,14 +1,16 @@
 import React, { ReactElement } from 'react';
 import { useContractAddress, useDispatch, useGraphql } from '@app';
-import { Alert, Button } from 'antd';
+import { Form } from 'antd';
 import { useTokenStatusQuery } from '@graphql';
 import { Loading } from '@components';
 
-export function ManageAsset(): ReactElement {
-  const { reset } = useGraphql();
+type FormData = {
+  kyaHash: string;
+  kuaUrl: string;
+};
 
+export function ManageAsset(): ReactElement {
   const { src20: src20Address } = useContractAddress();
-  const { dispatchTransaction } = useDispatch();
 
   const { loading, error, data } = useTokenStatusQuery({
     variables: { id: src20Address },
@@ -16,35 +18,13 @@ export function ManageAsset(): ReactElement {
   const gToken = data?.token || undefined;
   if (loading || !gToken) return <Loading />;
 
-  const handleFreeze = async () => {
-    dispatchTransaction({
-      method: 'features.freezeToken',
-      description: 'Freezing token',
-      onSuccess: reset,
-    });
+  const handleSubmit = async (values: FormData) => {
+    console.log({ values });
   };
 
-
   return (
-    <>
-      <h2>Freeze token</h2>
-      <p>When token is frozen, all transfers are disabled</p>
-      {gToken.isFrozen && <Alert message="Token is currently frozen!" type="warning" className="mb-3" />}
-      {gToken.features.tokenFreeze ? (
-        <p>
-          {gToken.isFrozen ? (
-            <Button type="primary" size="large" onClick={handleUnfreeze}>
-              Unfreeze token
-            </Button>
-          ) : (
-            <Button type="primary" size="large" onClick={handleFreeze}>
-              Freeze token
-            </Button>
-          )}
-        </p>
-      ) : (
-        <Alert message="Token freeze feature not enabled" type="error" />
-      )}
-    </>
+    <Form layout="vertical" onFinish={handleSubmit}>
+      <p>Asset management TBD</p>
+    </Form>
   );
 }

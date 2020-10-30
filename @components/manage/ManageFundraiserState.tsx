@@ -1,14 +1,22 @@
 import React, { ReactElement } from 'react';
-import { Button, Popconfirm } from 'antd';
-import { useDispatch } from '@app';
-import { FundraiserInfoFragment } from '@graphql';
+import { Button, Popconfirm, Tag } from 'antd';
+import { useContractAddress, useDispatch, useGraphql } from '@app';
+import { FundraiserInfoFragment, FundraiserStatus } from '@graphql';
+import { BigNumber } from 'ethers';
+import { CheckOutlined, WarningOutlined } from '@ant-design/icons';
+import { formatUnits, parseUnits } from '@lib';
+import { BASE_CURRENCIES, SWM_TOKEN_DECIMALS } from '@const';
 
 interface ManageFundraiserStateProps {
   fundraiser: FundraiserInfoFragment;
 }
 
+const baseCurrency = BASE_CURRENCIES.USDC;
+
 export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps): ReactElement {
-  const { dispatchTransaction } = useDispatch();
+  const { dispatchTransaction, checkAllowance } = useDispatch();
+  const { swm: swmAddress } = useContractAddress();
+  const { reset } = useGraphql();
 
   const handleCancel = () => {
     dispatchTransaction({
@@ -19,6 +27,31 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
       },
     });
   };
+
+  const handleStakeAndMint = () => {
+    checkAllowance('registry', swmAddress, parseUnits(1000, SWM_TOKEN_DECIMALS), () => {
+      dispatchTransaction({
+        method: 'fundraiser.stakeAndMint',
+        description: 'Staking and minting...',
+        onSuccess: () => {
+          reset();
+        },
+      });
+    });
+  };
+
+  const statusRunning = fundraiser.status === FundraiserStatus.Running;
+  const amountQualified = BigNumber.from(fundraiser.amountQualified);
+  const softCap = BigNumber.from(fundraiser.softCap);
+  const raisedEnough = amountQualified.gt(softCap);
+  const allowStakeAndMint = statusRunning && raisedEnough;
+
+  const raised = (
+    <>
+      Raised <strong>{formatUnits(amountQualified, baseCurrency.decimals)}</strong> of{' '}
+      <strong>{formatUnits(softCap, baseCurrency.decimals)}</strong> {baseCurrency.symbol}
+    </>
+  );
 
   return (
     <div>
@@ -37,7 +70,27 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
       <h2>Stake and mint</h2>
       <p>When fundraiser is finished, you&apos;ll ba able to Stake SWM and mint your tokens here</p>
       <p>
-        <Button disabled size="large" type="primary">
+        {statusRunning ? (
+          <Tag color="green">
+            <CheckOutlined /> Fundraiser is running
+          </Tag>
+        ) : (
+          <Tag color="red">
+            <WarningOutlined /> Fundraiser status is <strong>{fundraiser.status}</strong>
+          </Tag>
+        )}
+        {raisedEnough ? (
+          <Tag color="green">
+            <CheckOutlined /> {raised}
+          </Tag>
+        ) : (
+          <Tag color="red">
+            <CheckOutlined /> {raised}
+          </Tag>
+        )}
+      </p>
+      <p>
+        <Button disabled={!allowStakeAndMint} size="large" type="primary" onClick={handleStakeAndMint}>
           Stake &amp; Mint
         </Button>
       </p>

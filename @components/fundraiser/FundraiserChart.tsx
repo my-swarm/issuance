@@ -63,7 +63,6 @@ function aggregateDailyContributions(contributors: ContributorFragment[]): Chart
 
 function sumDailyContribution(data: ChartData) {
   const sortedData = _.sortBy(data, ['date']);
-  console.log({ sortedData });
   const result: ChartData = [];
   const sum = { ...emptyRow };
   for (const row of sortedData) {

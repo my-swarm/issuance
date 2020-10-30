@@ -1,6 +1,7 @@
 query Tokens {
   tokens {
     id
-    name
+    name,
+
   }
 }

@@ -7,6 +7,7 @@ export * from './ManageTokenHolders';
 export * from './ManageTokenStatus';
 export * from './ManageTransferHistory';
 export * from './ManageTransferRequests';
+export * from './ManageDistribute';
 export * from './ManageAsset';
 export * from './ManageDividends';
 export * from './AccountsAddModal';

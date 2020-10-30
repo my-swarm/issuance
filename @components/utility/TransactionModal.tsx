@@ -54,7 +54,6 @@ export function TransactionModal(): ReactElement {
 
   const { description } = transaction;
   const transactionStateMeta = transactionStatesMeta[transactionState];
-  console.log({ transaction });
 
   function renderHeader() {
     return (

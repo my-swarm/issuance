@@ -29,7 +29,6 @@ export class FundraiserDeployer extends Deployer {
     const { fundraiser } = this.token;
     const { decimals } = this.token;
     const startDate = fundraiser.startNow ? moment().add(1, 'minute') : fundraiser.startDate;
-    console.log(fundraiser.startNow, startDate);
     const params = [
       fundraiser.label, // label
       this.addresses.src20, // token (address)
@@ -39,16 +38,13 @@ export class FundraiserDeployer extends Deployer {
       parseUnits(fundraiser.softCap, decimals), // softCap
       parseUnits(fundraiser.hardCap, decimals), // hardCap
     ];
-    console.log('deploy fundraiser', params, startDate);
     this.handleStateChange(FundraiserDeployerState.Fundraiser);
     const instance = await this.contractProxy.deploy('fundraiser', params);
     this._addresses.fundraiser = instance.address;
     this.fundraiserContract = instance;
-    console.log('fundraiser deployed', instance.address);
   }
 
   private async deployContributorRestrictions() {
-    console.log('contributor restrictions');
     if (this.state > FundraiserDeployerState.ContributorRestrictions) return;
 
     this.handleStateChange(FundraiserDeployerState.ContributorRestrictions);
@@ -63,7 +59,6 @@ export class FundraiserDeployer extends Deployer {
   }
 
   private async setupFundraiser() {
-    console.log('setup fundraiser');
     if (this.state > FundraiserDeployerState.Setup) return;
 
     const { fundraiser } = this.token;
@@ -83,7 +78,6 @@ export class FundraiserDeployer extends Deployer {
       this.getAddress('minter'), // address _minter
       fundraiser.contributionsLocked, // bool _contributionsLocked
     ];
-    console.log('setupContract', args);
     await this.contractProxy.call('fundraiser', 'setupContract', args);
   }
 }

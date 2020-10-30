@@ -61,7 +61,6 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
   const tableData: AccountList = rawAccounts
     .map((a) => {
       const tokenAccountList = token.networks[networkId].accounts || {};
-      console.log({ networkId, type, tokenAccountList });
       return {
         key: a.address, // for the table
         ...a,

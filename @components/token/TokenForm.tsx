@@ -46,7 +46,6 @@ export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: Tok
   };
 
   const handleSubmit = (token: Store) => {
-    console.log('submit', token);
     onSubmit(token as Token);
   };
 

@@ -41,7 +41,6 @@ export class ContractProxy {
     args: Array<any> = [],
     events: { [index: string]: (event: Event) => void } = {},
   ): Promise<Transaction> {
-    console.log('call', { contractName, method, args });
     this.handleStateChange(TransactionState.None);
     let contract;
     if (typeof contractName === 'string') {
@@ -49,7 +48,6 @@ export class ContractProxy {
     } else {
       contract = new Contract(contractName[1], getContractAbi(contractName[0]), this.signer);
     }
-    console.log({ contract });
     for (const [eventName, eventHandler] of Object.entries(events)) {
       contract.once(eventName, (oldValue, newValue) => eventHandler(newValue));
     }

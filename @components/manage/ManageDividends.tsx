@@ -72,16 +72,25 @@ export function ManageDividends(): ReactElement {
         return `${holder.address},${bnRatio(holder.balance, sum)}`;
       })
       .join('\n');
-    console.log(addresses);
     form.setFieldsValue({ addresses });
   };
 
+  /*
   const initialValues = {
     type: 'erc20',
     amount: 100,
     tokenAddress: '0x7c2C195CD6D34B8F845992d380aADB2730bB9C6F',
     from: myAddress,
     addresses: 'adf',
+  };
+*/
+
+  const initialValues = {
+    type: 'eth',
+    amount: 0,
+    tokenAddress: null,
+    from: myAddress,
+    addresses: '',
   };
 
   return (
@@ -111,7 +120,7 @@ export function ManageDividends(): ReactElement {
           label={
             <Space>
               <span>List of Receivers</span>
-              <Button size="small" onClick={handleFillAddressesFromHolders}>
+              <Button type="link" size="small" onClick={handleFillAddressesFromHolders}>
                 From token holders
               </Button>
             </Space>

@@ -32,7 +32,7 @@ export function ManageDistribute(): ReactElement {
 
   if (loading || !data) return <Loading />;
   const { availableSupply, currentFundraiser: fundraiser } = data.token;
-  const { contributors } = fundraiser;
+  const contributors = fundraiser?.contributors || [];
 
   const handleSubmit = async (data: FormData) => {
     console.log({ data });

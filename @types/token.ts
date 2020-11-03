@@ -21,10 +21,10 @@ export const transferRules: { [key: number]: string } = {
 };
 
 export enum TokenState {
-  Created,
-  Deploying,
+  Created, // local only
+  Deploying, // local only
   Deployed,
-  DeployingFundraiser,
+  DeployingFundraiser, // local only
   Fundraising,
   // FundraisingFinished = 5,
   Minted,
@@ -44,7 +44,7 @@ export enum TokenAction {
 }
 
 export const tokenStates: { [key: number]: string } = {
-  [TokenState.Created]: 'Created, not deployed',
+  [TokenState.Created]: 'Undeployed',
   [TokenState.Fundraising]: 'Fundraising',
   [TokenState.Deploying]: 'Deployment in progress',
   [TokenState.Deployed]: 'Deployed',
@@ -145,3 +145,14 @@ export interface StoredToken {
   token: Token;
   address: EthereumAddress;
 }
+
+export type TokenRecord = {
+  name: string;
+  symbol: string;
+  address: string;
+  localState?: TokenState;
+  isDeployed: boolean;
+  isMinted: boolean;
+  isFundraising: boolean;
+  localToken: Token;
+};

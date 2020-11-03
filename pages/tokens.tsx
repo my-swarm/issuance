@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { Button, Drawer, Table } from 'antd';
 
 import { useEthers, useAppState, useDispatch } from '@app';
@@ -15,67 +15,109 @@ import {
   TokenStakeAndMint,
   TokenInfo,
   Address,
+  Loading,
 } from '@components';
-import { Token, TokenAction, TokenState, tokenStates, transferRules } from '@types';
+import { Token, TokenAction, TokenRecord, TokenState, tokenStates, transferRules } from '@types';
+import { useTokensQuery, TokenInfoFragment } from '@graphql';
+import { renderAddress, tableColumns } from '../@components/manage/listUtils';
 
-export default function Tokens() {
-  const { connected, networkId } = useEthers();
+function getTokenList(localTokens: Token[], onlineTokens: TokenInfoFragment[], networkId): TokenRecord[] {
+  const result: TokenRecord[] = localTokens.map((localToken) => ({
+    name: localToken.name,
+    symbol: localToken.symbol,
+    address: localToken.networks[networkId].addresses.src20,
+    localState: localToken.networks[networkId].state,
+    isDeployed: false,
+    isMinted: false,
+    isFundraising: false,
+    localToken,
+  }));
+
+  for (const onlineToken of onlineTokens) {
+    const fundraiserStatus = onlineToken?.currentFundraiser?.status;
+    const token = {
+      // name: onlineToken.name,
+      // symbol: onlineToken.symbol,
+      // address: onlineToken.address,
+      isFundraising: fundraiserStatus === 'Setup' || fundraiserStatus === 'Running',
+      isMinted: onlineToken.stake,
+      isDeployed: true,
+    };
+    const index = result.findIndex((t) => t.address === onlineToken.address);
+    console.log(onlineToken.address, index);
+    if (index !== -1) {
+      console.log('merging', onlineToken.address);
+      result[index] = { ...result[index], ...token };
+    } else {
+      // not implemented yet
+      // console.log('addning', onlineToken.address);
+      // result.push(token);
+    }
+  }
+
+  return result;
+}
+
+export default function Tokens(): ReactElement {
+  const { connected, networkId, address } = useEthers();
   const { setToken } = useDispatch();
   const [action, setAction] = useState<TokenAction>();
   const [{ tokens, token }, dispatch] = useAppState();
-
+  const query = useTokensQuery({ variables: { owner: address } });
+  const { data, loading, error } = query;
   // reloads current token if tokens update
   useEffect(() => {
     if (token) {
       setToken(tokens.find((t) => t.id === token.id));
     }
   }, [tokens]);
+  if (loading || !data) return <Loading />;
 
-  console.log({ tokens });
+  function renderTokenState(localState: TokenState, token: TokenRecord): string {
+    if (!connected) {
+      return 'Not connected';
+    }
+    const result = [];
+    if (token.isDeployed) result.push('Deployed');
+    if (token.isFundraising) result.push('Fundraiser');
+    if (token.isMinted) result.push('Minted');
+    if (result.length === 0) result.push(tokenStates[localState] || 'Unknown state');
+    return result.join(', ');
+  }
 
-  const columns = [
+  const columns = tableColumns<TokenRecord>([
     {
       title: 'Token',
       key: 'name',
-      render: (token) => `${token.name} (${token.symbol})`,
+      render: (name, token) => `${name} (${token.symbol})`,
     },
     {
       title: 'Status',
-      render: (token) => {
-        if (!connected) {
-          return <div>Unknown state (not connected)</div>;
-        }
-        const state = token.networks[networkId]?.state || TokenState.Created;
-        return (
-          <div>
-            {tokenStates[state] || 'Unknown state'}
-            {state === TokenState.Deploying && <div></div>}
-          </div>
-        );
-      },
+      key: 'localState',
+      render: renderTokenState,
     },
     {
       title: 'Address',
       key: 'address',
-      render: (token) => {
-        const address = token.networks[networkId]?.addresses?.src20;
-        return address ? <Address>{address}</Address> : '-';
-      },
+      render: renderAddress,
     },
     {
       title: 'Action',
       key: 'action',
-      render: (token: Token) => <TokenActions token={token} onAction={(action) => handleAction(action, token)} />,
+      render: (value: any, token: TokenRecord) => (
+        <TokenActions token={token} onAction={(action) => handleAction(action, token)} />
+      ),
     },
-  ];
+  ]);
 
-  const dataSource = tokens.map((token: Token, key: number) => ({ key, ...token }));
+  const dataSource = getTokenList(tokens, data.tokens, networkId);
+  console.log({ data, tokens, dataSource });
 
-  const handleAction = (action: TokenAction, token: Token) => {
+  const handleAction = (action: TokenAction, tokenRecord: TokenRecord) => {
     if (action === TokenAction.Delete) {
-      handleDelete(token);
+      handleDelete(tokenRecord);
     } else {
-      setToken(token);
+      setToken(tokenRecord.localToken);
       setAction(action);
     }
   };

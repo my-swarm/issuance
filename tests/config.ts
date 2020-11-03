@@ -6,7 +6,7 @@ export const GANACHE = {
   mnemonic: 'screen crop flip clean airport example clip envelope faint infant limit stay',
   hdPath: "m/44'/60'/0'/0/",
   host: '127.0.0.1',
-  port: 8545,
+  port: 7545,
   networkId: EthereumNetwork.Local,
   accounts: [
     {

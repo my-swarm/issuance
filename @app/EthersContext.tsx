@@ -90,7 +90,7 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
     setNetworkId(_networkId);
     const accounts = await _provider.listAccounts();
     if (accounts && accounts.length > 0) {
-      setAddress(accounts[0]);
+      setAddress(accounts[0].toLowerCase());
       setStatus(EthersStatus.CONNECTED);
     } else {
       setAddress(undefined);

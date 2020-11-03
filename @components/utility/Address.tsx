@@ -13,7 +13,8 @@ function getEtherscanUrl(networkId, address) {
   return `https://${etherscanDomains[networkId]}/address/${address}`;
 }
 
-export function Address({ children, link = false, short = false }: AddressProps): ReactElement | null {
+export function Address({ children, link = false, short = false }: AddressProps): ReactElement | null | undefined {
+  console.log('address', children);
   const { networkId } = useEthers();
 
   if (typeof children !== 'string') {

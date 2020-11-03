@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { Button, Layout, PageHeader, Modal } from 'antd';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import { PageProps } from '@types';
 import { Logo, MetamaskStatus, StateStorageSync, TransactionModal, SpendingApprovalModal } from '@components';
@@ -46,7 +46,11 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
         <title>{title}</title>
       </Head>
       <Sider trigger={null} collapsible collapsed={siderCollapsed}>
-        <Logo />
+        <Link href="/">
+          <a>
+            <Logo />
+          </a>
+        </Link>
         <MainMenu />
         <div className="side-box mt-4">
           <MetamaskStatus />

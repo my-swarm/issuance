@@ -17,17 +17,17 @@
     "features": "0x1a4eb93ed4a62d39fac01082bfecff491766241b"
   },
   "token4": {
-    "roles": "0x3307c25998c69ec9c37c71d2d2e2df837d254133",
-    "src20": "0xedc43eab736a435bd680b1643c6e7522ecc46029",
-    "fundraiser": "0xdc150be5af9874dbc233fa4aebb25a252069851b",
-    "contributorRestrictions": "0x67e5f24cf030b41fe01be75b35d8ab1cd4034d5b",
-    "features": "0xb63181cd1b0a347003137a9a2703bb1429fa852a"
+    "roles": "0xc9043db2d6c4812e57cae13b72b3d95e13a0fc78",
+    "src20": "0xa38034e5c2ef7fc1ae19956dbaf23af4ab012eb9",
+    "fundraiser": "0xb8b5ebca69a5a537bad998d706cf7ef0353933b5",
+    "contributorRestrictions": "0x12d910a4e63b205fe190eaad7333ad00c2f317d2",
+    "features": "0xce91a3967b1f8deddbd8414331f43b2592f5cecc"
   },
   "token5": {
-    "features": "0xebb71a379a2b02001d4f77db475f65bd196e85f3",
-    "roles": "0xd1c9286c8c7263200b71de3f95e00b330f255085",
-    "src20": "0xac9085c8bd3fe353e5a2397759a33269bc9c2c8b",
-    "fundraiser": "0x63d0d8b43169fe79e3beed9cca3e44f429538c9b",
-    "contributorRestrictions": "0x40cdaa2ee5c66ad74dbe119cc4d3004fa2f842a8"
+    "features": "0xd06d6142f24ca9fae60aada212ea4b2dfb3a61ca",
+    "roles": "0x58a94ae1fa963b4ce0eb6d529bf3c763165831f8",
+    "src20": "0x52ede4384c635731cdd3d75fdf271edce1959a30",
+    "fundraiser": "0x27d62df6ff9668cd8fd5612d7b8fbc2af7baea8f",
+    "contributorRestrictions": "0xe964cc77ab100b8fc5926fcaebd39135c284797a"
   }
 }

@@ -1,7 +1,35 @@
-query Tokens {
-  tokens {
-    id
-    name,
+fragment TokenInfo on Token {
+  id
+  name
+  symbol
+  address
+  availableSupply
+  stake
+  transferRules { address },
+  features { address }
+  roles { address }
+  currentFundraiser { address, status }
+}
 
+fragment Token on Token {
+  ...TokenInfo,
+  # description, // neni tam
+  decimals,
+  supply,
+  maxSupply,
+  nav,
+  kyaHash,
+  kyaUrl,
+  transferRules { address },
+  features { address }
+  roles { address }
+  currentFundraiser {
+    ...FundraiserInfo
+  }
+}
+
+query Tokens($owner: Bytes!) {
+  tokens(where: { owner: $owner }) {
+    ...TokenInfo
   }
 }

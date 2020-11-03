@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Token, TokenState, TokenAction, Uuid } from '@types';
+import { Token, TokenState, TokenAction, Uuid, TokenRecord } from '@types';
 import { Button, Popconfirm, Space } from 'antd';
 import {
   EditOutlined,
@@ -12,40 +12,36 @@ import {
 import { useEthers } from '@app';
 
 interface TokenActionsProps {
-  token: Token;
+  token: TokenRecord;
   onAction: (action: TokenAction) => void;
 }
 
-// const stateToAction = {
-//   [TokenState.Created]: [TokenAction.Edit, TokenAction
-// }
-
 export function TokenActions({ token, onAction }: TokenActionsProps): React.ReactElement {
   const actions: ReactElement[] = [];
-  const { connected, networkId } = useEthers();
+  const { connected } = useEthers();
 
   if (!connected) {
     return <div>Not connected</div>;
   }
 
-  const state = (token.networks && token.networks[networkId]?.state) || TokenState.Created;
+  const { localState } = token;
 
-  if (state === TokenState.Created) {
+  if (localState === TokenState.Created) {
     actions.push(
       <Button key="edit" size="small" onClick={() => onAction(TokenAction.Edit)} icon={<EditOutlined />}>
         Edit
       </Button>,
     );
   }
-  if (state === TokenState.Created || state === TokenState.Deploying) {
+  if (localState === TokenState.Created || localState === TokenState.Deploying) {
     actions.push(
       <Button key="deploy" size="small" onClick={() => onAction(TokenAction.Deploy)} icon={<RocketOutlined />}>
-        {state === TokenState.Deploying ? 'Resume Deploy' : 'Deploy'}
+        {localState === TokenState.Deploying ? 'Resume Deploy' : 'Deploy'}
       </Button>,
     );
   }
 
-  if (state === TokenState.Deployed) {
+  if (token.isDeployed && !token.isFundraising) {
     actions.push(
       <Button
         key="fundraiser"
@@ -56,7 +52,9 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
         Start fundraiser
       </Button>,
     );
+  }
 
+  if (token.isDeployed && !token.isMinted) {
     actions.push(
       <Button
         key="stake"
@@ -69,7 +67,7 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     );
   }
 
-  if (state === TokenState.Fundraising) {
+  if (token.isFundraising) {
     actions.push(
       <Button
         key="manageFundraise"
@@ -82,7 +80,7 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     );
   }
 
-  if (state === TokenState.DeployingFundraiser) {
+  if (localState === TokenState.DeployingFundraiser) {
     actions.push(
       <Button
         key="startFundraise"
@@ -95,7 +93,7 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     );
   }
 
-  if (state === TokenState.Deployed || state === TokenState.Minted) {
+  if (token.isMinted) {
     actions.push(
       <Button key="manageToken" size="small" onClick={() => onAction(TokenAction.ManageToken)} icon={<EditOutlined />}>
         Manage token
@@ -109,17 +107,19 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     </Button>,
   );
 
-  actions.push(
-    <Popconfirm
-      key="delete"
-      title={`Are you sure you want to delete '${token.name}`}
-      onConfirm={() => onAction(TokenAction.Delete)}
-    >
-      <Button key="delete" size="small" icon={<DeleteOutlined />}>
-        Delete
-      </Button>
-    </Popconfirm>,
-  );
+  if (!token.isDeployed) {
+    actions.push(
+      <Popconfirm
+        key="delete"
+        title={`Are you sure you want to delete '${token.name}`}
+        onConfirm={() => onAction(TokenAction.Delete)}
+      >
+        <Button key="delete" size="small" icon={<DeleteOutlined />}>
+          Delete
+        </Button>
+      </Popconfirm>,
+    );
+  }
 
   return (
     <>

@@ -35,6 +35,12 @@
       {
         "indexed": false,
         "internalType": "address",
+        "name": "roles",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
         "name": "features",
         "type": "address"
       },

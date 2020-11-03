@@ -161,6 +161,7 @@ export enum Contributor_OrderBy {
 export type Features = {
   __typename?: 'Features';
   id: Scalars['ID'];
+  address?: Maybe<Scalars['Bytes']>;
   token: Token;
   forceTransfer: Scalars['Boolean'];
   tokenFreeze: Scalars['Boolean'];
@@ -177,6 +178,12 @@ export type Features_Filter = {
   id_lte?: Maybe<Scalars['ID']>;
   id_in?: Maybe<Array<Scalars['ID']>>;
   id_not_in?: Maybe<Array<Scalars['ID']>>;
+  address?: Maybe<Scalars['Bytes']>;
+  address_not?: Maybe<Scalars['Bytes']>;
+  address_in?: Maybe<Array<Scalars['Bytes']>>;
+  address_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  address_contains?: Maybe<Scalars['Bytes']>;
+  address_not_contains?: Maybe<Scalars['Bytes']>;
   token?: Maybe<Scalars['String']>;
   token_not?: Maybe<Scalars['String']>;
   token_gt?: Maybe<Scalars['String']>;
@@ -211,6 +218,7 @@ export type Features_Filter = {
 
 export enum Features_OrderBy {
   Id = 'id',
+  Address = 'address',
   Token = 'token',
   ForceTransfer = 'forceTransfer',
   TokenFreeze = 'tokenFreeze',
@@ -221,6 +229,7 @@ export enum Features_OrderBy {
 export type Fundraiser = {
   __typename?: 'Fundraiser';
   id: Scalars['ID'];
+  address: Scalars['Bytes'];
   owner: Scalars['Bytes'];
   token: Token;
   label: Scalars['String'];
@@ -269,6 +278,12 @@ export type Fundraiser_Filter = {
   id_lte?: Maybe<Scalars['ID']>;
   id_in?: Maybe<Array<Scalars['ID']>>;
   id_not_in?: Maybe<Array<Scalars['ID']>>;
+  address?: Maybe<Scalars['Bytes']>;
+  address_not?: Maybe<Scalars['Bytes']>;
+  address_in?: Maybe<Array<Scalars['Bytes']>>;
+  address_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  address_contains?: Maybe<Scalars['Bytes']>;
+  address_not_contains?: Maybe<Scalars['Bytes']>;
   owner?: Maybe<Scalars['Bytes']>;
   owner_not?: Maybe<Scalars['Bytes']>;
   owner_in?: Maybe<Array<Scalars['Bytes']>>;
@@ -417,6 +432,7 @@ export type Fundraiser_Filter = {
 
 export enum Fundraiser_OrderBy {
   Id = 'id',
+  Address = 'address',
   Owner = 'owner',
   Token = 'token',
   Label = 'label',
@@ -508,6 +524,7 @@ export type Query = {
   greylistedAccounts: Array<GreylistedAccount>;
   transferRules: Array<TransferRules>;
   features: Array<Features>;
+  roles: Array<Roles>;
   transferRequest?: Maybe<TransferRequest>;
   transferRequests: Array<TransferRequest>;
   transfer?: Maybe<Transfer>;
@@ -587,6 +604,16 @@ export type QueryFeaturesArgs = {
   orderBy?: Maybe<Features_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Features_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryRolesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Roles_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Roles_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -686,6 +713,50 @@ export type QueryContributionsArgs = {
   block?: Maybe<Block_Height>;
 };
 
+export type Roles = {
+  __typename?: 'Roles';
+  id: Scalars['ID'];
+  address?: Maybe<Scalars['Bytes']>;
+  token: Token;
+};
+
+export type Roles_Filter = {
+  id?: Maybe<Scalars['ID']>;
+  id_not?: Maybe<Scalars['ID']>;
+  id_gt?: Maybe<Scalars['ID']>;
+  id_lt?: Maybe<Scalars['ID']>;
+  id_gte?: Maybe<Scalars['ID']>;
+  id_lte?: Maybe<Scalars['ID']>;
+  id_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  address?: Maybe<Scalars['Bytes']>;
+  address_not?: Maybe<Scalars['Bytes']>;
+  address_in?: Maybe<Array<Scalars['Bytes']>>;
+  address_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  address_contains?: Maybe<Scalars['Bytes']>;
+  address_not_contains?: Maybe<Scalars['Bytes']>;
+  token?: Maybe<Scalars['String']>;
+  token_not?: Maybe<Scalars['String']>;
+  token_gt?: Maybe<Scalars['String']>;
+  token_lt?: Maybe<Scalars['String']>;
+  token_gte?: Maybe<Scalars['String']>;
+  token_lte?: Maybe<Scalars['String']>;
+  token_in?: Maybe<Array<Scalars['String']>>;
+  token_not_in?: Maybe<Array<Scalars['String']>>;
+  token_contains?: Maybe<Scalars['String']>;
+  token_not_contains?: Maybe<Scalars['String']>;
+  token_starts_with?: Maybe<Scalars['String']>;
+  token_not_starts_with?: Maybe<Scalars['String']>;
+  token_ends_with?: Maybe<Scalars['String']>;
+  token_not_ends_with?: Maybe<Scalars['String']>;
+};
+
+export enum Roles_OrderBy {
+  Id = 'id',
+  Address = 'address',
+  Token = 'token'
+}
+
 export type Subscription = {
   __typename?: 'Subscription';
   token?: Maybe<Token>;
@@ -696,6 +767,7 @@ export type Subscription = {
   greylistedAccounts: Array<GreylistedAccount>;
   transferRules: Array<TransferRules>;
   features: Array<Features>;
+  roles: Array<Roles>;
   transferRequest?: Maybe<TransferRequest>;
   transferRequests: Array<TransferRequest>;
   transfer?: Maybe<Transfer>;
@@ -775,6 +847,16 @@ export type SubscriptionFeaturesArgs = {
   orderBy?: Maybe<Features_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Features_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionRolesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Roles_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Roles_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -900,6 +982,7 @@ export type Token = {
   currentFundraiser?: Maybe<Fundraiser>;
   transferRules?: Maybe<TransferRules>;
   features?: Maybe<Features>;
+  roles?: Maybe<Roles>;
 };
 
 
@@ -1205,6 +1288,20 @@ export type Token_Filter = {
   features_not_starts_with?: Maybe<Scalars['String']>;
   features_ends_with?: Maybe<Scalars['String']>;
   features_not_ends_with?: Maybe<Scalars['String']>;
+  roles?: Maybe<Scalars['String']>;
+  roles_not?: Maybe<Scalars['String']>;
+  roles_gt?: Maybe<Scalars['String']>;
+  roles_lt?: Maybe<Scalars['String']>;
+  roles_gte?: Maybe<Scalars['String']>;
+  roles_lte?: Maybe<Scalars['String']>;
+  roles_in?: Maybe<Array<Scalars['String']>>;
+  roles_not_in?: Maybe<Array<Scalars['String']>>;
+  roles_contains?: Maybe<Scalars['String']>;
+  roles_not_contains?: Maybe<Scalars['String']>;
+  roles_starts_with?: Maybe<Scalars['String']>;
+  roles_not_starts_with?: Maybe<Scalars['String']>;
+  roles_ends_with?: Maybe<Scalars['String']>;
+  roles_not_ends_with?: Maybe<Scalars['String']>;
 };
 
 export enum Token_OrderBy {
@@ -1231,7 +1328,8 @@ export enum Token_OrderBy {
   Fundraisers = 'fundraisers',
   CurrentFundraiser = 'currentFundraiser',
   TransferRules = 'transferRules',
-  Features = 'features'
+  Features = 'features',
+  Roles = 'roles'
 }
 
 export type Transfer = {
@@ -1365,6 +1463,7 @@ export enum TransferRequest_OrderBy {
 export type TransferRules = {
   __typename?: 'TransferRules';
   id: Scalars['ID'];
+  address?: Maybe<Scalars['Bytes']>;
   token: Token;
 };
 
@@ -1377,6 +1476,12 @@ export type TransferRules_Filter = {
   id_lte?: Maybe<Scalars['ID']>;
   id_in?: Maybe<Array<Scalars['ID']>>;
   id_not_in?: Maybe<Array<Scalars['ID']>>;
+  address?: Maybe<Scalars['Bytes']>;
+  address_not?: Maybe<Scalars['Bytes']>;
+  address_in?: Maybe<Array<Scalars['Bytes']>>;
+  address_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  address_contains?: Maybe<Scalars['Bytes']>;
+  address_not_contains?: Maybe<Scalars['Bytes']>;
   token?: Maybe<Scalars['String']>;
   token_not?: Maybe<Scalars['String']>;
   token_gt?: Maybe<Scalars['String']>;
@@ -1395,6 +1500,7 @@ export type TransferRules_Filter = {
 
 export enum TransferRules_OrderBy {
   Id = 'id',
+  Address = 'address',
   Token = 'token'
 }
 
@@ -1674,14 +1780,53 @@ export type TokenSupplyQuery = (
   )> }
 );
 
-export type TokensQueryVariables = Exact<{ [key: string]: never; }>;
+export type TokenInfoFragment = (
+  { __typename?: 'Token' }
+  & Pick<Token, 'id' | 'name' | 'symbol' | 'address' | 'availableSupply' | 'stake'>
+  & { transferRules?: Maybe<(
+    { __typename?: 'TransferRules' }
+    & Pick<TransferRules, 'address'>
+  )>, features?: Maybe<(
+    { __typename?: 'Features' }
+    & Pick<Features, 'address'>
+  )>, roles?: Maybe<(
+    { __typename?: 'Roles' }
+    & Pick<Roles, 'address'>
+  )>, currentFundraiser?: Maybe<(
+    { __typename?: 'Fundraiser' }
+    & Pick<Fundraiser, 'address' | 'status'>
+  )> }
+);
+
+export type TokenFragment = (
+  { __typename?: 'Token' }
+  & Pick<Token, 'decimals' | 'supply' | 'maxSupply' | 'nav' | 'kyaHash' | 'kyaUrl'>
+  & { transferRules?: Maybe<(
+    { __typename?: 'TransferRules' }
+    & Pick<TransferRules, 'address'>
+  )>, features?: Maybe<(
+    { __typename?: 'Features' }
+    & Pick<Features, 'address'>
+  )>, roles?: Maybe<(
+    { __typename?: 'Roles' }
+    & Pick<Roles, 'address'>
+  )>, currentFundraiser?: Maybe<(
+    { __typename?: 'Fundraiser' }
+    & FundraiserInfoFragment
+  )> }
+  & TokenInfoFragment
+);
+
+export type TokensQueryVariables = Exact<{
+  owner: Scalars['Bytes'];
+}>;
 
 
 export type TokensQuery = (
   { __typename?: 'Query' }
   & { tokens: Array<(
     { __typename?: 'Token' }
-    & Pick<Token, 'id' | 'name'>
+    & TokenInfoFragment
   )> }
 );
 
@@ -1819,6 +1964,53 @@ export const TokenHolderFragmentDoc = gql`
   isFrozen
 }
     `;
+export const TokenInfoFragmentDoc = gql`
+    fragment TokenInfo on Token {
+  id
+  name
+  symbol
+  address
+  availableSupply
+  stake
+  transferRules {
+    address
+  }
+  features {
+    address
+  }
+  roles {
+    address
+  }
+  currentFundraiser {
+    address
+    status
+  }
+}
+    `;
+export const TokenFragmentDoc = gql`
+    fragment Token on Token {
+  ...TokenInfo
+  decimals
+  supply
+  maxSupply
+  nav
+  kyaHash
+  kyaUrl
+  transferRules {
+    address
+  }
+  features {
+    address
+  }
+  roles {
+    address
+  }
+  currentFundraiser {
+    ...FundraiserInfo
+  }
+}
+    ${TokenInfoFragmentDoc}
+${FundraiserInfoFragmentDoc}`;
 export const TransferRequestFragmentDoc = gql`
     fragment TransferRequest on TransferRequest {
   id
@@ -2104,13 +2296,12 @@ export type TokenSupplyQueryHookResult = ReturnType<typeof useTokenSupplyQuery>;
 export type TokenSupplyLazyQueryHookResult = ReturnType<typeof useTokenSupplyLazyQuery>;
 export type TokenSupplyQueryResult = Apollo.QueryResult<TokenSupplyQuery, TokenSupplyQueryVariables>;
 export const TokensDocument = gql`
-    query Tokens {
-  tokens {
-    id
-    name
+    query Tokens($owner: Bytes!) {
+  tokens(where: {owner: $owner}) {
+    ...TokenInfo
   }
 }
-    `;
+    ${TokenInfoFragmentDoc}`;
 
 /**
  * __useTokensQuery__
@@ -2124,6 +2315,7 @@ export const TokensDocument = gql`
  * @example
  * const { data, loading, error } = useTokensQuery({
  *   variables: {
+ *      owner: // value for 'owner'
  *   },
  * });
  */

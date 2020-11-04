@@ -12,7 +12,7 @@ interface FundraiserCardProps {
 export function FundraiserCard({ fundraiser }: FundraiserCardProps): ReactElement {
   const { networkId } = useEthers();
   const [{ tokens }] = useAppState();
-  const extra = <a href="#">Manage</a>;
+  const extra = <a href={`/tokens/?address=${fundraiser.address}action=manageFundraiser`}>Manage</a>;
 
   // const token = tokens.find((t) => t.networks[networkId]?.addresses?.src20 === fundraiser.token.id);
 

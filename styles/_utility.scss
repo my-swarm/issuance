@@ -83,3 +83,8 @@
 .nowrap {
   white-space: nowrap;
 }
+
+.limit-height {
+  max-height: 40rem;
+  overflow-y: auto;
+}

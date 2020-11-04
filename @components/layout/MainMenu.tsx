@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import Link from 'next/link';
-import { Menu } from 'antd';
+import { Menu, Tag } from 'antd';
 import {
   AppstoreOutlined,
   DollarCircleOutlined,
@@ -14,11 +14,20 @@ export function MainMenu(): ReactElement {
   const router = useRouter();
 
   return (
-    <Menu theme="dark" mode="inline" defaultOpenKeys={['investor', 'issuer']} defaultSelectedKeys={[router.pathname]}>
-      <Menu.SubMenu key="investor" title="Investor" icon={<UserOutlined />} popupOffset={[16, 0]}>
-        <Menu.Item key="/contribute" icon={<DollarCircleOutlined />}>
-          <Link href="/contribute">
-            <a>Contribute</a>
+    <Menu theme="dark" mode="inline" defaultOpenKeys={['issuer']} defaultSelectedKeys={[router.pathname]}>
+      <Menu.SubMenu
+        key="investor"
+        title={
+          <>
+            <span>Investor</span> <Tag color="#108ee9">soon!</Tag>
+          </>
+        }
+        icon={<UserOutlined />}
+        popupOffset={[16, 0]}
+      >
+        <Menu.Item key="/invest" icon={<DollarCircleOutlined />}>
+          <Link href="/invest">
+            <a>Invest</a>
           </Link>
         </Menu.Item>
         <Menu.Item key="/wallet" icon={<WalletOutlined />}>

@@ -82,7 +82,7 @@ export function ManageTransferHistory(): ReactElement {
         </div>
       )}
 
-      <div style={{ maxHeight: '40rem', overflowY: 'auto' }}>
+      <div className="limit-height">
         <Table
           size="small"
           columns={columns}

@@ -40,6 +40,7 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
     });
   };
 
+  const statusFinished = fundraiser.status === FundraiserStatus.Finished;
   const statusRunning = fundraiser.status === FundraiserStatus.Running;
   const amountQualified = BigNumber.from(fundraiser.amountQualified);
   const softCap = BigNumber.from(fundraiser.softCap);
@@ -68,32 +69,38 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
         </Popconfirm>
       </p>
       <h2>Stake and mint</h2>
-      <p>When fundraiser is finished, you&apos;ll ba able to Stake SWM and mint your tokens here</p>
-      <p>
-        {statusRunning ? (
-          <Tag color="green">
-            <CheckOutlined /> Fundraiser is running
-          </Tag>
-        ) : (
-          <Tag color="red">
-            <WarningOutlined /> Fundraiser status is <strong>{fundraiser.status}</strong>
-          </Tag>
-        )}
-        {raisedEnough ? (
-          <Tag color="green">
-            <CheckOutlined /> {raised}
-          </Tag>
-        ) : (
-          <Tag color="red">
-            <CheckOutlined /> {raised}
-          </Tag>
-        )}
-      </p>
-      <p>
-        <Button disabled={!allowStakeAndMint} size="large" type="primary" onClick={handleStakeAndMint}>
-          Stake &amp; Mint
-        </Button>
-      </p>
+      {statusFinished ? (
+        <p>Fundraiser is finished and your tokens should already be minted</p>
+      ) : (
+        <>
+          <p>When fundraiser is finished, you&apos;ll ba able to Stake SWM and mint your tokens here</p>
+          <p>
+            {statusRunning ? (
+              <Tag color="green">
+                <CheckOutlined /> Fundraiser is running
+              </Tag>
+            ) : (
+              <Tag color="red">
+                <WarningOutlined /> Fundraiser status is <strong>{fundraiser.status}</strong>
+              </Tag>
+            )}
+            {raisedEnough ? (
+              <Tag color="green">
+                <CheckOutlined /> {raised}
+              </Tag>
+            ) : (
+              <Tag color="red">
+                <CheckOutlined /> {raised}
+              </Tag>
+            )}
+          </p>
+          <p>
+            <Button disabled={!allowStakeAndMint} size="large" type="primary" onClick={handleStakeAndMint}>
+              Stake &amp; Mint
+            </Button>
+          </p>
+        </>
+      )}
     </div>
   );
 }

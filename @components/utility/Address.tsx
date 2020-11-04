@@ -1,7 +1,8 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactElement, ReactNode, useCallback } from 'react';
 import { etherscanDomains } from '@const';
 import { EthereumNetwork } from '@types';
 import { useEthers } from '@app';
+import { CopyOutlined } from '@ant-design/icons';
 
 interface AddressProps {
   children: ReactNode;
@@ -14,8 +15,13 @@ function getEtherscanUrl(networkId, address) {
 }
 
 export function Address({ children, link = false, short = false }: AddressProps): ReactElement | null | undefined {
-  console.log('address', children);
   const { networkId } = useEthers();
+
+  const handleCopyToClipboard = useCallback(() => {
+    if (typeof children === 'string') {
+      navigator.clipboard.writeText(children);
+    }
+  }, [children]);
 
   if (typeof children !== 'string') {
     return <>{children}</>;
@@ -29,20 +35,20 @@ export function Address({ children, link = false, short = false }: AddressProps)
 
   if (short) {
     result = (
-      <div className="c-address" title={children}>
+      <span className="c-address" title={children}>
         <span>{children.substr(0, 8)}</span>
         <span>…</span>
         <span>{children.substr(-6)}</span>
-      </div>
+      </span>
     );
   } else {
     const chunks = children.match(/.{1,8}/g);
     result = (
-      <div className="c-address">
+      <span className="c-address">
         {chunks.map((part, key) => (
           <span key={key}>{part}</span>
         ))}
-      </div>
+      </span>
     );
   }
 
@@ -54,5 +60,10 @@ export function Address({ children, link = false, short = false }: AddressProps)
     );
   }
 
-  return result;
+  return (
+    <>
+      {result}&nbsp;
+      <CopyOutlined onClick={handleCopyToClipboard} />
+    </>
+  );
 }

@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { BigNumber, Contract } from 'ethers';
-import { formatNumber, formatTokenAmount, getContract, getContractAddress } from '@lib';
+import { formatNumber, formatUnits, getContract, getContractAddress } from '@lib';
 import { useEthers, useAppState } from '.';
 import { SWM_TOKEN_DECIMALS } from '@const';
 import { Token } from '@types';
 import { contractsMeta } from '@contracts';
-import { formatUnits } from 'ethers/lib/utils';
 
 enum ContractValueType {
   Integer,

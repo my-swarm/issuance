@@ -5,7 +5,11 @@ query Distrubute($id: ID!) {
     availableSupply
     stake
     currentFundraiser {
-      ...Fundraiser
+      contributors {
+        address
+        amount
+        status
+      }
     }
   }
 }

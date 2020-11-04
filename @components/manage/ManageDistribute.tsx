@@ -1,127 +1,108 @@
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';
-import { Button, Form, Input, InputNumber, Modal, Radio, Space, Table } from 'antd';
-import { useDistrubuteQuery, useTokenHoldersQuery, useTokenSupplyQuery } from '@graphql';
-import { Address, Loading } from '../utility';
-import { AddressZero } from '@ethersproject/constants';
-import { BigNumber, Contract } from 'ethers';
-import { bnRatio, formatUnits, getContractAbi, parseAddressesInput, parseUnits, sameAddress } from '@lib';
+import { Alert, Button, Form, Input, Modal, Radio, Space, Table } from 'antd';
+import { ContributorStatus, useDistrubuteQuery } from '@graphql';
+import { Address, AmountsTable, Loading } from '../utility';
+import { BigNumber } from 'ethers';
+import { formatUnits, parseAddressesInput, parseUnits } from '@lib';
 import { BASE_CURRENCIES } from '@const';
 
+type DistributionType = 'fundraiser' | 'custom';
+
 type FormData = {
-  distributionType: 'fundraiser' | 'custom';
-  amountType: 'all' | 'custom';
+  distributionType: DistributionType;
   from: string;
-  amount: number;
-  tokenAddress?: string;
   addresses: string;
 };
 
-const baseCurrency = BASE_CURRENCIES.USDC;
-
 export function ManageDistribute(): ReactElement {
-  const [distributionType, setDistributionType] = useState('fundraiser');
-  const [amountType, setAmountType] = useState('fundraiser');
-  const { address: myAddress, signer } = useEthers();
+  const { address: myAddress } = useEthers();
   const { dispatchTransaction } = useDispatch();
   const [{ token }] = useAppState();
   const { src20: src20Address } = useContractAddress();
   const [form] = Form.useForm();
   const { reset } = useGraphql();
   const { loading, error, data } = useDistrubuteQuery({ variables: { id: src20Address } });
+  const [distributionType, setDistributionType] = useState<DistributionType>(
+    data?.token?.currentFundraiser?.contributors ? 'fundraiser' : 'custom',
+  );
 
   if (loading || !data) return <Loading />;
   const { availableSupply, currentFundraiser: fundraiser } = data.token;
   const contributors = fundraiser?.contributors || [];
+  const qualifiedContributors = contributors.filter(
+    (c) => c.status === ContributorStatus.Qualified && BigNumber.from(c.amount).gt(0),
+  );
+  const pendingContributors = contributors.filter((c) => c.status === ContributorStatus.Pending);
 
   const handleSubmit = async (data: FormData) => {
-    console.log({ data });
+    let amount: BigNumber;
     let amounts: BigNumber[];
     let addresses: string[];
-    const amount =
-      data.amountType === 'all' ? BigNumber.from(availableSupply) : parseUnits(data.amount, token.decimals);
     if (data.distributionType === 'fundraiser') {
-      addresses = contributors.map((c) => c.address);
-      const sum = contributors.map((c) => c.amount).reduce((a, b) => a.add(b), BigNumber.from(0));
-      amounts = contributors.map((c) => BigNumber.from(c.amount).mul(amount).div(sum));
+      amount = BigNumber.from(availableSupply);
+      addresses = qualifiedContributors.map((c) => c.address);
+      const sum = qualifiedContributors.map((c) => c.amount).reduce((a, b) => a.add(b), BigNumber.from(0));
+      amounts = qualifiedContributors.map((c) => BigNumber.from(c.amount).mul(amount).div(sum));
     } else {
       const parsedInput = parseAddressesInput<BigNumber>(data.addresses, (meta) => parseUnits(meta[0], token.decimals));
       addresses = Object.keys(parsedInput);
       amounts = Object.values(parsedInput);
+      amount = amounts.reduce((a, b) => a.add(b), BigNumber.from(0));
     }
 
-    const niceAmounts = amounts.map((x) => formatUnits(x, token.decimals));
     const niceAmount = formatUnits(amount, token.decimals);
-    console.log({ amount, niceAmount, addresses, amounts, niceAmounts });
     Modal.confirm({
-      title: 'Please confirm mate',
-      width: 600,
+      title: `Please confirm the distribution of ${niceAmount} ${token.symbol} to ${amounts.length} qualified investors`,
+      width: 400,
       content: (
-        <Table
-          size="small"
-          dataSource={addresses.map((address, index) => ({ key: index, address, amount: amounts[index] }))}
-          pagination={null}
-          columns={[
-            {
-              title: 'Address',
-              dataIndex: 'address',
-              key: 'address',
-              render: (address) => <Address short>{address}</Address>,
-            },
-            {
-              title: amount,
-              dataIndex: 'amount',
-              key: 'amount',
-              render: (value) => Math.round(parseInt(formatUnits(value, token.decimals))) + ' ' + token.symbol,
-            },
-          ]}
-        />
+        <>
+          {pendingContributors.length > 0 && (
+            <Alert
+              type="error"
+              showIcon
+              message={`You have ${pendingContributors.length} pending contributors. Maybe you want to confirm them first?`}
+              className="mb-3"
+            />
+          )}
+          <div className="limit-height">
+            <AmountsTable amounts={amounts} addresses={addresses} token={token} />
+          </div>
+        </>
       ),
+
       onOk: () =>
         dispatchTransaction({
           method: 'src20.bulkTransfer',
           arguments: [addresses, amounts],
           description: `Distributing ${niceAmount} ${token.symbol} to ${addresses.length} accounts`,
-          onSuccess: reset,
+          onSuccess: () => {
+            reset();
+            form.resetFields();
+          },
         }),
     });
   };
 
-  const handleSetFullSupply = async () => {
-    form.setFieldsValue({ amount: availableSupply });
-  };
-
   const initialValues: FormData = {
-    distributionType: 'fundraiser',
-    amountType: 'all',
-    amount: 0,
-    tokenAddress: null,
+    distributionType: distributionType,
     from: myAddress,
     addresses: '',
   };
 
   return (
     <>
+      <p>
+        Available supply: {formatUnits(availableSupply, token.decimals)} {token.symbol}
+      </p>
+
       <Form form={form} layout="vertical" onFinish={handleSubmit} initialValues={initialValues}>
-        <Form.Item name="amountType" label="Amount to distribute">
-          <Radio.Group onChange={(e) => setAmountType(e.target.value)}>
-            <Radio value="all">
-              All available supply ({formatUnits(availableSupply, token.decimals)} {token.symbol})
-            </Radio>
-            <Radio value="custom">Custom amount</Radio>
-          </Radio.Group>
-        </Form.Item>
-
-        <Form.Item name="distributionType" label="Distribute to">
-          <Radio.Group onChange={(e) => setDistributionType(e.target.value)}>
-            <Radio value="fundraiser">Fundraiser contributors</Radio>
-            <Radio value="custom">Custom address list</Radio>
-          </Radio.Group>
-        </Form.Item>
-
-        {amountType === 'custom' && (
-          <Form.Item name="amount" label="Custom amount to distribute">
-            <InputNumber min={1} />
+        {qualifiedContributors.length > 0 && (
+          <Form.Item name="distributionType" label="Distribute to">
+            <Radio.Group onChange={(e) => setDistributionType(e.target.value)}>
+              <Radio value="fundraiser">Fundraiser contributors ({qualifiedContributors.length})</Radio>
+              <Radio value="custom">Custom address list</Radio>
+            </Radio.Group>
           </Form.Item>
         )}
 

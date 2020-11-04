@@ -1,5 +1,4 @@
 export * from './ManageSupply';
-export * from './ManageTransfer';
 export * from './ManageAccountList';
 export * from './ManageContributors';
 export * from './ManageFundraiserState';
@@ -12,3 +11,4 @@ export * from './ManageAsset';
 export * from './ManageDividends';
 export * from './AccountsAddModal';
 export * from './AccountBurnModal';
+export * from './TransferModal';

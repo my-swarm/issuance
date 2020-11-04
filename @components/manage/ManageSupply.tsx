@@ -9,8 +9,8 @@ import {
   useSwmAllowance,
   useSwmBalance,
 } from '@app';
-import { Button, Descriptions, Form, InputNumber } from 'antd';
-import { formatInt, formatNumber, formatTokenAmount, parseUnits, formatUnits } from '@lib';
+import { Button, Col, Descriptions, Divider, Form, InputNumber, Row, Statistic } from 'antd';
+import { formatInt, parseUnits, formatUnits } from '@lib';
 import { useTokenSupplyQuery } from '@graphql';
 import { Loading } from '@components';
 import { SWM_TOKEN_DECIMALS } from '@const';
@@ -47,7 +47,7 @@ export function ManageSupply(): ReactElement {
 
     registry
       .swmNeeded(src20.address, parseUnits(newSupply.toString(), token.decimals))
-      .then((x) => method(formatUnits(x, SWM_TOKEN_DECIMALS)));
+      .then((x) => method(parseFloat(formatUnits(x, SWM_TOKEN_DECIMALS))));
   };
 
   const handleIncreaseSupply = async () => {
@@ -90,24 +90,36 @@ export function ManageSupply(): ReactElement {
 
   return (
     <>
-      <Descriptions title="Current supply and stake">
-        <Descriptions.Item label="Supply">
-          {formatTokenAmount(gToken.supply, token.decimals)} {token.symbol}
-        </Descriptions.Item>
-        <Descriptions.Item label="Max Supply">
-          {formatTokenAmount(gToken.maxSupply, token.decimals)} {token.symbol}
-        </Descriptions.Item>
-        <Descriptions.Item label="Available">
-          {formatTokenAmount(gToken.availableSupply, token.decimals)} {token.symbol}
-        </Descriptions.Item>
-        <Descriptions.Item label="Stake">{formatTokenAmount(gToken.stake, SWM_TOKEN_DECIMALS)} SWM</Descriptions.Item>
-        <Descriptions.Item label="SWM Balance">{swmBalance.nice} SWM</Descriptions.Item>
-        <Descriptions.Item label="SWM Allowance">{swmAllowance.nice} SWM</Descriptions.Item>
-      </Descriptions>
+      <Row gutter={[24, 16]}>
+        <Col xs={24} md={12} lg={8}>
+          <Statistic title="Supply" value={formatUnits(gToken.supply, token.decimals)} suffix={token.symbol} />
+        </Col>
+        <Col xs={24} md={12} lg={8}>
+          <Statistic title="Max Supply" value={formatUnits(gToken.maxSupply, token.decimals)} suffix={token.symbol} />
+        </Col>
+        <Col xs={24} md={12} lg={8}>
+          <Statistic
+            title="Available Supply"
+            value={formatUnits(gToken.availableSupply, token.decimals)}
+            suffix={token.symbol}
+          />
+        </Col>
+        <Col xs={24} md={12} lg={8}>
+          <Statistic title="Current stake" value={formatUnits(gToken.stake, SWM_TOKEN_DECIMALS)} suffix="SWM" />
+        </Col>
+        <Col xs={24} md={12} lg={8}>
+          <Statistic title="SWM Balance" value={swmBalance.nice} suffix="SWM" />
+        </Col>
+        <Col xs={24} md={12} lg={8}>
+          <Statistic title="SWM Allowance" value={swmAllowance.nice} suffix="SWM" />
+        </Col>
+      </Row>
 
-      <h3>Increase supply</h3>
+      <Divider />
+
+      <h3 className="mt-3">Increase supply</h3>
       <Form form={increaseForm} onFinish={handleIncreaseSupply} layout="inline" className="mb-3">
-        <Form.Item name="supply" label="Additonal supply">
+        <Form.Item name="supply" label="Increase by">
           <InputNumber
             min={0}
             placeholder="Gazillion"
@@ -121,7 +133,7 @@ export function ManageSupply(): ReactElement {
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Stake and mint
+            Increase
           </Button>
         </Form.Item>
       </Form>
@@ -142,7 +154,7 @@ export function ManageSupply(): ReactElement {
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Decrease supply
+            Decrease
           </Button>
         </Form.Item>
       </Form>

@@ -6,7 +6,6 @@ import {
   ManageAccountList,
   ManageSupply,
   ManageTokenHolders,
-  ManageTransfer,
   ManageTokenStatus,
   ManageTransferHistory,
   ManageTransferRequests,
@@ -19,10 +18,12 @@ export function TokenManage(): ReactElement {
   const [{ token }] = useAppState();
   return (
     <div>
-      <Collapse defaultActiveKey={['distribute']}>
-        <Collapse.Panel header="Token status" key="status">
-          <ManageTokenStatus />
-        </Collapse.Panel>
+      <Collapse defaultActiveKey={[]}>
+        {token.allowContractFreeze && (
+          <Collapse.Panel header="Freeze token" key="status">
+            <ManageTokenStatus />
+          </Collapse.Panel>
+        )}
 
         <Collapse.Panel header="Token supply (Mint & Burn)" key="supply">
           <ManageSupply />
@@ -34,10 +35,6 @@ export function TokenManage(): ReactElement {
 
         <Collapse.Panel header="Token holders" key="holders">
           <ManageTokenHolders />
-        </Collapse.Panel>
-
-        <Collapse.Panel header="Transfer token" key="transfer">
-          <ManageTransfer />
         </Collapse.Panel>
 
         <Collapse.Panel header="Transfer history" key="transfers">
@@ -73,12 +70,6 @@ export function TokenManage(): ReactElement {
           <ManageDividends />
         </Collapse.Panel>
       </Collapse>
-      <h2>Real fancy stuff, skipping in V1</h2>
-      <ul>
-        <li>Manage token roles</li>
-        <li>Update restrictions and rules [SRC20.updateRestrictionsAndRules]</li>
-        <li>List minters, add, remove [SRC20Registry]</li>
-      </ul>
     </div>
   );
 }

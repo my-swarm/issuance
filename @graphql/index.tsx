@@ -1648,7 +1648,10 @@ export type DistrubuteQuery = (
     & Pick<Token, 'id' | 'address' | 'availableSupply' | 'stake'>
     & { currentFundraiser?: Maybe<(
       { __typename?: 'Fundraiser' }
-      & FundraiserFragment
+      & { contributors?: Maybe<Array<(
+        { __typename?: 'Contributor' }
+        & Pick<Contributor, 'address' | 'amount' | 'status'>
+      )>> }
     )> }
   )> }
 );
@@ -1672,7 +1675,7 @@ export type FundraiserContributorsFragment = (
 
 export type FundraiserInfoFragment = (
   { __typename?: 'Fundraiser' }
-  & Pick<Fundraiser, 'startDate' | 'endDate' | 'softCap' | 'hardCap' | 'supply' | 'amountQualified' | 'amountPending' | 'amountRefunded' | 'amountWithdrawn' | 'status'>
+  & Pick<Fundraiser, 'address' | 'startDate' | 'endDate' | 'softCap' | 'hardCap' | 'supply' | 'amountQualified' | 'amountPending' | 'amountRefunded' | 'amountWithdrawn' | 'status'>
 );
 
 export type FundraiserFragment = (
@@ -1906,6 +1909,7 @@ export type WhitelistGreylistQuery = (
 
 export const FundraiserInfoFragmentDoc = gql`
     fragment FundraiserInfo on Fundraiser {
+  address
   startDate
   endDate
   softCap
@@ -2048,11 +2052,15 @@ export const DistrubuteDocument = gql`
     availableSupply
     stake
     currentFundraiser {
-      ...Fundraiser
+      contributors {
+        address
+        amount
+        status
+      }
     }
   }
 }
-    ${FundraiserFragmentDoc}`;
+    `;
 
 /**
  * __useDistrubuteQuery__

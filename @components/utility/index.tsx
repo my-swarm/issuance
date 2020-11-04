@@ -8,3 +8,4 @@ export * from './DeployProgress';
 export * from './TransactionModal';
 export * from './SpendingApprovalModal';
 export * from './Loading';
+export * from './AmountsTable';

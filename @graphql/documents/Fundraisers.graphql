@@ -16,6 +16,7 @@ fragment FundraiserContributors on Fundraiser {
 }
 
 fragment FundraiserInfo on Fundraiser {
+  address
   startDate
   endDate
   softCap

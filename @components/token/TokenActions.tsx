@@ -41,7 +41,7 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     );
   }
 
-  if (token.isDeployed && !token.isFundraising) {
+  if (token.isDeployed && !token.isFundraising && !token.isMinted) {
     actions.push(
       <Button
         key="fundraiser"
@@ -54,7 +54,7 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     );
   }
 
-  if (token.isDeployed && !token.isMinted) {
+  if (token.isDeployed && !token.isMinted && !token.isFundraising) {
     actions.push(
       <Button
         key="stake"

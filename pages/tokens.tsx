@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { Button, Drawer, Table } from 'antd';
 
 import { useEthers, useAppState, useDispatch } from '@app';
-import { BaseError } from '@lib';
+import { BaseError, parseUnits } from '@lib';
 import {
   DefaultLayout,
   TokenDeploy,
@@ -20,6 +20,7 @@ import {
 import { Token, TokenAction, TokenRecord, TokenState, tokenStates, transferRules } from '@types';
 import { useTokensQuery, TokenInfoFragment } from '@graphql';
 import { renderAddress, tableColumns } from '../@components/manage/listUtils';
+import { SWM_TOKEN_DECIMALS } from '@const';
 
 function getTokenList(localTokens: Token[], onlineTokens: TokenInfoFragment[], networkId): TokenRecord[] {
   const result: TokenRecord[] = localTokens.map((localToken) => ({
@@ -35,12 +36,13 @@ function getTokenList(localTokens: Token[], onlineTokens: TokenInfoFragment[], n
 
   for (const onlineToken of onlineTokens) {
     const fundraiserStatus = onlineToken?.currentFundraiser?.status;
+    console.log({ onlineToken });
     const token = {
       // name: onlineToken.name,
       // symbol: onlineToken.symbol,
       // address: onlineToken.address,
-      isFundraising: fundraiserStatus === 'Setup' || fundraiserStatus === 'Running',
-      isMinted: onlineToken.stake,
+      isFundraising: fundraiserStatus !== undefined,
+      isMinted: parseUnits(onlineToken.stake, SWM_TOKEN_DECIMALS).gt(0),
       isDeployed: true,
     };
     const index = result.findIndex((t) => t.address === onlineToken.address);

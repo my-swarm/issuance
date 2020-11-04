@@ -4,9 +4,8 @@ import { CheckCircleTwoTone, DownOutlined, ExclamationCircleTwoTone, SearchOutli
 
 import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';
 import { useTokenHoldersQuery } from '@graphql';
-import { AccountBurnModal, Address, EditableCell, FilterDropdown, Loading } from '@components';
+import { AccountBurnModal, Address, EditableCell, FilterDropdown, Loading, TransferModal } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
-import { ColumnType } from 'antd/lib/table';
 import { formatDatetime, strcmp } from '@lib';
 import { formatUnits } from 'ethers/lib/utils';
 
@@ -24,6 +23,7 @@ export function ManageTokenHolders(): ReactElement {
   const [{ token }] = useAppState();
   const [searchText, setSearchText] = useState<string>('');
   const [paginate, setPaginate] = useState<boolean>(true);
+  const [transferingFrom, setTransferingFrom] = useState<string>();
   const [burningAccount, setBurningAccount] = useState<string>();
   const { networkId } = useEthers();
   const { dispatchTransaction, setAccountProp } = useDispatch();
@@ -52,8 +52,9 @@ export function ManageTokenHolders(): ReactElement {
     });
   };
 
-  const handleBurnedAccount = () => {
+  const handleCloseModal = () => {
     setBurningAccount(undefined);
+    setTransferingFrom(undefined);
     reset();
   };
 
@@ -86,9 +87,11 @@ export function ManageTokenHolders(): ReactElement {
     const enableFreeze = features.accountFreeze && !record.isFrozen;
     const enableUnfreeze = features.accountFreeze && record.isFrozen;
     const enableBurn = features.accountBurn && record.balance > 0;
-    if (enableFreeze || enableUnfreeze || enableBurn) {
+    const enableTransfer = features.forceTransfer && record.balance > 0;
+    if (enableFreeze || enableUnfreeze || enableBurn || enableTransfer) {
       const menu = (
         <Menu>
+          <Menu.Item onClick={() => setTransferingFrom(record.address)}>Transfer tokens</Menu.Item>
           {enableFreeze && <Menu.Item onClick={() => handleFreeze(record.address)}>Freeze account</Menu.Item>}
           {enableUnfreeze && <Menu.Item onClick={() => handleUnfreeze(record.address)}>Unfreeze account</Menu.Item>}
           {enableBurn && <Menu.Item onClick={() => setBurningAccount(record.address)}>Burn tokens</Menu.Item>}
@@ -170,7 +173,7 @@ export function ManageTokenHolders(): ReactElement {
         </div>
       )}
 
-      <div style={{ maxHeight: '40rem', overflowY: 'auto' }}>
+      <div className="limit-height">
         <Table
           size="small"
           columns={columns}
@@ -185,7 +188,14 @@ export function ManageTokenHolders(): ReactElement {
         <AccountBurnModal
           address={burningAccount}
           currentBalance={tableData.find((x) => x.address === burningAccount).balance}
-          onClose={handleBurnedAccount}
+          onClose={handleCloseModal}
+        />
+      )}
+      {transferingFrom !== undefined && (
+        <TransferModal
+          from={transferingFrom}
+          currentBalance={tableData.find((x) => x.address === transferingFrom).balance}
+          onClose={handleCloseModal}
         />
       )}
     </>

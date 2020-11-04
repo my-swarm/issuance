@@ -127,7 +127,7 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
         </Row>
       )}
 
-      <div style={{ maxHeight: '40rem', overflowY: 'auto' }}>
+      <div className="limit-height">
         <Table
           size="small"
           columns={columns}

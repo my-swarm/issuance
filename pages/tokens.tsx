@@ -23,6 +23,8 @@ import { renderAddress, tableColumns } from '../@components/manage/listUtils';
 import { SWM_TOKEN_DECIMALS } from '@const';
 
 function getTokenList(localTokens: Token[], onlineTokens: TokenInfoFragment[], networkId): TokenRecord[] {
+  if (!networkId) return [];
+
   const result: TokenRecord[] = localTokens.map((localToken) => ({
     name: localToken.name,
     symbol: localToken.symbol,
@@ -73,7 +75,6 @@ export default function Tokens(): ReactElement {
       setToken(tokens.find((t) => t.id === token.id));
     }
   }, [tokens]);
-  if (loading || !data) return <Loading />;
 
   function renderTokenState(localState: TokenState, token: TokenRecord): string {
     if (!connected) {
@@ -112,8 +113,7 @@ export default function Tokens(): ReactElement {
     },
   ]);
 
-  const dataSource = getTokenList(tokens, data.tokens, networkId);
-  console.log({ data, tokens, dataSource });
+  const dataSource = getTokenList(tokens, data?.tokens || [], networkId);
 
   const handleAction = (action: TokenAction, tokenRecord: TokenRecord) => {
     if (action === TokenAction.Delete) {
@@ -176,7 +176,7 @@ export default function Tokens(): ReactElement {
   }
 
   return (
-    <DefaultLayout title="My Tokens" headExtra={renderHeadExtra()} headTableAligned={true}>
+    <DefaultLayout title="My Tokens" headExtra={renderHeadExtra()} headTableAligned={true} query={query}>
       <Table columns={columns} dataSource={dataSource} />
       <Drawer
         title={<TokenActionTitle action={action} />}

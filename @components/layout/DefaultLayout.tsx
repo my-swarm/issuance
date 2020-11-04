@@ -7,13 +7,14 @@ import { PageProps } from '@types';
 import { Logo, MetamaskStatus, StateStorageSync, TransactionModal, SpendingApprovalModal } from '@components';
 import { MainMenu } from '@components/layout/MainMenu';
 import { useAppState } from '@app';
-import { ApolloProvider } from '@apollo/client';
+import { ApolloProvider, ApolloQueryResult } from '@apollo/client';
 
 const { Content, Sider } = Layout;
 
 interface DefaultLayoutProps extends PageProps {
   headExtra?: ReactNode;
   headTableAligned?: boolean;
+  query: ApolloQueryResult<any>;
 }
 
 export function DefaultLayout({ title, headExtra, children, headTableAligned = false }: DefaultLayoutProps) {

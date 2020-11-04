@@ -85,6 +85,7 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
     }
 */
     case 'deleteToken':
+      console.log('delete token', action.id);
       return unsynced({
         tokens: state.tokens.filter((token) => token.id !== action.id),
       });

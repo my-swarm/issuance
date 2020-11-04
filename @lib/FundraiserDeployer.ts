@@ -7,7 +7,8 @@ import { BASE_CURRENCIES } from '@const';
 import { Deployer } from './Deployer';
 import { parseUnits } from './numberUtils';
 import { getUnixTimestamp } from './dateUtils';
-import { getContractAddress } from './contracts';
+
+const baseCurrency = BASE_CURRENCIES.USDC;
 
 export class FundraiserDeployer extends Deployer {
   private fundraiserContract: Contract;
@@ -35,8 +36,8 @@ export class FundraiserDeployer extends Deployer {
       parseUnits(fundraiser.tokensToMint, decimals), // tokensToMint
       getUnixTimestamp(startDate), // startDate (int)
       getUnixTimestamp(fundraiser.endDate), // endDate (int)
-      parseUnits(fundraiser.softCap, decimals), // softCap
-      parseUnits(fundraiser.hardCap, decimals), // hardCap
+      parseUnits(fundraiser.softCap, baseCurrency.decimals), // softCap
+      parseUnits(fundraiser.hardCap, baseCurrency.decimals), // hardCap
     ];
     this.handleStateChange(FundraiserDeployerState.Fundraiser);
     const instance = await this.contractProxy.deploy('fundraiser', params);
@@ -78,6 +79,6 @@ export class FundraiserDeployer extends Deployer {
       this.getAddress('minter'), // address _minter
       fundraiser.contributionsLocked, // bool _contributionsLocked
     ];
-    await this.contractProxy.call('fundraiser', 'setupContract', args);
+    await this.contractProxy.call('fundraiser', 'setup', args);
   }
 }

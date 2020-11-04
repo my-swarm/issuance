@@ -27,7 +27,7 @@ export abstract class Deployer {
 
   constructor(signer: Signer, token: Token) {
     this.signer = signer;
-    this.contractProxy = new ContractProxy(signer);
+    this.contractProxy = new ContractProxy(signer, token);
     this.token = token;
   }
 

@@ -11,15 +11,19 @@ export function TokenInfoStaking() {
   const [stake, setStake] = useState<string>('calculating...');
   const [swmBalance, setSwmBalance] = useState<string>('calculating...');
   const [swmPrice, setSwmPrice] = useState<string>('calculating...');
-  const { minter, swmPriceOracle, swmToken } = useContract();
+  const { minter, swmPriceOracle, swm } = useContract();
+
+  console.log({ minter, swmPriceOracle, swm });
 
   useEffect(() => {
-    minter.calcStake(token.assetNetValue).then((val) => setStake(formatUnits(val, SWM_TOKEN_DECIMALS)));
-    swmPriceOracle.getPrice().then(({ priceNumerator, priceDenominator }) => {
-      setSwmPrice(formatNumber(priceNumerator.toNumber() / priceDenominator.toNumber(), 4));
-    });
-    swmToken.balanceOf(address).then((val) => setSwmBalance(formatUnits(val, SWM_TOKEN_DECIMALS)));
-  }, [token, minter, swmPriceOracle, swmToken, address]);
+    if (minter && swmPriceOracle && swm) {
+      minter.calcStake(token.assetNetValue).then((val) => setStake(formatUnits(val, SWM_TOKEN_DECIMALS)));
+      swmPriceOracle.getPrice().then(({ priceNumerator, priceDenominator }) => {
+        setSwmPrice(formatNumber(priceNumerator.toNumber() / priceDenominator.toNumber(), 4));
+      });
+      swm.balanceOf(address).then((val) => setSwmBalance(formatUnits(val, SWM_TOKEN_DECIMALS)));
+    }
+  }, [token, minter, swmPriceOracle, swm, address]);
 
   return (
     <Descriptions title="Staking information" layout="vertical" size="small" className="mb-3">

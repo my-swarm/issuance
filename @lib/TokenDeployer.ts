@@ -102,9 +102,8 @@ export class TokenDeployer extends Deployer {
     ];
     return new Promise((resolve, reject) => {
       const events = {
-        SRC20Created: (event) => {
-          const { args } = event;
-          this.addresses.src20 = args.token;
+        SRC20Created: (address) => {
+          this.addresses.src20 = address;
           resolve();
         },
       };
@@ -124,9 +123,9 @@ export class TokenDeployer extends Deployer {
     const registryAddress = this.getAddress('registry');
     const stakeAmount = await this.getStakeAmount();
     const owner = await this.signer.getAddress();
-    const currentlyApproved = await this.contractProxy.get('swmToken', 'allowance', [owner, registryAddress]);
+    const currentlyApproved = await this.contractProxy.get('swm', 'allowance', [owner, registryAddress]);
     if (currentlyApproved.lt(stakeAmount)) {
-      await this.contractProxy.call('swmToken', 'approve', [
+      await this.contractProxy.call('swm', 'approve', [
         registryAddress, // param: spender
         stakeAmount.sub(currentlyApproved), // param: value
       ]);

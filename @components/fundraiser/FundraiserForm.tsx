@@ -5,7 +5,6 @@ import { BASE_CURRENCIES } from '@const';
 import { useEthers } from '@app';
 import { Help, HelpLabel } from '../utility';
 import moment from 'moment';
-import { getNetwork } from '@ethersproject/networks';
 
 interface FundraiserFormProps {
   tokenName: string;
@@ -78,7 +77,7 @@ export function FundraiserForm({
             const address = currency.addresses[networkId] || undefined;
             return (
               <Select.Option value={key} key={key}>
-                {currency.symbol}: {address || 'unknown address'} ({network.name})
+                {currency.symbol}: {address || 'unknown address'}
               </Select.Option>
             );
           })}

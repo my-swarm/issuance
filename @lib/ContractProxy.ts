@@ -48,6 +48,7 @@ export class ContractProxy {
     } else {
       contract = new Contract(contractName[1], getContractAbi(contractName[0]), this.signer);
     }
+    console.log({ contractName, contract });
     for (const [eventName, eventHandler] of Object.entries(events)) {
       contract.once(eventName, (oldValue, newValue) => eventHandler(newValue));
     }

@@ -75,6 +75,7 @@ export function DeployProgress({ type, onClose }: DeployProgressProps): ReactEle
     } else if (type === 'fundraiser') {
       deployer = new FundraiserDeployer(signer, token);
     }
+    console.log('setup deployer', type, deployer);
 
     await deployer.setup();
     deployer.resume(deployerState, tokenNetwork?.addresses || {});

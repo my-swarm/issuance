@@ -31,7 +31,7 @@ const contractValues = {
     },
   },
   swmAllowance: {
-    name: 'swmToken',
+    name: 'swm',
     method: 'allowance',
     type: ContractValueType.SwmTokenAmount,
     implicitArgs: {

@@ -32,7 +32,6 @@ interface ManageContributorsProps {
 export function ManageContributors({ contributors }: ManageContributorsProps): ReactElement {
   const { reset } = useGraphql();
   const [paginate, setPaginate] = useState<boolean>(true);
-  const [batchAdding, setBatchAdding] = useState<boolean>(false);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchText, setSearchText] = useState<string>('');
   const { networkId } = useEthers();
@@ -58,11 +57,6 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
       description: 'Removing contributor...',
       onSuccess: reset,
     });
-  };
-
-  const handleAddModalClosed = () => {
-    setBatchAdding(false);
-    reset();
   };
 
   const renderStatus = (status) => {
@@ -214,11 +208,6 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
           rowClassName="editable-row"
         />
       </div>
-      <div>
-        <Button onClick={() => setBatchAdding(true)}>Batch add contributors</Button>
-      </div>
-
-      {batchAdding && <AccountsAddModal list="contributors" onClose={handleAddModalClosed} />}
     </>
   );
 }

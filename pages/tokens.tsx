@@ -1,8 +1,8 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { Button, Drawer, Table } from 'antd';
 
-import { useEthers, useAppState, useDispatch } from '@app';
-import { BaseError, parseUnits } from '@lib';
+import { useEthers, useAppState, useDispatch, useGraphql } from '@app';
+import { BaseError, parseUnits, sameAddress } from '@lib';
 import {
   DefaultLayout,
   TokenDeploy,
@@ -26,10 +26,11 @@ function getTokenList(localTokens: Token[], onlineTokens: TokenInfoFragment[], n
   if (!networkId) return [];
 
   const result: TokenRecord[] = localTokens.map((localToken) => ({
+    id: localToken.id,
     name: localToken.name,
     symbol: localToken.symbol,
-    address: localToken.networks[networkId].addresses.src20,
-    localState: localToken.networks[networkId].state,
+    address: localToken.networks[networkId]?.addresses.src20 || undefined,
+    localState: localToken.networks[networkId]?.state || TokenState.Created,
     isDeployed: false,
     isMinted: false,
     isFundraising: false,
@@ -38,7 +39,6 @@ function getTokenList(localTokens: Token[], onlineTokens: TokenInfoFragment[], n
 
   for (const onlineToken of onlineTokens) {
     const fundraiserStatus = onlineToken?.currentFundraiser?.status;
-    console.log({ onlineToken });
     const token = {
       // name: onlineToken.name,
       // symbol: onlineToken.symbol,
@@ -47,10 +47,8 @@ function getTokenList(localTokens: Token[], onlineTokens: TokenInfoFragment[], n
       isMinted: parseUnits(onlineToken.stake, SWM_TOKEN_DECIMALS).gt(0),
       isDeployed: true,
     };
-    const index = result.findIndex((t) => t.address === onlineToken.address);
-    console.log(onlineToken.address, index);
+    const index = result.findIndex((t) => sameAddress(t.address, onlineToken.address));
     if (index !== -1) {
-      console.log('merging', onlineToken.address);
       result[index] = { ...result[index], ...token };
     } else {
       // not implemented yet
@@ -68,6 +66,7 @@ export default function Tokens(): ReactElement {
   const [action, setAction] = useState<TokenAction>();
   const [{ tokens, token }, dispatch] = useAppState();
   const query = useTokensQuery({ variables: { owner: address } });
+  const { reset } = useGraphql();
   const { data, loading, error } = query;
   // reloads current token if tokens update
   useEffect(() => {
@@ -114,6 +113,7 @@ export default function Tokens(): ReactElement {
   ]);
 
   const dataSource = getTokenList(tokens, data?.tokens || [], networkId);
+  console.log({ dataSource });
 
   const handleAction = (action: TokenAction, tokenRecord: TokenRecord) => {
     if (action === TokenAction.Delete) {
@@ -132,6 +132,7 @@ export default function Tokens(): ReactElement {
   const handleClearAction = () => {
     setToken(undefined);
     setAction(undefined);
+    reset();
   };
 
   const handleSubmit = (newToken: Token) => {

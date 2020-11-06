@@ -11,7 +11,7 @@ interface AccountBurnModalProps {
 }
 
 export function TransferModal({ from, currentBalance, onClose }: AccountBurnModalProps): ReactElement {
-  const [to, setTo] = useState<string>(0);
+  const [to, setTo] = useState<string>();
   const [amount, setAmount] = useState<number>(0);
   const { dispatchTransaction } = useDispatch();
   const [{ token }] = useAppState();

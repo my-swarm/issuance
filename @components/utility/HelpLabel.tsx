@@ -7,7 +7,7 @@ interface HelpLabelProps {
   name: string;
 }
 
-export function HelpLabel({ name }: HelpLabelProps): React {
+export function HelpLabel({ name }: HelpLabelProps): ReactElement {
   return (
     <Space>
       <span>{help[name].title}</span>

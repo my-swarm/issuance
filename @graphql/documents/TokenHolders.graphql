@@ -12,6 +12,7 @@ query TokenHolders($token: ID!) {
     features {
       accountBurn
       accountFreeze
+      forceTransfer
     }
     holders {
       ...TokenHolder

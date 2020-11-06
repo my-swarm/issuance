@@ -1,12 +1,9 @@
 import React from 'react';
-import { ethers } from 'ethers';
 import { Button } from 'antd';
-
-import { Metamask } from '@lib';
-import { EthersContext, useEthers } from '@app';
+import { useEthers } from '@app';
 
 interface MetamaskConnectProps {
-  label: string;
+  label?: string;
 }
 
 export function MetamaskConnect({ label = 'Connect with Metamask' }: MetamaskConnectProps) {

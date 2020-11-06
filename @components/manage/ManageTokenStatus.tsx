@@ -21,7 +21,7 @@ export function ManageTokenStatus(): ReactElement {
       method: 'features.freezeToken',
       description: 'Freezing token',
       onSuccess: reset,
-    });managetok
+    });
   };
 
   const handleUnfreeze = async () => {

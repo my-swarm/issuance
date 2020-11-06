@@ -1745,7 +1745,7 @@ export type TokenHoldersQuery = (
     & Pick<Token, 'id'>
     & { features?: Maybe<(
       { __typename?: 'Features' }
-      & Pick<Features, 'accountBurn' | 'accountFreeze'>
+      & Pick<Features, 'accountBurn' | 'accountFreeze' | 'forceTransfer'>
     )>, holders: Array<(
       { __typename?: 'TokenHolder' }
       & TokenHolderFragment
@@ -2195,6 +2195,7 @@ export const TokenHoldersDocument = gql`
     features {
       accountBurn
       accountFreeze
+      forceTransfer
     }
     holders {
       ...TokenHolder

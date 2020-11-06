@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, ReactElement } from 'react';
-import { Input, Form } from 'antd';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
+import { Input } from 'antd';
 
 interface EditableCellProps {
   value: string;
@@ -8,7 +8,7 @@ interface EditableCellProps {
 
 export function EditableCell({ value, onChange }: EditableCellProps): ReactElement {
   const [editing, setEditing] = useState(false);
-  const inputRef = useRef();
+  const inputRef = useRef<Input>(null);
 
   useEffect(() => {
     if (editing) {

@@ -1,5 +1,4 @@
 import { v4 as uuid } from 'uuid';
-import ganache from 'ganache-cli';
 import { Contract, ContractFactory, providers, Wallet } from 'ethers';
 
 import { contracts } from '@contracts';

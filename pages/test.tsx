@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Drawer, Table } from 'antd';
 import { DefaultLayout } from '@components';
-import { useAppState, useContract, useContractAddress, useContractValue, useDispatch, useSwmAllowance } from '@app';
-import { useTokensQuery } from '../@graphql';
+import { useAppState, useContract, useContractAddress, useDispatch, useSwmAllowance } from '@app';
+import { useTokensQuery } from '@graphql';
 
 export default function TestPage() {
   const [{ tokens, token }, dispatch] = useAppState();

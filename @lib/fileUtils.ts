@@ -1,6 +1,16 @@
 import { UploadFile } from 'antd/lib/upload/interface';
-import { AppFile } from '@types';
-import { InvalidStateError } from '@lib';
+import { InvalidStateError } from './errors';
+
+export interface AppFile {
+  id: string;
+  name: string;
+  size: number;
+  thumbUrl?: string;
+  type: string;
+  content: string;
+}
+
+export type AppImage = AppFile;
 
 export async function convertFileToUpload(file: AppFile): Promise<UploadFile> {
   const { id, name, size, thumbUrl, type, content } = file;

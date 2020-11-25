@@ -1,7 +1,6 @@
 import { useAppState } from './StateContext';
-import { AccountsMeta, SpendingApproval, Token, Transaction } from '@types';
 import { useEthers } from './EthersContext';
-import { getContract, getContractAbi } from '@lib';
+import { getContract, getContractAbi, Token, AccountsMeta, Transaction } from '@lib';
 import { BigNumber, Contract } from 'ethers';
 
 interface UseDispatchResult {

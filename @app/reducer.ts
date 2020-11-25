@@ -2,7 +2,8 @@ import { Reducer } from 'react';
 import { v4 as uuid } from 'uuid';
 import _ from 'lodash';
 
-import { AppState, Action, Uuid, Token } from '@types';
+import { Token, Uuid } from '@lib';
+import { Action, AppState } from '.';
 
 export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
   function findToken(id: Uuid) {

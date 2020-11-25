@@ -1,12 +1,8 @@
 import React, { ReactElement } from 'react';
 import { Collapse, Space } from 'antd';
-import { FundraiserCard, FundraiserChart } from '../fundraiser';
 import { useContractAddress } from '@app';
 import { useFundraiserQuery } from '@graphql';
-import { Loading } from '../utility';
-import { FundraiserInfo } from '../fundraiser/FundraiserInfo';
-import { ManageContributors } from '../manage/ManageContributors';
-import { ManageFundraiserState } from '../manage/ManageFundraiserState';
+import { Loading, FundraiserChart, FundraiserInfo, ManageContributors, ManageFundraiserState } from '..';
 
 export function TokenManageFundraiser(): ReactElement {
   const { fundraiser: fundraiserAddress } = useContractAddress();

@@ -1,4 +1,4 @@
-import { navToStakeBase } from '@const';
+import { navToStakeBase } from '@lib';
 
 export const getNavToStake = () => {
   const result = [];

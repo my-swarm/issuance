@@ -9,11 +9,10 @@ import {
   useSwmAllowance,
   useSwmBalance,
 } from '@app';
-import { Button, Col, Descriptions, Divider, Form, InputNumber, Row, Statistic } from 'antd';
-import { formatInt, parseUnits, formatUnits } from '@lib';
+import { Button, Col, Divider, Form, InputNumber, Row, Statistic } from 'antd';
+import { formatInt, parseUnits, formatUnits, SWM_TOKEN_DECIMALS } from '@lib';
 import { useTokenSupplyQuery } from '@graphql';
 import { Loading } from '@components';
-import { SWM_TOKEN_DECIMALS } from '@const';
 
 export function ManageSupply(): ReactElement {
   const { reset } = useGraphql();

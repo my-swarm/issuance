@@ -1,8 +1,9 @@
 import React, { ReactElement, useState } from 'react';
 import { Col, Input, InputNumber, Modal, Row, Space } from 'antd';
+
 import { useAppState, useDispatch } from '@app';
-import { Address } from '../utility';
 import { parseUnits } from '@lib';
+import { Address } from '..';
 
 interface AccountBurnModalProps {
   from: string;

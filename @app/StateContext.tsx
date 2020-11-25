@@ -9,7 +9,8 @@ import React, {
   Dispatch,
 } from 'react';
 
-import { Action, AppState } from '@types';
+import { Action } from './actions';
+import { AppState } from './state';
 import { useStorage } from '@app';
 
 export const StateContext = createContext(undefined);

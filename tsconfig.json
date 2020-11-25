@@ -23,9 +23,7 @@
       "@app": ["@app"],
       "@lib": ["@lib"],
       "@graphql": ["@graphql"],
-      "@types": ["@types"],
-      "@components": ["@components"],
-      "@const": ["@const"]
+      "@components": ["@components"]
     }
   },
   "exclude": [

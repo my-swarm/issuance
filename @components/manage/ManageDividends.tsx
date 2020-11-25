@@ -1,11 +1,12 @@
 import React, { ReactElement, useState, useEffect } from 'react';
-import { useAppState, useContractAddress, useDispatch, useEthers } from '@app';
-import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
-import { useTokenHoldersQuery } from '@graphql';
-import { Loading } from '../utility';
-import { AddressZero } from '@ethersproject/constants';
 import { BigNumber, Contract } from 'ethers';
-import { bnRatio, formatUnits, getContractAbi, parseAddressesInput, parseUnits, sameAddress } from '@lib';
+import { AddressZero } from '@ethersproject/constants';
+import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
+
+import { useContractAddress, useDispatch, useEthers } from '@app';
+import { useTokenHoldersQuery } from '@graphql';
+import { bnRatio, getContractAbi, parseAddressesInput, parseUnits, sameAddress } from '@lib';
+import { Loading } from '..';
 
 type FormData = {
   type: 'eth' | 'erc20';

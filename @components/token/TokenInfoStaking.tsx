@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Descriptions } from 'antd';
-import { formatNumber, formatUnits } from '@lib';
-import { SWM_TOKEN_DECIMALS } from '@const';
+
+import { formatNumber, formatUnits, SWM_TOKEN_DECIMALS } from '@lib';
 import { useAppState, useContract, useEthers } from '@app';
 
 export function TokenInfoStaking() {

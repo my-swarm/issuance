@@ -1,5 +1,5 @@
 import { IStorageAdapter } from './IStorageAdapter';
-import { ColdState } from '@types';
+import { ColdState } from './common';
 
 export class Storage {
   private adapter: IStorageAdapter;

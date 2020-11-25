@@ -1,28 +1,38 @@
-import {
-  FundraiserDeployerState,
-  TokenDeployerState,
-  TransactionStateMeta,
-  TransactionState,
-  DeployerStatesMeta,
-} from '@types';
+export const DeployerStateNone = 0;
+export const DeployerStateFinished = -1;
 
-export const transactionStatesMeta: { [index in TransactionState]: TransactionStateMeta } = {
-  [TransactionState.None]: {
-    message: "Transaction hasn't been initiated yet",
-  },
-  [TransactionState.Signing]: {
-    message: 'Waiting for transaction signature',
-  },
-  [TransactionState.Confirming]: {
-    message: 'Waiting for network confirmation',
-  },
-  [TransactionState.Confirmed]: {
-    message: 'Transaction has finished',
-  },
-  [TransactionState.Error]: {
-    message: 'Error when processing transaction',
-  },
-};
+export enum TokenDeployerState {
+  None = DeployerStateNone,
+  TransferRules = 1,
+  Features,
+  Roles,
+  Token,
+  Finished = DeployerStateFinished,
+}
+
+export enum FundraiserDeployerState {
+  None = DeployerStateNone,
+  Fundraiser = 1,
+  ContributorRestrictions,
+  AffiliateManager,
+  Setup,
+  Finished = DeployerStateFinished,
+}
+
+export type DeployerState = TokenDeployerState | FundraiserDeployerState;
+
+// this
+export type DeployerEventCallback = (state: DeployerState) => void;
+
+// this
+export interface DeployerStateMeta {
+  message?: string;
+  description?: string;
+  percent?: number;
+}
+
+// DeployerProgress.tsx, deployStates.ts
+export type DeployerStatesMeta = { [index in DeployerState]?: DeployerStateMeta };
 
 export const tokenDeployerStatesMeta: DeployerStatesMeta = {
   [TokenDeployerState.None]: {

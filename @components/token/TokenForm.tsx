@@ -1,9 +1,9 @@
-import React, { ReactElement, useEffect, useState } from 'react';
-import { Form, Input, InputNumber, Button, Checkbox, Popover, Space, Radio, Upload } from 'antd';
+import React, { ReactElement, useState } from 'react';
+import { Form, Input, InputNumber, Button, Checkbox, Space, Radio } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { Store } from 'rc-field-form/lib/interface';
 
-import { Token, TransferRules } from '@types';
+import { Token, TransferRules } from '@lib';
 import { tokenFormRules as rules } from './tokenFormRules';
 import { Help, HelpLabel, SingleFileUpload, MultipleFilesUpload } from '@components/index';
 

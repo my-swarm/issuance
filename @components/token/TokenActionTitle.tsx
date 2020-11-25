@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { TokenAction } from '@types';
+import { TokenAction } from '@lib';
 import { useAppState } from '@app';
 
 interface TokenActionTitleProps {

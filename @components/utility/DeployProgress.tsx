@@ -1,19 +1,25 @@
 import { Button, Progress } from 'antd';
 import React, { MouseEventHandler, ReactElement, useState } from 'react';
+import { LoadingOutlined } from '@ant-design/icons';
+
 import {
+  Deployer,
   DeployerState,
   DeployerStateFinished,
   DeployerStateNone,
   DeployerStatesMeta,
+  FundraiserDeployer,
   FundraiserDeployerState,
+  TokenDeployer,
   TokenState,
   TransactionState,
-} from '@types';
-import { fundraiserDeployerStatesMeta, tokenDeployerStatesMeta, transactionStatesMeta } from '@const';
-import { Deployer, TokenDeployer, FundraiserDeployer } from '../../@lib';
-import { LoadingOutlined } from '@ant-design/icons';
+  fundraiserDeployerStatesMeta,
+  tokenDeployerStatesMeta,
+  transactionStatesMeta,
+} from '@lib';
+import { useAppState, useEthers } from '@app';
+
 import { RequireEthers } from './RequireEthers';
-import { useEthers, useAppState } from '@app';
 
 interface DeployProgressProps {
   type: 'token' | 'fundraiser';

@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { DeployerStateFinished, EthereumNetwork, Token, TokenDeployerState, TokenState, TransferRules } from '@types';
+import { EthereumNetwork, Token, TokenState, TransferRules, DeployerStateFinished, TokenDeployerState } from '@lib';
 import addressesLocal from './addresses/local.json';
 import addressesKovan from './addresses/kovan.json';
 

@@ -1,22 +1,14 @@
 import React from 'react';
-import { EthereumNetwork } from '@types';
 import { Tooltip } from 'antd';
+import { getNetwork } from '@ethersproject/networks';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
+import { EthereumNetwork } from '@lib';
 import { EthersStatus, useEthers } from '@app';
 import { Address } from '@components';
 
 export function MetamaskStatus() {
   const { status, connect, address, networkId } = useEthers();
-
-  const networkNames = {
-    [EthereumNetwork.Main]: 'Mainnet',
-    [EthereumNetwork.Ropsten]: 'Ropsten',
-    [EthereumNetwork.Rinkeby]: 'Rinkeby',
-    [EthereumNetwork.Goerli]: 'Goerli',
-    [EthereumNetwork.Kovan]: 'Kovan',
-    [EthereumNetwork.Local]: 'Local',
-  };
 
   const supportedNetworks = [EthereumNetwork.Main, EthereumNetwork.Kovan];
 
@@ -45,7 +37,7 @@ export function MetamaskStatus() {
                 <ExclamationCircleOutlined twoToneColor="red" />
               </Tooltip>
             )}{' '}
-            <strong>{networkNames[networkId] ?? 'Unknown'}</strong>
+            <strong>{getNetwork(networkId).name}</strong>
           </div>
         </div>
       );

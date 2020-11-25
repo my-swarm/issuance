@@ -4,8 +4,7 @@ import { useContractAddress, useDispatch, useGraphql } from '@app';
 import { FundraiserInfoFragment, FundraiserStatus } from '@graphql';
 import { BigNumber } from 'ethers';
 import { CheckOutlined, WarningOutlined } from '@ant-design/icons';
-import { formatUnits, parseUnits } from '@lib';
-import { BASE_CURRENCIES, SWM_TOKEN_DECIMALS } from '@const';
+import { formatUnits, parseUnits, BASE_CURRENCIES, SWM_TOKEN_DECIMALS } from '@lib';
 
 interface ManageFundraiserStateProps {
   fundraiser: FundraiserInfoFragment;

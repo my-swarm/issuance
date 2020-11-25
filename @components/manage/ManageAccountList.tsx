@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Button, Checkbox, Col, Popconfirm, Row, Table } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
+import { AccountList, Account, RawAccount, RawAccountList } from '@lib';
 import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';
 import { useWhitelistGreylistQuery } from '@graphql';
 import { Loading, FilterDropdown, AccountsAddModal, EditableCell, Address } from '@components';
@@ -12,17 +13,6 @@ interface ManageAccountListProps {
   type: 'whitelist' | 'greylist';
 }
 
-interface AccountRecord {
-  address: string;
-  name: string;
-  note: string;
-  createdAt: Date;
-}
-
-type RawAccount = { address: string; createdAt: number };
-type RawAccountList = RawAccount[];
-type AccountList = AccountRecord[];
-
 export function ManageAccountList({ type }: ManageAccountListProps): ReactElement {
   const { reset } = useGraphql();
   const [{ token }] = useAppState();
@@ -30,7 +20,6 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [paginate, setPaginate] = useState<boolean>(true);
   const [batchAdding, setBatchAdding] = useState<boolean>(false);
-  const [, dispatch] = useAppState();
   const { networkId } = useEthers();
   const { dispatchTransaction, setAccountProp } = useDispatch();
   const { src20: src20Address } = useContractAddress();
@@ -70,7 +59,7 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
     })
     .filter((a) => `${a.address} ${a.name} ${a.note}`.toLowerCase().includes(searchText.toLowerCase()));
 
-  const columns = tableColumns<AccountRecord>([
+  const columns = tableColumns<Account>([
     {
       title: 'Address',
       key: 'address',

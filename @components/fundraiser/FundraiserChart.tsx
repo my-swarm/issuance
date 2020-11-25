@@ -14,7 +14,7 @@ import moment from 'moment';
 import _ from 'lodash';
 import { formatUnits } from 'ethers/lib/utils';
 import { BigNumber } from 'ethers';
-import { BASE_CURRENCIES } from '@const';
+import { BASE_CURRENCIES } from '@lib';
 
 interface FundraiserChartProps {
   fundraiser: FundraiserFragment;

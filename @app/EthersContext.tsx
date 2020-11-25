@@ -1,8 +1,7 @@
 import React, { ReactElement, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { getNetwork, Network, Web3Provider } from '@ethersproject/providers';
 import { Contract, ethers, Signer } from 'ethers';
-import { Metamask } from '@lib';
-import { EthereumNetwork } from '@types';
+import { Metamask, EthereumNetwork } from '@lib';
 
 export enum EthersStatus {
   DISCONNECTED,

@@ -1,7 +1,9 @@
-import { TokenDeployerState, Src20FeaturesBitmask, TokenState, TransferRules, zeroAddress } from '@types';
 import { BigNumber, utils } from 'ethers';
+import { AddressZero } from '@ethersproject/constants';
 
-import { Deployer, parseUnits, getContractAddress, InvalidStateError } from '.';
+import { TokenDeployerState } from './common';
+import { Deployer } from './Deployer';
+import { parseUnits, getContractAddress, InvalidStateError, TokenState, TransferRules, Src20FeaturesBitmask } from '..';
 import assert from 'assert';
 
 export class TokenDeployer extends Deployer {
@@ -23,7 +25,7 @@ export class TokenDeployer extends Deployer {
 
   private async deployTransferRules(): Promise<void> {
     if (this.token.transferRestrictionsType === TransferRules.None) {
-      this._addresses.transferRules = zeroAddress;
+      this._addresses.transferRules = AddressZero;
       return;
     }
     if (this.state > TokenDeployerState.TransferRules) return;
@@ -51,7 +53,7 @@ export class TokenDeployer extends Deployer {
     this.handleStateChange(TokenDeployerState.Roles);
     const instance = await this.contractProxy.deploy('roles', [
       getContractAddress('registry', this.networkId), // manager: the SRC20 registry contract
-      this._addresses.transferRules || zeroAddress, // rules
+      this._addresses.transferRules || AddressZero, // rules
     ]);
     this._addresses.roles = instance.address;
   }

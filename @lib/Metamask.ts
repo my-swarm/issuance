@@ -1,5 +1,5 @@
-import { MetamaskNotReadyError } from '@lib';
 import { ExternalProvider } from '@ethersproject/providers';
+import { MetamaskNotReadyError } from './errors';
 
 type Ethereum = any;
 

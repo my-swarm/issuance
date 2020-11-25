@@ -1,6 +1,4 @@
-import { EthereumNetwork } from '@types';
-import { SWM_TOKEN_DECIMALS } from '@const';
-import { parseUnits } from '@lib';
+import { parseUnits, EthereumNetwork, SWM_TOKEN_DECIMALS } from '@lib';
 
 export const GANACHE = {
   mnemonic: 'screen crop flip clean airport example clip envelope faint infant limit stay',

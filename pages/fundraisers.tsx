@@ -1,10 +1,10 @@
 import React from 'react';
+import Link from 'next/link';
 import { Button, Space } from 'antd';
 
 import { DefaultLayout, FundraiserCard, Loading } from '@components';
-import { useAppState, useEthers } from '../@app';
-import Link from 'next/link';
-import { useFundraisersQuery } from '../@graphql';
+import { useAppState, useEthers } from '@app';
+import { useFundraisersQuery } from '@graphql';
 
 export default function Fundraisers() {
   const [{ tokens }, dispatch] = useAppState();

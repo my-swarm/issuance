@@ -1,11 +1,11 @@
 import React, { ReactElement, useState } from 'react';
-import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';
-import { Alert, Button, Form, Input, Modal, Radio, Space, Table } from 'antd';
-import { ContributorStatus, useDistrubuteQuery } from '@graphql';
-import { Address, AmountsTable, Loading } from '../utility';
 import { BigNumber } from 'ethers';
+import { Alert, Button, Form, Input, Modal, Radio, Space, Table } from 'antd';
+
+import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';
+import { ContributorStatus, useDistrubuteQuery } from '@graphql';
 import { formatUnits, parseAddressesInput, parseUnits } from '@lib';
-import { BASE_CURRENCIES } from '@const';
+import { AmountsTable, Loading } from '..';
 
 type DistributionType = 'fundraiser' | 'custom';
 

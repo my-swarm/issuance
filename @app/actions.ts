@@ -1,16 +1,15 @@
 import {
-  AccountList,
-  AccountsMeta,
-  AppError,
-  ColdState,
   EthereumNetwork,
-  SpendingApproval,
+  AccountsMeta,
   Token,
   TokenNetworkData,
   TokenState,
   Transaction,
+  SpendingApproval,
   Uuid,
-} from '.';
+  ColdState,
+} from '@lib';
+import { AppError } from './state';
 
 interface resetDataAction {
   type: 'restoreState';

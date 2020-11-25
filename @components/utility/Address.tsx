@@ -1,8 +1,8 @@
 import React, { ReactElement, ReactNode, useCallback } from 'react';
-import { etherscanDomains } from '@const';
-import { EthereumNetwork } from '@types';
-import { useEthers } from '@app';
 import { CopyOutlined } from '@ant-design/icons';
+
+import { EthereumNetwork, etherscanDomains } from '@lib';
+import { useEthers } from '@app';
 
 interface AddressProps {
   children: ReactNode;

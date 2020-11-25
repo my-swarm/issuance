@@ -1,10 +1,10 @@
 import { IStorageAdapter } from './IStorageAdapter';
-import { AppState } from '@types';
+import { ColdState } from './common';
 
 export class LocalStorageAdapter implements IStorageAdapter {
   static readonly LS_KEY = 'data';
 
-  public save(data: AppState) {
+  public save(data: ColdState) {
     window.localStorage.setItem(LocalStorageAdapter.LS_KEY, LocalStorageAdapter.serialize(data));
   }
 
@@ -12,11 +12,11 @@ export class LocalStorageAdapter implements IStorageAdapter {
     return LocalStorageAdapter.unserialize(window.localStorage.getItem(LocalStorageAdapter.LS_KEY));
   }
 
-  private static serialize(data: AppState): string {
+  private static serialize(data: ColdState): string {
     return JSON.stringify(data);
   }
 
-  private static unserialize(serializedData: string | null): AppState {
+  private static unserialize(serializedData: string | null): ColdState {
     if (!serializedData) {
       return null;
     }

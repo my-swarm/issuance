@@ -1,12 +1,10 @@
 import { Contract } from 'ethers';
 import moment from 'moment';
 
-import { FundraiserDeployerState } from '@types';
-import { BASE_CURRENCIES } from '@const';
+import { BASE_CURRENCIES } from '@lib';
 
-import { Deployer } from './Deployer';
-import { parseUnits } from './numberUtils';
-import { getUnixTimestamp } from './dateUtils';
+import { parseUnits, getUnixTimestamp, FundraiserDeployerState } from '..';
+import { Deployer } from '.';
 
 const baseCurrency = BASE_CURRENCIES.USDC;
 

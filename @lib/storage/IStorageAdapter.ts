@@ -1,4 +1,4 @@
-import { ColdState } from '@types';
+import { ColdState } from './common';
 export interface IStorageAdapter {
   save: (data: ColdState) => void;
   load: () => ColdState;

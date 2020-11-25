@@ -2,9 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { Space, Modal, Alert, Button } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { useAppState, useEthers } from '@app';
-import { ContractProxy } from '../../@lib';
-import { TransactionState } from '@types';
-import { transactionStatesMeta } from '@const';
+import { ContractProxy, TransactionState, transactionStatesMeta } from '@lib';
 
 export function TransactionModal(): ReactElement {
   const { signer, networkId } = useEthers();

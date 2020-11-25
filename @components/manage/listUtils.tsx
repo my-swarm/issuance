@@ -1,5 +1,5 @@
 import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
-import { MANAGE_TABLE_PER_PAGE } from '@const';
+import { MANAGE_TABLE_PER_PAGE } from '@app';
 import { Address } from '@components';
 import React, { ReactElement } from 'react';
 

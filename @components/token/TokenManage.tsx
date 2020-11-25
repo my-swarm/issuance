@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Collapse } from 'antd';
-import { TransferRules } from '@types';
+import { TransferRules } from '@lib';
 import { useAppState } from '@app';
 import {
   ManageAccountList,
@@ -12,7 +12,7 @@ import {
   ManageDividends,
   ManageAsset,
   ManageDistribute,
-} from '../manage';
+} from '..';
 
 export function TokenManage(): ReactElement {
   const [{ token }] = useAppState();

@@ -1,9 +1,8 @@
 import React, { ReactElement } from 'react';
 import { Address } from '@components';
-import { formatUnits } from '@lib';
+import { formatUnits, Token } from '@lib';
 import { Table } from 'antd';
 import { BigNumber } from 'ethers';
-import { Token } from '@types';
 
 interface AmountsTableProps {
   addresses: string[];

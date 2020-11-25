@@ -1,26 +1,33 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { Button, Drawer, Table } from 'antd';
 
-import { useEthers, useAppState, useDispatch, useGraphql } from '@app';
-import { BaseError, parseUnits, sameAddress } from '@lib';
+import { useAppState, useDispatch, useEthers, useGraphql } from '@app';
 import {
+  BaseError,
+  parseUnits,
+  sameAddress,
+  Token,
+  TokenAction,
+  TokenRecord,
+  TokenState,
+  tokenStates,
+  SWM_TOKEN_DECIMALS,
+} from '@lib';
+import { TokenInfoFragment, useTokensQuery } from '@graphql';
+import {
+  Address,
   DefaultLayout,
-  TokenDeploy,
-  TokenForm,
   TokenActions,
   TokenActionTitle,
-  TokenStartFundraiser,
+  TokenDeploy,
+  TokenForm,
+  TokenInfo,
   TokenManage,
   TokenManageFundraiser,
   TokenStakeAndMint,
-  TokenInfo,
-  Address,
-  Loading,
+  TokenStartFundraiser,
 } from '@components';
-import { Token, TokenAction, TokenRecord, TokenState, tokenStates, transferRules } from '@types';
-import { useTokensQuery, TokenInfoFragment } from '@graphql';
-import { renderAddress, tableColumns } from '../@components/manage/listUtils';
-import { SWM_TOKEN_DECIMALS } from '@const';
+import { renderAddress, tableColumns } from '@components/manage/listUtils';
 
 function getTokenList(localTokens: Token[], onlineTokens: TokenInfoFragment[], networkId): TokenRecord[] {
   if (!networkId) return [];
@@ -111,7 +118,6 @@ export default function Tokens(): ReactElement {
   ]);
 
   const dataSource = getTokenList(tokens, data?.tokens || [], networkId);
-  console.log({ dataSource });
 
   const handleAction = (action: TokenAction, tokenRecord: TokenRecord) => {
     if (action === TokenAction.Delete) {
@@ -176,7 +182,7 @@ export default function Tokens(): ReactElement {
 
   return (
     <DefaultLayout title="My Tokens" headExtra={renderHeadExtra()} headTableAligned={true}>
-      <Table columns={columns} dataSource={dataSource} rowKey="address" />
+      <Table columns={columns} dataSource={dataSource} rowKey="id" />
       <Drawer
         title={<TokenActionTitle action={action} />}
         visible={action !== undefined}

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
-import { ColdState } from '@types';
-import { Storage, LocalStorageAdapter } from '@lib';
+import { Storage, LocalStorageAdapter, ColdState } from '@lib';
 
 export function useStorage() {
   const [isWorking, setIsWorking] = useState(false);

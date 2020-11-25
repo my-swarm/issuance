@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
-import { Token, TokenState, TokenAction, Uuid, TokenRecord } from '@types';
-import { Button, Popconfirm, Space } from 'antd';
+import { TokenState, TokenAction, TokenRecord } from '@lib';
+import { Button, Popconfirm } from 'antd';
 import {
   EditOutlined,
   InfoCircleOutlined,

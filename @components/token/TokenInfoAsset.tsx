@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Descriptions } from 'antd';
-import { formatNumber } from '@lib';
-import { tokenFeatures } from '@const';
+import { formatNumber, tokenFeatures } from '@lib';
 import { FilePreview } from '@components';
 import { useAppState } from '@app';
 

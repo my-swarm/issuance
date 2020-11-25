@@ -1,6 +1,6 @@
 import { Contract, ContractFactory, Signer } from 'ethers';
 import { abis, addresses, bytecodes, contractsMeta, contractNameMap } from '@contracts';
-import { Token } from '@types';
+import { Token } from './token';
 
 function getFullName(contractName: string): string {
   if (!contractNameMap[contractName]) throw new Error('Unknown contract: ' + contractName);

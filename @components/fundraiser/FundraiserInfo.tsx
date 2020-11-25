@@ -1,8 +1,6 @@
 import React, { ReactElement } from 'react';
-import { Token, transferRules } from '@types';
-import { Descriptions, Space } from 'antd';
-import { formatDate, formatNumber } from '@lib';
-import { BASE_CURRENCIES, tokenFeatures } from '@const';
+import { Descriptions } from 'antd';
+import { formatDate, formatNumber, BASE_CURRENCIES } from '@lib';
 import { formatUnits } from 'ethers/lib/utils';
 import { FundraiserInfoFragment } from '@graphql';
 

@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react';
 import { Button, Divider } from 'antd';
 
-import { TokenDeployerState } from '@types';
 import { useAppState, useEthers } from '@app';
+import { TokenDeployerState } from '@lib';
 import { TokenInfoGeneral, DeployProgress } from '..';
 
 interface TokenDeployProps {

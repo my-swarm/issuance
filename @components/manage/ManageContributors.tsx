@@ -10,12 +10,11 @@ import {
 import { Button, Checkbox, Dropdown, Menu, Select, Space, Table, Tooltip } from 'antd';
 
 import { ContributorFragment, ContributorStatus } from '@graphql';
-import { BASE_CURRENCIES } from '@const';
 import { useAppState, useDispatch, useEthers, useGraphql } from '@app';
 import { FilterDropdown, EditableCell, AccountsAddModal } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
 import { Address } from '@components';
-import { strcmp } from '@lib';
+import { strcmp, BASE_CURRENCIES } from '@lib';
 
 interface TableRecord {
   address: string;

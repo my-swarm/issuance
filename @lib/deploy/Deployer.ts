@@ -1,15 +1,8 @@
 import { Signer } from 'ethers';
-import { ContractProxy } from './ContractProxy';
-import {
-  EthereumAddress,
-  EthereumNetwork,
-  Token,
-  DeployerEventCallback,
-  TransactionEventCallback,
-  DeployerState,
-  TokenAddresses,
-} from '@types';
-import { getContractAddress } from './contracts';
+import { EthereumAddress, EthereumNetwork } from '@lib';
+
+import { ContractProxy, getContractAddress, Token, TokenAddresses, TransactionEventCallback } from '..';
+import { DeployerEventCallback, DeployerState } from './common';
 
 export abstract class Deployer {
   protected contractAddresses: { [index: string]: EthereumAddress } = {}; // overrides of base contracts

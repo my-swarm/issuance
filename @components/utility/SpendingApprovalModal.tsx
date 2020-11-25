@@ -1,11 +1,8 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import { Space, Modal, Alert, Button } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
+import { Button, Modal, Space } from 'antd';
 import { useAppState, useDispatch, useEthers } from '@app';
-import { ContractProxy, formatUnits, getContract, getContractAbi, getContractAddress, parseUnits } from '@lib';
-import { TransactionState } from '@types';
-import { transactionStatesMeta } from '@const';
-import { BigNumber, Contract } from 'ethers';
+import { formatUnits, getContractAddress } from '@lib';
+import { BigNumber } from 'ethers';
 
 interface TokenInfo {
   name: string;

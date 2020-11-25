@@ -2,8 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { Button, Divider } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 
-import { TokenState } from '@types';
-import { TokenDeployer } from '@lib';
+import { TokenDeployer, TokenState } from '@lib';
 import { useAppState, useEthers } from '@app';
 import { StakeTable, TokenInfoMinting, TokenInfoStaking } from '..';
 

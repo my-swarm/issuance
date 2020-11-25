@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { FundraiserDeployerState, TokenFundraiser } from '@types';
+import { FundraiserDeployerState, TokenFundraiser } from '@lib';
 import { FundraiserForm, DeployProgress } from '..';
 import { useEthers, useAppState } from '@app';
 

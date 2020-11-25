@@ -1,17 +1,15 @@
 import React, { ReactElement, useState } from 'react';
 import { Input, Modal } from 'antd';
-import { AccountMeta, AccountsMeta, TokenAccountListType } from '@types';
-import ethers from 'ethers';
-import { useAppState, useDispatch } from '@app';
+import { useDispatch } from '@app';
 import { Help } from '@components';
-import { parseAddressesInput } from '@lib';
+import { parseAddressesInput, AccountMeta, AccountsMeta, AccountListType } from '@lib';
 
 interface AccountsAddModalProps {
-  list: TokenAccountListType;
+  list: AccountListType;
   onClose: () => void;
 }
 
-function listToContractMethod(list: TokenAccountListType, operation: 'add' | 'remove'): string {
+function listToContractMethod(list: AccountListType, operation: 'add' | 'remove'): string {
   const whitelistOperations = {
     add: 'bulkWhitelistAccount',
     remove: 'bulkUnWhitelistAccount',
@@ -30,7 +28,7 @@ function listToContractMethod(list: TokenAccountListType, operation: 'add' | 're
   }
 }
 
-function listTitle(list: TokenAccountListType): string {
+function listTitle(list: AccountListType): string {
   switch (list) {
     case 'contributors':
       return 'fundraiser contributors list';

@@ -3,12 +3,18 @@ import { Layout, PageHeader, Modal } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
 
-import { PageProps } from '@types';
 import { Logo, MetamaskStatus, StateStorageSync, TransactionModal, SpendingApprovalModal } from '@components';
 import { MainMenu } from '@components/layout/MainMenu';
 import { useAppState } from '@app';
 
 const { Content, Sider } = Layout;
+
+interface PageProps {
+  children: ReactNode;
+  title: string;
+  subtitle?: string;
+  description?: string;
+}
 
 interface DefaultLayoutProps extends PageProps {
   headExtra?: ReactNode;

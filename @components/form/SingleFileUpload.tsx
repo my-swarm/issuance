@@ -2,9 +2,8 @@ import React, { ReactElement, useState, useEffect } from 'react';
 import { Upload } from 'antd';
 import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface';
 
-import { convertFileToUpload, convertUploadToFile } from '@lib';
-import { FORM } from '@const';
-import { AppFile } from '@types';
+import { convertFileToUpload, convertUploadToFile, AppFile } from '@lib';
+import { FORM } from '@app';
 import { UploadDraggerContent } from '@components';
 
 interface ImageUploadProps {

@@ -1,5 +1,6 @@
-import { Contract, ContractFactory, Signer, Transaction, Event } from 'ethers';
-import { EthereumNetwork, Token, TransactionEventCallback, TransactionState } from '@types';
+import { Contract, Signer, Transaction, Event } from 'ethers';
+import { EthereumNetwork, TransactionEventCallback, TransactionState } from '@lib';
+import { Token } from './token';
 import { getContractFactory, getContract, getContractAbi } from './contracts';
 
 interface ContractOptions {

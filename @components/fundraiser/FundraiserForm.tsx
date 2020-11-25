@@ -1,10 +1,10 @@
-import React, { ReactElement, useEffect, useState } from 'react';
-import { Form, DatePicker, Input, InputNumber, Button, Space, Select, Row, Col, Checkbox } from 'antd';
-import { Token, TokenFundraiser } from '@types';
-import { BASE_CURRENCIES } from '@const';
-import { useEthers } from '@app';
-import { Help, HelpLabel } from '../utility';
+import React, { ReactElement, useState } from 'react';
 import moment from 'moment';
+import { Form, DatePicker, Input, InputNumber, Button, Space, Select, Row, Col, Checkbox } from 'antd';
+
+import { TokenFundraiser, BASE_CURRENCIES } from '@lib';
+import { useEthers } from '@app';
+import { Help, HelpLabel } from '..';
 
 interface FundraiserFormProps {
   tokenName: string;

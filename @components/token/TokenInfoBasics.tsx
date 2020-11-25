@@ -1,8 +1,6 @@
 import React, { ReactElement } from 'react';
-import { transferRules } from '@types';
 import { Descriptions } from 'antd';
-import { formatNumber } from '@lib';
-import { tokenFeatures } from '@const';
+import { formatNumber, transferRules, tokenFeatures } from '@lib';
 import { useAppState } from '@app';
 
 export function TokenInfoBasics(): ReactElement {

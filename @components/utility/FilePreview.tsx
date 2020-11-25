@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { DownloadOutlined } from '@ant-design/icons';
-import { AppFile } from '@types';
+import { AppFile } from '@lib';
 
 interface FilePreviewProps {
   file: AppFile;

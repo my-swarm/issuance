@@ -46,17 +46,17 @@ export function ManageSupply(): ReactElement {
     }
 
     registry
-      .swmNeeded(src20.address, parseUnits(newSupply.toString(), token.decimals))
+      .computeStake(src20.address, parseUnits(newSupply.toString(), token.decimals))
       .then((x) => method(parseFloat(formatUnits(x, SWM_TOKEN_DECIMALS))));
   };
 
   const handleIncreaseSupply = async () => {
     const additionalSupply = parseUnits(increaseForm.getFieldValue('supply'), token.decimals);
-    const swmNeeded = await registry.swmNeeded(src20.address, additionalSupply);
+    const computeStake = await registry.computeStake(src20.address, additionalSupply);
 
     dispatchTransaction({
       method: 'swm.approve',
-      arguments: [registry.address, swmNeeded.sub(swmAllowance.raw)],
+      arguments: [registry.address, computeStake.sub(swmAllowance.raw)],
       description: 'Approving SWM spending. Confirm transaction to be albe to stake your SWM',
       onSuccess: () => {
         dispatchTransaction({

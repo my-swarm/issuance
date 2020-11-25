@@ -43,6 +43,7 @@ export function DeployProgress({ type, onClose }: DeployProgressProps): ReactEle
   }
   const deployerStateMeta = deployerStatesMeta[deployerState];
   const transactionStateMeta = transactionStatesMeta[transactionState];
+  console.log({ deployerState, deployerStateMeta });
 
   const handleDeploy = async () => {
     await setupDeployer();
@@ -84,7 +85,7 @@ export function DeployProgress({ type, onClose }: DeployProgressProps): ReactEle
   }
 
   const handleDeployProgress = (newState: DeployerState) => {
-    const deployingState = type === 'token' ? TokenState.Deployed : TokenState.DeployingFundraiser;
+    const deployingState = type === 'token' ? TokenState.Deploying : TokenState.DeployingFundraiser;
     const deployedState = type === 'token' ? TokenState.Deployed : TokenState.Fundraising;
     dispatch({
       type: 'updateTokenNetwork',

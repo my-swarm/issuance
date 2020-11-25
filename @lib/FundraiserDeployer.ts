@@ -21,6 +21,7 @@ export class FundraiserDeployer extends Deployer {
   public async deploy(): Promise<void> {
     await this.deployFundraiser();
     await this.deployContributorRestrictions();
+    await this.deployAffiliateManager();
     await this.setupFundraiser();
     this.handleStateChange(FundraiserDeployerState.Finished);
   }
@@ -59,6 +60,13 @@ export class FundraiserDeployer extends Deployer {
     this._addresses.contributorRestrictions = instance.address;
   }
 
+  private async deployAffiliateManager() {
+    if (this.state > FundraiserDeployerState.AffiliateManager) return;
+    this.handleStateChange(FundraiserDeployerState.AffiliateManager);
+    const instance = await this.contractProxy.deploy('affiliateManager');
+    this._addresses.affiliateManager = instance.address;
+  }
+
   private async setupFundraiser() {
     if (this.state > FundraiserDeployerState.Setup) return;
 
@@ -76,6 +84,7 @@ export class FundraiserDeployer extends Deployer {
       tokenPrice, // uint _tokenPrice
       this.getAddress('affiliateManager'), // address _affiliateManager
       this.getAddress('contributorRestrictions'), // address _contributorRestrictions
+      this.getAddress('fundraiserManager'), // address _fundraiserManager
       this.getAddress('minter'), // address _minter
       fundraiser.contributionsLocked, // bool _contributionsLocked
     ];

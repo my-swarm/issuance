@@ -41,7 +41,18 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     );
   }
 
-  if (token.isDeployed && !token.isFundraising && !token.isMinted) {
+  if (localState === TokenState.DeployingFundraiser) {
+    actions.push(
+      <Button
+        key="startFundraise"
+        size="small"
+        onClick={() => onAction(TokenAction.StartFundraise)}
+        icon={<EditOutlined />}
+      >
+        Resume fundraiser deploy
+      </Button>,
+    );
+  } else if (token.isDeployed && !token.isFundraising && !token.isMinted) {
     actions.push(
       <Button
         key="fundraiser"
@@ -52,9 +63,6 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
         Start fundraiser
       </Button>,
     );
-  }
-
-  if (token.isDeployed && !token.isMinted && !token.isFundraising) {
     actions.push(
       <Button
         key="stake"
@@ -76,19 +84,6 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
         icon={<EditOutlined />}
       >
         Manage fundraiser
-      </Button>,
-    );
-  }
-
-  if (localState === TokenState.DeployingFundraiser) {
-    actions.push(
-      <Button
-        key="startFundraise"
-        size="small"
-        onClick={() => onAction(TokenAction.StartFundraise)}
-        icon={<EditOutlined />}
-      >
-        Resume fundraiser deploy
       </Button>,
     );
   }

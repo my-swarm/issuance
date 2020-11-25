@@ -61,6 +61,7 @@ export interface TokenAddresses {
   src20?: EthereumAddress;
   fundraiser?: EthereumAddress;
   contributorRestrictions?: EthereumAddress;
+  affiliateManager?: EthereumAddress;
 }
 
 export type AccountMeta = {

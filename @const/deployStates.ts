@@ -73,6 +73,12 @@ export const fundraiserDeployerStatesMeta: DeployerStatesMeta = {
     description: 'List of contributors has to be maintained - that’s what this contract is for.',
     percent: 50,
   },
+  [FundraiserDeployerState.AffiliateManager]: {
+    message: 'Deploy affiliate manager contract',
+    description:
+      'This contract lets you manage List of contributors has to be maintained - that’s what this contract is for.',
+    percent: 50,
+  },
   [FundraiserDeployerState.Setup]: {
     message: 'Setting up fundraiser contract',
     description: 'There’ some additional setup we have to do with a separate transaction.',

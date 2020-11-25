@@ -45,7 +45,7 @@ const contractValues = {
     type: ContractValueType.SwmTokenAmount,
     implicitArgs: { 0: 'address.src20' },
   },
-  swmNeeded: { name: 'registry', method: 'swmNeeded', type: ContractValueType.SwmTokenAmount },
+  computeStake: { name: 'registry', method: 'computeStake', type: ContractValueType.SwmTokenAmount },
 };
 
 type ContractAddressMap = { [key: string]: string };

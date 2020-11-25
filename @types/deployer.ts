@@ -14,6 +14,7 @@ export enum FundraiserDeployerState {
   None = DeployerStateNone,
   Fundraiser = 1,
   ContributorRestrictions,
+  AffiliateManager,
   Setup,
   Finished = DeployerStateFinished,
 }

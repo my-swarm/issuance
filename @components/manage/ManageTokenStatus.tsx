@@ -18,7 +18,7 @@ export function ManageTokenStatus(): ReactElement {
 
   const handleFreeze = async () => {
     dispatchTransaction({
-      method: 'features.freezeToken',
+      method: 'features.pause',
       description: 'Freezing token',
       onSuccess: reset,
     });
@@ -26,7 +26,7 @@ export function ManageTokenStatus(): ReactElement {
 
   const handleUnfreeze = async () => {
     dispatchTransaction({
-      method: 'features.unfreezeToken',
+      method: 'features.unpause',
       description: 'Unfreezing token',
       onSuccess: reset,
     });

@@ -76,9 +76,7 @@ export default function Tokens(): ReactElement {
   }, [tokens]);
 
   function renderTokenState(localState: TokenState, token: TokenRecord): string {
-    if (!connected) {
-      return 'Not connected';
-    }
+    if (!connected) return 'Not connected';
     const result = [];
     if (token.isDeployed) result.push('Deployed');
     if (token.isFundraising) result.push('Fundraiser');
@@ -178,7 +176,7 @@ export default function Tokens(): ReactElement {
 
   return (
     <DefaultLayout title="My Tokens" headExtra={renderHeadExtra()} headTableAligned={true}>
-      <Table columns={columns} dataSource={dataSource} />
+      <Table columns={columns} dataSource={dataSource} rowKey="address" />
       <Drawer
         title={<TokenActionTitle action={action} />}
         visible={action !== undefined}

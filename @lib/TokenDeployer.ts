@@ -50,7 +50,6 @@ export class TokenDeployer extends Deployer {
 
     this.handleStateChange(TokenDeployerState.Roles);
     const instance = await this.contractProxy.deploy('roles', [
-      this.owner, // owner
       getContractAddress('registry', this.networkId), // manager: the SRC20 registry contract
       this._addresses.transferRules || zeroAddress, // rules
     ]);
@@ -91,8 +90,6 @@ export class TokenDeployer extends Deployer {
       kyaUrl,
       assetNetValue,
       [
-        this.owner,
-        zeroAddress, // restrictions - not implemented (yet?)
         this.getAddress('transferRules'),
         this.getAddress('roles'),
         this.getAddress('features'),

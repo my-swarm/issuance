@@ -1,5 +1,6 @@
 import React from 'react';
-import { DefaultLayout } from '@components';
+import Link from 'next/link';
+import { CardAction, DefaultLayout } from '@components';
 import { Card, Col, Divider, Row, Space, Tag } from 'antd';
 import { useAppState } from '@app';
 import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined, WalletOutlined } from '@ant-design/icons';
@@ -11,10 +12,12 @@ interface IndexProps {
 export default function Index({ title }: IndexProps) {
   const [{ tokens }] = useAppState();
 
+  const colLayout = { xs: 24, md: 12, lg: 8, lg: 8, xxl: 6 };
+
   return (
     <DefaultLayout title="Welcome to MySwarm Investment Portal">
       <Row gutter={24}>
-        <Col xs={24} sm={12} lg={6}>
+        <Col {...colLayout}>
           <Card
             bordered={false}
             cover={
@@ -25,21 +28,21 @@ export default function Index({ title }: IndexProps) {
             actions={[
               <>
                 <AppstoreOutlined />
-                <span>Issue Tokens</span>
+                <span>Tokens</span>
               </>,
               <>
                 <LineChartOutlined />
-                <span>Explore Fundraisers</span>
+                <span>Fundraisers</span>
               </>,
             ]}
           >
             <Card.Meta
-              title="I want to issue a security token"
-              description="Deploy your own security token with ease."
+              title="As a token issuer"
+              description="You can deploy and manage your security tokens and create fundraisers for them."
             />
           </Card>
         </Col>
-        <Col xs={24} sm={12} lg={6}>
+        <Col {...colLayout}>
           <Card
             cover={
               <div className="index-card-cover">
@@ -47,24 +50,13 @@ export default function Index({ title }: IndexProps) {
               </div>
             }
             actions={[
-              <>
-                <DollarCircleOutlined />
-                <span>Invest</span>
-              </>,
-              <>
-                <WalletOutlined />
-                <span>Wallet</span>
-              </>,
+              <CardAction href="/contribute" icon={<DollarCircleOutlined />} title="Invest" key="contribute" />,
+              <CardAction href="/wallet" icon={<WalletOutlined />} title="Wallet" key="wallet" />,
             ]}
           >
             <Card.Meta
-              title={
-                <Space>
-                  <span>I want to invest</span>
-                  <Tag color="#108ee9">Coming soon</Tag>
-                </Space>
-              }
-              description="Invest now."
+              title="As an investor"
+              description="You can contribute to a fundraiser or manage the security tokens you already own."
             />
           </Card>
         </Col>

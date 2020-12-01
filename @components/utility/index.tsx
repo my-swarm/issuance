@@ -13,3 +13,5 @@ export * from './Countdown';
 export * from './VSpace';
 export * from './PaginatedTable';
 export * from './Box';
+export * from './CardAction';
+export * from './WrapWhen';

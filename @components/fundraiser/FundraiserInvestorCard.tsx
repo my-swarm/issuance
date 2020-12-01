@@ -3,7 +3,7 @@ import { Card, Col, Row } from 'antd';
 import { FundraiserWithTokenFragment } from '@graphql';
 import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined } from '@ant-design/icons';
 import { FundraiserCountdown } from './FundraiserCountdown';
-import { FundraiserStatusChart } from '..';
+import { CardAction, FundraiserStatusChart } from '..';
 
 export enum FundraiserInvestorAction {
   TokenDetails,
@@ -35,18 +35,14 @@ export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInves
     <Card
       title={`${token.name} (${token.symbol})`}
       actions={[
-        <>
-          <AppstoreOutlined onClick={handleTokenDetails} />
-          <span onClick={handleTokenDetails}>Token details</span>
-        </>,
-        <>
-          <LineChartOutlined onClick={handleFundraiserDetails} />
-          <span onClick={handleFundraiserDetails}>Fundraiser details</span>
-        </>,
-        <>
-          <DollarCircleOutlined onClick={handleContribute} />
-          <span onClick={handleContribute}>Contribute</span>
-        </>,
+        <CardAction onClick={handleTokenDetails} icon={<AppstoreOutlined />} title="Token details" key={1} />,
+        <CardAction
+          onClick={handleFundraiserDetails}
+          icon={<LineChartOutlined />}
+          title="Fundraiser details"
+          key={2}
+        />,
+        <CardAction onClick={handleContribute} icon={<DollarCircleOutlined />} title="Contribute" key={3} />,
       ]}
     >
       <h2>Token info</h2>

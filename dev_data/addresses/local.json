@@ -5,16 +5,16 @@
     "features": "0x919b4b4b561c72c990dc868f751328ef127c45f4"
   },
   "token2": {
-    "transferRules": "0xb63181cd1b0a347003137a9a2703bb1429fa852a",
-    "roles": "0x25c344e14b5df94e89021f3b09dad5f462e9b777",
+    "transferRules": "0x3307c25998c69ec9c37c71d2d2e2df837d254133",
+    "roles": "0xdc150be5af9874dbc233fa4aebb25a252069851b",
     "src20": "0xedc43eab736a435bd680b1643c6e7522ecc46029",
-    "features": "0x3307c25998c69ec9c37c71d2d2e2df837d254133"
+    "features": "0x25c344e14b5df94e89021f3b09dad5f462e9b777"
   },
   "token3": {
-    "transferRules": "0x840a75c32f70b204ecf3c795b12289e5eeb3a32c",
-    "roles": "0x51f2aa5298badb434d0c66130c01773ac1b12e3d",
+    "transferRules": "0x1a4eb93ed4a62d39fac01082bfecff491766241b",
+    "roles": "0x10120c0a9c480c2858c0711a3c40ac872ec62732",
     "src20": "0xac9085c8bd3fe353e5a2397759a33269bc9c2c8b",
-    "features": "0x1a4eb93ed4a62d39fac01082bfecff491766241b"
+    "features": "0x51f2aa5298badb434d0c66130c01773ac1b12e3d"
   },
   "token4": {
     "roles": "0x2209d4e308a2cb2c15c20b483f5f5676db009400",

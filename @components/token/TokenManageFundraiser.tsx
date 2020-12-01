@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { Collapse, Space } from 'antd';
 import { useContractAddress } from '@app';
 import { useFundraiserWithContributorsQuery } from '@graphql';
-import { Loading, FundraiserProgressChart, FundraiserInfo, ManageContributors, ManageFundraiserState } from '..';
+import { Loading, FundraiserProgressChart, FundraiserInfoCommon, ManageContributors, ManageFundraiserState } from '..';
 
 export function TokenManageFundraiser(): ReactElement {
   const { fundraiser: fundraiserAddress } = useContractAddress();
@@ -19,7 +19,7 @@ export function TokenManageFundraiser(): ReactElement {
       <Collapse defaultActiveKey={['status']}>
         <Collapse.Panel header="Overview" key="overview">
           <Space direction="vertical">
-            <FundraiserCommon fundraiser={fundraiser} column={2} />
+            <FundraiserInfoCommon fundraiser={fundraiser} column={2} />
             <FundraiserProgressChart fundraiser={fundraiser} />
           </Space>
         </Collapse.Panel>

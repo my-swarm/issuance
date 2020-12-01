@@ -1,8 +1,6 @@
 import React from 'react';
-import Link from 'next/link';
 import { CardAction, DefaultLayout } from '@components';
 import { Card, Col, Divider, Row, Space, Tag } from 'antd';
-import { useAppState } from '@app';
 import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined, WalletOutlined } from '@ant-design/icons';
 
 interface IndexProps {
@@ -10,9 +8,7 @@ interface IndexProps {
 }
 
 export default function Index({ title }: IndexProps) {
-  const [{ tokens }] = useAppState();
-
-  const colLayout = { xs: 24, md: 12, lg: 8, lg: 8, xxl: 6 };
+  const colLayout = { xs: 24, md: 12, lg: 8, xl: 8, xxl: 6 };
 
   return (
     <DefaultLayout title="Welcome to MySwarm Investment Portal">

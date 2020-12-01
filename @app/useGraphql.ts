@@ -7,7 +7,7 @@ interface UseGraphqlResult {
 export function useGraphql() {
   const client = useApolloClient();
 
-  const timeouts = [500, 1000, 2000];
+  const timeouts = [1000, 3000, 9000];
   const reset = () => {
     client.resetStore();
     for (const timeout of timeouts) {

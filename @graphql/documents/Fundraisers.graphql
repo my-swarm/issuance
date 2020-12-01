@@ -63,9 +63,14 @@ fragment Fundraiser on Fundraiser {
   ...FundraiserToken
 }
 
+fragment FundraiserWithContributors on Fundraiser {
+  ...Fundraiser
+  ...FundraiserContributors
+}
+
 query Fundraisers($owner: Bytes!) {
   fundraisers(where: { owner: $owner }) {
-    ...Fundraiser
+    ...FundraiserWithContributors
   }
 }
 

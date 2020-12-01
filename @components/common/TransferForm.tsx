@@ -23,13 +23,14 @@ export function TransferForm({
 }: TransferFormProps): ReactElement {
   const { dispatchTransaction } = useDispatch();
   const { address } = useEthers();
+  const [form] = Form.useForm();
+
   if (from === undefined) from = address;
   if (typeof currentBalance !== 'number')
     currentBalance = parseFloat(formatUnits(BigNumber.from(currentBalance), token.decimals));
 
   const handleTransfer = async (values) => {
     const method = type === 'normal' ? 'transfer' : 'transferForced';
-    console.log({ values });
     const { to, amount } = values;
     const amountBn = parseUnits(amount, token.decimals);
     const args = method === 'transfer' ? [to, amountBn] : [from, to, amountBn];
@@ -42,7 +43,10 @@ export function TransferForm({
       address: token.address,
       arguments: args,
       description,
-      onSuccess,
+      onSuccess: () => {
+        form.resetFields();
+        onSuccess();
+      },
     });
   };
 
@@ -60,7 +64,13 @@ export function TransferForm({
       <VSpace />
 
       <Box>
-        <Form onFinish={handleTransfer} layout="horizontal" labelCol={{ span: 4 }} wrapperCol={{ span: 16 }}>
+        <Form
+          form={form}
+          onFinish={handleTransfer}
+          layout="horizontal"
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 16 }}
+        >
           <Form.Item name="to" label="To address">
             <Input />
           </Form.Item>

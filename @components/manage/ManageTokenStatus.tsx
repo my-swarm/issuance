@@ -18,7 +18,7 @@ export function ManageTokenStatus(): ReactElement {
 
   const handleFreeze = async () => {
     dispatchTransaction({
-      method: 'features.pause',
+      method: 'features.pauseToken',
       description: 'Freezing token',
       onSuccess: reset,
     });
@@ -26,7 +26,7 @@ export function ManageTokenStatus(): ReactElement {
 
   const handleUnfreeze = async () => {
     dispatchTransaction({
-      method: 'features.unpause',
+      method: 'features.unpauseToken',
       description: 'Unfreezing token',
       onSuccess: reset,
     });
@@ -36,7 +36,7 @@ export function ManageTokenStatus(): ReactElement {
     <>
       <h2>Freeze token</h2>
       <p>When token is frozen, all transfers are disabled</p>
-      {gToken.isFrozen && <Alert message="Token is currently frozen!" type="warning" className="mb-3" />}
+      {gToken.isFrozen && <Alert message="Token is currently frozen." type="error" showIcon className="mb-3" />}
       {gToken.features.tokenFreeze ? (
         <p>
           {gToken.isFrozen ? (

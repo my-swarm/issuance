@@ -8,7 +8,7 @@ fragment TokenHolder on TokenHolder {
 
 query TokenHolders($token: ID!) {
   token(id: $token) {
-    id
+    ...TokenInfo
     features {
       accountBurn
       accountFreeze

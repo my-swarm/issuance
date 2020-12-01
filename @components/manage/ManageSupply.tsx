@@ -91,26 +91,42 @@ export function ManageSupply(): ReactElement {
     <>
       <Row gutter={[24, 16]}>
         <Col xs={24} md={12} lg={8}>
-          <Statistic title="Supply" value={formatUnits(gToken.supply, token.decimals)} suffix={token.symbol} />
+          <Statistic
+            title="Supply"
+            value={formatUnits(gToken.supply, token.decimals)}
+            suffix={token.symbol}
+            precision={2}
+          />
         </Col>
         <Col xs={24} md={12} lg={8}>
-          <Statistic title="Max Supply" value={formatUnits(gToken.maxSupply, token.decimals)} suffix={token.symbol} />
+          <Statistic
+            title="Max Supply"
+            value={formatUnits(gToken.maxSupply, token.decimals)}
+            suffix={token.symbol}
+            precision={2}
+          />
         </Col>
         <Col xs={24} md={12} lg={8}>
           <Statistic
             title="Available Supply"
             value={formatUnits(gToken.availableSupply, token.decimals)}
             suffix={token.symbol}
+            precision={2}
           />
         </Col>
         <Col xs={24} md={12} lg={8}>
-          <Statistic title="Current stake" value={formatUnits(gToken.stake, SWM_TOKEN_DECIMALS)} suffix="SWM" />
+          <Statistic
+            title="Current stake"
+            value={formatUnits(gToken.stake, SWM_TOKEN_DECIMALS)}
+            suffix="SWM"
+            precision={2}
+          />
         </Col>
         <Col xs={24} md={12} lg={8}>
-          <Statistic title="SWM Balance" value={swmBalance.nice} suffix="SWM" />
+          <Statistic title="SWM Balance" value={swmBalance.nice} suffix="SWM" precision={2} />
         </Col>
         <Col xs={24} md={12} lg={8}>
-          <Statistic title="SWM Allowance" value={swmAllowance.nice} suffix="SWM" />
+          <Statistic title="SWM Allowance" value={swmAllowance.nice} suffix="SWM" precision={2} />
         </Col>
       </Row>
 

@@ -1848,6 +1848,12 @@ export type FundraiserFragment = (
   & FundraiserTokenFragment
 );
 
+export type FundraiserWithContributorsFragment = (
+  { __typename?: 'Fundraiser' }
+  & FundraiserFragment
+  & FundraiserContributorsFragment
+);
+
 export type FundraisersQueryVariables = Exact<{
   owner: Scalars['Bytes'];
 }>;
@@ -1857,7 +1863,7 @@ export type FundraisersQuery = (
   { __typename?: 'Query' }
   & { fundraisers: Array<(
     { __typename?: 'Fundraiser' }
-    & FundraiserFragment
+    & FundraiserWithContributorsFragment
   )> }
 );
 
@@ -1963,7 +1969,6 @@ export type TokenHoldersQuery = (
   { __typename?: 'Query' }
   & { token?: Maybe<(
     { __typename?: 'Token' }
-    & Pick<Token, 'id'>
     & { features?: Maybe<(
       { __typename?: 'Features' }
       & Pick<Features, 'accountBurn' | 'accountFreeze' | 'forceTransfer'>
@@ -1971,6 +1976,7 @@ export type TokenHoldersQuery = (
       { __typename?: 'TokenHolder' }
       & TokenHolderFragment
     )> }
+    & TokenInfoFragment
   )> }
 );
 
@@ -2156,25 +2162,6 @@ export type WhitelistGreylistQuery = (
   )> }
 );
 
-export const ContributorFragmentDoc = gql`
-    fragment Contributor on Contributor {
-  address
-  status
-  amount
-  contributions {
-    timestamp
-    type
-    amount
-  }
-}
-    `;
-export const FundraiserContributorsFragmentDoc = gql`
-    fragment FundraiserContributors on Fundraiser {
-  contributors {
-    ...Contributor
-  }
-}
-    ${ContributorFragmentDoc}`;
 export const FundraiserContractsFragmentDoc = gql`
     fragment FundraiserContracts on Fundraiser {
   affiliateManager
@@ -2242,6 +2229,32 @@ export const FundraiserFragmentDoc = gql`
     ${FundraiserInfoFragmentDoc}
 ${FundraiserBaseCurrencyFragmentDoc}
 ${FundraiserTokenFragmentDoc}`;
+export const ContributorFragmentDoc = gql`
+    fragment Contributor on Contributor {
+  address
+  status
+  amount
+  contributions {
+    timestamp
+    type
+    amount
+  }
+}
+    `;
+export const FundraiserContributorsFragmentDoc = gql`
+    fragment FundraiserContributors on Fundraiser {
+  contributors {
+    ...Contributor
+  }
+}
+    ${ContributorFragmentDoc}`;
+export const FundraiserWithContributorsFragmentDoc = gql`
+    fragment FundraiserWithContributors on Fundraiser {
+  ...Fundraiser
+  ...FundraiserContributors
+}
+    ${FundraiserFragmentDoc}
+${FundraiserContributorsFragmentDoc}`;
 export const FundraiserWithTokenFragmentDoc = gql`
     fragment FundraiserWithToken on Fundraiser {
   ...FundraiserInfo
@@ -2373,10 +2386,10 @@ export type DistrubuteQueryResult = Apollo.QueryResult<DistrubuteQuery, Distrubu
 export const FundraisersDocument = gql`
     query Fundraisers($owner: Bytes!) {
   fundraisers(where: {owner: $owner}) {
-    ...Fundraiser
+    ...FundraiserWithContributors
   }
 }
-    ${FundraiserFragmentDoc}`;
+    ${FundraiserWithContributorsFragmentDoc}`;
 
 /**
  * __useFundraisersQuery__
@@ -2589,7 +2602,7 @@ export type TokenAssetQueryResult = Apollo.QueryResult<TokenAssetQuery, TokenAss
 export const TokenHoldersDocument = gql`
     query TokenHolders($token: ID!) {
   token(id: $token) {
-    id
+    ...TokenInfo
     features {
       accountBurn
       accountFreeze
@@ -2600,7 +2613,8 @@ export const TokenHoldersDocument = gql`
     }
   }
 }
-    ${TokenHolderFragmentDoc}`;
+    ${TokenInfoFragmentDoc}
+${TokenHolderFragmentDoc}`;
 
 /**
  * __useTokenHoldersQuery__

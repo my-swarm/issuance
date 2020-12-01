@@ -34,18 +34,18 @@ export interface SpendingApproval {
 
 export const transactionStatesMeta: { [index in TransactionState]: TransactionStateMeta } = {
   [TransactionState.None]: {
-    message: "Transaction hasn't been initiated yet",
+    message: "Transaction hasn't been initiated yet.",
   },
   [TransactionState.Signing]: {
-    message: 'Waiting for transaction signature',
+    message: 'Waiting for transaction signature...',
   },
   [TransactionState.Confirming]: {
-    message: 'Waiting for network confirmation',
+    message: 'Waiting for network confirmation...',
   },
   [TransactionState.Confirmed]: {
-    message: 'Transaction has finished',
+    message: 'Transaction has finished.',
   },
   [TransactionState.Error]: {
-    message: 'Error when processing transaction',
+    message: 'Error when processing transaction.',
   },
 };

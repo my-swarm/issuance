@@ -38,7 +38,6 @@ export function getContractBytecode(contractName: string): string {
 }
 
 export function getContract(contractName: string, signer: Signer, networkId: string | number, token?: Token): Contract {
-  console.log('getContract', { contractName, signer, networkId, token });
   const address = getContractAddress(contractName, networkId, token);
   if (!address) return undefined;
   return new Contract(address, getContractAbi(contractName), signer);

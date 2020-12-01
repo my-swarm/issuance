@@ -196,6 +196,7 @@ export function ManageTokenHolders(): ReactElement {
           from={transferingFrom}
           currentBalance={tableData.find((x) => x.address === transferingFrom).balance}
           onClose={handleCloseModal}
+          token={data.token}
         />
       )}
     </>

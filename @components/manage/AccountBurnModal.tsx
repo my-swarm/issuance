@@ -30,7 +30,7 @@ export function AccountBurnModal({ address, currentBalance, onClose }: AccountBu
   };
 
   return (
-    <Modal visible={true} title="Burn account" onOk={handleBurn} onCancel={handleCancel}>
+    <Modal visible={true} title="Burn account" onOk={handleBurn} onCancel={handleCancel} maskClosable={false}>
       <div className="mb-2">
         <p>Burning means permanently deleting tokens.</p>
         <Space direction="vertical">

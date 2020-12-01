@@ -18,6 +18,7 @@ export function InvestContribute({ id }: InvestTokenDetailsProps): ReactElement 
   const { checkAllowance, dispatchTransaction } = useDispatch();
   const { reset } = useGraphql();
   const [balance, reloadBalance] = useErc20Balance(data?.fundraiser?.baseCurrency?.address);
+  const [form] = Form.useForm();
 
   if (loading) return <Loading />;
   const { fundraiser } = data;
@@ -41,13 +42,14 @@ export function InvestContribute({ id }: InvestTokenDetailsProps): ReactElement 
             content: (
               <div>
                 <p>
-                  You have contributed ${values.amount} ${baseCurrency.symbol} to the ${token.symbol} fundraiser.
+                  You have contributed {values.amount} {baseCurrency.symbol} to the {token.symbol} fundraiser.
                 </p>
                 <p>Follow the fundraiser status to see how the progress goes.</p>
               </div>
             ),
           });
           reset();
+          form.resetFields();
           reloadBalance();
         },
       });
@@ -81,7 +83,7 @@ export function InvestContribute({ id }: InvestTokenDetailsProps): ReactElement 
         <Address short>{fundraiser.address}</Address>). You will be asked to sign the transaction and you can verify the
         parameters in the Metamask popup window.
       </p>
-      <Form onFinish={handleContribute} layout="inline">
+      <Form onFinish={handleContribute} layout="inline" form={form}>
         <Form.Item name="amount" label="Amount to contribute">
           <InputNumber min={1} max={balance.raw ? parseFloat(balance.nice) : 1} />
         </Form.Item>

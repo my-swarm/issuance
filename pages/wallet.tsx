@@ -6,6 +6,7 @@ import { DefaultLayout, Loading, WalletDetail } from '@components';
 import { TokenHolderFragment, TokenInfoFragment, TransferFragment, useWalletLazyQuery } from '@graphql';
 import { formatUnits } from '@lib';
 import { useEthers, useGraphql } from '@app';
+import { AlignType } from 'rc-table/es/interface';
 
 enum WalletAction {
   Detail,
@@ -79,13 +80,13 @@ export default function WalletPage(): ReactElement {
     {
       title: 'Balance',
       key: 'balance',
-      align: 'right',
+      align: 'right' as AlignType,
       render: ({ holder, token }) => formatUnits(holder.balance, token.decimals),
     },
     {
       title: 'Action',
       key: 'action',
-      align: 'right',
+      align: 'right' as AlignType,
       render: (record) => (
         <Space size="small">
           <Button size="small" onClick={() => handleAction(WalletAction.Detail, record)}>

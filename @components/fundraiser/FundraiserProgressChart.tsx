@@ -9,7 +9,7 @@ import {
   Tooltip,
   XAxis,
 } from 'recharts';
-import { ContributorFragment, FundraiserFragment } from '@graphql';
+import { ContributorFragment, FundraiserWithContributorsFragment } from '@graphql';
 import moment from 'moment';
 import _ from 'lodash';
 import { formatUnits } from 'ethers/lib/utils';
@@ -17,7 +17,7 @@ import { BigNumber } from 'ethers';
 import { BASE_CURRENCIES } from '@lib';
 
 interface FundraiserChartProps {
-  fundraiser: FundraiserFragment;
+  fundraiser: FundraiserWithContributorsFragment;
 }
 
 type ChartRecord = {

@@ -87,9 +87,12 @@ export function TransactionModal(): ReactElement {
         </div>
       )}
       {transactionState === TransactionState.Confirmed && (
-        <div>
-          <Button onClick={handleClose}>Close</Button>
-        </div>
+        <>
+          <p>Please note that it might take some times for the changes to show in the UI.</p>
+          <div>
+            <Button onClick={handleClose}>Close</Button>
+          </div>
+        </>
       )}
     </Modal>
   );

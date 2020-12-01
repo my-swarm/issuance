@@ -21,7 +21,7 @@ export const contractsMeta: { [key: string]: ContractMeta } = {
 
   AffiliateManager: { shortName: 'affiliateManager', isBase: false },
   SRC20: { shortName: 'src20', isBase: false },
-  Featured: { shortName: 'features', isBase: false },
+  Features: { shortName: 'features', isBase: false },
   SRC20Roles: { shortName: 'roles', isBase: false },
   TransferRules: { shortName: 'transferRules', isBase: false },
   Fundraiser: { shortName: 'fundraiser', isBase: false },

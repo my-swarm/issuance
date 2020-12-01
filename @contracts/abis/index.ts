@@ -1,5 +1,5 @@
 import AssetRegistry from './AssetRegistry.json';
-import Featured from './Featured.json';
+import Features from './Features.json';
 import TokenMinter from './TokenMinter.json';
 import SRC20Roles from './SRC20Roles.json';
 import SRC20Factory from './SRC20Factory.json';
@@ -18,7 +18,7 @@ import ERC20 from './ERC20.json';
 
 export const abis = {
   TransferRules,
-  Featured,
+  Features,
   SRC20Roles,
   AssetRegistry,
   TokenMinter,

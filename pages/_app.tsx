@@ -4,10 +4,12 @@ import { ApolloProvider, ApolloClient, InMemoryCache, NormalizedCacheObject } fr
 import '../styles/index.scss';
 import { EthersProvider, StateProvider, reducer } from '@app';
 import { MetamaskNotReadyError } from '@lib';
-import { StateStorageSync } from '@components';
+import { DevAccountSwitcher, StateStorageSync } from '@components';
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
   const [apolloClient, setApolloClient] = useState<ApolloClient<NormalizedCacheObject>>();
+  const [devAccountId, setDevAccountId] = useState<number>(1);
+
   useEffect(() => {
     window.onerror = function (msg, url, line, col, error) {
       if (error instanceof MetamaskNotReadyError) {
@@ -35,11 +37,12 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
 
   return (
     <StateProvider reducer={reducer}>
-      <EthersProvider>
+      <EthersProvider devAccountId={devAccountId}>
         <ApolloProvider client={apolloClient}>
           <Component {...pageProps} />
         </ApolloProvider>
       </EthersProvider>
+      <DevAccountSwitcher value={devAccountId} onChange={setDevAccountId} />
     </StateProvider>
   );
 }

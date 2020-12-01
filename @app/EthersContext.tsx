@@ -1,6 +1,7 @@
 import React, { ReactElement, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { getNetwork, Network, Web3Provider } from '@ethersproject/providers';
-import { Contract, ethers, Signer } from 'ethers';
+import { getNetwork, Network, Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
+import { Contract, ethers, Signer, Wallet } from 'ethers';
+import { devEthereumAccounts, devEthereumNode } from './config';
 import { Metamask, EthereumNetwork } from '@lib';
 
 export enum EthersStatus {
@@ -11,9 +12,9 @@ export enum EthersStatus {
 
 interface ContextProps {
   status: EthersStatus;
-  provider: Web3Provider | undefined;
-  signer: Signer | undefined;
-  address: string | undefined;
+  provider?: Web3Provider | JsonRpcProvider;
+  signer?: Signer;
+  address?: string;
   networkId: EthereumNetwork;
   network: Network;
   connect: (silent: boolean) => void;
@@ -24,8 +25,13 @@ interface ContextProps {
 
 export const EthersContext = React.createContext<Partial<ContextProps>>({});
 
-export function EthersProvider({ children }: { children: ReactNode }): ReactElement {
-  const [provider, setProvider] = useState<Web3Provider | undefined>(undefined);
+interface EthersProviderProps {
+  devAccountId: number;
+  children: ReactNode;
+}
+
+export function EthersProvider({ children, devAccountId }: EthersProviderProps): ReactElement {
+  const [provider, setProvider] = useState<Web3Provider | JsonRpcProvider>(undefined);
   const [signer, setSigner] = useState<Signer>();
   const [networkId, setNetworkId] = useState<EthereumNetwork>();
   const [status, setStatus] = useState<EthersStatus>(EthersStatus.DISCONNECTED);
@@ -33,18 +39,22 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
   const [metamask, setMetamask] = useState<Metamask>();
 
   useEffect(() => {
-    if (process.browser && window['ethereum']) {
+    if (process.env.NEXT_PUBLIC_DEV && devAccountId !== undefined) {
+      resetJsonRpcProvider();
+    } else if (process.browser && window['ethereum']) {
       const m = new Metamask(window['ethereum']);
       setMetamask(m);
+    } else {
+      throw new Error('Could not figure out how to setup ethereum provider');
     }
-  }, []);
+  }, [devAccountId]);
 
   const connect = useCallback(
     async (silent: boolean): Promise<void> => {
       if (!metamask) return;
       metamask.onStateUpdate((e) => {
         console.log('metemask state update', e);
-        resetProvider(e);
+        resetWeb3Provider(e);
       });
       await metamask.initAndConnect(silent);
     },
@@ -56,35 +66,22 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
       connect(true).then();
     }
   }, [metamask, connect]);
-  /*
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const updateAddress = async () => {
-      if (provider) {
-        const accounts = await provider.listAccounts();
-        if (accounts && accounts.length > 0) {
-          setAddress(accounts[0]);
-        }
-      }
-    };
-  });
-*/
 
-  async function resetProvider(ethereum) {
+  async function resetWeb3Provider(ethereum = undefined) {
     if (!ethereum) {
       setStatus(EthersStatus.FAILED);
       return;
     }
-
     const _provider = new ethers.providers.Web3Provider(ethereum);
+    const _signer = _provider && _provider.getSigner();
+
     setProvider(_provider);
+    setSigner(_signer);
     if (!_provider) {
       setStatus(EthersStatus.FAILED);
       return;
     }
 
-    const _signer = _provider.getSigner();
-    setSigner(_signer);
     const _networkId = (await _signer.getChainId()) as EthereumNetwork;
     setNetworkId(_networkId);
     const accounts = await _provider.listAccounts();
@@ -97,17 +94,23 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
     }
   }
 
-  async function disconnect() {
-    if (!metamask) {
+  async function resetJsonRpcProvider() {
+    const url = `http://${devEthereumNode.host}:${devEthereumNode.port}`;
+    const devAccount = devEthereumAccounts[devAccountId];
+    const _provider = new ethers.providers.JsonRpcProvider(url, devEthereumNode.networkId);
+    if (!_provider) {
+      setStatus(EthersStatus.FAILED);
       return;
     }
-    await metamask.disconnect();
-    setProvider(undefined);
-    setSigner(undefined);
-    setAddress(undefined);
+
+    const _signer = _provider && new Wallet(devAccount.privateKey, _provider);
+    setProvider(_provider);
+    setSigner(_signer);
+    setNetworkId(devEthereumNode.networkId);
+    setAddress(devAccount.address);
+    setStatus(EthersStatus.CONNECTED);
   }
 
-  console.log('render ethers context');
   return (
     <EthersContext.Provider
       value={{
@@ -119,7 +122,6 @@ export function EthersProvider({ children }: { children: ReactNode }): ReactElem
         networkId,
         network: getNetwork(networkId),
         connect,
-        disconnect,
       }}
     >
       {children}

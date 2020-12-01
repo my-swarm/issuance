@@ -10,3 +10,4 @@ export * from './table';
 export * from './manage';
 export * from './wallet';
 export * from './common';
+export * from './dev';

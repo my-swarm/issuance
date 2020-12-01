@@ -1,0 +1,20 @@
+query Wallet($address: Bytes) {
+  tokenHolders(where: { address: $address }) {
+    ...TokenHolder
+    token {
+      ...TokenInfo
+      transfersFrom: transfers(where: { fromAddress: $address }) {
+        ...Transfer
+      }
+      transfersTo: transfers(where: { toAddress: $address }) {
+        ...Transfer
+      }
+      whitelist(where: { address: $address }) {
+        address
+      },
+      greylist(where: { address: $address }) {
+        address
+      },
+    }
+  }
+}

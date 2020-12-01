@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Button, Space } from 'antd';
 
-import { DefaultLayout, FundraiserCard, Loading } from '@components';
+import { DefaultLayout, FundraiserIssuerCard, Loading } from '@components';
 import { useAppState, useEthers } from '@app';
 import { useFundraisersQuery } from '@graphql';
 
@@ -25,7 +25,7 @@ export default function Fundraisers() {
     <DefaultLayout title="My fundraisers" headExtra={renderHeadExtra()} headTableAligned={true}>
       {fundraisers.map((fundraiser) => (
         <div className="mb-3" key={fundraiser.id}>
-          <FundraiserCard fundraiser={fundraiser} />
+          <FundraiserIssuerCard fundraiser={fundraiser} />
         </div>
       ))}
     </DefaultLayout>

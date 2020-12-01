@@ -1,18 +1,14 @@
 fragment Transfer on Transfer {
   id
-  from {
-    address
-  }
-  to {
-    address
-  }
+  fromAddress
+  toAddress
   createdAt
   value
 }
 
 query Transfers($token: ID!) {
   token(id: $token) {
-    id
+    ...TokenInfo
     transfers {
       ...Transfer
     },

@@ -1,0 +1,13 @@
+fragment FundraiserWithToken on Fundraiser{
+  ...FundraiserInfo
+  ...FundraiserBaseCurrency
+  token {
+    ...TokenInfo
+  }
+
+}
+query Invest {
+  fundraisers {
+    ...FundraiserWithToken
+  }
+}

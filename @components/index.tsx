@@ -8,3 +8,5 @@ export * from './fundraiser';
 export * from './misc';
 export * from './table';
 export * from './manage';
+export * from './wallet';
+export * from './common';

@@ -1,23 +1,29 @@
-import moment from 'moment';
+import moment, { Moment } from 'moment';
+
+export type Datelike = string | number | Moment | Date;
+
+export function toMoment(d: Datelike) {
+  if (typeof d === 'number') {
+    return moment.unix(d);
+  } else {
+    return moment(d);
+  }
+}
 
 export function createDate(d: string | number): Date {
   const m = typeof d === 'number' ? moment.unix(d) : moment(d);
   return m.toDate();
 }
 
-export function formatDate(d: Date | number): string {
-  const m = typeof d === 'number' ? moment.unix(d) : moment(d);
-  return m.format('LL');
+export function formatDate(d: Datelike): string {
+  return toMoment(d).format('LL');
 }
 
-export function formatDatetime(d: Date | number): string {
-  const m = typeof d === 'number' ? moment.unix(d) : moment(d);
-  return m.format('lll');
+export function formatDatetime(d: Datelike): string {
+  return toMoment(d).format('lll');
 }
 
-export function getUnixTimestamp(d: Date | moment.Moment | string): number {
-  if (d instanceof Date || typeof d === 'string') {
-    d = moment(d);
-  }
-  return d.unix();
+export function getUnixTimestamp(d: Datelike): number {
+  if (typeof d === 'number') return d;
+  return moment(d).unix();
 }

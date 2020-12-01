@@ -2,14 +2,14 @@ import React, { ReactElement } from 'react';
 import { Card, Row, Col } from 'antd';
 import { FundraiserFragment } from '@graphql';
 import { useAppState, useEthers } from '@app';
-import { FundraiserChart } from './FundraiserChart';
-import { FundraiserInfo } from './FundraiserInfo';
+import { FundraiserProgressChart } from './FundraiserProgressChart';
+import { FundraiserInfoCommon } from './FundraiserInfoCommon';
 
 interface FundraiserCardProps {
   fundraiser: FundraiserFragment;
 }
 
-export function FundraiserCard({ fundraiser }: FundraiserCardProps): ReactElement {
+export function FundraiserIssuerCard({ fundraiser }: FundraiserCardProps): ReactElement {
   const { networkId } = useEthers();
   const [{ tokens }] = useAppState();
   const extra = <a href={`/tokens/?address=${fundraiser.address}action=manageFundraiser`}>Manage</a>;
@@ -20,10 +20,10 @@ export function FundraiserCard({ fundraiser }: FundraiserCardProps): ReactElemen
     <Card title={fundraiser.label} extra={extra}>
       <Row gutter={16}>
         <Col xs={24} lg={12}>
-          <FundraiserChart fundraiser={fundraiser} />
+          <FundraiserProgressChart fundraiser={fundraiser} />
         </Col>
         <Col xs={24} lg={12}>
-          <FundraiserInfo fundraiser={fundraiser} />
+          <FundraiserInfoCommon fundraiser={fundraiser} />
         </Col>
       </Row>
     </Card>

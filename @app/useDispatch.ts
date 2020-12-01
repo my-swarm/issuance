@@ -7,7 +7,12 @@ interface UseDispatchResult {
   setToken: (token: Token) => void;
   dispatchError: (message: string, description: string) => void;
   dispatchTransaction: (transaction: Transaction) => void;
-  checkAllowance: (contractName: string, tokenAddress: string, amount: BigNumber, onSuccess: () => void) => void;
+  checkAllowance: (
+    contractName: string | [string, string],
+    tokenAddress: string,
+    amount: BigNumber,
+    onSuccess: () => void,
+  ) => void;
   setAccountProp: (address: string, prop: string, value: string) => void;
   batchSetAccountProp: (items: AccountsMeta) => void;
 }
@@ -45,19 +50,31 @@ export function useDispatch(): UseDispatchResult {
   };
 
   const checkAllowance = async (
-    contractName: string,
+    spender: string | [string, string],
     tokenAddress: string,
     amount: BigNumber,
     onSuccess: () => void,
   ) => {
-    const contract = getContract(contractName, signer, networkId);
+    let spenderName;
+    let spenderAddress;
+
+    if (typeof spender === 'string') {
+      spenderName = spender;
+      const spenderContract = getContract(spenderName, signer, networkId);
+      spenderAddress = spenderContract.address;
+    } else {
+      spenderName = spender[0];
+      spenderAddress = spender[1];
+    }
+
     const tokenContract = new Contract(tokenAddress, getContractAbi('erc20'), signer);
-    const currentAllowance = await tokenContract.allowance(address, contract.address);
+    const currentAllowance = await tokenContract.allowance(address, spenderAddress);
     if (currentAllowance.lt(amount)) {
       dispatch({
         type: 'approveSpending',
         spendingApproval: {
-          contractName,
+          spenderName,
+          spenderAddress,
           tokenContract,
           amount,
           currentAllowance,

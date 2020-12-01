@@ -9,3 +9,7 @@ export * from './TransactionModal';
 export * from './SpendingApprovalModal';
 export * from './Loading';
 export * from './AmountsTable';
+export * from './Countdown';
+export * from './VSpace';
+export * from './PaginatedTable';
+export * from './Box';

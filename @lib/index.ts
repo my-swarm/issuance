@@ -15,3 +15,4 @@ export * from './transaction';
 export * from './account';
 export * from './token';
 export * from './swarm';
+export * from './wallet';

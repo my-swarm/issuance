@@ -12,11 +12,12 @@ interface TokenInfo {
 
 export function SpendingApprovalModal(): ReactElement {
   const { signer, networkId } = useEthers();
-  const [{ spendingApproval, token }, dispatch] = useAppState();
+  const [{ spendingApproval }, dispatch] = useAppState();
   const [tokenInfo, setTokenInfo] = useState<TokenInfo>();
   const { dispatchTransaction } = useDispatch();
 
-  const { amount, tokenContract, contractName, currentAllowance, onSuccess } = spendingApproval;
+  const { amount, tokenContract, spenderName, spenderAddress, currentAllowance, onSuccess } = spendingApproval;
+  console.log('approval modal', tokenContract);
 
   useEffect(() => {
     if (tokenContract && signer && networkId) {
@@ -37,21 +38,23 @@ export function SpendingApprovalModal(): ReactElement {
     const transaction = {
       method: 'erc20.approve',
       address: tokenContract.address,
-      arguments: [getContractAddress(contractName, networkId, token), realAmount],
+      arguments: [spenderAddress, realAmount],
       description: 'Approving spending',
       onSuccess,
     };
     dispatchTransaction(transaction);
+    handleClose();
   };
 
   const handleClose = () => {
     dispatch({ type: 'resetSpendingApproval' });
   };
 
+  console.log({ tokenInfo });
   return (
     <Modal title="Approve spending" footer={null} visible={true} closable={false}>
       <p>
-        The <strong>{contractName}</strong> contract needs to spend{' '}
+        The <strong>{spenderName}</strong> contract needs to spend{' '}
         <strong>{formatUnits(amount, tokenInfo.decimals)}</strong> {tokenInfo.symbol} on your behalf. Please allow
         limited or unlimited spending
       </p>

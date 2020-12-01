@@ -5,31 +5,39 @@ fragment TokenInfo on Token {
   address
   availableSupply
   stake
+  decimals
+  supply
+  maxSupply
+}
+
+fragment TokenAsset on Token {
+  kyaHash
+  kyaUrl
+  nav
+}
+
+fragment TokenContracts on Token {
   transferRules { address },
   features { address }
   roles { address }
   currentFundraiser { address, status }
 }
 
-fragment Token on Token {
-  ...TokenInfo,
-  # description, // neni tam
-  decimals,
-  supply,
-  maxSupply,
-  nav,
-  kyaHash,
-  kyaUrl,
-  transferRules { address },
-  features { address }
-  roles { address }
+fragment TokenFundraiser on Token {
   currentFundraiser {
     ...FundraiserInfo
   }
 }
 
+
+fragment Token on Token {
+  ...TokenInfo,
+  ...TokenContracts,
+  ...TokenFundraiser,
+}
+
 query Tokens($owner: Bytes!) {
   tokens(where: { owner: $owner }) {
-    ...TokenInfo
+    ...Token
   }
 }

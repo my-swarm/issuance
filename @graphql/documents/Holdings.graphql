@@ -1,0 +1,14 @@
+query Holdings {
+  tokenHolders {
+    ...TokenHolder
+    token {
+      ...TokenInfo
+      transfersFrom: transfers {
+        ...Transfer
+      }
+      transfersTo: transfers {
+        ...Transfer
+      }
+    }
+  }
+}

@@ -1,12 +1,12 @@
 import React, { ReactElement } from 'react';
 import { Collapse, Space } from 'antd';
 import { useContractAddress } from '@app';
-import { useFundraiserQuery } from '@graphql';
-import { Loading, FundraiserChart, FundraiserInfo, ManageContributors, ManageFundraiserState } from '..';
+import { useFundraiserWithContributorsQuery } from '@graphql';
+import { Loading, FundraiserProgressChart, FundraiserInfo, ManageContributors, ManageFundraiserState } from '..';
 
 export function TokenManageFundraiser(): ReactElement {
   const { fundraiser: fundraiserAddress } = useContractAddress();
-  const { loading, error, data } = useFundraiserQuery({ variables: { id: fundraiserAddress } });
+  const { loading, error, data } = useFundraiserWithContributorsQuery({ variables: { id: fundraiserAddress } });
   if (loading || !data) return <Loading />;
 
   const fundraiser = data.fundraiser;
@@ -19,8 +19,8 @@ export function TokenManageFundraiser(): ReactElement {
       <Collapse defaultActiveKey={['status']}>
         <Collapse.Panel header="Overview" key="overview">
           <Space direction="vertical">
-            <FundraiserInfo fundraiser={fundraiser} column={2} />
-            <FundraiserChart fundraiser={fundraiser} />
+            <FundraiserCommon fundraiser={fundraiser} column={2} />
+            <FundraiserProgressChart fundraiser={fundraiser} />
           </Space>
         </Collapse.Panel>
         <Collapse.Panel header="Contributors" key="contributors">

@@ -2,11 +2,13 @@ import { BigNumber, BigNumberish, utils } from 'ethers';
 
 export function parseUnits(amount: string | number, decimals: number): BigNumber {
   if (typeof amount === 'number') amount = amount.toString();
+  console.log({ amount });
   return utils.parseUnits(amount, decimals);
 }
 
-export function formatUnits(bnAmount: BigNumber, decimals: number): string {
-  if (typeof bnAmount === 'string') bnAmount = BigNumber.from(bnAmount);
+export function formatUnits(bnAmount: BigNumber, decimals: number, ifZero = '0'): string {
+  if (typeof bnAmount === 'string' || typeof bnAmount === 'number') bnAmount = BigNumber.from(bnAmount);
+  if (bnAmount.eq(0)) return ifZero;
   return utils.formatUnits(bnAmount, decimals);
 }
 

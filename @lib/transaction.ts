@@ -24,7 +24,8 @@ export interface Transaction {
 }
 
 export interface SpendingApproval {
-  contractName: string;
+  spenderName: string;
+  spenderAddress: string;
   tokenContract: Contract;
   amount: BigNumber;
   currentAllowance: BigNumber;

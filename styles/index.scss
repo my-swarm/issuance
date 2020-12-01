@@ -1,8 +1,11 @@
 @import '~antd/dist/antd.css';
+@import 'vars';
 @import 'ant-hacks';
+@import 'spacing';
 @import 'utility';
 @import 'side-box';
 @import 'custom-card';
+@import 'countdown';
 
 .c-metamask-connect-button {
   img {
@@ -47,4 +50,15 @@
   background: rgba(0, 10, 20, .05);
   border: 1px solid rgba(0, 10, 20, .2);
   padding: .5em;
+}
+
+
+.c-box {
+  padding: 16px;
+  border: 1px dotted $cSwarm;
+  background: $cSwarmBg;
+  button {
+    background: $cSwarm !important;
+    border: 1px solid $cSwarm !important;
+  }
 }

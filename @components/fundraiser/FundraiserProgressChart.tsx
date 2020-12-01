@@ -89,7 +89,7 @@ function contributorsToChartData(contributors: ContributorFragment[], decimals: 
   return dataToNumbers(sumDailyContribution(aggregateDailyContributions(contributors)), decimals);
 }
 
-export function FundraiserChart({ fundraiser }: FundraiserChartProps): ReactElement {
+export function FundraiserProgressChart({ fundraiser }: FundraiserChartProps): ReactElement {
   const baseCurrency = BASE_CURRENCIES.USDC;
   const data = contributorsToChartData(fundraiser.contributors, baseCurrency.decimals);
   const softCap = parseFloat(formatUnits(fundraiser.softCap, baseCurrency.decimals));

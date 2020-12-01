@@ -1,4 +1,4 @@
-import ethers from 'ethers';
+import { ethers } from 'ethers';
 
 export function parseAddressesInput<T>(input: string, convert: (meta: string[]) => T): { [key: string]: T } {
   if (input.trim() === '') {

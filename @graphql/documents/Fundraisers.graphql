@@ -16,36 +16,51 @@ fragment FundraiserContributors on Fundraiser {
 }
 
 fragment FundraiserInfo on Fundraiser {
+  id
+  label
+  owner
   address
   startDate
   endDate
   softCap
   hardCap
   supply
+  tokenPrice
+  contributionsLocked
+
   amountQualified
   amountPending
   amountRefunded
   amountWithdrawn
   status
-
+  numContributors
 }
 
-fragment Fundraiser on Fundraiser {
-  id
-  label
-  ...FundraiserInfo
+fragment FundraiserToken on Fundraiser {
+  token {
+    ...TokenInfo
+  }
+}
 
-  baseCurrency
-  tokenPrice
+fragment FundraiserContracts on Fundraiser {
   affiliateManager
   contributorRestrictions
   minter
-  contributionsLocked
+}
 
-  ...FundraiserContributors
-  token {
-    id
+fragment FundraiserBaseCurrency on Fundraiser {
+  baseCurrency {
+    address
+    name
+    symbol
+    decimals
   }
+}
+
+fragment Fundraiser on Fundraiser {
+  ...FundraiserInfo
+  ...FundraiserBaseCurrency
+  ...FundraiserToken
 }
 
 query Fundraisers($owner: Bytes!) {
@@ -54,8 +69,18 @@ query Fundraisers($owner: Bytes!) {
   }
 }
 
-query Fundraiser($id: ID!) {
+query Fundraiser($id: ID!, $address: Bytes!) {
   fundraiser(id: $id) {
     ...Fundraiser
+    contributors(where: { address: $address }) {
+      ...Contributor
+    }
+  }
+}
+
+query FundraiserWithContributors($id: ID!) {
+  fundraiser(id: $id) {
+    ...Fundraiser
+    ...FundraiserContributors
   }
 }

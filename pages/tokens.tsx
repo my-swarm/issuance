@@ -13,7 +13,7 @@ import {
   tokenStates,
   SWM_TOKEN_DECIMALS,
 } from '@lib';
-import { TokenInfoFragment, useTokensQuery } from '@graphql';
+import { TokenFragment, useTokensQuery } from '@graphql';
 import {
   Address,
   DefaultLayout,
@@ -29,7 +29,7 @@ import {
 } from '@components';
 import { renderAddress, tableColumns } from '@components/manage/listUtils';
 
-function getTokenList(localTokens: Token[], onlineTokens: TokenInfoFragment[], networkId): TokenRecord[] {
+function getTokenList(localTokens: Token[], onlineTokens: TokenFragment[], networkId): TokenRecord[] {
   if (!networkId) return [];
 
   const result: TokenRecord[] = localTokens.map((localToken) => ({

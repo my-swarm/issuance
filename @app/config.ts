@@ -16,8 +16,7 @@ export const FORM = {
 };
 
 export const devEthereumNode = {
-  host: process.env.NEXT_PUBLIC_DEV_ETH_HOST || '127.0.0.1',
-  port: parseInt(process.env.NEXT_PUBLIC_DEV_ETH_PORT) || 7545,
+  address: process.env.NEXT_PUBLIC_DEV_ETH_ADDRESS || 'http://127.0.0.1:7545',
   networkId: parseInt(process.env.NEXT_PUBLIC_DEV_ETH_NETWORK_ID) || 31337,
 };
 

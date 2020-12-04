@@ -95,7 +95,7 @@ export function EthersProvider({ children, devAccountId }: EthersProviderProps):
   }
 
   async function resetJsonRpcProvider() {
-    const url = `http://${devEthereumNode.host}:${devEthereumNode.port}`;
+    const url = `${devEthereumNode.address}`;
     const devAccount = devEthereumAccounts[devAccountId];
     const _provider = new ethers.providers.JsonRpcProvider(url, devEthereumNode.networkId);
     if (!_provider) {

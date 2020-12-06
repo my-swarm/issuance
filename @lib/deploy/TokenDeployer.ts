@@ -3,7 +3,16 @@ import { AddressZero } from '@ethersproject/constants';
 
 import { TokenDeployerState } from './common';
 import { Deployer } from './Deployer';
-import { parseUnits, getContractAddress, InvalidStateError, TokenState, TransferRules, Src20FeaturesBitmask } from '..';
+import {
+  parseUnits,
+  getContractAddress,
+  InvalidStateError,
+  TokenState,
+  TransferRules,
+  Src20FeaturesBitmask,
+  tokenToKya,
+  storeKya,
+} from '..';
 import assert from 'assert';
 
 export class TokenDeployer extends Deployer {
@@ -13,9 +22,6 @@ export class TokenDeployer extends Deployer {
   }
 
   public async deploy(): Promise<void> {
-    // if (this.state > TokenDeployerState.None) {
-    //   this.handleStateChange(TokenDeployerState.None);
-    // }
     await this.deployTransferRules();
     await this.deployFeatures();
     await this.deployRoles();
@@ -72,8 +78,10 @@ export class TokenDeployer extends Deployer {
       allowMint,
       assetNetValue,
     } = this.token;
-    const kyaHash = utils.formatBytes32String('abcd1234abcd1234');
-    const kyaUrl = 'http://kya.com';
+
+    const kya = tokenToKya(this.token);
+    const { kyaHash, kyaUrl } = await storeKya(kya);
+
     let supply = initialSupply;
     if (allowMint) {
       if (allowUnlimitedSupply) {

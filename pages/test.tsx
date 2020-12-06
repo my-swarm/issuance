@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Space } from 'antd';
 import { DefaultLayout } from '@components';
 import { apiUrl, useAppState } from '@app';
-import { Kya, Token, tokenToKya, Api } from '@lib';
+import { tokenToKya, Api } from '@lib';
 
 export default function TestPage() {
   const [{ tokens }] = useAppState();

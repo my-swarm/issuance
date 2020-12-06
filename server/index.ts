@@ -9,17 +9,23 @@ dotenv.config();
 const port = process.env.PORT;
 
 const app = express();
-app.use(bodyParser.json());
+app.use(
+  bodyParser.json({
+    limit: '100mb',
+  }),
+);
 
 const storage = new KyaStorage(ipfsConfig);
 
 app.get('/', (req, res) => res.send('Backend for MySwarm App. Not of much use publicly :)'));
 
 app.post('/api/kya/put', (req, res) => {
-  storage.put(req.body).then((cid: string) => res.send({ cid }));
+  console.log('put');
+  storage.put(req.body).then(({ cid, hash }) => res.send({ cid, hash }));
 });
 
 app.post('/api/kya/get', (req, res) => {
+  console.log('get', req.body.cid);
   storage.get(req.body.cid).then((kya: Kya) => res.send(kya));
 });
 

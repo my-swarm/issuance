@@ -3,6 +3,7 @@ import _ from 'lodash';
 import dataUriToBuffer from 'data-uri-to-buffer';
 import uint8Array from 'uint8arrays';
 import all from 'it-all';
+import keccak256 from 'keccak256';
 
 interface IpfsConfig {
   protocol: string;
@@ -47,9 +48,12 @@ export class KyaStorage {
     return this.ipfs.cat(cid);
   }
 
-  public async put(kya: Kya): Promise<string> {
+  public async put(kya: Kya): Promise<{ cid: string; hash: string }> {
     kya = await this.walkKya(kya, async (file) => await this.contentToCid(file));
-    return await this.ipfsAdd(JSON.stringify(kya));
+    const kyaJson = JSON.stringify(kya);
+    const hash = keccak256(kyaJson).toString('hex');
+    const cid = await this.ipfsAdd(kyaJson);
+    return { cid, hash };
   }
 
   public async get(cid: string): Promise<Kya> {

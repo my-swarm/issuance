@@ -1,6 +1,10 @@
 import { AppFile, Token } from '.';
+import { Api } from './Api';
+import { apiUrl } from '@app';
 
 export type KyaFile = AppFile;
+
+const api = new Api(apiUrl);
 
 export type Kya = {
   token: {
@@ -32,4 +36,9 @@ export function tokenToKya(token: Token): Kya {
       legalDocuments: token.assetLegalDocuments,
     },
   };
+}
+
+export async function storeKya(kya: Kya): Promise<{ kyaHash: string; kyaUrl: string }> {
+  const { cid, hash } = await api.putKya(kya);
+  return { kyaUrl: `ipfs:${cid}`, kyaHash: `0x${hash}` };
 }

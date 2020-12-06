@@ -1,19 +1,20 @@
 import { Kya } from './kya';
 
-interface PutKyaResponse {
+export interface PutKyaResponse {
   cid: string;
+  hash: string;
 }
 
 export class Api {
-  private baseUrl;
+  private readonly baseUrl;
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
   }
 
-  async putKya(kya: Kya): Promise<string> {
+  async putKya(kya: Kya): Promise<PutKyaResponse> {
     const response = await this.apiRequest<PutKyaResponse>(`kya/put`, kya);
-    return response.cid;
+    return response;
   }
 
   async getKya(cid: string): Promise<Kya> {

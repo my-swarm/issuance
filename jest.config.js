@@ -5,6 +5,7 @@ module.exports = {
   preset: 'ts-jest',
   moduleDirectories: ['node_modules', '@lib', '@app'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
+  setupFiles: ['./jest.setup.js'],
   moduleNameMapper: {
     '@contracts': path.resolve(`${__dirname}/@contracts`),
     '@lib': path.resolve(`${__dirname}/@lib`),

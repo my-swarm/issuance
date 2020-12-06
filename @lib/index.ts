@@ -16,3 +16,5 @@ export * from './account';
 export * from './token';
 export * from './swarm';
 export * from './wallet';
+export * from './kya';
+export * from './Api';

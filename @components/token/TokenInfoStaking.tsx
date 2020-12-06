@@ -18,8 +18,8 @@ export function TokenInfoStaking() {
   useEffect(() => {
     if (minter && swmPriceOracle && swm) {
       minter.calcStake(token.assetNetValue).then((val) => setStake(formatUnits(val, SWM_TOKEN_DECIMALS)));
-      swmPriceOracle.getPrice().then(({ priceNumerator, priceDenominator }) => {
-        setSwmPrice(formatNumber(priceNumerator.toNumber() / priceDenominator.toNumber(), 4));
+      swmPriceOracle.getPrice().then(({ numerator, denominator }) => {
+        setSwmPrice(formatNumber(numerator.toNumber() / denominator.toNumber(), 4));
       });
       swm.balanceOf(address).then((val) => setSwmBalance(formatUnits(val, SWM_TOKEN_DECIMALS)));
     }

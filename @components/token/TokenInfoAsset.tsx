@@ -16,7 +16,7 @@ export function TokenInfoAsset(): ReactElement {
       <Descriptions.Item label="Asset name">{token.assetName}</Descriptions.Item>
       <Descriptions.Item label="Asset Net Value">{formatNumber(token.assetNetValue)}</Descriptions.Item>
       <Descriptions.Item label="NAV Supporting document">
-        <FilePreview file={token.navSupportingDocument} />
+        <FilePreview file={token.assetNavDocument} />
       </Descriptions.Item>
       <Descriptions.Item label="Asset Description">{token.assetDescription}</Descriptions.Item>
       <Descriptions.Item label="Asset image">

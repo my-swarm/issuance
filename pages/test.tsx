@@ -1,72 +1,55 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Drawer, Table } from 'antd';
+import React, { useState } from 'react';
+import { Button, Space } from 'antd';
 import { DefaultLayout } from '@components';
-import { useAppState, useContract, useContractAddress, useDispatch, useSwmAllowance } from '@app';
-import { useTokensQuery } from '@graphql';
+import { apiUrl, useAppState } from '@app';
+import { Kya, Token, tokenToKya, Api } from '@lib';
 
 export default function TestPage() {
-  const [{ tokens, token }, dispatch] = useAppState();
-  const { setToken, dispatchTransaction } = useDispatch();
-  const [swmAllowance] = useSwmAllowance();
-  const tokensQuery = useTokensQuery();
-  const { src20: src20Address, swm: swmAddress } = useContractAddress();
-  const { src20, swm } = useContract();
+  const [{ tokens }] = useAppState();
+  const [imageSrc, setImageSrc] = useState<string>();
+  const [fileContent, setFileContent] = useState<string>();
+  const [fileContentRaw, setFileContentRaw] = useState<string>();
+  const token = tokens[0];
+  const cid = 'QmWZzX6BgD878piQM9mCse8MfAFLmb6q1K1g3QGW9SFGuj';
+  const api = new Api(apiUrl);
 
-  const { loading, error, data } = tokensQuery;
-  console.log({ loading, error, data });
-
-  useEffect(() => {
-    console.log('eff');
-    if (tokens.length) {
-      const t = tokens.find((x) => x.symbol === 'TT2');
-      if (!t) throw new Error('Token TT2 not found');
-      setToken(t);
-    }
-  }, [tokens]);
-
-  const [src20Symbol, setSrc20Symbol] = useState<string>('loading');
-  useEffect(() => {
-    if (src20) {
-      src20.symbol().then((x) => setSrc20Symbol(x));
-    }
-  }, [src20]);
-
-  const handleStartTransaction = () => {
-    dispatchTransaction({
-      method: 'src20.approve',
-      arguments: ['0x0a057a7172d0466aef80976d7e8c80647dfd35e3', 1000000000],
-      description: 'Running dummy transaction (setting allowance)',
-      onSuccess: () => alert('Success mate!'),
-    });
+  const handlePutKya = async (token) => {
+    const kya = tokenToKya(token);
+    const cid = await api.putKya(kya);
+    alert('saved: ' + cid);
   };
+
+  const handleGetKya = async (cid) => {
+    const kya = await api.getKya(cid);
+    setImageSrc(kya.token.image.content);
+    const c = kya.asset.navDocument.content;
+    setFileContent(fileContent);
+    fetch(c)
+      .then((response) => response.arrayBuffer())
+      .then((bf) => {
+        const td = new TextDecoder('utf-8');
+        setFileContentRaw(td.decode(bf));
+      });
+  };
+
+  console.log({ token });
 
   return (
     <DefaultLayout title="Test page">
-      <h2>useAddress hook test</h2>
-      <p>swm address: {swmAddress}</p>
-      <p>src20 address: {src20Address}</p>
+      <Space>
+        <Button onClick={() => handlePutKya(token)}>Save KYA</Button>
+        <Button onClick={() => handleGetKya(cid)}>Read KYA</Button>
+      </Space>
 
-      <h2>useContract hook test</h2>
-      <p>swm address: {swm ? swm.address : 'loading'}</p>
-      <p>src20 address: {src20 ? src20.address : 'loading'}</p>
-      <p>src20 symbol: {src20Symbol}</p>
-      <p>
-        {/*Available supply: {supply} /!*<Button size="small" onClick={() => reloadSupply()}>*!/*/}
-        {/*  reload*/}
-        {/*</Button>*/}
-      </p>
+      <hr />
 
-      <h2>useContractValue test</h2>
-      {swmAllowance ? (
-        <p>
-          Total supply: {swmAllowance.nice || '?'} [{swmAllowance.raw.toString()}]
-        </p>
-      ) : (
-        'loading'
+      {imageSrc && (
+        <div>
+          <img src={imageSrc} />
+        </div>
       )}
-
-      <h2>Transaction modal test</h2>
-      <Button onClick={handleStartTransaction}>test TransactionModal</Button>
+      {fileContent && <div>{fileContent}</div>}
+      {fileContentRaw && <div>{fileContentRaw}</div>}
     </DefaultLayout>
   );
 }

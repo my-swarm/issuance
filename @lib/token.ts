@@ -61,7 +61,7 @@ export interface Token {
 
   assetName?: string;
   assetNetValue: number;
-  navSupportingDocument?: AppFile;
+  assetNavDocument?: AppFile;
   assetDescription?: string;
   assetImage?: AppImage;
   assetLegalDocuments: AppFile[];

@@ -45,7 +45,7 @@ export const tokenFormRules = {
 
   assetName: [],
   assetNetValue: [],
-  navSupportingDocument: [],
+  assetNavDocument: [],
   assetDescription: [],
   assetImage: [],
   assetLegalDocuments: [],

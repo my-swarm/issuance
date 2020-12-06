@@ -27,7 +27,8 @@ function createImage(name) {
 const tokenDefaults: Partial<Token> = {
   decimals: 18,
   initialSupply: 10000,
-  description: 'Testing token',
+  description:
+    'Testing token description. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nulla metus, tempus non mauris vitae, faucibus congue magna. Vestibulum non cursus dui, eget euismod turpis. Sed id tristique odio, vel pulvinar nunc. Nam facilisis vitae odio eu pharetra. Ut tempor faucibus odio. Mauris eu faucibus quam. Duis odio mauris, commodo in sodales id, auctor vel orci. Nulla mollis ultrices diam, sed consequat magna tempor sit amet. Maecenas malesuada felis eros, vitae venenatis purus porta a. Suspendisse gravida fringilla lorem, at vehicula turpis porttitor at. Nullam sed efficitur magna.',
   transferRestrictionsType: TransferRules.WhitelistOrGreylist,
   allowAccountFreeze: true,
   allowContractFreeze: true,
@@ -36,7 +37,7 @@ const tokenDefaults: Partial<Token> = {
   allowMint: true,
   image: createImage('Token image.jpg'),
   assetName: 'Some valuable asset',
-  navSupportingDocument: createFile('NAV supporting document.txt'),
+  assetNavDocument: createFile('NAV supporting document.txt'),
   assetLegalDocuments: [createFile('First legal document.txt'), createFile('Second legal document.txt')],
   assetNetValue: 500,
   assetImage: createImage('Asset image.jpg'),

@@ -1,20 +1,26 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import { KyaStorage, Kya } from './lib';
+import { ipfsConfig } from './config';
 
-const port = 5071;
+dotenv.config();
+
+const port = process.env.PORT;
 
 const app = express();
-const rawBodyParser = bodyParser.raw();
-const jsonBodyParser = bodyParser.json();
+app.use(bodyParser.json());
+
+const storage = new KyaStorage(ipfsConfig);
 
 app.get('/', (req, res) => res.send('Backend for MySwarm App. Not of much use publicly :)'));
 
-app.post('/ipfs/add', rawBodyParser, (req, res) => {
-  res.send('add');
+app.post('/api/kya/put', (req, res) => {
+  storage.put(req.body).then((cid: string) => res.send({ cid }));
 });
 
-app.post('/ipfs/cat', jsonBodyParser, (req, res) => {
-  res.send('cat');
+app.post('/api/kya/get', (req, res) => {
+  storage.get(req.body.cid).then((kya: Kya) => res.send(kya));
 });
 
 app.listen(port, () => {

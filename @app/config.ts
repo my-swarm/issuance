@@ -20,6 +20,8 @@ export const devEthereumNode = {
   networkId: parseInt(process.env.NEXT_PUBLIC_DEV_ETH_NETWORK_ID) || 31337,
 };
 
+export const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
+
 export const devEthereumAccounts = [
   {
     address: '0xc783df8a850f42e7f7e57013759c285caa701eb6',

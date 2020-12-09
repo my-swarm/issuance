@@ -8,6 +8,12 @@ fragment TokenInfo on Token {
   decimals
   supply
   maxSupply
+  features {
+    forceTransfer
+    tokenFreeze
+    accountFreeze
+    accountBurn
+  }
 }
 
 fragment TokenAsset on Token {
@@ -32,8 +38,15 @@ fragment TokenFundraiser on Token {
 
 fragment Token on Token {
   ...TokenInfo,
+  ...TokenAsset,
   ...TokenContracts,
   ...TokenFundraiser,
+}
+
+query Token($id: ID!) {
+  token(id: $id) {
+    ...Token
+  }
 }
 
 query Tokens($owner: Bytes!) {

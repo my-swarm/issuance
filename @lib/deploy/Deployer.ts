@@ -1,16 +1,16 @@
 import { Signer } from 'ethers';
 import { EthereumAddress, EthereumNetwork } from '@lib';
 
-import { ContractProxy, getContractAddress, Token, TokenAddresses, TransactionEventCallback } from '..';
+import { ContractProxy, getContractAddress, LocalToken, LocalTokenAddresses, TransactionEventCallback } from '..';
 import { DeployerEventCallback, DeployerState } from './common';
 
 export abstract class Deployer {
   protected contractAddresses: { [index: string]: EthereumAddress } = {}; // overrides of base contracts
-  protected _addresses: TokenAddresses;
+  protected _addresses: LocalTokenAddresses;
 
   protected readonly signer: Signer;
   protected readonly contractProxy: ContractProxy;
-  protected readonly token: Token;
+  protected readonly token: LocalToken;
 
   protected owner: EthereumAddress;
   protected networkId: EthereumNetwork;
@@ -18,16 +18,16 @@ export abstract class Deployer {
   protected state: DeployerState;
   private callbacks: DeployerEventCallback[] = [];
 
-  constructor(signer: Signer, token: Token) {
+  constructor(signer: Signer, token: LocalToken) {
     this.signer = signer;
-    this.contractProxy = new ContractProxy(signer, token);
+    this.contractProxy = new ContractProxy(signer);
     this.token = token;
   }
 
   public async setup(): Promise<void> {
     this.owner = await this.signer.getAddress();
     this.networkId = (await this.signer.getChainId()) as EthereumNetwork;
-    this.addresses = this.token.networks[this.networkId]?.addresses || {};
+    this.addresses = this.token.networks[this.networkId]?.addresses || ({} as LocalTokenAddresses);
   }
 
   public onProgress(callback: DeployerEventCallback): void {
@@ -45,7 +45,7 @@ export abstract class Deployer {
     this.contractProxy.onProgress(callback);
   }
 
-  public resume(state: DeployerState, addresses: TokenAddresses): void {
+  public resume(state: DeployerState, addresses: LocalTokenAddresses): void {
     this.state = state;
     this.addresses = addresses;
   }
@@ -61,11 +61,11 @@ export abstract class Deployer {
 
   public abstract async deploy(): Promise<void>;
 
-  get addresses(): TokenAddresses {
+  get addresses(): LocalTokenAddresses {
     return this._addresses;
   }
 
-  set addresses(addresses: TokenAddresses) {
+  set addresses(addresses: LocalTokenAddresses) {
     this._addresses = addresses;
   }
 

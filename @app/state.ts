@@ -1,5 +1,6 @@
-import { Token, ColdState, Transaction, SpendingApproval } from '@lib';
+import { LocalToken, ColdState, Transaction, SpendingApproval } from '@lib';
 import { ReactElement } from 'react';
+import { TokenFragment } from '@graphql';
 
 export interface AppError {
   message: string;
@@ -12,7 +13,10 @@ export interface AppState extends ColdState {
   isLoaded: boolean;
   isSynced: boolean;
   error?: AppError;
-  token?: Token;
+
+  localToken?: LocalToken;
+  onlineToken?: TokenFragment;
+
   transaction?: Transaction;
   spendingApproval?: SpendingApproval;
 }

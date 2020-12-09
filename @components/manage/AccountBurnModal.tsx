@@ -3,17 +3,18 @@ import { Col, Input, InputNumber, Modal, Row, Space } from 'antd';
 import { useAppState, useDispatch } from '@app';
 import { parseUnits } from '@lib';
 import { Address } from '..';
+import { TokenInfoFragment } from '@graphql';
 
 interface AccountBurnModalProps {
+  token: TokenInfoFragment;
   address: string;
   currentBalance: number;
   onClose: () => void;
 }
 
-export function AccountBurnModal({ address, currentBalance, onClose }: AccountBurnModalProps): ReactElement {
+export function AccountBurnModal({ token, address, currentBalance, onClose }: AccountBurnModalProps): ReactElement {
   const [amount, setAmount] = useState<number>(0);
   const { dispatchTransaction } = useDispatch();
-  const [{ token }] = useAppState();
 
   const handleBurn = async (): Promise<void> => {
     dispatchTransaction({

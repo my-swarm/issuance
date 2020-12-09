@@ -13,7 +13,7 @@ export * from './accountList';
 export * from './contracts';
 export * from './transaction';
 export * from './account';
-export * from './token';
+export * from './localToken';
 export * from './swarm';
 export * from './wallet';
 export * from './kya';

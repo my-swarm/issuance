@@ -1,13 +1,13 @@
 import React, { ReactElement } from 'react';
 import { Address } from '@components';
-import { formatUnits, Token } from '@lib';
+import { formatUnits, LocalToken } from '@lib';
 import { Table } from 'antd';
 import { BigNumber } from 'ethers';
 
 interface AmountsTableProps {
   addresses: string[];
   amounts: BigNumber[];
-  token: Pick<Token, 'decimals' | 'symbol'>;
+  token: Pick<LocalToken, 'decimals' | 'symbol'>;
 }
 
 export function AmountsTable({ amounts, addresses, token }: AmountsTableProps): ReactElement {

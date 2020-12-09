@@ -2,7 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { Checkbox, Dropdown, Menu, Space, Table, Tooltip } from 'antd';
 import { CheckCircleTwoTone, DownOutlined, ExclamationCircleTwoTone, SearchOutlined } from '@ant-design/icons';
 
-import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';
+import { useAppState, useDispatch, useGraphql, useAccountNotes } from '@app';
 import { useTokenHoldersQuery } from '@graphql';
 import { AccountBurnModal, Address, EditableCell, FilterDropdown, Loading, TransferModal } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
@@ -20,19 +20,19 @@ interface TableRecord {
 
 export function ManageTokenHolders(): ReactElement {
   const { reset } = useGraphql();
-  const [{ token }] = useAppState();
+  const [{ onlineToken }] = useAppState();
+  const { dispatchTransaction, setAccountProp } = useDispatch();
+  const accountNotes = useAccountNotes(onlineToken.address);
   const [searchText, setSearchText] = useState<string>('');
   const [paginate, setPaginate] = useState<boolean>(true);
   const [transferingFrom, setTransferingFrom] = useState<string>();
   const [burningAccount, setBurningAccount] = useState<string>();
-  const { networkId } = useEthers();
-  const { dispatchTransaction, setAccountProp } = useDispatch();
-  const { src20: src20Address } = useContractAddress();
   const { loading, error, data } = useTokenHoldersQuery({
-    variables: { token: src20Address },
+    variables: { token: onlineToken.id },
   });
-  if (loading || !data) return <Loading />;
-  const { features, holders } = data.token;
+  if (loading) return <Loading />;
+  const { token } = data;
+  const { features, holders } = token;
 
   const handleFreeze = (account: string) => {
     dispatchTransaction({
@@ -60,12 +60,11 @@ export function ManageTokenHolders(): ReactElement {
 
   const tableData: TableRecord[] = holders
     .map((a) => {
-      const tokenAccountList = token.networks[networkId].accounts || {};
       return {
         ...a,
         key: a.address, // for the table
         balance: parseFloat(formatUnits(a.balance, token.decimals)),
-        ...tokenAccountList[a.address],
+        ...accountNotes[a.address],
       };
     })
     .filter((a) => `${a.address} ${a.name} ${a.note}`.toLowerCase().includes(searchText.toLowerCase()));
@@ -186,6 +185,7 @@ export function ManageTokenHolders(): ReactElement {
 
       {burningAccount !== undefined && (
         <AccountBurnModal
+          token={token}
           address={burningAccount}
           currentBalance={tableData.find((x) => x.address === burningAccount).balance}
           onClose={handleCloseModal}
@@ -193,10 +193,10 @@ export function ManageTokenHolders(): ReactElement {
       )}
       {transferingFrom !== undefined && (
         <TransferModal
+          token={token}
           from={transferingFrom}
           currentBalance={tableData.find((x) => x.address === transferingFrom).balance}
           onClose={handleCloseModal}
-          token={data.token}
         />
       )}
     </>

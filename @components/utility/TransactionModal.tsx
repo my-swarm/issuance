@@ -5,15 +5,15 @@ import { useAppState, useEthers } from '@app';
 import { ContractProxy, TransactionState, transactionStatesMeta } from '@lib';
 
 export function TransactionModal(): ReactElement {
-  const { signer, networkId } = useEthers();
-  const [{ transaction, token }, dispatch] = useAppState();
+  const { signer } = useEthers();
+  const [{ transaction, onlineToken }, dispatch] = useAppState();
   const [transactionState, setTransactionState] = useState<TransactionState>(TransactionState.None);
   const [error, setError] = useState<string>();
   const [retry, setRetry] = useState<boolean>(false);
 
   useEffect(() => {
     if ((signer && transaction) || retry) {
-      const proxy = new ContractProxy(signer, token);
+      const proxy = new ContractProxy(signer, onlineToken);
       proxy.onProgress(handleTransactionProgress);
       setRetry(false);
       const contract: string | [string, string] = transaction.address

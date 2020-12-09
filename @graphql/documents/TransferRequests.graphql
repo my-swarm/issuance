@@ -15,7 +15,7 @@ fragment TransferRequest on TransferRequest {
 
 query TransferRequests($token: ID!) {
   token(id: $token) {
-    id
+    ...TokenInfo
     transferRequests {
       ...TransferRequest
     },

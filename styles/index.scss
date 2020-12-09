@@ -28,18 +28,17 @@
 }
 
 .image-preview {
-  height: 2rem;
-  min-width: 4rem;
+  height: 4rem;
   width: auto;
   position: relative;
 
   img {
     display: block;
     position: absolute;
-    height: 2rem;
+    height: 4rem;
     width: auto;
     &:hover {
-      height: 8rem;
+      height: 16rem;
     }
   }
 }

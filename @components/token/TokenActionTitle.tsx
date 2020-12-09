@@ -15,17 +15,13 @@ const tokenActionTitle = {
   [TokenAction.StartFundraise]: 'Start fundraiser for',
   [TokenAction.ManageToken]: 'Manage',
   [TokenAction.ManageFundraise]: 'Manage fundraiser for',
-  [TokenAction.Info]: 'Token information',
+  [TokenAction.Info]: 'Details about',
 };
 
 export function TokenActionTitle({ action }: TokenActionTitleProps): ReactElement {
-  const [{ token }] = useAppState();
+  const [{ localToken, onlineToken }] = useAppState();
 
-  const tokenName = token ? (
-    <strong>
-      {token.name} ({token.symbol})
-    </strong>
-  ) : null;
+  const tokenName = onlineToken?.name || localToken?.name || '';
   const actionTitle = tokenActionTitle[action];
 
   if (action === TokenAction.Create) {
@@ -33,7 +29,7 @@ export function TokenActionTitle({ action }: TokenActionTitleProps): ReactElemen
   } else if (actionTitle) {
     return (
       <>
-        {actionTitle} {tokenName}
+        {actionTitle} <strong>{tokenName}</strong>
       </>
     );
   } else {

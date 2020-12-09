@@ -19,13 +19,13 @@ export const contractsMeta: { [key: string]: ContractMeta } = {
   SwmToken: { shortName: 'swm', isBase: true },
   Disperse: { shortName: 'disperse', isBase: true },
 
-  AffiliateManager: { shortName: 'affiliateManager', isBase: false },
   SRC20: { shortName: 'src20', isBase: false },
   Features: { shortName: 'features', isBase: false },
   SRC20Roles: { shortName: 'roles', isBase: false },
   TransferRules: { shortName: 'transferRules', isBase: false },
   Fundraiser: { shortName: 'fundraiser', isBase: false },
   ContributorRestrictions: { shortName: 'contributorRestrictions', isBase: false },
+  AffiliateManager: { shortName: 'affiliateManager', isBase: false },
 
   ERC20: { shortName: 'erc20', isBase: false },
 };

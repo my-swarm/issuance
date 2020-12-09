@@ -1,40 +1,29 @@
 import React, { ReactElement, useState } from 'react';
-import {
-  useAppState,
-  useContract,
-  useContractAddress,
-  useDispatch,
-  useEthers,
-  useGraphql,
-  useSwmAllowance,
-  useSwmBalance,
-} from '@app';
+import { useAppState, useContract, useDispatch, useEthers, useGraphql, useSwmAllowance, useSwmBalance } from '@app';
 import { Button, Col, Divider, Form, InputNumber, Row, Statistic } from 'antd';
 import { formatInt, parseUnits, formatUnits, SWM_TOKEN_DECIMALS } from '@lib';
-import { useTokenSupplyQuery } from '@graphql';
+import { useTokenQuery } from '@graphql';
 import { Loading } from '@components';
 
 export function ManageSupply(): ReactElement {
   const { reset } = useGraphql();
   const { address } = useEthers();
-  const [{ token }] = useAppState();
+  const [{ onlineToken }] = useAppState();
   const [swmAllowance, reloadSwmAllowance] = useSwmAllowance();
   const [swmBalance, reloadSwmBalance] = useSwmBalance();
 
   const [stakeRequired, setStakeRequired] = useState<number>();
   const [stakeReturned, setStakeReturned] = useState<number>();
-  const { src20, registry, swm } = useContract();
-  const { src20: src20Address } = useContractAddress();
+  const { src20, registry } = useContract();
   const [increaseForm] = Form.useForm();
   const [decreaseForm] = Form.useForm();
-  const [, dispatch] = useAppState();
   const { dispatchTransaction } = useDispatch();
 
-  const { loading, error, data } = useTokenSupplyQuery({
-    variables: { id: src20Address },
+  const { loading, data } = useTokenQuery({
+    variables: { id: onlineToken.id },
   });
-  const gToken = data?.token || undefined;
-  if (loading || !gToken) return <Loading />;
+  if (loading) return <Loading />;
+  const { token } = data;
 
   const handleSupplyChange = (newSupply: number | string | undefined, returned = false) => {
     const method = returned ? setStakeReturned : setStakeRequired;
@@ -50,7 +39,7 @@ export function ManageSupply(): ReactElement {
   };
 
   const handleIncreaseSupply = async () => {
-    const additionalSupply = parseUnits(increaseForm.getFieldValue('supply'), token.decimals);
+    const additionalSupply = parseUnits(increaseForm.getFieldValue('supply_add'), token.decimals);
     const computeStake = await registry.computeStake(src20.address, additionalSupply);
 
     dispatchTransaction({
@@ -73,7 +62,7 @@ export function ManageSupply(): ReactElement {
   };
 
   const handleDecreaseSupply = async () => {
-    const supply = parseUnits(decreaseForm.getFieldValue('supply'), token.decimals);
+    const supply = parseUnits(decreaseForm.getFieldValue('supply_sub'), token.decimals);
 
     dispatchTransaction({
       method: 'registry.decreaseSupply',
@@ -93,7 +82,7 @@ export function ManageSupply(): ReactElement {
         <Col xs={24} md={12} lg={8}>
           <Statistic
             title="Supply"
-            value={formatUnits(gToken.supply, token.decimals)}
+            value={formatUnits(token.supply, token.decimals)}
             suffix={token.symbol}
             precision={2}
           />
@@ -101,7 +90,7 @@ export function ManageSupply(): ReactElement {
         <Col xs={24} md={12} lg={8}>
           <Statistic
             title="Max Supply"
-            value={formatUnits(gToken.maxSupply, token.decimals)}
+            value={formatUnits(token.maxSupply, token.decimals)}
             suffix={token.symbol}
             precision={2}
           />
@@ -109,7 +98,7 @@ export function ManageSupply(): ReactElement {
         <Col xs={24} md={12} lg={8}>
           <Statistic
             title="Available Supply"
-            value={formatUnits(gToken.availableSupply, token.decimals)}
+            value={formatUnits(token.availableSupply, token.decimals)}
             suffix={token.symbol}
             precision={2}
           />
@@ -117,7 +106,7 @@ export function ManageSupply(): ReactElement {
         <Col xs={24} md={12} lg={8}>
           <Statistic
             title="Current stake"
-            value={formatUnits(gToken.stake, SWM_TOKEN_DECIMALS)}
+            value={formatUnits(token.stake, SWM_TOKEN_DECIMALS)}
             suffix="SWM"
             precision={2}
           />
@@ -134,7 +123,7 @@ export function ManageSupply(): ReactElement {
 
       <h3 className="mt-3">Increase supply</h3>
       <Form form={increaseForm} onFinish={handleIncreaseSupply} layout="inline" className="mb-3">
-        <Form.Item name="supply" label="Increase by">
+        <Form.Item name="supply_add" label="Increase by">
           <InputNumber
             min={0}
             placeholder="Gazillion"
@@ -155,7 +144,7 @@ export function ManageSupply(): ReactElement {
 
       <h3>Decrease supply</h3>
       <Form form={decreaseForm} onFinish={handleDecreaseSupply} layout="inline">
-        <Form.Item name="supply" label="Decrease by">
+        <Form.Item name="supply_sub" label="Decrease by">
           <InputNumber
             min={0}
             placeholder="Gazillion"

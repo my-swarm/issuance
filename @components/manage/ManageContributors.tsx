@@ -10,7 +10,7 @@ import {
 import { Button, Checkbox, Dropdown, Menu, Select, Space, Table, Tooltip } from 'antd';
 
 import { ContributorFragment, ContributorStatus } from '@graphql';
-import { useAppState, useDispatch, useEthers, useGraphql } from '@app';
+import { useAccountNotes, useAppState, useDispatch, useEthers, useGraphql } from '@app';
 import { FilterDropdown, EditableCell, AccountsAddModal } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
 import { Address } from '@components';
@@ -33,8 +33,8 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
   const [paginate, setPaginate] = useState<boolean>(true);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchText, setSearchText] = useState<string>('');
-  const { networkId } = useEthers();
-  const [{ token }, dispatch] = useAppState();
+  const [{ onlineToken }] = useAppState();
+  const accountNotes = useAccountNotes(onlineToken.address);
   const { dispatchTransaction, setAccountProp } = useDispatch();
   const baseCurrency = BASE_CURRENCIES.USDC;
 
@@ -167,12 +167,11 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
 
   const tableData: TableRecord[] = contributors
     .map((contributor) => {
-      const tokenAccountList = token.networks[networkId].accounts || {};
       return {
         ...contributor,
         key: contributor.address,
         amount: parseFloat(formatUnits(contributor.amount, baseCurrency.decimals)),
-        ...tokenAccountList[contributor.address],
+        ...accountNotes[contributor.address],
       };
     })
     .filter(filterByStatus)

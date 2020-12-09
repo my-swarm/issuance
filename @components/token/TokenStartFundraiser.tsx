@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { FundraiserDeployerState, TokenFundraiser } from '@lib';
+import { FundraiserDeployerState, LocalFundraiser } from '@lib';
 import { FundraiserForm, DeployProgress } from '..';
 import { useEthers, useAppState } from '@app';
 
@@ -8,37 +8,39 @@ interface TokenManageProps {
 }
 
 export function TokenStartFundraiser({ onClose }: TokenManageProps): ReactElement {
-  const [{ token }, dispatch] = useAppState();
+  const [{ localToken, onlineToken, fundraisers }, dispatch] = useAppState();
   const { networkId } = useEthers();
   const [isStarted, setIsStarted] = useState<boolean>(false);
-  const deployerState = token.networks[networkId]?.fundraiserDeployerState || FundraiserDeployerState.None;
+  const deployerState = localToken?.networks[networkId]?.fundraiserDeployerState || FundraiserDeployerState.None;
   const isDeploying = deployerState !== FundraiserDeployerState.None;
+  const fundraiser = fundraisers[onlineToken.address];
 
-  const handleSave = async (values: TokenFundraiser) => {
-    saveToken(values);
+  const handleSave = async (values: LocalFundraiser) => {
+    save(values);
     onClose();
   };
 
-  const handleStart = async (values: TokenFundraiser) => {
-    saveToken(values);
+  const handleStart = async (values: LocalFundraiser) => {
+    save(values);
     setIsStarted(true);
   };
 
-  function saveToken(fundraiser) {
+  function save(fundraiser) {
     dispatch({
-      type: 'updateToken',
-      token: { id: token.id, fundraiser },
+      type: 'saveFundraiser',
+      fundraiser,
+      tokenAddress: onlineToken.address,
     });
   }
 
   return (
     <div>
       <FundraiserForm
-        tokenName={token.name}
+        tokenName={onlineToken.name}
         onCancel={onClose}
         onSave={handleSave}
         onStart={handleStart}
-        formData={token.fundraiser}
+        formData={fundraiser}
         disabled={isDeploying || isStarted}
       />
       {(isDeploying || isStarted) && (

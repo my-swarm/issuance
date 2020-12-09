@@ -9,11 +9,6 @@ fragment TokenHolder on TokenHolder {
 query TokenHolders($token: ID!) {
   token(id: $token) {
     ...TokenInfo
-    features {
-      accountBurn
-      accountFreeze
-      forceTransfer
-    }
     holders {
       ...TokenHolder
     },

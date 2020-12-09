@@ -5,9 +5,7 @@ export type AccountMeta = {
   note: string;
 };
 
-export type AccountsMeta = {
-  [key: string]: AccountMeta;
-};
+export type AccountsMeta = Record<string, AccountMeta>;
 
 export type RawAccount = { address: string; createdAt: number };
 

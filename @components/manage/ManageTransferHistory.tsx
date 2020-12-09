@@ -1,13 +1,13 @@
 import React, { ReactElement } from 'react';
 
-import { useContractAddress } from '@app';
+import { useAppState } from '@app';
 import { useTransfersQuery } from '@graphql';
 import { Loading, TransferHistory } from '@components';
 
 export function ManageTransferHistory(): ReactElement {
-  const { src20: src20Address } = useContractAddress();
+  const [{ onlineToken }] = useAppState();
   const { loading, error, data } = useTransfersQuery({
-    variables: { token: src20Address },
+    variables: { token: onlineToken.id },
   });
   if (loading || !data) return <Loading />;
   const { token } = data;

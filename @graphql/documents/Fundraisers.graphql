@@ -34,18 +34,16 @@ fragment FundraiserInfo on Fundraiser {
   amountWithdrawn
   status
   numContributors
+
+  affiliateManager
+  contributorRestrictions
+  minter
 }
 
 fragment FundraiserToken on Fundraiser {
   token {
     ...TokenInfo
   }
-}
-
-fragment FundraiserContracts on Fundraiser {
-  affiliateManager
-  contributorRestrictions
-  minter
 }
 
 fragment FundraiserBaseCurrency on Fundraiser {

@@ -1,23 +1,44 @@
 import React, { ReactElement } from 'react';
+import { AddressZero } from '@ethersproject/constants';
 import { Descriptions } from 'antd';
 import { useAppState, useEthers } from '@app';
 import { Address } from '@components/utility';
+import { LocalTokenAddresses } from '@lib';
 
 export function TokenInfoDeployed(): ReactElement {
   const { networkId } = useEthers();
-  const [{ token }] = useAppState();
+  const [{ onlineToken, localToken }] = useAppState();
 
-  const addresses = token.networks[networkId]?.addresses || undefined;
-  if (!addresses) {
-    return null;
-  }
+  const addresses = localToken.networks[networkId]?.addresses || ({} as LocalTokenAddresses);
 
   function printAddress(type) {
-    if (addresses && addresses[type]) {
-      return <Address link>{addresses[type]}</Address>;
+    let address;
+    if (onlineToken) {
+      switch (type) {
+        case 'src20':
+          address = onlineToken.address;
+          break;
+        case 'features':
+        case 'roles':
+        case 'transferRules':
+          address = onlineToken[type].address;
+          break;
+        case 'fundraiser':
+          address = onlineToken.currentFundraiser.address;
+          break;
+        case 'contributorRestrictions':
+        case 'affiliateManager':
+          address = onlineToken.currentFundraiser[type];
+          break;
+      }
+      if (address === AddressZero) {
+        address = undefined;
+      }
     } else {
-      return 'Not deployed';
+      address = (addresses && addresses[type]) || undefined;
     }
+
+    return address ? <Address link>{address}</Address> : 'Not deployed';
   }
 
   return (

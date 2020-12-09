@@ -3,38 +3,20 @@ import { Form, Input, InputNumber, Button, Checkbox, Space, Radio } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { Store } from 'rc-field-form/lib/interface';
 
-import { Token, TransferRules } from '@lib';
+import { LocalToken, TransferRules } from '@lib';
 import { tokenFormRules as rules } from './tokenFormRules';
 import { Help, HelpLabel, SingleFileUpload, MultipleFilesUpload } from '@components/index';
+import { devDefaultToken, isDev } from '@app';
 
 interface TokenFormProps {
   onCancel: () => void;
-  onSubmit: (token: Token) => void;
-  formData?: Token;
+  onSubmit: (token: LocalToken) => void;
+  formData?: LocalToken;
 }
 
-const sampleFormData: Token = {
-  id: 'xxx-yyy',
-  name: 'New Token',
-  symbol: 'NWT',
-  decimals: 18,
-  description: 'Completely new token',
-  initialSupply: 1000,
-  totalSupply: 5000,
-  transferRestrictionsType: TransferRules.None,
-  allowAccountFreeze: true,
-  allowContractFreeze: true,
-  allowForceTransfer: true,
-  allowBurn: true,
-  allowMint: true,
-  assetName: 'Luxury Mediterranean Condo',
-  assetDescription: 'Love my condo',
-  networks: {},
-  assetNetValue: 50,
-  assetLegalDocuments: [],
-};
+const defaultToken = isDev ? devDefaultToken : undefined;
 
-export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: TokenFormProps): ReactElement {
+export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: TokenFormProps): ReactElement {
   const [initialSupply, setInitialSupply] = useState<number>(formData.initialSupply || 0);
   const [showMintSection, setShowMintSection] = useState<boolean>(formData.allowMint || false);
   const [allowUnlimitedSupply, setallowUnlimitedSupply] = useState<boolean>(formData.allowUnlimitedSupply || false);
@@ -46,7 +28,7 @@ export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: Tok
   };
 
   const handleSubmit = (token: Store) => {
-    onSubmit(token as Token);
+    onSubmit(token as LocalToken);
   };
 
   const handleToggleAdditionalMinting = (e: CheckboxChangeEvent) => {
@@ -143,7 +125,7 @@ export function TokenForm({ onCancel, onSubmit, formData = sampleFormData }: Tok
       )}
 
       <h3>Asset details</h3>
-      <p>Define your asset, it's value and other information in detail.</p>
+      <p>Define your asset, it&apos;s value and other information in detail.</p>
 
       <Form.Item name="assetName" label="Asset Name">
         <Input />

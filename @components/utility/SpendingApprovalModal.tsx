@@ -17,7 +17,6 @@ export function SpendingApprovalModal(): ReactElement {
   const { dispatchTransaction } = useDispatch();
 
   const { amount, tokenContract, spenderName, spenderAddress, currentAllowance, onSuccess } = spendingApproval;
-  console.log('approval modal', tokenContract);
 
   useEffect(() => {
     if (tokenContract && signer && networkId) {
@@ -50,7 +49,6 @@ export function SpendingApprovalModal(): ReactElement {
     dispatch({ type: 'resetSpendingApproval' });
   };
 
-  console.log({ tokenInfo });
   return (
     <Modal title="Approve spending" footer={null} visible={true} closable={false}>
       <p>

@@ -3,7 +3,7 @@ import { BigNumber, Contract } from 'ethers';
 import { AddressZero } from '@ethersproject/constants';
 import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
 
-import { useContractAddress, useDispatch, useEthers } from '@app';
+import { useAppState, useContractAddress, useDispatch, useEthers } from '@app';
 import { useTokenHoldersQuery } from '@graphql';
 import { bnRatio, getContractAbi, parseAddressesInput, parseUnits, sameAddress } from '@lib';
 import { Loading } from '..';
@@ -18,15 +18,17 @@ type FormData = {
 
 export function ManageDividends(): ReactElement {
   const [assetType, setAssetType] = useState('eth');
+  const [{ onlineToken }] = useAppState();
   const { address: myAddress, signer } = useEthers();
   const { dispatchTransaction } = useDispatch();
-  const { src20: src20Address, disperse: disperseAddress } = useContractAddress();
+  const { disperse: disperseAddress } = useContractAddress();
   const { loading, error, data } = useTokenHoldersQuery({
-    variables: { token: src20Address },
+    variables: { token: onlineToken.id },
   });
   const [form] = Form.useForm();
   if (loading || !data) return <Loading />;
-  const { holders } = data.token;
+  const { token } = data;
+  const { holders } = token;
 
   const handleSubmit = async (data: FormData) => {
     const tokenContract =
@@ -75,16 +77,6 @@ export function ManageDividends(): ReactElement {
       .join('\n');
     form.setFieldsValue({ addresses });
   };
-
-  /*
-  const initialValues = {
-    type: 'erc20',
-    amount: 100,
-    tokenAddress: '0x7c2C195CD6D34B8F845992d380aADB2730bB9C6F',
-    from: myAddress,
-    addresses: 'adf',
-  };
-*/
 
   const initialValues = {
     type: 'eth',

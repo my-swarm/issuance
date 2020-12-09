@@ -1,10 +1,10 @@
 import { useAppState } from './StateContext';
 import { useEthers } from './EthersContext';
-import { getContract, getContractAbi, Token, AccountsMeta, Transaction } from '@lib';
+import { getContract, getContractAbi, LocalToken, AccountsMeta, Transaction, OnlineToken } from '@lib';
 import { BigNumber, Contract } from 'ethers';
 
 interface UseDispatchResult {
-  setToken: (token: Token) => void;
+  setToken: (localToken: LocalToken, onlineToken: OnlineToken) => void;
   dispatchError: (message: string, description: string) => void;
   dispatchTransaction: (transaction: Transaction) => void;
   checkAllowance: (
@@ -98,8 +98,8 @@ export function useDispatch(): UseDispatchResult {
     });
   };
 
-  const setToken = (token: Token) => {
-    dispatch({ type: 'setToken', token });
+  const setToken = (localToken: LocalToken, onlineToken: OnlineToken) => {
+    dispatch({ type: 'setToken', localToken, onlineToken });
   };
 
   return {

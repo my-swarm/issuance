@@ -1,32 +1,29 @@
 import React, { ReactElement } from 'react';
 import { Descriptions } from 'antd';
-import { formatNumber, tokenFeatures } from '@lib';
-import { FilePreview } from '@components';
-import { useAppState } from '@app';
+import { formatNumber } from '@lib';
+import { FilePreview, ImagePreview, Loading } from '@components';
+import { useKya } from '@app';
 
 export function TokenInfoAsset(): ReactElement {
-  const [{ token }] = useAppState();
+  const { kya, nav } = useKya();
+  if (!kya) return <Loading />;
 
-  const features = Object.entries(tokenFeatures)
-    .filter(([key, value]) => token[key])
-    .map(([key, value]) => value);
+  const { asset } = kya;
 
   return (
-    <Descriptions title="Asset info" layout="horizontal" bordered size="small" className="c-token-info mb-3" column={2}>
-      <Descriptions.Item label="Asset name">{token.assetName}</Descriptions.Item>
-      <Descriptions.Item label="Asset Net Value">{formatNumber(token.assetNetValue)}</Descriptions.Item>
+    <Descriptions title="Asset info" layout="horizontal" bordered size="small" className="c-token-info mb-3" column={1}>
+      <Descriptions.Item label="Asset name">{asset.name}</Descriptions.Item>
+      <Descriptions.Item label="Asset Net Value">{formatNumber(nav)}</Descriptions.Item>
       <Descriptions.Item label="NAV Supporting document">
-        <FilePreview file={token.assetNavDocument} />
+        <FilePreview file={asset.navDocument} />
       </Descriptions.Item>
-      <Descriptions.Item label="Asset Description">{token.assetDescription}</Descriptions.Item>
+      <Descriptions.Item label="Asset Description">{asset.description}</Descriptions.Item>
       <Descriptions.Item label="Asset image">
-        <div className="image-preview">
-          {token.assetImage?.content ? <img src={token.assetImage.content} alt="Asset" /> : '-'}
-        </div>
+        <ImagePreview image={asset.image} />
       </Descriptions.Item>
       <Descriptions.Item label="Legal documents">
-        {token.assetLegalDocuments.length
-          ? token.assetLegalDocuments.map((document, key) => <FilePreview file={document} key={key} />)
+        {asset.legalDocuments.length
+          ? asset.legalDocuments.map((document, key) => <FilePreview file={document} key={key} />)
           : '-'}
       </Descriptions.Item>
     </Descriptions>

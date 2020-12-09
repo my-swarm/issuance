@@ -3,7 +3,7 @@ import { Button, Divider } from 'antd';
 
 import { useAppState, useEthers } from '@app';
 import { TokenDeployerState } from '@lib';
-import { TokenInfoGeneral, DeployProgress } from '..';
+import { TokenInfoDeploy, DeployProgress } from '..';
 
 interface TokenDeployProps {
   onReview: () => void;
@@ -12,13 +12,13 @@ interface TokenDeployProps {
 
 export function TokenDeploy({ onReview, onCancel }: TokenDeployProps): ReactElement {
   const { networkId } = useEthers();
-  const [{ token }] = useAppState();
+  const [{ localToken }] = useAppState();
 
-  const deployerState = token.networks[networkId]?.deployerState;
+  const deployerState = localToken.networks[networkId]?.deployerState;
 
   return (
     <>
-      <TokenInfoGeneral />
+      <TokenInfoDeploy />
 
       <Button onClick={onReview} disabled={deployerState != TokenDeployerState.None}>
         Review/edit the token

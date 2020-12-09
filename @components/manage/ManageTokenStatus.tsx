@@ -1,20 +1,19 @@
 import React, { ReactElement } from 'react';
-import { useContractAddress, useDispatch, useGraphql } from '@app';
+import { useAppState, useContractAddress, useDispatch, useGraphql } from '@app';
 import { Alert, Button } from 'antd';
 import { useTokenStatusQuery } from '@graphql';
 import { Loading } from '@components';
 
 export function ManageTokenStatus(): ReactElement {
   const { reset } = useGraphql();
-
-  const { src20: src20Address } = useContractAddress();
+  const [{ onlineToken }] = useAppState();
   const { dispatchTransaction } = useDispatch();
 
   const { loading, error, data } = useTokenStatusQuery({
-    variables: { id: src20Address },
+    variables: { id: onlineToken.id },
   });
-  const gToken = data?.token || undefined;
-  if (loading || !gToken) return <Loading />;
+  if (loading) return <Loading />;
+  const { token } = data;
 
   const handleFreeze = async () => {
     dispatchTransaction({
@@ -36,10 +35,10 @@ export function ManageTokenStatus(): ReactElement {
     <>
       <h2>Freeze token</h2>
       <p>When token is frozen, all transfers are disabled</p>
-      {gToken.isFrozen && <Alert message="Token is currently frozen." type="error" showIcon className="mb-3" />}
-      {gToken.features.tokenFreeze ? (
+      {token.isFrozen && <Alert message="Token is currently frozen." type="error" showIcon className="mb-3" />}
+      {token.features.tokenFreeze ? (
         <p>
-          {gToken.isFrozen ? (
+          {token.isFrozen ? (
             <Button type="primary" size="large" onClick={handleUnfreeze}>
               Unfreeze token
             </Button>

@@ -1,6 +1,5 @@
 import { Contract, Signer, Transaction, Event } from 'ethers';
-import { EthereumNetwork, TransactionEventCallback, TransactionState } from '@lib';
-import { Token } from './token';
+import { EthereumNetwork, OnlineToken, TransactionEventCallback, TransactionState } from '@lib';
 import { getContractFactory, getContract, getContractAbi } from './contracts';
 
 interface ContractOptions {
@@ -9,14 +8,14 @@ interface ContractOptions {
 }
 
 export class ContractProxy {
-  private _signer: Signer;
-  private _token: Token;
+  private readonly _signer: Signer;
+  private readonly _token: OnlineToken;
   private callbacks: TransactionEventCallback[] = [];
   private state: TransactionState = TransactionState.None;
 
-  constructor(signer: Signer, token?: Token) {
+  constructor(signer: Signer, onlineToken?: OnlineToken) {
     this._signer = signer;
-    this._token = token;
+    this._token = onlineToken;
   }
 
   private handleStateChange(state: TransactionState): void {
@@ -59,11 +58,6 @@ export class ContractProxy {
     await transaction.wait();
     this.handleStateChange(TransactionState.Confirmed);
     return transaction;
-  }
-
-  public async get(contractName: string, method: string, args: Array<any> = []): Promise<any> {
-    const contract = getContract(contractName, this.signer, await this.signer.getChainId());
-    return await contract[method](...args);
   }
 
   private async getOptions(): Promise<ContractOptions> {

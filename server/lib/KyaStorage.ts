@@ -66,19 +66,21 @@ export class KyaStorage {
 
     for (const path of KyaStorage.filePaths) {
       const file = _.get(newKya, path);
-      if (_.isArray(file)) {
-        for (const key in file) {
-          _.set(newKya, `${path}[${key}]`, await mapCallback(file[key]));
+      if (file) {
+        if (_.isArray(file)) {
+          for (const key in file) {
+            _.set(newKya, `${path}[${key}]`, await mapCallback(file[key]));
+          }
+        } else {
+          _.set(newKya, path, await mapCallback(file));
         }
-      } else {
-        _.set(newKya, path, await mapCallback(file));
       }
     }
     return newKya;
   }
 
   private async contentToCid(file: KyaFile): Promise<KyaFile> {
-    if (!file || !file.content) {
+    if (!file.content) {
       throw new Error('Not a proper KyaFile');
     }
     if (file.content.match(/^ipfs:/)) {
@@ -91,7 +93,7 @@ export class KyaStorage {
   }
 
   private async cidToContent(file: KyaFile): Promise<KyaFile> {
-    if (!file || !file.content) {
+    if (!file.content) {
       throw new Error('Not a proper KyaFile');
     }
     if (file.content.match(/^data:/)) {

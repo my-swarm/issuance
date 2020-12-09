@@ -1,13 +1,15 @@
 import {
   EthereumNetwork,
   AccountsMeta,
-  Token,
-  TokenNetworkData,
+  LocalToken,
+  LocalTokenNetworkData,
   TokenState,
   Transaction,
   SpendingApproval,
+  LocalFundraiser,
   Uuid,
   ColdState,
+  OnlineToken,
 } from '@lib';
 import { AppError } from './state';
 
@@ -18,7 +20,13 @@ interface resetDataAction {
 
 interface AddTokenAction {
   type: 'addToken';
-  token: Token;
+  token: LocalToken;
+}
+
+interface SaveFundraiserAction {
+  type: 'saveFundraiser';
+  tokenAddress: string;
+  fundraiser: LocalFundraiser;
 }
 
 interface DeleteTokenAction {
@@ -28,7 +36,7 @@ interface DeleteTokenAction {
 
 interface UpdateTokenAction {
   type: 'updateToken';
-  token: Partial<Token>;
+  token: Partial<LocalToken>;
   id: Uuid;
 }
 
@@ -36,7 +44,7 @@ interface UpdateTokenNetworkAction {
   type: 'updateTokenNetwork';
   id: Uuid;
   networkId: EthereumNetwork;
-  networkData: TokenNetworkData;
+  networkData: LocalTokenNetworkData;
 }
 
 interface StartSavingAction {
@@ -65,7 +73,8 @@ interface SetTokenStateAction {
 
 interface SetTokenAction {
   type: 'setToken';
-  token: Token | undefined;
+  localToken?: LocalToken;
+  onlineToken?: OnlineToken;
 }
 
 interface StartTransactionAction {
@@ -112,6 +121,7 @@ interface DeleteFromTokenAccountListAction {
 export type Action =
   | resetDataAction
   | AddTokenAction
+  | SaveFundraiserAction
   | DeleteTokenAction
   | UpdateTokenAction
   | UpdateTokenNetworkAction

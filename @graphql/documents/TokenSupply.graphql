@@ -1,10 +1,5 @@
 query TokenSupply($id: ID!) {
   token(id: $id) {
-    id
-    address
-    supply
-    maxSupply
-    availableSupply
-    stake
+    ...TokenInfo
   }
 }

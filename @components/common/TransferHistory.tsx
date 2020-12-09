@@ -40,8 +40,6 @@ export function TransferHistory({ token, transfers, direction = false }: Transfe
       ]
     : [];
 
-  console.log({ direction });
-
   const columns = tableColumns<TableRecord>([
     ...transferDirectionCols,
     {

@@ -4,6 +4,7 @@ export * from './HelpLabel';
 export * from './UploadDraggerContent';
 export * from './RequireEthers';
 export * from './FilePreview';
+export * from './ImagePreview';
 export * from './DeployProgress';
 export * from './TransactionModal';
 export * from './SpendingApprovalModal';

@@ -8,11 +8,11 @@ import {
   SearchOutlined,
 } from '@ant-design/icons';
 
-import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';
+import { useAppState, useDispatch, useGraphql, useAccountNotes } from '@app';
 import { TransferRequestStatus, useTransferRequestsQuery } from '@graphql';
 import { FilterDropdown, Loading } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
-import { formatDatetime, strcmp } from '@lib';
+import { AccountMeta, formatDatetime, strcmp } from '@lib';
 import { formatUnits } from 'ethers/lib/utils';
 
 interface TableRecord {
@@ -22,22 +22,24 @@ interface TableRecord {
   value: number;
   status: TransferRequestStatus;
   createdAt: number; // just keep it as unix timestamp and format on render
+  metaFrom: AccountMeta;
+  metaTo: AccountMeta;
 }
 
 export function ManageTransferRequests(): ReactElement {
   const { reset } = useGraphql();
-  const [{ token }] = useAppState();
+  const [{ onlineToken }] = useAppState();
+  const accountNotes = useAccountNotes(onlineToken.address);
   const [searchText, setSearchText] = useState<string>('');
   const [paginate, setPaginate] = useState<boolean>(true);
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const { networkId } = useEthers();
   const { dispatchTransaction, setAccountProp } = useDispatch();
-  const { src20: src20Address } = useContractAddress();
   const { loading, error, data } = useTransferRequestsQuery({
-    variables: { token: src20Address },
+    variables: { token: onlineToken.id },
   });
   if (loading || !data) return <Loading />;
-  const { transferRequests } = data.token;
+  const { token } = data;
+  const { transferRequests } = token;
 
   const statusFilterOptions = [
     'all',
@@ -66,13 +68,14 @@ export function ManageTransferRequests(): ReactElement {
 
   const tableData: TableRecord[] = transferRequests
     .map((a) => {
-      const tokenAccountList = token.networks[networkId].accounts || {};
       return {
         ...a,
         from: a.from.address,
         to: a.to.address,
         key: a.requestId, // for the table
         value: parseFloat(formatUnits(a.value, token.decimals)),
+        metaFrom: accountNotes[a.from.address],
+        metaTo: accountNotes[a.from.address],
       };
     })
     .filter((a) => `${a.from} ${a.to}`.toLowerCase().includes(searchText.toLowerCase()))

@@ -2,7 +2,7 @@ import { Reducer } from 'react';
 import { v4 as uuid } from 'uuid';
 import _ from 'lodash';
 
-import { Token, Uuid } from '@lib';
+import { LocalToken, Uuid } from '@lib';
 import { Action, AppState } from '.';
 
 export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
@@ -14,7 +14,7 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
     return { ...token };
   }
 
-  function withUpdatedToken(updatedToken: Token) {
+  function withUpdatedToken(updatedToken: LocalToken) {
     return state.tokens.map((token) => (token.id === updatedToken.id ? updatedToken : token));
   }
 
@@ -31,7 +31,7 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
     case 'restoreState':
       return {
         ...state,
-        ..._.pick(action.data, ['tokens', 'version']),
+        ..._.pick(action.data, ['tokens', 'version', 'accountNames', 'accountNotes']),
         isLoaded: true,
         isSynced: true,
       };
@@ -39,6 +39,12 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       const token = { ...action.token, id: uuid(), networks: {} };
       return unsynced({
         tokens: [...state.tokens, token],
+      });
+    }
+    case 'saveFundraiser': {
+      const tokenAddress = action.tokenAddress;
+      return unsynced({
+        fundraisers: { ...state.fundraisers, [tokenAddress]: { ...action.fundraiser, tokenAddress } },
       });
     }
     case 'updateToken': {
@@ -85,7 +91,6 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
     }
 */
     case 'deleteToken':
-      console.log('delete token', action.id);
       return unsynced({
         tokens: state.tokens.filter((token) => token.id !== action.id),
       });
@@ -117,7 +122,8 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
     case 'setToken': {
       return {
         ...state,
-        token: action.token,
+        localToken: action.localToken,
+        onlineToken: action.onlineToken,
       };
     }
 
@@ -150,18 +156,27 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
     }
 
     case 'setAccountProp': {
-      const { prop, value, address, networkId } = action;
-      const id = state.token.id;
-      const updatedToken = findToken(id);
-      _.set(updatedToken, ['networks', networkId, 'accounts', address.toLowerCase(), prop], value);
-      return unsynced({
-        tokens: withUpdatedToken(updatedToken),
-      });
+      const { prop, value, address } = action;
+      const tokenAddress = state.onlineToken?.address;
+      switch (prop) {
+        case 'name':
+          return unsynced({
+            accountNames: { ...(state.accountNames || {}), [address]: value },
+          });
+        case 'note':
+          return unsynced({
+            accountNotes: {
+              ...(state.accountNotes || {}),
+              [tokenAddress]: { ...((state.accountNotes || {})[tokenAddress] || {}), [address]: value },
+            },
+          });
+      }
+      return state;
     }
 
     case 'batchSetAccountProp': {
       const { networkId, items } = action;
-      const id = state.token.id;
+      const id = state.localToken.id;
 
       const updatedToken = findToken(id);
       for (const [address, { name, note }] of Object.entries(items)) {

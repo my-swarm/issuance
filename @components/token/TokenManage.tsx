@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import { Collapse } from 'antd';
-import { TransferRules } from '@lib';
 import { useAppState } from '@app';
 import {
   ManageAccountList,
@@ -15,11 +14,12 @@ import {
 } from '..';
 
 export function TokenManage(): ReactElement {
-  const [{ token }] = useAppState();
+  const [{ onlineToken: token }] = useAppState();
+
   return (
     <div>
       <Collapse defaultActiveKey={[]}>
-        {token.allowContractFreeze && (
+        {token.features.tokenFreeze && (
           <Collapse.Panel header="Freeze token" key="status">
             <ManageTokenStatus />
           </Collapse.Panel>
@@ -41,22 +41,18 @@ export function TokenManage(): ReactElement {
           <ManageTransferHistory />
         </Collapse.Panel>
 
-        {token.transferRestrictionsType !== TransferRules.None && (
-          <Collapse.Panel header="Transfer requests" key="requests">
-            <ManageTransferRequests />
-          </Collapse.Panel>
-        )}
-
-        {token.transferRestrictionsType !== TransferRules.None && (
-          <Collapse.Panel header="Whitelist management" key="whitelist">
-            <ManageAccountList type="whitelist" />
-          </Collapse.Panel>
-        )}
-
-        {token.transferRestrictionsType !== TransferRules.None && (
-          <Collapse.Panel header="Greylist management" key="greylist">
-            <ManageAccountList type="greylist" />
-          </Collapse.Panel>
+        {token.transferRules && (
+          <>
+            <Collapse.Panel header="Transfer requests" key="requests">
+              <ManageTransferRequests />
+            </Collapse.Panel>
+            <Collapse.Panel header="Whitelist management" key="whitelist">
+              <ManageAccountList type="whitelist" />
+            </Collapse.Panel>
+            <Collapse.Panel header="Greylist management" key="greylist">
+              <ManageAccountList type="greylist" />
+            </Collapse.Panel>
+          </>
         )}
 
         {/* this is disabled before we figure out how to store KYA */}

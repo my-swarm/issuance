@@ -13,7 +13,7 @@ interface TransferModalProps {
 
 export function TransferModal({ from, currentBalance, token, onClose }: TransferModalProps): ReactElement {
   return (
-    <Modal visible={true} title="Transfer tokens" maskClosable={false}>
+    <Modal visible={true} title="Transfer tokens" maskClosable={false} onCancel={onClose}>
       <TransferForm type="forced" from={from} currentBalance={currentBalance} onSuccess={onClose} token={token} />
     </Modal>
   );

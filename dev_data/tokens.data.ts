@@ -1,5 +1,12 @@
 import { v4 as uuid } from 'uuid';
-import { EthereumNetwork, Token, TokenState, TransferRules, DeployerStateFinished, TokenDeployerState } from '@lib';
+import {
+  EthereumNetwork,
+  LocalToken,
+  TokenState,
+  TransferRules,
+  DeployerStateFinished,
+  TokenDeployerState,
+} from '@lib';
 import addressesLocal from './addresses/local.json';
 import addressesKovan from './addresses/kovan.json';
 
@@ -24,7 +31,7 @@ function createImage(name) {
   };
 }
 
-const tokenDefaults: Partial<Token> = {
+const tokenDefaults: Partial<LocalToken> = {
   decimals: 18,
   initialSupply: 10000,
   description:

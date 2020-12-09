@@ -3,10 +3,10 @@ import moment from 'moment';
 import { Button, Checkbox, Col, Popconfirm, Row, Table } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
-import { AccountList, Account, RawAccount, RawAccountList } from '@lib';
-import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';
+import { Account, AccountList, RawAccountList } from '@lib';
+import { useAppState, useDispatch, useEthers, useGraphql, useAccountNotes } from '@app';
 import { useWhitelistGreylistQuery } from '@graphql';
-import { Loading, FilterDropdown, AccountsAddModal, EditableCell, Address } from '@components';
+import { AccountsAddModal, Address, EditableCell, FilterDropdown, Loading } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
 
 interface ManageAccountListProps {
@@ -15,16 +15,15 @@ interface ManageAccountListProps {
 
 export function ManageAccountList({ type }: ManageAccountListProps): ReactElement {
   const { reset } = useGraphql();
-  const [{ token }] = useAppState();
+  const [{ onlineToken }] = useAppState();
+  const accountNotes = useAccountNotes(onlineToken.address);
   const [searchText, setSearchText] = useState<string>('');
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [paginate, setPaginate] = useState<boolean>(true);
   const [batchAdding, setBatchAdding] = useState<boolean>(false);
-  const { networkId } = useEthers();
   const { dispatchTransaction, setAccountProp } = useDispatch();
-  const { src20: src20Address } = useContractAddress();
   const { loading, error, data } = useWhitelistGreylistQuery({
-    variables: { token: src20Address },
+    variables: { token: onlineToken.id },
   });
   if (loading) return <Loading />;
 
@@ -49,12 +48,11 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
   const rawAccounts: RawAccountList = type === 'whitelist' ? data.whitelistedAccounts : data.greylistedAccounts;
   const tableData: AccountList = rawAccounts
     .map((a) => {
-      const tokenAccountList = token.networks[networkId].accounts || {};
       return {
         key: a.address, // for the table
         ...a,
         createdAt: moment(a.createdAt).toDate(),
-        ...tokenAccountList[a.address],
+        ...accountNotes[a.address],
       };
     })
     .filter((a) => `${a.address} ${a.name} ${a.note}`.toLowerCase().includes(searchText.toLowerCase()));

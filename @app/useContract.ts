@@ -51,47 +51,36 @@ type ContractMap = { [key: string]: Contract };
 
 export function useContractAddress(): ContractAddressMap {
   const [addresses, setAddresses] = useState<ContractAddressMap>({});
-  const { signer, networkId } = useEthers();
-  const [{ token }] = useAppState();
+  const { networkId } = useEthers();
+  const [{ onlineToken }] = useAppState();
   useEffect(() => {
-    if (token && networkId) {
+    if (onlineToken) {
       const result = {};
       for (const c of Object.values(contractsMeta)) {
         const name = c.shortName;
-        result[name] = getContractAddress(name, networkId, token)?.toLowerCase();
+        result[name] = getContractAddress(name, networkId, onlineToken)?.toLowerCase();
       }
       setAddresses(result);
     }
-  }, [token, networkId]);
+  }, [onlineToken, networkId]);
   return addresses;
 }
 
 export function useContract(): ContractMap {
   const [contracts, setContracts] = useState<ContractMap>({});
   const { signer, networkId } = useEthers();
-  const [{ token }] = useAppState();
+  const [{ onlineToken }] = useAppState();
   useEffect(() => {
-    if (token && signer && networkId) {
+    if (onlineToken && signer && networkId) {
       const result = {};
       for (const c of Object.values(contractsMeta)) {
         const name = c.shortName;
-        result[name] = getContract(name, signer, networkId, token);
+        result[name] = getContract(name, signer, networkId, onlineToken);
       }
       setContracts(result);
     }
-  }, [token, signer, networkId]);
+  }, [onlineToken, signer, networkId]);
   return contracts;
-}
-
-function useContractHelpers() {
-  const [{ token }] = useAppState();
-  const { address } = useEthers();
-  /*
-  const handleUpdate = useCallback(() => {
-    setTimestamp(Date.now());
-  }, []);
-*/
-  return { token, address };
 }
 
 interface ContractValue {

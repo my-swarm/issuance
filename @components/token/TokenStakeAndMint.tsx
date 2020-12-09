@@ -1,80 +1,43 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 import { Button, Divider } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
 
-import { TokenDeployer, TokenState } from '@lib';
-import { useAppState, useEthers } from '@app';
+import { useAppState, useContract, useDispatch, useGraphql } from '@app';
 import { StakeTable, TokenInfoMinting, TokenInfoStaking } from '..';
+import { BigNumber } from 'ethers';
 
 interface TokenStakeAndMintProps {
   onCancel: () => void;
 }
 
 export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactElement {
-  const { signer, networkId } = useEthers();
-  const [{ token }, dispatch] = useAppState();
-  const [isDeploying, setIsDeploying] = useState<boolean>(false);
+  const [{ onlineToken: token, localToken }] = useAppState();
+  const { swm, minter } = useContract();
+  const { checkAllowance, dispatchTransaction } = useDispatch();
+  const { reset } = useGraphql();
 
   const handleStakeAndMint = async () => {
-    setIsDeploying(true);
-    const deployer = new TokenDeployer(signer, token);
-    await deployer.setup();
-    try {
-      await deployer.stakeAndMint();
-      setTokenMinted();
-    } catch (e) {
-      let error;
-      if (e.code === 4001) {
-        error = {
-          message: 'Transaction canceled',
-          description:
-            'You need to confirm both transactions (SWM spending and minting) in the Metamask popups. Note: SWM spending approval not required if you already have high enough allowance.',
-        };
-      } else if (e.code === -32000) {
-        error = {
-          message: 'Cannot stake SWM',
-          description: "It appears your SWM balance is lower than what's required to stake",
-        };
-      } else if (e.code === -32603) {
-        if (e.data.message.match(/trying to mint too many tokens/)) {
-          error = {
-            message: 'Cannot mint',
-            description: 'It appears you have aleready minted your tokens.',
-          };
-          setTokenMinted();
-        }
-      } else {
-        console.error(e);
-        error = { message: 'Error during deployment', description: e.message };
-      }
-      dispatch({ type: 'showError', error });
-    }
-    setIsDeploying(false);
-  };
+    const stakeAmount = await minter.calcStake(token.nav);
 
-  function setTokenMinted() {
-    dispatch({
-      type: 'setTokenState',
-      id: token.id,
-      networkId: networkId,
-      state: TokenState.Minted,
+    checkAllowance('registry', swm.address, stakeAmount, () => {
+      dispatchTransaction({
+        method: 'minter.stakeAndMint',
+        arguments: [token.address, localToken.initialSupply],
+        description: 'Minting Your Token...',
+        onSuccess: () => {
+          reset();
+        },
+      });
     });
-  }
-
-  const tokenState = token.networks[networkId].state;
+  };
 
   return (
     <div>
       <TokenInfoStaking />
       <TokenInfoMinting />
       <div className="mb-3">
-        {tokenState === TokenState.Minted ? (
+        {BigNumber.from(token.stake).gt(0) ? (
           <Button size="large" onClick={onCancel}>
             Token minted! Close.
-          </Button>
-        ) : isDeploying ? (
-          <Button disabled size="large">
-            <LoadingOutlined /> Minting in progress
           </Button>
         ) : (
           <Button type="primary" size="large" onClick={handleStakeAndMint}>
@@ -97,7 +60,7 @@ export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactEl
       </ul>
 
       <h3>How is the stake amount computed</h3>
-      <p>It's derived from your asset value using the table below</p>
+      <p>It&apos;s derived from your asset value using the table below</p>
       <StakeTable />
     </div>
   );

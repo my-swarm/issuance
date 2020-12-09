@@ -8,3 +8,5 @@ export * from './useStorage';
 export * from './useContract';
 export * from './useDispatch';
 export * from './useGraphql';
+export * from './useAccountNotes';
+export * from './useKya';

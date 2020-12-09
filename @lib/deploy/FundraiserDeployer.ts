@@ -26,8 +26,7 @@ export class FundraiserDeployer extends Deployer {
 
   private async deployFundraiser() {
     if (this.state > FundraiserDeployerState.Fundraiser) return;
-    const { fundraiser } = this.token;
-    const { decimals } = this.token;
+    const { fundraiser, decimals } = this.token;
     const startDate = fundraiser.startNow ? moment().add(1, 'minute') : fundraiser.startDate;
     const params = [
       fundraiser.label, // label

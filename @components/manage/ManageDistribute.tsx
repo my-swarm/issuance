@@ -18,17 +18,17 @@ type FormData = {
 export function ManageDistribute(): ReactElement {
   const { address: myAddress } = useEthers();
   const { dispatchTransaction } = useDispatch();
-  const [{ token }] = useAppState();
-  const { src20: src20Address } = useContractAddress();
+  const [{ onlineToken }] = useAppState();
   const [form] = Form.useForm();
   const { reset } = useGraphql();
-  const { loading, error, data } = useDistrubuteQuery({ variables: { id: src20Address } });
+  const { loading, error, data } = useDistrubuteQuery({ variables: { id: onlineToken.id } });
   const [distributionType, setDistributionType] = useState<DistributionType>(
     data?.token?.currentFundraiser?.contributors ? 'fundraiser' : 'custom',
   );
 
   if (loading || !data) return <Loading />;
-  const { availableSupply, currentFundraiser: fundraiser } = data.token;
+  const { token } = data;
+  const { availableSupply, currentFundraiser: fundraiser } = token;
   const contributors = fundraiser?.contributors || [];
   const qualifiedContributors = contributors.filter(
     (c) => c.status === ContributorStatus.Qualified && BigNumber.from(c.amount).gt(0),

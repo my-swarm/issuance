@@ -12,7 +12,6 @@ export function StateStorageSync(): ReactElement {
   const { isLoaded, isSaving, isSynced, version } = state;
 
   const handleResetDev = () => {
-    console.log('reseting to', devData);
     dispatch({ type: 'restoreState', data: { ...devData, version: 0 } });
   };
 
@@ -20,7 +19,7 @@ export function StateStorageSync(): ReactElement {
 
   useEffect(() => {
     if (isLoaded) {
-      save(_.pick(state, ['tokens', 'version']));
+      save(_.pick(state, ['tokens', 'version', 'accountNames', 'accountNotes']));
     }
   }, [version]);
 

@@ -15,7 +15,7 @@ export function ManageAsset(): ReactElement {
   const { loading, error, data } = useTokenStatusQuery({
     variables: { id: src20Address },
   });
-  const gToken = data?.token || undefined;
+  const gToken = data?.localToken || undefined;
   if (loading || !gToken) return <Loading />;
 
   const handleSubmit = async (values: FormData) => {

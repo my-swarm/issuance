@@ -18,6 +18,10 @@ export class Api {
   }
 
   async getKya(cid: string): Promise<Kya> {
+    let found;
+    if ((found = cid.match(/ipfs:(.+)/))) {
+      cid = found[1];
+    }
     return this.apiRequest<Kya>(`kya/get`, { cid });
   }
 
@@ -32,3 +36,6 @@ export class Api {
     return ((await response.json()) as unknown) as T;
   }
 }
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
+export const api = new Api(apiUrl);

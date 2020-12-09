@@ -4,16 +4,15 @@ import { Button, Drawer, Table } from 'antd';
 import { useAppState, useDispatch, useEthers, useGraphql } from '@app';
 import {
   BaseError,
-  parseUnits,
-  sameAddress,
-  Token,
+  LocalToken,
   TokenAction,
   TokenRecord,
   TokenState,
   tokenStates,
-  SWM_TOKEN_DECIMALS,
+  OnlineToken,
+  TokenDeployerState,
 } from '@lib';
-import { TokenFragment, useTokensQuery } from '@graphql';
+import { useTokensQuery } from '@graphql';
 import {
   Address,
   DefaultLayout,
@@ -28,39 +27,41 @@ import {
   TokenStartFundraiser,
 } from '@components';
 import { renderAddress, tableColumns } from '@components/manage/listUtils';
+import { BigNumber } from 'ethers';
 
-function getTokenList(localTokens: Token[], onlineTokens: TokenFragment[], networkId): TokenRecord[] {
+/**
+ * Merges local underploed tokens with deployedTokens.
+ *
+ * @param localTokens
+ * @param onlineTokens
+ * @param networkId
+ */
+function getTokenList(localTokens: LocalToken[], onlineTokens: OnlineToken[], networkId): TokenRecord[] {
   if (!networkId) return [];
 
-  const result: TokenRecord[] = localTokens.map((localToken) => ({
-    id: localToken.id,
-    name: localToken.name,
-    symbol: localToken.symbol,
-    address: localToken.networks[networkId]?.addresses.src20 || undefined,
-    localState: localToken.networks[networkId]?.state || TokenState.Created,
-    isDeployed: false,
-    isMinted: false,
-    isFundraising: false,
-    localToken,
+  const result: TokenRecord[] = onlineTokens.map((token) => ({
+    ...(({ id, name, symbol, address }) => ({ id, name, symbol, address }))(token),
+    isMinted: BigNumber.from(token.stake).gt(0),
+    isFundraising: token.currentFundraiser !== null,
+    onlineToken: token,
   }));
 
-  for (const onlineToken of onlineTokens) {
-    const fundraiserStatus = onlineToken?.currentFundraiser?.status;
-    const token = {
-      // name: onlineToken.name,
-      // symbol: onlineToken.symbol,
-      // address: onlineToken.address,
-      isFundraising: fundraiserStatus !== undefined,
-      isMinted: parseUnits(onlineToken.stake, SWM_TOKEN_DECIMALS).gt(0),
-      isDeployed: true,
-    };
-    const index = result.findIndex((t) => sameAddress(t.address, onlineToken.address));
-    if (index !== -1) {
-      result[index] = { ...result[index], ...token };
+  for (const token of localTokens) {
+    const { state, addresses } = token.networks[networkId] || { state: TokenDeployerState.None, address: undefined };
+    if (state < TokenState.Deploying) {
+      result.push({
+        ...(({ id, name, symbol }) => ({ id, name, symbol }))(token),
+        address: null,
+        isMinted: false,
+        isFundraising: false,
+        localToken: token,
+        localState: state,
+      });
     } else {
-      // not implemented yet
-      // console.log('addning', onlineToken.address);
-      // result.push(token);
+      const record = result.find((t) => t.address === addresses.src20);
+      if (record) {
+        record.localToken = token;
+      }
     }
   }
 
@@ -71,21 +72,27 @@ export default function Tokens(): ReactElement {
   const { connected, networkId, address } = useEthers();
   const { setToken } = useDispatch();
   const [action, setAction] = useState<TokenAction>();
-  const [{ tokens, token }, dispatch] = useAppState();
+  const [{ tokens, localToken }, dispatch] = useAppState();
   const query = useTokensQuery({ variables: { owner: address } });
   const { reset } = useGraphql();
   const { data, loading, error } = query;
-  // reloads current token if tokens update
+
+  // reloads current token if tokens update ????
+  /*
   useEffect(() => {
-    if (token) {
-      setToken(tokens.find((t) => t.id === token.id));
+    if (localToken) {
+      setToken(
+        tokens.find((t) => t.id === localToken.id),
+        undefined,
+      );
     }
   }, [tokens]);
+*/
 
   function renderTokenState(localState: TokenState, token: TokenRecord): string {
     if (!connected) return 'Not connected';
     const result = [];
-    if (token.isDeployed) result.push('Deployed');
+    if (token.address) result.push('Deployed');
     if (token.isFundraising) result.push('Fundraiser');
     if (token.isMinted) result.push('Minted');
     if (result.length === 0) result.push(tokenStates[localState] || 'Unknown state');
@@ -123,29 +130,31 @@ export default function Tokens(): ReactElement {
     if (action === TokenAction.Delete) {
       handleDelete(tokenRecord);
     } else {
-      setToken(tokenRecord.localToken);
+      setToken(tokenRecord.localToken, tokenRecord.onlineToken);
       setAction(action);
     }
   };
 
   const handleCreate = () => {
-    setToken(undefined);
+    setToken(undefined, undefined);
     setAction(TokenAction.Create);
   };
 
   const handleClearAction = () => {
-    setToken(undefined);
+    // reseting this fucks up any component that's still active before closing the drawer and needs the token state
+    // setToken(undefined, undefined);
     setAction(undefined);
     reset();
   };
 
-  const handleSubmit = (newToken: Token) => {
+  const handleSubmit = (newToken: LocalToken) => {
+    console.log({ action, newToken });
     switch (action) {
       case TokenAction.Create:
         dispatch({ type: 'addToken', token: newToken });
         break;
       case TokenAction.Edit:
-        dispatch({ type: 'updateToken', token: { id: token.id, ...newToken } });
+        dispatch({ type: 'updateToken', token: { id: localToken.id, ...newToken } });
         break;
       default:
         throw new BaseError('Cannot submit when not editing');
@@ -170,7 +179,7 @@ export default function Tokens(): ReactElement {
 
   function renderAction() {
     if (action === TokenAction.Create || action === TokenAction.Edit)
-      return <TokenForm onSubmit={handleSubmit} onCancel={handleClearAction} formData={token} />;
+      return <TokenForm onSubmit={handleSubmit} onCancel={handleClearAction} formData={localToken} />;
     if (action === TokenAction.Deploy)
       return <TokenDeploy onCancel={handleClearAction} onReview={() => handleSwitchActionAnimated(TokenAction.Edit)} />;
     if (action === TokenAction.StartFundraise) return <TokenStartFundraiser onClose={handleClearAction} />;

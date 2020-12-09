@@ -1,33 +1,33 @@
 import { EthereumAddress, EthereumNetwork, Uuid } from './ethereum';
 
-import { FundraiserDeployerState, TokenDeployerState, AccountsMeta, AppFile, AppImage } from '.';
+import { FundraiserDeployerState, TokenDeployerState, AppFile, AppImage } from '.';
+import { TokenFragment } from '@graphql';
 
 export enum TransferRules {
   None,
   WhitelistOrGreylist,
 }
 
-export interface TokenAddresses {
+export interface LocalTokenAddresses {
   features?: EthereumAddress;
   transferRules?: EthereumAddress;
   roles?: EthereumAddress;
   src20?: EthereumAddress;
+  appstat;
   fundraiser?: EthereumAddress;
   contributorRestrictions?: EthereumAddress;
   affiliateManager?: EthereumAddress;
 }
 
-export interface TokenNetworkData {
+export interface LocalTokenNetworkData {
   state?: TokenState;
   deployerState?: TokenDeployerState;
   fundraiserDeployerState?: FundraiserDeployerState;
-  addresses?: TokenAddresses;
-  accounts: AccountsMeta;
+  addresses?: LocalTokenAddresses;
 }
 
-type TokenNetworksData = { [index in EthereumNetwork]?: TokenNetworkData };
-
-export interface TokenFundraiser {
+export interface LocalFundraiser {
+  tokenAddress: string;
   label: string;
   baseCurrency: string;
   contributionsLocked: boolean;
@@ -40,7 +40,7 @@ export interface TokenFundraiser {
   hardCap: number;
 }
 
-export interface Token {
+export interface LocalToken {
   id: Uuid;
 
   name: string;
@@ -66,9 +66,11 @@ export interface Token {
   assetImage?: AppImage;
   assetLegalDocuments: AppFile[];
 
-  networks: TokenNetworksData;
-  fundraiser?: TokenFundraiser;
+  networks: Record<EthereumNetwork, LocalTokenNetworkData>;
+  fundraiser?: LocalFundraiser;
 }
+
+export type OnlineToken = TokenFragment;
 
 export enum TokenState {
   Created, // local only
@@ -78,7 +80,6 @@ export enum TokenState {
   Fundraising,
   // FundraisingFinished = 5,
   Minted,
-  Deleted,
 }
 
 export enum TokenAction {
@@ -93,15 +94,16 @@ export enum TokenAction {
   Delete,
 }
 
+/** Simplified token type for token list. References both local and online token for details */
 export type TokenRecord = {
   name: string;
   symbol: string;
   address: string;
-  localState?: TokenState;
-  isDeployed: boolean;
   isMinted: boolean;
   isFundraising: boolean;
-  localToken: Token;
+  localToken?: LocalToken;
+  localState?: TokenState;
+  onlineToken?: TokenFragment;
 };
 
 export const tokenStates: { [key: number]: string } = {
@@ -112,7 +114,6 @@ export const tokenStates: { [key: number]: string } = {
   [TokenState.DeployingFundraiser]: 'Fundraiser deployment in progress',
   [TokenState.Fundraising]: 'Fundraiser in progress',
   [TokenState.Minted]: 'Minted',
-  [TokenState.Deleted]: 'Deleted',
 };
 
 export const transferRules: { [key: number]: string } = {

@@ -1787,7 +1787,6 @@ export type DistrubuteQuery = (
   { __typename?: 'Query' }
   & { token?: Maybe<(
     { __typename?: 'Token' }
-    & Pick<Token, 'id' | 'address' | 'availableSupply' | 'stake'>
     & { currentFundraiser?: Maybe<(
       { __typename?: 'Fundraiser' }
       & { contributors?: Maybe<Array<(
@@ -1795,6 +1794,7 @@ export type DistrubuteQuery = (
         & Pick<Contributor, 'address' | 'amount' | 'status'>
       )>> }
     )> }
+    & TokenInfoFragment
   )> }
 );
 
@@ -1817,7 +1817,7 @@ export type FundraiserContributorsFragment = (
 
 export type FundraiserInfoFragment = (
   { __typename?: 'Fundraiser' }
-  & Pick<Fundraiser, 'id' | 'label' | 'owner' | 'address' | 'startDate' | 'endDate' | 'softCap' | 'hardCap' | 'supply' | 'tokenPrice' | 'contributionsLocked' | 'amountQualified' | 'amountPending' | 'amountRefunded' | 'amountWithdrawn' | 'status' | 'numContributors'>
+  & Pick<Fundraiser, 'id' | 'label' | 'owner' | 'address' | 'startDate' | 'endDate' | 'softCap' | 'hardCap' | 'supply' | 'tokenPrice' | 'contributionsLocked' | 'amountQualified' | 'amountPending' | 'amountRefunded' | 'amountWithdrawn' | 'status' | 'numContributors' | 'affiliateManager' | 'contributorRestrictions' | 'minter'>
 );
 
 export type FundraiserTokenFragment = (
@@ -1826,11 +1826,6 @@ export type FundraiserTokenFragment = (
     { __typename?: 'Token' }
     & TokenInfoFragment
   ) }
-);
-
-export type FundraiserContractsFragment = (
-  { __typename?: 'Fundraiser' }
-  & Pick<Fundraiser, 'affiliateManager' | 'contributorRestrictions' | 'minter'>
 );
 
 export type FundraiserBaseCurrencyFragment = (
@@ -1969,10 +1964,7 @@ export type TokenHoldersQuery = (
   { __typename?: 'Query' }
   & { token?: Maybe<(
     { __typename?: 'Token' }
-    & { features?: Maybe<(
-      { __typename?: 'Features' }
-      & Pick<Features, 'accountBurn' | 'accountFreeze' | 'forceTransfer'>
-    )>, holders: Array<(
+    & { holders: Array<(
       { __typename?: 'TokenHolder' }
       & TokenHolderFragment
     )> }
@@ -2006,13 +1998,17 @@ export type TokenSupplyQuery = (
   { __typename?: 'Query' }
   & { token?: Maybe<(
     { __typename?: 'Token' }
-    & Pick<Token, 'id' | 'address' | 'supply' | 'maxSupply' | 'availableSupply' | 'stake'>
+    & TokenInfoFragment
   )> }
 );
 
 export type TokenInfoFragment = (
   { __typename?: 'Token' }
   & Pick<Token, 'id' | 'name' | 'symbol' | 'address' | 'availableSupply' | 'stake' | 'decimals' | 'supply' | 'maxSupply'>
+  & { features?: Maybe<(
+    { __typename?: 'Features' }
+    & Pick<Features, 'forceTransfer' | 'tokenFreeze' | 'accountFreeze' | 'accountBurn'>
+  )> }
 );
 
 export type TokenAssetFragment = (
@@ -2048,8 +2044,22 @@ export type TokenFundraiserFragment = (
 export type TokenFragment = (
   { __typename?: 'Token' }
   & TokenInfoFragment
+  & TokenAssetFragment
   & TokenContractsFragment
   & TokenFundraiserFragment
+);
+
+export type TokenQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type TokenQuery = (
+  { __typename?: 'Query' }
+  & { token?: Maybe<(
+    { __typename?: 'Token' }
+    & TokenFragment
+  )> }
 );
 
 export type TokensQueryVariables = Exact<{
@@ -2086,11 +2096,11 @@ export type TransferRequestsQuery = (
   { __typename?: 'Query' }
   & { token?: Maybe<(
     { __typename?: 'Token' }
-    & Pick<Token, 'id'>
     & { transferRequests: Array<(
       { __typename?: 'TransferRequest' }
       & TransferRequestFragment
     )> }
+    & TokenInfoFragment
   )> }
 );
 
@@ -2162,13 +2172,6 @@ export type WhitelistGreylistQuery = (
   )> }
 );
 
-export const FundraiserContractsFragmentDoc = gql`
-    fragment FundraiserContracts on Fundraiser {
-  affiliateManager
-  contributorRestrictions
-  minter
-}
-    `;
 export const FundraiserInfoFragmentDoc = gql`
     fragment FundraiserInfo on Fundraiser {
   id
@@ -2188,6 +2191,9 @@ export const FundraiserInfoFragmentDoc = gql`
   amountWithdrawn
   status
   numContributors
+  affiliateManager
+  contributorRestrictions
+  minter
 }
     `;
 export const FundraiserBaseCurrencyFragmentDoc = gql`
@@ -2211,6 +2217,12 @@ export const TokenInfoFragmentDoc = gql`
   decimals
   supply
   maxSupply
+  features {
+    forceTransfer
+    tokenFreeze
+    accountFreeze
+    accountBurn
+  }
 }
     `;
 export const FundraiserTokenFragmentDoc = gql`
@@ -2309,10 +2321,12 @@ export const TokenFundraiserFragmentDoc = gql`
 export const TokenFragmentDoc = gql`
     fragment Token on Token {
   ...TokenInfo
+  ...TokenAsset
   ...TokenContracts
   ...TokenFundraiser
 }
     ${TokenInfoFragmentDoc}
+${TokenAssetFragmentDoc}
 ${TokenContractsFragmentDoc}
 ${TokenFundraiserFragmentDoc}`;
 export const TransferRequestFragmentDoc = gql`
@@ -2343,10 +2357,7 @@ export const TransferFragmentDoc = gql`
 export const DistrubuteDocument = gql`
     query Distrubute($id: ID!) {
   token(id: $id) {
-    id
-    address
-    availableSupply
-    stake
+    ...TokenInfo
     currentFundraiser {
       contributors {
         address
@@ -2356,7 +2367,7 @@ export const DistrubuteDocument = gql`
     }
   }
 }
-    `;
+    ${TokenInfoFragmentDoc}`;
 
 /**
  * __useDistrubuteQuery__
@@ -2603,11 +2614,6 @@ export const TokenHoldersDocument = gql`
     query TokenHolders($token: ID!) {
   token(id: $token) {
     ...TokenInfo
-    features {
-      accountBurn
-      accountFreeze
-      forceTransfer
-    }
     holders {
       ...TokenHolder
     }
@@ -2681,15 +2687,10 @@ export type TokenStatusQueryResult = Apollo.QueryResult<TokenStatusQuery, TokenS
 export const TokenSupplyDocument = gql`
     query TokenSupply($id: ID!) {
   token(id: $id) {
-    id
-    address
-    supply
-    maxSupply
-    availableSupply
-    stake
+    ...TokenInfo
   }
 }
-    `;
+    ${TokenInfoFragmentDoc}`;
 
 /**
  * __useTokenSupplyQuery__
@@ -2716,6 +2717,39 @@ export function useTokenSupplyLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type TokenSupplyQueryHookResult = ReturnType<typeof useTokenSupplyQuery>;
 export type TokenSupplyLazyQueryHookResult = ReturnType<typeof useTokenSupplyLazyQuery>;
 export type TokenSupplyQueryResult = Apollo.QueryResult<TokenSupplyQuery, TokenSupplyQueryVariables>;
+export const TokenDocument = gql`
+    query Token($id: ID!) {
+  token(id: $id) {
+    ...Token
+  }
+}
+    ${TokenFragmentDoc}`;
+
+/**
+ * __useTokenQuery__
+ *
+ * To run a query within a React component, call `useTokenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTokenQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useTokenQuery(baseOptions: Apollo.QueryHookOptions<TokenQuery, TokenQueryVariables>) {
+        return Apollo.useQuery<TokenQuery, TokenQueryVariables>(TokenDocument, baseOptions);
+      }
+export function useTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TokenQuery, TokenQueryVariables>) {
+          return Apollo.useLazyQuery<TokenQuery, TokenQueryVariables>(TokenDocument, baseOptions);
+        }
+export type TokenQueryHookResult = ReturnType<typeof useTokenQuery>;
+export type TokenLazyQueryHookResult = ReturnType<typeof useTokenLazyQuery>;
+export type TokenQueryResult = Apollo.QueryResult<TokenQuery, TokenQueryVariables>;
 export const TokensDocument = gql`
     query Tokens($owner: Bytes!) {
   tokens(where: {owner: $owner}) {
@@ -2752,13 +2786,14 @@ export type TokensQueryResult = Apollo.QueryResult<TokensQuery, TokensQueryVaria
 export const TransferRequestsDocument = gql`
     query TransferRequests($token: ID!) {
   token(id: $token) {
-    id
+    ...TokenInfo
     transferRequests {
       ...TransferRequest
     }
   }
 }
-    ${TransferRequestFragmentDoc}`;
+    ${TokenInfoFragmentDoc}
+${TransferRequestFragmentDoc}`;
 
 /**
  * __useTransferRequestsQuery__

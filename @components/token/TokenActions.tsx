@@ -52,7 +52,7 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
         Resume fundraiser deploy
       </Button>,
     );
-  } else if (token.isDeployed && !token.isFundraising && !token.isMinted) {
+  } else if (token.address && !token.isFundraising && !token.isMinted) {
     actions.push(
       <Button
         key="fundraiser"
@@ -102,7 +102,7 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     </Button>,
   );
 
-  if (!token.isDeployed) {
+  if (!token.address) {
     actions.push(
       <Popconfirm
         key="delete"

@@ -7,13 +7,11 @@ import {
   parseUnits,
   getContractAddress,
   InvalidStateError,
-  TokenState,
   TransferRules,
   Src20FeaturesBitmask,
   tokenToKya,
   storeKya,
 } from '..';
-import assert from 'assert';
 
 export class TokenDeployer extends Deployer {
   public async setup(): Promise<void> {
@@ -116,39 +114,6 @@ export class TokenDeployer extends Deployer {
       };
       this.contractProxy.call('factory', 'create', params, events).catch((e) => reject(e));
     });
-  }
-
-  public async stakeAndMint(): Promise<void> {
-    const canMint = this.token.networks[this.networkId]?.state === TokenState.Deployed;
-    assert(canMint, "Cannot mint a token that's not deplyed");
-
-    await this.approveStake();
-    await this.mint();
-  }
-
-  private async approveStake(): Promise<void> {
-    const registryAddress = this.getAddress('registry');
-    const stakeAmount = await this.getStakeAmount();
-    const owner = await this.signer.getAddress();
-    const currentlyApproved = await this.contractProxy.get('swm', 'allowance', [owner, registryAddress]);
-    if (currentlyApproved.lt(stakeAmount)) {
-      await this.contractProxy.call('swm', 'approve', [
-        registryAddress, // param: spender
-        stakeAmount.sub(currentlyApproved), // param: value
-      ]);
-    }
-  }
-
-  public async getStakeAmount(): Promise<BigNumber> {
-    return await this.contractProxy.get('minter', 'calcStake', [this.token.assetNetValue]);
-  }
-
-  private async mint(): Promise<void> {
-    const params = [
-      this.addresses.src20, // param: src20
-      parseUnits(this.token.initialSupply, this.token.decimals), // param: numSRC20TOkens
-    ];
-    await this.contractProxy.call('minter', 'stakeAndMint', params);
   }
 
   private getFeaturesAsContractValue(): number {

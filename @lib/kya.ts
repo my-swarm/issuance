@@ -1,15 +1,9 @@
-import { AppFile, Token } from '.';
-import { Api } from './Api';
-import { apiUrl } from '@app';
+import { AppFile, LocalToken, api } from '.';
 
 export type KyaFile = AppFile;
 
-const api = new Api(apiUrl);
-
 export type Kya = {
   token: {
-    // name: string;
-    // symbol: string;
     image: KyaFile;
     description: string;
   };
@@ -22,7 +16,7 @@ export type Kya = {
   };
 };
 
-export function tokenToKya(token: Token): Kya {
+export function tokenToKya(token: LocalToken): Kya {
   return {
     token: {
       description: token.description,

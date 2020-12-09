@@ -6,7 +6,7 @@ export * from './TokenManage';
 export * from './TokenInfo';
 export * from './TokenStakeAndMint';
 export * from './TokenInfoBasics';
-export * from './TokenInfoGeneral';
+export * from './TokenInfoDeploy';
 export * from './TokenInfoAsset';
 export * from './TokenInfoDeployed';
 export * from './TokenInfoStaking';

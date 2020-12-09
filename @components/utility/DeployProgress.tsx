@@ -16,6 +16,7 @@ import {
   fundraiserDeployerStatesMeta,
   tokenDeployerStatesMeta,
   transactionStatesMeta,
+  LocalTokenAddresses,
 } from '@lib';
 import { useAppState, useEthers } from '@app';
 
@@ -28,9 +29,9 @@ interface DeployProgressProps {
 
 export function DeployProgress({ type, onClose }: DeployProgressProps): ReactElement {
   const { signer, networkId } = useEthers();
-  const [{ token }, dispatch] = useAppState();
+  const [{ localToken }, dispatch] = useAppState();
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
-  const tokenNetwork = token.networks[networkId];
+  const tokenNetwork = localToken.networks[networkId];
   let deployerState: DeployerState;
   const [transactionState, setTransactionState] = useState<TransactionState>(TransactionState.None);
 
@@ -49,7 +50,6 @@ export function DeployProgress({ type, onClose }: DeployProgressProps): ReactEle
   }
   const deployerStateMeta = deployerStatesMeta[deployerState];
   const transactionStateMeta = transactionStatesMeta[transactionState];
-  console.log({ deployerState, deployerStateMeta });
 
   const handleDeploy = async () => {
     await setupDeployer();
@@ -78,14 +78,13 @@ export function DeployProgress({ type, onClose }: DeployProgressProps): ReactEle
 
   async function setupDeployer() {
     if (type === 'token') {
-      deployer = new TokenDeployer(signer, token);
+      deployer = new TokenDeployer(signer, localToken);
     } else if (type === 'fundraiser') {
-      deployer = new FundraiserDeployer(signer, token);
+      deployer = new FundraiserDeployer(signer, localToken);
     }
-    console.log('setup deployer', type, deployer);
 
     await deployer.setup();
-    deployer.resume(deployerState, tokenNetwork?.addresses || {});
+    deployer.resume(deployerState, tokenNetwork?.addresses || ({} as LocalTokenAddresses));
     deployer.onProgress(handleDeployProgress);
     deployer.onTransactionProgress(handleTransactionProgress);
   }
@@ -95,7 +94,7 @@ export function DeployProgress({ type, onClose }: DeployProgressProps): ReactEle
     const deployedState = type === 'token' ? TokenState.Deployed : TokenState.Fundraising;
     dispatch({
       type: 'updateTokenNetwork',
-      id: token.id,
+      id: localToken.id,
       networkId: networkId,
       networkData: {
         state: newState === DeployerStateFinished ? deployedState : deployingState,

@@ -26,10 +26,13 @@ export const StateProvider = ({ reducer, children }: StateProviderProps): ReactE
   const initialState: AppState = {
     version: 0,
     tokens: [],
+    fundraisers: [],
     isSaving: false,
     isLoading: false,
     isLoaded: false,
     isSynced: false,
+    accountNames: {},
+    accountNotes: {},
   };
 
   const storage = useStorage();

@@ -2,41 +2,30 @@ import React, { ReactElement, useState } from 'react';
 import moment from 'moment';
 import { Form, DatePicker, Input, InputNumber, Button, Space, Select, Row, Col, Checkbox } from 'antd';
 
-import { TokenFundraiser, BASE_CURRENCIES } from '@lib';
-import { useEthers } from '@app';
+import { LocalFundraiser, BASE_CURRENCIES } from '@lib';
+import { devDefaultFundraiser, isDev, useEthers } from '@app';
 import { Help, HelpLabel } from '..';
 
 interface FundraiserFormProps {
   tokenName: string;
   onCancel: () => void;
-  formData: TokenFundraiser;
-  onSave: (values: TokenFundraiser) => void;
-  onStart: (values: TokenFundraiser) => void;
+  formData: LocalFundraiser;
+  onSave: (values: LocalFundraiser) => void;
+  onStart: (values: LocalFundraiser) => void;
   disabled: boolean;
 }
 
-const sampleFormData: TokenFundraiser = {
-  label: 'Christmas fundraiser',
-  baseCurrency: 'USDC',
-  contributionsLocked: false,
-  tokensToMint: 100000,
-  tokenPrice: null,
-  startDate: moment().format('YYYY-MM-DD'),
-  endDate: moment().add(1, 'M').format('YYYY-MM-DD'),
-  softCap: 500000,
-  hardCap: 1000000,
-  startNow: true,
-};
+const defaultFormData = isDev ? devDefaultFundraiser : undefined;
 
 export function FundraiserForm({
   tokenName,
   onCancel,
   onSave,
   onStart,
-  formData = sampleFormData,
+  formData = defaultFormData,
   disabled = false,
 }: FundraiserFormProps): ReactElement {
-  const [startNow, setStartNow] = useState(sampleFormData.startNow);
+  const [startNow, setStartNow] = useState(defaultFormData.startNow);
   const [form] = Form.useForm();
   const [submitButton, setSubmitButton] = useState<string>();
   const { networkId, network } = useEthers();
@@ -61,9 +50,9 @@ export function FundraiserForm({
 
   const initialValues = {
     ...formData,
-    label: `${tokenName} fundraiser`,
-    startDate: moment(formData.startDate),
-    endDate: moment(formData.endDate),
+    startDate: formData.startDate ? moment(formData.startDate) : undefined,
+    endDate: formData.endDate ? moment(formData.endDate) : undefined,
+    label: formData.label || `${tokenName} fundraiser`,
   };
 
   return (

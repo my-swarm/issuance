@@ -1,3 +1,6 @@
+import { LocalFundraiser, LocalToken, TransferRules } from '@lib';
+import moment from 'moment';
+
 export const MANAGE_TABLE_PER_PAGE = 10;
 const layout = {
   labelCol: { span: 6 },
@@ -15,12 +18,49 @@ export const FORM = {
   maxDocumentSize: '2MB',
 };
 
+export const isDev = process.env.NEXT_PUBLIC_DEV === '1';
+
 export const devEthereumNode = {
   address: process.env.NEXT_PUBLIC_DEV_ETH_ADDRESS || 'http://127.0.0.1:7545',
   networkId: parseInt(process.env.NEXT_PUBLIC_DEV_ETH_NETWORK_ID) || 31337,
 };
 
 export const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
+
+export const devDefaultToken: LocalToken = {
+  id: 'xxx-yyy',
+  name: 'New Token',
+  symbol: 'NWT',
+  decimals: 18,
+  description: 'Completely new token',
+  initialSupply: 1000,
+  totalSupply: 5000,
+  transferRestrictionsType: TransferRules.None,
+  allowAccountFreeze: true,
+  allowContractFreeze: true,
+  allowForceTransfer: true,
+  allowBurn: true,
+  allowMint: true,
+  assetName: 'Luxury Mediterranean Condo',
+  assetDescription: 'Love my condo',
+  networks: undefined,
+  assetNetValue: 50,
+  assetLegalDocuments: [],
+};
+
+export const devDefaultFundraiser: LocalFundraiser = {
+  tokenAddress: undefined,
+  label: 'Christmas fundraiser',
+  baseCurrency: 'USDC',
+  contributionsLocked: false,
+  tokensToMint: 100000,
+  tokenPrice: null,
+  startDate: moment().format('YYYY-MM-DD'),
+  endDate: moment().add(1, 'M').format('YYYY-MM-DD'),
+  softCap: 500000,
+  hardCap: 1000000,
+  startNow: true,
+};
 
 export const devEthereumAccounts = [
   {

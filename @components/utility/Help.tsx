@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import * as help from '@help';
 import { Popover } from 'antd';
 import { QuestionCircleTwoTone as HelpIcon } from '@ant-design/icons/lib/icons';
@@ -13,7 +13,12 @@ export function Help({ name, type = 'popover' }: HelpProps): ReactElement {
     return help[name].content;
   } else {
     return (
-      <Popover className="c-help" title={help[name].title} content={help[name].content} placement="top">
+      <Popover
+        className="c-help"
+        title={<strong>{help[name].title}</strong>}
+        content={help[name].content}
+        placement="top"
+      >
         <HelpIcon />
       </Popover>
     );

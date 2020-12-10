@@ -18,7 +18,7 @@ import {
   transactionStatesMeta,
   LocalTokenAddresses,
 } from '@lib';
-import { useAppState, useEthers } from '@app';
+import { isDev, useAppState, useEthers } from '@app';
 
 import { RequireEthers } from './RequireEthers';
 
@@ -92,6 +92,7 @@ export function DeployProgress({ type, onClose }: DeployProgressProps): ReactEle
   const handleDeployProgress = (newState: DeployerState) => {
     const deployingState = type === 'token' ? TokenState.Deploying : TokenState.DeployingFundraiser;
     const deployedState = type === 'token' ? TokenState.Deployed : TokenState.Fundraising;
+    if (isDev && !confirm('Please confirm')) return false;
     dispatch({
       type: 'updateTokenNetwork',
       id: localToken.id,

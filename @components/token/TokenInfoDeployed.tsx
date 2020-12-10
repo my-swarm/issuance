@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { AddressZero } from '@ethersproject/constants';
 import { Descriptions } from 'antd';
 import { useAppState, useEthers } from '@app';
-import { Address } from '@components/utility';
+import { Address, HelpLabel } from '@components/utility';
 import { LocalTokenAddresses } from '@lib';
 
 export function TokenInfoDeployed(): ReactElement {
@@ -43,15 +43,19 @@ export function TokenInfoDeployed(): ReactElement {
 
   return (
     <Descriptions title="Deployed addresses" layout="horizontal" bordered size="small" className="mb-3" column={1}>
-      <Descriptions.Item label="SRC20 Token Contract">{printAddress('src20')}</Descriptions.Item>
-      <Descriptions.Item label="Features Contract">{printAddress('features')}</Descriptions.Item>
-      <Descriptions.Item label="Roles Contract">{printAddress('roles')}</Descriptions.Item>
-      <Descriptions.Item label="Transfer Rules Contract">{printAddress('transferRules')}</Descriptions.Item>
+      <Descriptions.Item label={<HelpLabel name="contractsSrc20" />}>{printAddress('src20')}</Descriptions.Item>
+      <Descriptions.Item label={<HelpLabel name="contractsFeatures" />}>{printAddress('features')}</Descriptions.Item>
+      <Descriptions.Item label={<HelpLabel name="contractsRoles" />}>{printAddress('roles')}</Descriptions.Item>
+      <Descriptions.Item label={<HelpLabel name="contractsTransferRules" />}>
+        {printAddress('transferRules')}
+      </Descriptions.Item>
       {addresses.fundraiser && (
-        <Descriptions.Item label="Fundraiser Contract">{printAddress('fundraiser')}</Descriptions.Item>
+        <Descriptions.Item label={<HelpLabel name="contractsFundraiser" />}>
+          {printAddress('fundraiser')}
+        </Descriptions.Item>
       )}
       {addresses.contributorRestrictions && (
-        <Descriptions.Item label="Contributor Restrictions Contract">
+        <Descriptions.Item label={<HelpLabel name="contractsContributorRestrictions" />}>
           {printAddress('contributorRestrictions')}
         </Descriptions.Item>
       )}

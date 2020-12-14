@@ -1,6 +1,6 @@
 import { EthereumAddress, EthereumNetwork, Uuid } from './ethereum';
 
-import { FundraiserDeployerState, TokenDeployerState, AppFile, AppImage } from '.';
+import { DeployerState, AppFile, AppImage } from '.';
 import { TokenFragment } from '@graphql';
 
 export enum TransferRules {
@@ -13,7 +13,6 @@ export interface LocalTokenAddresses {
   transferRules?: EthereumAddress;
   roles?: EthereumAddress;
   src20?: EthereumAddress;
-  appstat;
   fundraiser?: EthereumAddress;
   contributorRestrictions?: EthereumAddress;
   affiliateManager?: EthereumAddress;
@@ -21,8 +20,7 @@ export interface LocalTokenAddresses {
 
 export interface LocalTokenNetworkData {
   state?: TokenState;
-  deployerState?: TokenDeployerState;
-  fundraiserDeployerState?: FundraiserDeployerState;
+  deployerState?: DeployerState;
   addresses?: LocalTokenAddresses;
 }
 
@@ -38,6 +36,7 @@ export interface LocalFundraiser {
   endDate: string;
   softCap: number;
   hardCap: number;
+  networks: Record<EthereumNetwork, LocalTokenNetworkData>;
 }
 
 export interface LocalToken {
@@ -67,7 +66,6 @@ export interface LocalToken {
   assetLegalDocuments: AppFile[];
 
   networks: Record<EthereumNetwork, LocalTokenNetworkData>;
-  fundraiser?: LocalFundraiser;
 }
 
 export type OnlineToken = TokenFragment;

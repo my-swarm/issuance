@@ -6,6 +6,8 @@ import { useAppState } from '@app';
 export function TokenInfoMinting(): ReactElement {
   const [{ localToken, onlineToken: token }] = useAppState();
 
+  if (!localToken) return null;
+
   return (
     <Descriptions title="Minting information" layout="vertical" size="small" className="mb-3" bordered column={3}>
       <Descriptions.Item label="Initial Token supply">

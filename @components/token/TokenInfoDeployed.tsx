@@ -9,10 +9,8 @@ export function TokenInfoDeployed(): ReactElement {
   const { networkId } = useEthers();
   const [{ onlineToken, localToken }] = useAppState();
 
-  const addresses = localToken.networks[networkId]?.addresses || ({} as LocalTokenAddresses);
-
-  function printAddress(type) {
-    let address;
+  function getAddress(type) {
+    let address: string;
     if (onlineToken) {
       switch (type) {
         case 'src20':
@@ -24,20 +22,27 @@ export function TokenInfoDeployed(): ReactElement {
           address = onlineToken[type].address;
           break;
         case 'fundraiser':
-          address = onlineToken.currentFundraiser.address;
+          address = onlineToken.currentFundraiser?.address || undefined;
           break;
         case 'contributorRestrictions':
+          address = onlineToken.currentFundraiser?.contributorRestrictions || undefined;
+          break;
         case 'affiliateManager':
-          address = onlineToken.currentFundraiser[type];
+          address = onlineToken.currentFundraiser?.affiliateManager || undefined;
           break;
       }
       if (address === AddressZero) {
         address = undefined;
       }
     } else {
+      const addresses = localToken.networks[networkId]?.addresses || ({} as LocalTokenAddresses);
       address = (addresses && addresses[type]) || undefined;
     }
+    return address;
+  }
 
+  function printAddress(type) {
+    const address = getAddress(type);
     return address ? <Address link>{address}</Address> : 'Not deployed';
   }
 
@@ -49,12 +54,12 @@ export function TokenInfoDeployed(): ReactElement {
       <Descriptions.Item label={<HelpLabel name="contractsTransferRules" />}>
         {printAddress('transferRules')}
       </Descriptions.Item>
-      {addresses.fundraiser && (
+      {getAddress('fundraiser') && (
         <Descriptions.Item label={<HelpLabel name="contractsFundraiser" />}>
           {printAddress('fundraiser')}
         </Descriptions.Item>
       )}
-      {addresses.contributorRestrictions && (
+      {getAddress('contributorRestrictions') && (
         <Descriptions.Item label={<HelpLabel name="contractsContributorRestrictions" />}>
           {printAddress('contributorRestrictions')}
         </Descriptions.Item>

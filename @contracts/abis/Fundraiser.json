@@ -240,6 +240,12 @@
       {
         "indexed": false,
         "internalType": "address",
+        "name": "fundraiserManager",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
         "name": "minter",
         "type": "address"
       },

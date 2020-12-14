@@ -1,58 +1,39 @@
+import React, { ReactElement, useState, useEffect } from 'react';
+import { RequireEthers } from '@components';
 import { Button, Progress } from 'antd';
-import React, { MouseEventHandler, ReactElement, useState } from 'react';
-import { LoadingOutlined } from '@ant-design/icons';
-
 import {
   Deployer,
-  DeployerState,
   DeployerStateFinished,
   DeployerStateNone,
-  DeployerStatesMeta,
-  FundraiserDeployer,
-  FundraiserDeployerState,
-  TokenDeployer,
-  TokenState,
   TransactionState,
-  fundraiserDeployerStatesMeta,
-  tokenDeployerStatesMeta,
   transactionStatesMeta,
-  LocalTokenAddresses,
+  deployerStatesMeta,
 } from '@lib';
-import { isDev, useAppState, useEthers } from '@app';
-
-import { RequireEthers } from './RequireEthers';
+import { LoadingOutlined } from '@ant-design/icons';
+import { useDispatch } from '@app';
 
 interface DeployProgressProps {
-  type: 'token' | 'fundraiser';
-  onClose: MouseEventHandler;
+  deployer: Deployer;
+  onClose: () => void;
 }
 
-export function DeployProgress({ type, onClose }: DeployProgressProps): ReactElement {
-  const { signer, networkId } = useEthers();
-  const [{ localToken }, dispatch] = useAppState();
+export function DeployProgress({ deployer, onClose }: DeployProgressProps): ReactElement {
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
-  const tokenNetwork = localToken.networks[networkId];
-  let deployerState: DeployerState;
   const [transactionState, setTransactionState] = useState<TransactionState>(TransactionState.None);
+  const { dispatchError } = useDispatch();
+  useEffect(() => {
+    if (deployer) {
+      deployer.onTransactionProgress(handleTransactionProgress);
+    }
+  }, [deployer]);
 
-  // these are initialized depending on deployer type (token/fundraiser)
-  let deployer: Deployer;
-  let stateField: string;
-  let deployerStatesMeta: DeployerStatesMeta;
-  if (type === 'token') {
-    stateField = 'deployerState';
-    deployerState = tokenNetwork?.deployerState || DeployerStateNone;
-    deployerStatesMeta = tokenDeployerStatesMeta;
-  } else if (type === 'fundraiser') {
-    stateField = 'fundraiserDeployerState';
-    deployerState = tokenNetwork?.fundraiserDeployerState || FundraiserDeployerState.None;
-    deployerStatesMeta = fundraiserDeployerStatesMeta;
-  }
-  const deployerStateMeta = deployerStatesMeta[deployerState];
+  const handleTransactionProgress = (event: TransactionState) => {
+    setTransactionState(event);
+  };
+
   const transactionStateMeta = transactionStatesMeta[transactionState];
 
-  const handleDeploy = async () => {
-    await setupDeployer();
+  const handleStart = async () => {
     setIsDeploying(true);
     try {
       await deployer.deploy();
@@ -71,52 +52,24 @@ export function DeployProgress({ type, onClose }: DeployProgressProps): ReactEle
           description: `${e.message} - ${e.reason} - If the error message makes no sense to you, contact us!`,
         };
       }
-      dispatch({ type: 'showError', error });
+      dispatchError(error.message, error.description);
     }
     setIsDeploying(false);
   };
+  if (!deployer) return null;
 
-  async function setupDeployer() {
-    if (type === 'token') {
-      deployer = new TokenDeployer(signer, localToken);
-    } else if (type === 'fundraiser') {
-      deployer = new FundraiserDeployer(signer, localToken);
-    }
-
-    await deployer.setup();
-    deployer.resume(deployerState, tokenNetwork?.addresses || ({} as LocalTokenAddresses));
-    deployer.onProgress(handleDeployProgress);
-    deployer.onTransactionProgress(handleTransactionProgress);
-  }
-
-  const handleDeployProgress = (newState: DeployerState) => {
-    const deployingState = type === 'token' ? TokenState.Deploying : TokenState.DeployingFundraiser;
-    const deployedState = type === 'token' ? TokenState.Deployed : TokenState.Fundraising;
-    if (isDev && !confirm('Please confirm')) return false;
-    dispatch({
-      type: 'updateTokenNetwork',
-      id: localToken.id,
-      networkId: networkId,
-      networkData: {
-        state: newState === DeployerStateFinished ? deployedState : deployingState,
-        [stateField]: newState,
-        addresses: deployer.addresses,
-      },
-    });
-  };
-
-  const handleTransactionProgress = (event: TransactionState) => {
-    setTransactionState(event);
-  };
+  const state = deployer.state;
+  const meta = deployerStatesMeta[state];
+  console.log('deployer', { state, meta });
 
   return (
     <RequireEthers>
-      <Progress percent={deployerStateMeta.percent} status={deployerStateMeta.percent === 100 ? 'normal' : 'active'} />
-      <h3 className="mt-3">{deployerStateMeta.message}</h3>
-      {deployerStateMeta.description && <p>{deployerStateMeta.description}</p>}
-      {deployerStateMeta.percent > 0 && deployerStateMeta.percent < 100 && <p>{transactionStateMeta.message}</p>}
+      <Progress percent={meta.percent} status={meta.percent === 100 ? 'normal' : 'active'} />
+      <h3 className="mt-3">{meta.message}</h3>
+      {meta.description && <div>{meta.description}</div>}
+      {meta.percent > 0 && meta.percent < 100 && <p>{transactionStateMeta.message}</p>}
 
-      {deployerState === DeployerStateFinished ? (
+      {state === DeployerStateFinished ? (
         <Button onClick={onClose} size="large">
           Close
         </Button>
@@ -127,8 +80,8 @@ export function DeployProgress({ type, onClose }: DeployProgressProps): ReactEle
           </Button>
         </>
       ) : (
-        <Button onClick={handleDeploy} type="primary" size="large">
-          {deployerState === DeployerStateNone ? 'Start deployment now!' : 'Resume deployment'}
+        <Button onClick={handleStart} type="primary" size="large">
+          {state === DeployerStateNone ? 'Start deployment now!' : 'Resume deployment'}
         </Button>
       )}
     </RequireEthers>

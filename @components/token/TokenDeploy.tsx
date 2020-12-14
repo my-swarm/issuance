@@ -2,8 +2,8 @@ import React, { ReactElement } from 'react';
 import { Button, Divider } from 'antd';
 
 import { useAppState, useEthers } from '@app';
-import { TokenDeployerState } from '@lib';
-import { TokenInfoDeploy, DeployProgress } from '..';
+import { DeployerState } from '@lib';
+import { TokenInfoDeploy, TokenDeployProgress } from '..';
 
 interface TokenDeployProps {
   onReview: () => void;
@@ -20,12 +20,12 @@ export function TokenDeploy({ onReview, onCancel }: TokenDeployProps): ReactElem
     <>
       <TokenInfoDeploy />
 
-      <Button onClick={onReview} disabled={deployerState != TokenDeployerState.None}>
+      <Button onClick={onReview} disabled={deployerState != DeployerState.None}>
         Review/edit the token
       </Button>
 
       <Divider />
-      <DeployProgress type="token" onClose={onCancel} />
+      <TokenDeployProgress onClose={onCancel} />
       <Divider />
 
       <h3>How does this work</h3>

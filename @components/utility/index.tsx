@@ -6,6 +6,8 @@ export * from './RequireEthers';
 export * from './FilePreview';
 export * from './ImagePreview';
 export * from './DeployProgress';
+export * from './TokenDeployProgress';
+export * from './FundraiserDeployProgress';
 export * from './TransactionModal';
 export * from './SpendingApprovalModal';
 export * from './Loading';

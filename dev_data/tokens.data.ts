@@ -1,12 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import {
-  EthereumNetwork,
-  LocalToken,
-  TokenState,
-  TransferRules,
-  DeployerStateFinished,
-  TokenDeployerState,
-} from '@lib';
+import { EthereumNetwork, LocalToken, TokenState, TransferRules, DeployerStateFinished, DeployerState } from '@lib';
 import addressesLocal from './addresses/local.json';
 import addressesKovan from './addresses/kovan.json';
 
@@ -60,12 +53,12 @@ export const tokens = [
     networks: {
       [EthereumNetwork.Kovan]: {
         state: TokenState.Created,
-        deployerState: TokenDeployerState.None,
+        deployerState: DeployerState.None,
         addresses: {},
       },
       [EthereumNetwork.Local]: {
         state: TokenState.Created,
-        deployerState: TokenDeployerState.None,
+        deployerState: DeployerState.None,
         addresses: {},
       },
     },
@@ -79,12 +72,12 @@ export const tokens = [
     networks: {
       [EthereumNetwork.Kovan]: {
         state: TokenState.Deploying,
-        deployerState: TokenDeployerState.Roles,
+        deployerState: DeployerState.Roles,
         addresses: addressesKovan.token1,
       },
       [EthereumNetwork.Local]: {
         state: TokenState.Deploying,
-        deployerState: TokenDeployerState.Roles,
+        deployerState: DeployerState.Roles,
         addresses: addressesLocal.token1,
       },
     },

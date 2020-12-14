@@ -314,6 +314,7 @@ export type Fundraiser = {
   tokenPrice?: Maybe<Scalars['BigInt']>;
   affiliateManager?: Maybe<Scalars['Bytes']>;
   contributorRestrictions?: Maybe<Scalars['Bytes']>;
+  fundraiserManager?: Maybe<Scalars['Bytes']>;
   minter?: Maybe<Scalars['Bytes']>;
   contributionsLocked?: Maybe<Scalars['Boolean']>;
   amountQualified: Scalars['BigInt'];
@@ -465,6 +466,12 @@ export type Fundraiser_Filter = {
   contributorRestrictions_not_in?: Maybe<Array<Scalars['Bytes']>>;
   contributorRestrictions_contains?: Maybe<Scalars['Bytes']>;
   contributorRestrictions_not_contains?: Maybe<Scalars['Bytes']>;
+  fundraiserManager?: Maybe<Scalars['Bytes']>;
+  fundraiserManager_not?: Maybe<Scalars['Bytes']>;
+  fundraiserManager_in?: Maybe<Array<Scalars['Bytes']>>;
+  fundraiserManager_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  fundraiserManager_contains?: Maybe<Scalars['Bytes']>;
+  fundraiserManager_not_contains?: Maybe<Scalars['Bytes']>;
   minter?: Maybe<Scalars['Bytes']>;
   minter_not?: Maybe<Scalars['Bytes']>;
   minter_in?: Maybe<Array<Scalars['Bytes']>>;
@@ -534,6 +541,7 @@ export enum Fundraiser_OrderBy {
   TokenPrice = 'tokenPrice',
   AffiliateManager = 'affiliateManager',
   ContributorRestrictions = 'contributorRestrictions',
+  FundraiserManager = 'fundraiserManager',
   Minter = 'minter',
   ContributionsLocked = 'contributionsLocked',
   AmountQualified = 'amountQualified',

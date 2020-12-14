@@ -1,7 +1,6 @@
-import { BigNumber, utils } from 'ethers';
 import { AddressZero } from '@ethersproject/constants';
 
-import { TokenDeployerState } from './common';
+import { DeployerState } from './common';
 import { Deployer } from './Deployer';
 import {
   parseUnits,
@@ -11,12 +10,15 @@ import {
   Src20FeaturesBitmask,
   tokenToKya,
   storeKya,
+  LocalToken,
 } from '..';
 
 export class TokenDeployer extends Deployer {
-  public async setup(): Promise<void> {
+  private token: LocalToken;
+
+  public async setup(token?: LocalToken): Promise<void> {
     await super.setup();
-    this.state = TokenDeployerState.None;
+    this.token = token;
   }
 
   public async deploy(): Promise<void> {
@@ -24,48 +26,48 @@ export class TokenDeployer extends Deployer {
     await this.deployFeatures();
     await this.deployRoles();
     await this.createToken();
-    this.handleStateChange(TokenDeployerState.Finished);
+    this.handleStateChange(DeployerState.Finished);
   }
 
   private async deployTransferRules(): Promise<void> {
     if (this.token.transferRestrictionsType === TransferRules.None) {
-      this._addresses.transferRules = AddressZero;
+      this.addresses.transferRules = AddressZero;
       return;
     }
-    if (this.state > TokenDeployerState.TransferRules) return;
-    if (this.state === TokenDeployerState.Finished) {
+    if (this.state > DeployerState.TransferRules) return;
+    if (this.state === DeployerState.Finished) {
       throw new InvalidStateError('Cannot deploy a finished contract.');
     }
 
-    this.handleStateChange(TokenDeployerState.TransferRules);
+    this.handleStateChange(DeployerState.TransferRules);
     const instance = await this.contractProxy.deploy('transferRules', [this.owner]);
-    this._addresses.transferRules = instance.address;
+    this.addresses.transferRules = instance.address;
   }
 
   private async deployFeatures(): Promise<void> {
-    if (this.state > TokenDeployerState.Features) return;
+    if (this.state > DeployerState.Features) return;
 
-    this.handleStateChange(TokenDeployerState.Features);
+    this.handleStateChange(DeployerState.Features);
     const features = this.getFeaturesAsContractValue();
     const instance = await this.contractProxy.deploy('features', [this.owner, features]);
-    this._addresses.features = instance.address;
+    this.addresses.features = instance.address;
   }
 
   private async deployRoles(): Promise<void> {
-    if (this.state > TokenDeployerState.Roles) return;
+    if (this.state > DeployerState.Roles) return;
 
-    this.handleStateChange(TokenDeployerState.Roles);
+    this.handleStateChange(DeployerState.Roles);
     const instance = await this.contractProxy.deploy('roles', [
       getContractAddress('registry', this.networkId), // manager: the SRC20 registry contract
-      this._addresses.transferRules || AddressZero, // rules
+      this.addresses.transferRules || AddressZero, // rules
     ]);
-    this._addresses.roles = instance.address;
+    this.addresses.roles = instance.address;
   }
 
   private async createToken(): Promise<void> {
-    if (this.state > TokenDeployerState.Token) return;
+    if (this.state > DeployerState.Token) return;
 
-    this.handleStateChange(TokenDeployerState.Token);
+    this.handleStateChange(DeployerState.Token);
     const {
       name,
       symbol,

@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
-import { FundraiserDeployerState, LocalFundraiser } from '@lib';
-import { FundraiserForm, DeployProgress } from '..';
+import { DeployerState, LocalFundraiser } from '@lib';
+import { FundraiserForm, TokenDeployProgress, FundraiserDeployProgress } from '..';
 import { useEthers, useAppState } from '@app';
 
 interface TokenManageProps {
@@ -8,12 +8,12 @@ interface TokenManageProps {
 }
 
 export function TokenStartFundraiser({ onClose }: TokenManageProps): ReactElement {
-  const [{ localToken, onlineToken, fundraisers }, dispatch] = useAppState();
+  const [{ onlineToken, fundraisers }, dispatch] = useAppState();
   const { networkId } = useEthers();
   const [isStarted, setIsStarted] = useState<boolean>(false);
-  const deployerState = localToken?.networks[networkId]?.fundraiserDeployerState || FundraiserDeployerState.None;
-  const isDeploying = deployerState !== FundraiserDeployerState.None;
   const fundraiser = fundraisers[onlineToken.address];
+  const deployerState = fundraiser?.networks?.[networkId]?.deployerState || DeployerState.None;
+  const isDeploying = deployerState !== DeployerState.None;
 
   const handleSave = async (values: LocalFundraiser) => {
     save(values);
@@ -46,7 +46,7 @@ export function TokenStartFundraiser({ onClose }: TokenManageProps): ReactElemen
       {(isDeploying || isStarted) && (
         <>
           <h2>Fundraiser contract deployment</h2>
-          <DeployProgress type="fundraiser" onClose={onClose} />
+          <FundraiserDeployProgress onClose={onClose} />
         </>
       )}
     </div>

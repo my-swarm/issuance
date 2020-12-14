@@ -1,19 +1,24 @@
 import { Contract } from 'ethers';
 import moment from 'moment';
 
-import { BASE_CURRENCIES } from '@lib';
+import { BASE_CURRENCIES, LocalFundraiser } from '@lib';
 
-import { parseUnits, getUnixTimestamp, FundraiserDeployerState } from '..';
+import { parseUnits, getUnixTimestamp, DeployerState } from '..';
 import { Deployer } from '.';
 
 const baseCurrency = BASE_CURRENCIES.USDC;
 
 export class FundraiserDeployer extends Deployer {
+  private fundraiser: LocalFundraiser;
+  private tokenDecimals: number;
+  private tokenAddress: string;
   private fundraiserContract: Contract;
 
-  public async setup(): Promise<void> {
+  public async setup(fundraiser?: LocalFundraiser, tokenAddress?: string, tokenDecimals?: number): Promise<void> {
+    this.fundraiser = fundraiser;
+    this.tokenAddress = tokenAddress;
+    this.tokenDecimals = tokenDecimals;
     await super.setup();
-    this.state = FundraiserDeployerState.None;
   }
 
   public async deploy(): Promise<void> {
@@ -21,32 +26,32 @@ export class FundraiserDeployer extends Deployer {
     await this.deployContributorRestrictions();
     await this.deployAffiliateManager();
     await this.setupFundraiser();
-    this.handleStateChange(FundraiserDeployerState.Finished);
+    this.handleStateChange(DeployerState.Finished);
   }
 
   private async deployFundraiser() {
-    if (this.state > FundraiserDeployerState.Fundraiser) return;
-    const { fundraiser, decimals } = this.token;
+    if (this.state > DeployerState.Fundraiser) return;
+    const { fundraiser, tokenDecimals } = this;
     const startDate = fundraiser.startNow ? moment().add(1, 'minute') : fundraiser.startDate;
     const params = [
       fundraiser.label, // label
-      this.addresses.src20, // token (address)
-      parseUnits(fundraiser.tokensToMint, decimals), // tokensToMint
+      this.tokenAddress, // token (address)
+      parseUnits(fundraiser.tokensToMint, tokenDecimals), // tokensToMint
       getUnixTimestamp(startDate), // startDate (int)
       getUnixTimestamp(fundraiser.endDate), // endDate (int)
       parseUnits(fundraiser.softCap, baseCurrency.decimals), // softCap
       parseUnits(fundraiser.hardCap, baseCurrency.decimals), // hardCap
     ];
-    this.handleStateChange(FundraiserDeployerState.Fundraiser);
+    this.handleStateChange(DeployerState.Fundraiser);
     const instance = await this.contractProxy.deploy('fundraiser', params);
-    this._addresses.fundraiser = instance.address;
+    this.addresses.fundraiser = instance.address;
     this.fundraiserContract = instance;
   }
 
   private async deployContributorRestrictions() {
-    if (this.state > FundraiserDeployerState.ContributorRestrictions) return;
+    if (this.state > DeployerState.ContributorRestrictions) return;
 
-    this.handleStateChange(FundraiserDeployerState.ContributorRestrictions);
+    this.handleStateChange(DeployerState.ContributorRestrictions);
     const params = [
       this.addresses.fundraiser, // address fundraiseContract
       0, // uint maxNumContributors
@@ -54,21 +59,21 @@ export class FundraiserDeployer extends Deployer {
       0, // maxAmount
     ];
     const instance = await this.contractProxy.deploy('contributorRestrictions', params);
-    this._addresses.contributorRestrictions = instance.address;
+    this.addresses.contributorRestrictions = instance.address;
   }
 
   private async deployAffiliateManager() {
-    if (this.state > FundraiserDeployerState.AffiliateManager) return;
-    this.handleStateChange(FundraiserDeployerState.AffiliateManager);
+    if (this.state > DeployerState.AffiliateManager) return;
+    this.handleStateChange(DeployerState.AffiliateManager);
     const instance = await this.contractProxy.deploy('affiliateManager');
-    this._addresses.affiliateManager = instance.address;
+    this.addresses.affiliateManager = instance.address;
   }
 
   private async setupFundraiser() {
-    if (this.state > FundraiserDeployerState.Setup) return;
+    if (this.state > DeployerState.Setup) return;
 
-    const { fundraiser } = this.token;
-    this.handleStateChange(FundraiserDeployerState.Setup);
+    const fundraiser = this.fundraiser;
+    this.handleStateChange(DeployerState.Setup);
     const baseCurrency = BASE_CURRENCIES[fundraiser.baseCurrency];
     if (!baseCurrency) {
       throw new Error(`Base currency not defined: ${fundraiser.baseCurrency}`);
@@ -85,6 +90,6 @@ export class FundraiserDeployer extends Deployer {
       this.getAddress('minter'), // address _minter
       fundraiser.contributionsLocked, // bool _contributionsLocked
     ];
-    await this.contractProxy.call('fundraiser', 'setup', args);
+    await this.contractProxy.call(['fundraiser', this.addresses.fundraiser], 'setup', args);
   }
 }

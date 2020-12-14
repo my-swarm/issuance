@@ -26,7 +26,7 @@ export const StateProvider = ({ reducer, children }: StateProviderProps): ReactE
   const initialState: AppState = {
     version: 0,
     tokens: [],
-    fundraisers: [],
+    fundraisers: {},
     isSaving: false,
     isLoading: false,
     isLoaded: false,

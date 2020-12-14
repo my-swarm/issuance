@@ -26,6 +26,7 @@ export class ContractProxy {
   }
 
   public async deploy(contractName: string, args: Array<any> = []): Promise<Contract> {
+    console.log('ContractProxy.deploy', { contractName, args });
     const contractFactory = getContractFactory(contractName, this.signer);
     this.handleStateChange(TransactionState.Signing);
     const contractInstance = await contractFactory.deploy(...args, await this.getOptions());

@@ -31,7 +31,7 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
     case 'restoreState':
       return {
         ...state,
-        ..._.pick(action.data, ['tokens', 'version', 'accountNames', 'accountNotes']),
+        ..._.pick(action.data, ['tokens', 'version', 'accountNames', 'accountNotes', 'fundraisers']),
         isLoaded: true,
         isSynced: true,
       };
@@ -62,6 +62,7 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
         tokens: withUpdatedToken(updatedToken),
       });
     }
+
     case 'updateTokenNetwork': {
       const { id, networkId, networkData } = action;
       const updatedToken = findToken(id);
@@ -69,6 +70,16 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       updatedToken.networks[networkId] = { ...oldNetworkData, ...networkData };
       return unsynced({
         tokens: withUpdatedToken(updatedToken),
+      });
+    }
+
+    case 'updateFundraiserNetwork': {
+      const { tokenAddress, networkId, networkData } = action;
+      return unsynced({
+        fundraisers: {
+          ...state.fundraisers,
+          [tokenAddress]: { ...state.fundraisers[tokenAddress], networkId, networkData },
+        },
       });
     }
 

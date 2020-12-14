@@ -47,6 +47,13 @@ interface UpdateTokenNetworkAction {
   networkData: LocalTokenNetworkData;
 }
 
+interface UpdateFundraiserNetworkAction {
+  type: 'updateFundraiserNetwork';
+  tokenAddress: string;
+  networkId: EthereumNetwork;
+  networkData: LocalTokenNetworkData;
+}
+
 interface StartSavingAction {
   type: 'startSaving';
 }
@@ -125,6 +132,7 @@ export type Action =
   | DeleteTokenAction
   | UpdateTokenAction
   | UpdateTokenNetworkAction
+  | UpdateFundraiserNetworkAction
   | StartSavingAction
   | EndSavingAction
   | ShowErrorAction

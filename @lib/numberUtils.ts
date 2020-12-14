@@ -1,6 +1,7 @@
 import { BigNumber, BigNumberish, utils } from 'ethers';
 
 export function parseUnits(amount: string | number, decimals: number): BigNumber {
+  if (!amount) return BigNumber.from(0);
   if (typeof amount === 'number') amount = amount.toString();
   return utils.parseUnits(amount, decimals);
 }

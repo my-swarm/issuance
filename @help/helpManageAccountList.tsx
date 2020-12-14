@@ -5,14 +5,14 @@ export const batchAdd = {
   content: (
     <div>
       <p>
-        Add one account (Ethereum address) per line. You can provide additional information by entering three values per
-        line: address, name, note. They need to be comma, semicolon or tab separated (like in a CSV file).
+        Add one account (Ethereum address) per line. Additional information can be entered in a CSV format with three
+        columns: <code>address, name, note</code>.
       </p>
       <h4>Example:</h4>
       <div className="code-sample">
         0x1234567812345678123456781234567812345678, John Smith, my best friend
         <br />
-        0x1234567812345678123456781234567812345678; Jane; my wife
+        0x1234567812345678123456781234567812345678, Jane, my wife
       </div>
     </div>
   ),

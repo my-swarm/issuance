@@ -6,7 +6,7 @@ import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
 import { useAppState, useContractAddress, useDispatch, useEthers } from '@app';
 import { useTokenHoldersQuery } from '@graphql';
 import { bnRatio, getContractAbi, parseAddressesInput, parseUnits, sameAddress } from '@lib';
-import { Loading } from '..';
+import { Help, Loading } from '..';
 
 type FormData = {
   type: 'eth' | 'erc20';
@@ -110,20 +110,19 @@ export function ManageDividends(): ReactElement {
         </Form.Item>
         <Form.Item
           name="addresses"
+          rules={[{ required: true, message: 'The list is required' }]}
           label={
             <Space>
               <span>List of Receivers</span>
+              <Help name="distributeInput" />
               <Button type="link" size="small" onClick={handleFillAddressesFromHolders}>
-                From token holders
+                Load token holders
               </Button>
             </Space>
           }
         >
           <Input.TextArea rows={8} />
         </Form.Item>
-        <p>
-          Enter CSV data with <code>receiver,ration per line</code>
-        </p>
         <Form.Item>
           <Space>
             <Button type="primary" htmlType="submit">

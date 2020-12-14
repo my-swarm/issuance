@@ -1,11 +1,11 @@
 import React, { ReactElement, useState } from 'react';
 import { BigNumber } from 'ethers';
-import { Alert, Button, Form, Input, Modal, Radio, Space, Table } from 'antd';
+import { Descriptions, Alert, Button, Form, Input, Modal, Radio, Space, Table } from 'antd';
 
 import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';
 import { ContributorStatus, useDistrubuteQuery } from '@graphql';
 import { formatUnits, parseAddressesInput, parseUnits } from '@lib';
-import { AmountsTable, Loading } from '..';
+import { AmountsTable, Help, Loading, VSpace } from '..';
 
 type DistributionType = 'fundraiser' | 'custom';
 
@@ -92,9 +92,13 @@ export function ManageDistribute(): ReactElement {
 
   return (
     <>
-      <p>
-        Available supply: {formatUnits(availableSupply, token.decimals)} {token.symbol}
-      </p>
+      <Descriptions bordered column={1}>
+        <Descriptions.Item label="Available supply">
+          {formatUnits(availableSupply, token.decimals)} {token.symbol}
+        </Descriptions.Item>
+      </Descriptions>
+
+      <VSpace />
 
       <Form form={form} layout="vertical" onFinish={handleSubmit} initialValues={initialValues}>
         {qualifiedContributors.length > 0 && (
@@ -108,12 +112,17 @@ export function ManageDistribute(): ReactElement {
 
         {distributionType === 'custom' && (
           <>
-            <Form.Item name="addresses" label="List of Receivers">
+            <Form.Item
+              name="addresses"
+              label={
+                <Space>
+                  <span>Enter a list of Receivers</span>
+                  <Help name="distributeInput" />
+                </Space>
+              }
+            >
               <Input.TextArea rows={8} />
             </Form.Item>
-            <p>
-              Enter CSV data with <code>&lt;address&gt;,&lt;amount&gt;</code> per line
-            </p>
           </>
         )}
 

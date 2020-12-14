@@ -10,7 +10,7 @@ interface HelpProps {
 
 export function Help({ name, type = 'popover' }: HelpProps): ReactElement {
   if (type === 'render') {
-    return help[name].content;
+    return <div className="mb-3">{help[name].content}</div>;
   } else {
     return (
       <Popover

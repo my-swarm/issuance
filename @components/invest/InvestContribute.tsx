@@ -7,12 +7,11 @@ import { formatUnits, parseUnits } from '@lib';
 
 const { Title } = Typography;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface InvestTokenDetailsProps {
+interface InvestContributeProps {
   id: string;
 }
 
-export function InvestContribute({ id }: InvestTokenDetailsProps): ReactElement {
+export function InvestContribute({ id }: InvestContributeProps): ReactElement {
   const { address } = useEthers();
   const { data, loading } = useFundraiserQuery({ variables: { id, address } });
   const { checkAllowance, dispatchTransaction } = useDispatch();
@@ -66,7 +65,7 @@ export function InvestContribute({ id }: InvestTokenDetailsProps): ReactElement 
         On succesful raise, you&apos;ll get you share of the <strong>{token.symbol}</strong> token ({token.name}).
       </p>
       <p>TBD: Info about what happens after contribution, when user gets his tokens etc.</p>
-      <Descriptions title="Your contributor status" column={1} size="small">
+      <Descriptions title="Your investor status" column={1} size="small" bordered>
         <Descriptions.Item label="Status">{status}</Descriptions.Item>
         <Descriptions.Item label={`${baseCurrency.symbol} balance`}>
           {balance.nice} {baseCurrency.symbol}
@@ -76,7 +75,7 @@ export function InvestContribute({ id }: InvestTokenDetailsProps): ReactElement 
         </Descriptions.Item>
       </Descriptions>
       <VSpace />
-      <Title level={4}>Contribute</Title>
+      <Title level={4}>Invest</Title>
       <p>
         When you contribute, {baseCurrency.symbol} tokens are sent from your current account (
         <Address short>{address}</Address>) to the Fundraiser contract address (

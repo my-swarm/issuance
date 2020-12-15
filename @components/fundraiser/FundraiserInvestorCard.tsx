@@ -8,7 +8,7 @@ import { CardAction, FundraiserStatusChart } from '..';
 export enum FundraiserInvestorAction {
   TokenDetails,
   FundraiserDetails,
-  Contribute,
+  Invest,
 }
 
 interface FundraiserInvestorCardProps {
@@ -28,7 +28,7 @@ export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInves
   };
 
   const handleContribute = () => {
-    onAction(FundraiserInvestorAction.Contribute);
+    onAction(FundraiserInvestorAction.Invest);
   };
 
   return (
@@ -42,7 +42,7 @@ export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInves
           title="Fundraiser details"
           key={2}
         />,
-        <CardAction onClick={handleContribute} icon={<DollarCircleOutlined />} title="Contribute" key={3} />,
+        <CardAction onClick={handleContribute} icon={<DollarCircleOutlined />} title="Invest" key={3} />,
       ]}
     >
       <h2>Token info</h2>

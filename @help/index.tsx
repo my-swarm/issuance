@@ -4,5 +4,5 @@ export * from './helpTokenAsset';
 export * from './helpManageAccountList';
 export * from './helpManageDistribution';
 export * from './helpFundraiserForm';
-export * from './helpInvestContribute';
+export * from './helpInvest';
 export * from './helpContracts';

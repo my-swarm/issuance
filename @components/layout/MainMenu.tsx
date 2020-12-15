@@ -16,9 +16,9 @@ export function MainMenu(): ReactElement {
   return (
     <Menu theme="dark" mode="inline" defaultOpenKeys={['investor', 'issuer']} defaultSelectedKeys={[router.pathname]}>
       <Menu.SubMenu key="investor" title={<span>Investor</span>} icon={<UserOutlined />} popupOffset={[16, 0]}>
-        <Menu.Item key="/contribute" icon={<DollarCircleOutlined />}>
-          <Link href="/contribute">
-            <a>Contribute</a>
+        <Menu.Item key="/invest" icon={<DollarCircleOutlined />}>
+          <Link href="/invest">
+            <a>Invest</a>
           </Link>
         </Menu.Item>
         <Menu.Item key="/wallet" icon={<WalletOutlined />}>

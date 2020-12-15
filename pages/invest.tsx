@@ -29,8 +29,8 @@ export default function InvestPage(): ReactElement {
         return 'Token details';
       case FundraiserInvestorAction.FundraiserDetails:
         return 'Fundraiser details';
-      case FundraiserInvestorAction.Contribute:
-        return 'Contribute';
+      case FundraiserInvestorAction.Invest:
+        return 'Invest';
     }
   }
 
@@ -43,7 +43,7 @@ export default function InvestPage(): ReactElement {
         return <InvestTokenDetails />;
       case FundraiserInvestorAction.FundraiserDetails:
         return <InvestFundraiserDetails id={fundraiser.id} />;
-      case FundraiserInvestorAction.Contribute:
+      case FundraiserInvestorAction.Invest:
         return <InvestContribute id={fundraiser.id} />;
     }
   }

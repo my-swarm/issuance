@@ -1,84 +1,146 @@
-import React from 'react';
-import { CardAction, DefaultLayout } from '@components';
-import { Card, Col, Divider, Row, Space, Tag } from 'antd';
-import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined, WalletOutlined } from '@ant-design/icons';
+import React, { ReactElement, useEffect, useState } from 'react';
+import moment from 'moment';
+import { BuySwmModal, DefaultLayout, MasternodesChart, SwmPriceChart, SwmStakeChart } from '@components';
+import { Button, Card, Col, Divider, Row, Space, Statistic } from 'antd';
+import { PriceData, MasternodesData, RawMasternodeStats } from '@lib';
+
+const cgUrl =
+  'https://api.coingecko.com/api/v3/coins/swarm/market_chart?vs_currency=usd&days=14&localization=false&interval=daily';
+const mnUrl = 'https://api.masternode.swarm.fund/api/v1/nodes/states-overview';
 
 interface IndexProps {
   title?: string;
 }
 
-export default function Index({ title }: IndexProps) {
-  const colLayout = { xs: 24, md: 12, lg: 8, xl: 8, xxl: 6 };
+export default function Index({ title }: IndexProps): ReactElement {
+  const colLayout = { xs: 24, md: 12, lg: 6 };
+  const [buyingSwm, setBuyingSwm] = useState<boolean>(false);
+  const [priceData, setPriceData] = useState<PriceData>();
+  const [mnData, setMnData] = useState<MasternodesData>();
+
+  useEffect(() => {
+    fetch(cgUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        setPriceData(
+          data.prices.map((record) => ({ date: moment.unix(record[0] / 1000).format('YYYY-MM-DD'), price: record[1] })),
+        );
+      })
+      .catch((err) => {
+        console.error('CoinGecko error');
+        console.error(err.message);
+      });
+  }, [cgUrl]);
+
+  useEffect(() => {
+    fetch(mnUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('mnn data raw', data);
+        setMnData(
+          Object.entries(data.result).map(([date, nodeStats]: [string, RawMasternodeStats]) => {
+            return {
+              date: date,
+              active: nodeStats.ACTIVE,
+              warmup: nodeStats.WARMUP,
+            };
+          }),
+        );
+      });
+  }, [mnUrl]);
+
+  const firstPrice = priceData?.[0].price;
+  const lastPrice = priceData?.[priceData.length - 1].price;
+  const priceDirection: 'up' | 'down' = firstPrice > lastPrice ? 'up' : 'down';
+  const priceChangePercent = firstPrice
+    ? (priceDirection === 'up' ? lastPrice / firstPrice - 1 : firstPrice / lastPrice - 1) * 100
+    : 0;
 
   return (
     <DefaultLayout title="Welcome to MySwarm Investment Portal">
-      <Row gutter={24}>
+      <Row gutter={24} className="dashboard">
         <Col {...colLayout}>
-          <Card
-            bordered={false}
-            cover={
-              <div className="index-card-cover">
-                <img alt="Isssuer illustration" src="/illustrations/undraw_ethereum_desire_wy1b.svg" />
-              </div>
-            }
-            actions={[
-              <>
-                <AppstoreOutlined />
-                <span>Tokens</span>
-              </>,
-              <>
-                <LineChartOutlined />
-                <span>Fundraisers</span>
-              </>,
-            ]}
-          >
-            <Card.Meta
-              title="As a token issuer"
-              description="You can deploy and manage your security tokens and create fundraisers for them."
-            />
+          <Card title="SWM stake">
+            <SwmStakeChart total={1000} masternodes={200} tokens={100} />
           </Card>
         </Col>
         <Col {...colLayout}>
           <Card
-            cover={
-              <div className="index-card-cover">
-                <img alt="Investor illustration" src="/illustrations/undraw_finance_0bdk.svg" />
-              </div>
+            title="SWM price (2 weeks)"
+            extra={
+              <a href="https://www.coingecko.com/en/coins/swarm-fund" target="_blank" rel="noopener noreferrer">
+                more
+              </a>
             }
-            actions={[
-              <CardAction href="/contribute" icon={<DollarCircleOutlined />} title="Invest" key="contribute" />,
-              <CardAction href="/wallet" icon={<WalletOutlined />} title="Wallet" key="wallet" />,
-            ]}
           >
-            <Card.Meta
-              title="As an investor"
-              description="You can contribute to a fundraiser or manage the security tokens you already own."
-            />
+            <Row className="mb-3">
+              <Col xs={12}>
+                <Statistic title="Current" value={lastPrice} precision={4} valueStyle={{ color: 'green' }} />
+              </Col>
+              <Col xs={12}>
+                <Statistic
+                  title="Change"
+                  value={priceChangePercent}
+                  precision={2}
+                  suffix="%"
+                  valueStyle={{ color: 'red' }}
+                />
+              </Col>
+            </Row>
+            <SwmPriceChart data={priceData} />
+          </Card>
+        </Col>
+        <Col {...colLayout}>
+          <Card
+            title="Masternodes"
+            extra={
+              <a href="https://masternodes.swarmnetwork.org" target="_blank" rel="noopener noreferrer">
+                more
+              </a>
+            }
+          >
+            <Row className="mb-3">
+              <Col xs={12}>
+                <Statistic title="Online nodes" value={404} valueStyle={{ color: 'green' }} />
+              </Col>
+              <Col xs={12}>
+                <Statistic title="Annual ROI" value={6.84} suffix="%" valueStyle={{ color: 'red' }} />
+              </Col>
+            </Row>
+            <MasternodesChart data={mnData} />
+          </Card>
+        </Col>
+        <Col {...colLayout}>
+          <Card title="Buy SWM">
+            <Space direction="vertical" style={{ width: '100%' }}>
+              <Button
+                className="button-with-image"
+                icon={<img src="/images/balancer.svg" alt="Balancer icon" />}
+                size="large"
+                block
+              >
+                Balancer
+              </Button>
+              <Button
+                className="button-with-image"
+                icon={<img src="/images/uniswap.svg" alt="Uniswap icon" />}
+                size="large"
+                block
+              >
+                Uniswap
+              </Button>
+            </Space>
+
+            <Divider />
+            <Button size="large" type="primary" block onClick={() => setBuyingSwm(true)}>
+              Quick buy now
+            </Button>
           </Card>
         </Col>
       </Row>
       <Divider />
-      <h2>What is MySwarm?</h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In bibendum ultricies eros a varius. Curabitur at justo
-        neque. Fusce egestas augue sed sapien imperdiet tempor. Nulla facilisis venenatis mattis. Vivamus tincidunt
-        massa ac ex aliquet volutpat. Sed suscipit, nisi in placerat scelerisque, tellus turpis aliquet nisi, eget
-        rhoncus sem massa auctor magna. Donec vulputate lorem nibh, ut porta quam vestibulum vitae. Maecenas ut suscipit
-        ante.
-      </p>
-      <ul>
-        <li>
-          Nam facilisis eros ut ipsum elementum pretium eget vel nisi. Aenean turpis lectus, dignissim eget elementum
-          id, hendrerit sit amet lorem.
-        </li>
-        <li>
-          Praesent tellus magna, molestie eu nisi in, interdum semper diam. Aliquam erat volutpat. Suspendisse potenti.
-        </li>
-        <li>
-          Pellentesque lacinia leo eget velit vulputate, id interdum mauris semper. Quisque sed nisl at nunc pretium
-          laoreet.
-        </li>
-      </ul>
+
+      {buyingSwm && <BuySwmModal onClose={() => setBuyingSwm(false)} />}
     </DefaultLayout>
   );
 }

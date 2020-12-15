@@ -6,8 +6,9 @@
 @import 'side-box';
 @import 'custom-card';
 @import 'countdown';
+@import 'dashboard';
 
-.c-metamask-connect-button {
+.button-with-image {
   img {
     width: 20px;
     position: relative;

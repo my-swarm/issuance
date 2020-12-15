@@ -1227,6 +1227,11 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@coingecko/cg-api-ts@^0.0.41":
+  version "0.0.41"
+  resolved "https://registry.yarnpkg.com/@coingecko/cg-api-ts/-/cg-api-ts-0.0.41.tgz#3181ce050350b8cb0cbf7ef1a374a0a73c5205cf"
+  integrity sha512-GFPJGdwreaMyl7NbNM5H4QaBVrRP0gWxWf8mhaXYkK/gmCGWyXCGYClsfe1/YCkDun15DcDk5glgHPO/TodhEg==
+
 "@ctrl/tinycolor@^3.1.6":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.2.0.tgz#77a8a33edb2fdc02318c828be78f6fb3d6c65eb2"

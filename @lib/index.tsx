@@ -19,3 +19,5 @@ export * from './wallet';
 export * from './help';
 export * from './kya';
 export * from './Api';
+export * from './price';
+export * from './masternodes';

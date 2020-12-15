@@ -24,7 +24,7 @@ export function MetamaskConnect({ label = 'Connect with Metamask' }: MetamaskCon
   return (
     <Button
       onClick={handleConnect}
-      className="c-metamask-connect-button"
+      className="button-with-image"
       icon={<img src="/images/metamask-fox.svg" alt="Metamask icon" />}
     >
       {address ? 'Already connected' : label}

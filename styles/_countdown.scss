@@ -1,25 +1,26 @@
 .c-countdown {
-  .ant-statistic {
+  display: flex;
+  width: 100%;
+  .item {
+    //width: 25%;
+    flex-grow: 1;
     text-align: center;
-  }
-  .ant-statistic-title {
-    font-size: 11px;
-  }
-  .ant-statistic-content {
-    font-size: 32px;
-    line-height: 1;
-    &:after {
-      content: ':';
-      position: relative;
-      left: 12px;
-      top: -4px;
+
+    strong {
+      display: block;
+      font-weight: normal;
       font-size: 24px;
+      line-height: 1;
+    }
+
+    span {
+      margin-top: 4px;
+      display: block;
+      font-size: 11px;
+      line-height: 1;
     }
   }
-  .ant-space-item:last-child {
-    .ant-statistic-content:after {
-      content: '';
-    }
-  }
+
+
 }
 

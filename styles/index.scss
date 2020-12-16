@@ -28,21 +28,31 @@
   cursor: help;
 }
 
-.image-preview {
+.c-image-preview {
   height: 4rem;
   width: auto;
   position: relative;
 
   img {
     display: block;
-    position: absolute;
     height: 4rem;
     width: auto;
+
     &:hover {
       height: 16rem;
     }
   }
+
+  &.fit-width {
+    width: 100%;
+    height: auto;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
 }
+
 
 
 .code-sample {
@@ -60,5 +70,49 @@
   button {
     background: $cSwarm !important;
     border: 1px solid $cSwarm !important;
+  }
+}
+
+$raiseProgressHeight: 24px;
+$raiseProgressRadius: 4px;
+
+.raise-progress {
+  //background: #a0d911;
+  background: rgba(0, 0, 0, .05);
+  border: 1px solid rgba(0, 0, 0, .1);
+  border-radius: $raiseProgressRadius;
+  position: relative;
+  height: $raiseProgressHeight;
+  .raised {
+    z-index: 1;
+    background: #f4ffb8;
+    border: 1px solid #f4ffb8;
+    border-radius: $raiseProgressRadius 0 0 $raiseProgressRadius;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+  }
+  .softcap {
+    z-index: 2;
+    background: #a0d911;
+    position: absolute;
+    top: -2px;
+    width: .25rem;
+    height: calc(#{$raiseProgressHeight} + 2px);
+    border-radius: 2px;
+  }
+}
+
+.c-fundraiser-investor-card {
+  .token {
+    width: 100%;
+    p {
+      font-size: 14px;
+    }
+  }
+  .countdown, .status {
+    width: 50%;
+    height: 128px;
   }
 }

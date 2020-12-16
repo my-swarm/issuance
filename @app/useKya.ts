@@ -1,17 +1,18 @@
-import { Kya, tokenToKya, api } from '@lib';
+import { Kya, tokenToKya, api, OnlineToken } from '@lib';
 import { useEffect, useState } from 'react';
 import { useAppState } from './StateContext';
 
-export function useKya(): { kya: Kya; nav: number } {
+export function useKya(token?: OnlineToken): { kya: Kya; nav: number } {
   const [kya, setKya] = useState<Kya>();
   const [nav, setNav] = useState<number>();
 
   const [{ onlineToken, localToken }] = useAppState();
 
   useEffect(() => {
-    if (onlineToken) {
-      api.getKya(onlineToken.kyaUrl).then((kya) => setKya(kya));
-      setNav(onlineToken.nav);
+    const t = token || onlineToken;
+    if (t) {
+      api.getKya(t.kyaUrl).then((kya) => setKya(kya));
+      setNav(t.nav);
     } else if (localToken) {
       setKya(tokenToKya(localToken));
       setNav(localToken.assetNetValue);

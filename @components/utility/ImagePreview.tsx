@@ -1,15 +1,19 @@
 import React, { ReactElement } from 'react';
-import { DownloadOutlined } from '@ant-design/icons';
 import { AppFile } from '@lib';
 
 interface FilePreviewProps {
   image: AppFile;
+  fitWidth?: boolean;
 }
 
-export function ImagePreview({ image }: FilePreviewProps): ReactElement {
+export function ImagePreview({ image, fitWidth = false }: FilePreviewProps): ReactElement {
   if (!image) {
     return <span>-</span>;
   }
 
-  return <div className="image-preview">{image?.content ? <img src={image.content} alt="Asset" /> : '-'}</div>;
+  return (
+    <div className={`c-image-preview ${fitWidth && 'fit-width'}`}>
+      {image?.content ? <img src={image.content} alt="Asset" /> : '-'}
+    </div>
+  );
 }

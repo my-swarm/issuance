@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { BigNumber, BigNumberish } from 'ethers';
-import { Col, Progress, Row, Space, Statistic } from 'antd';
-import { formatUnits } from '@lib';
+import { Col, Progress, Row, Space, Statistic, Tooltip } from 'antd';
+import { formatUnits, parseUnits } from '@lib';
 
 interface FundraiserStatusChartProps {
   softCap: BigNumberish;
@@ -9,10 +9,6 @@ interface FundraiserStatusChartProps {
   amount: BigNumberish;
   decimals: number;
 }
-
-const colorRaised = '#13c2c2';
-const colorSoftCap = '#52c41a';
-const colorHardCap = '#a0d911';
 
 export function FundraiserStatusChart({
   softCap,
@@ -24,27 +20,28 @@ export function FundraiserStatusChart({
   hardCap = BigNumber.from(hardCap);
   amount = BigNumber.from(amount);
   const softCapPercent = softCap.mul(100).div(hardCap).toNumber();
-  const amountPercent = amount.mul(100).div(hardCap).toNumber();
+  const amountPercentHardcap = amount.mul(100).div(hardCap).toNumber();
+  const amountPercentSoftcap = amount.mul(100).div(softCap).toNumber();
 
   return (
     <div>
-      <Row>
-        <Col span={8}>
-          <Statistic title="Raised" value={formatUnits(amount, decimals)} valueStyle={{ color: colorRaised }} />
-        </Col>
-        <Col span={8} style={{ textAlign: 'center' }}>
-          <Statistic title="Soft Cap" value={formatUnits(softCap, decimals)} valueStyle={{ color: colorSoftCap }} />
-        </Col>
-        <Col span={8} style={{ textAlign: 'right' }}>
-          <Statistic title="Hard Cap" value={formatUnits(hardCap, decimals)} valueStyle={{ color: colorHardCap }} />
-        </Col>
-      </Row>
-      <Progress
-        percent={softCapPercent}
-        strokeColor={colorSoftCap}
-        success={{ percent: amountPercent, strokeColor: colorRaised }}
-        trailColor={colorHardCap}
-      />
+      <h3>Amount raised</h3>
+      <div style={{ width: '100%' }} className="mb-1 raise-progress">
+        {softCap.gt(0) && <div className="softcap" style={{ left: `${softCapPercent}%` }} />}
+        <div className="raised" style={{ width: `${amountPercentHardcap}%` }} />
+      </div>
+      <div style={{ fontSize: '11px' }}>
+        {amountPercentSoftcap < 100 ? (
+          <>
+            {amountPercentSoftcap} % of {formatUnits(BigNumber.from(softCap.toString()), decimals)} (soft cap)
+          </>
+        ) : (
+          <>
+            {amountPercentHardcap} % of {formatUnits(BigNumber.from(softCap.toString()), decimals)} (hard cap)
+          </>
+        )}{' '}
+        USD raised
+      </div>
     </div>
   );
 }

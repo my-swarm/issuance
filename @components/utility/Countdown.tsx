@@ -25,12 +25,22 @@ export function Countdown({ to }: CountdownProps): ReactElement {
 
   return (
     <div className="c-countdown">
-      <Space size="large">
-        <Statistic title="days" value={Math.floor(duration.asDays())} className="c-countdown-days" />
-        <Statistic title="hours" value={duration.hours()} className="c-countdown-hours" />
-        <Statistic title="minutes" value={duration.minutes()} className="c-countdown-minutes" />
-        <Statistic title="seconds" value={duration.seconds()} className="c-countdown-seconds" />
-      </Space>
+      <div className="item days">
+        <strong>{Math.floor(duration.asDays())}</strong>
+        <span>days</span>
+      </div>
+      <div className="item hours">
+        <strong>{Math.floor(duration.hours())}</strong>
+        <span>hours</span>
+      </div>
+      <div className="item minutes">
+        <strong>{Math.floor(duration.minutes())}</strong>
+        <span>min</span>
+      </div>
+      <div className="item seconds">
+        <strong>{Math.floor(duration.seconds())}</strong>
+        <span>sec</span>
+      </div>
     </div>
   );
 }

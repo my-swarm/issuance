@@ -3,6 +3,8 @@ fragment FundraiserWithToken on Fundraiser{
   ...FundraiserBaseCurrency
   token {
     ...TokenInfo
+    ...TokenAsset
+    ...TokenContracts
   }
 
 }

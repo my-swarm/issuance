@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Descriptions } from 'antd';
-import { formatNumber, transferRules, tokenFeatures } from '@lib';
+import { formatNumber, transferRules, tokenFeatures, formatUnits } from '@lib';
 import { useAppState, useKya } from '@app';
 import { ImagePreview, Loading } from '../utility';
 
@@ -41,7 +41,7 @@ export function TokenInfoBasics(): ReactElement {
           {formatNumber(onlineToken.supply)} {token.symbol}
         </Descriptions.Item>
         <Descriptions.Item label="Maximum supply">
-          {formatNumber(onlineToken.maxSupply)} {token.symbol}
+          {formatNumber(formatUnits(onlineToken.maxSupply, token.decimals))} {token.symbol}
         </Descriptions.Item>
         <Descriptions.Item label="Available supply">
           {formatNumber(onlineToken.availableSupply)} {token.symbol}

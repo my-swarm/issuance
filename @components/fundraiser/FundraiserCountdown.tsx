@@ -17,12 +17,12 @@ export function FundraiserCountdown({ startDate, endDate }: FundraiserCountdownP
     <div>
       {now.isBefore(start) ? (
         <>
-          <h3 className="mb-0">Starts in</h3>
+          <h3>Starts in</h3>
           <Countdown to={start} />
         </>
       ) : (
         <>
-          <h3 className="mb-0">Ends in</h3>
+          <h3>Ends in</h3>
           <Countdown to={end} />
         </>
       )}

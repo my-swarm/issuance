@@ -1929,6 +1929,8 @@ export type FundraiserWithTokenFragment = (
   & { token: (
     { __typename?: 'Token' }
     & TokenInfoFragment
+    & TokenAssetFragment
+    & TokenContractsFragment
   ) }
   & FundraiserInfoFragment
   & FundraiserBaseCurrencyFragment
@@ -2275,26 +2277,6 @@ export const FundraiserWithContributorsFragmentDoc = gql`
 }
     ${FundraiserFragmentDoc}
 ${FundraiserContributorsFragmentDoc}`;
-export const FundraiserWithTokenFragmentDoc = gql`
-    fragment FundraiserWithToken on Fundraiser {
-  ...FundraiserInfo
-  ...FundraiserBaseCurrency
-  token {
-    ...TokenInfo
-  }
-}
-    ${FundraiserInfoFragmentDoc}
-${FundraiserBaseCurrencyFragmentDoc}
-${TokenInfoFragmentDoc}`;
-export const TokenHolderFragmentDoc = gql`
-    fragment TokenHolder on TokenHolder {
-  address
-  balance
-  createdAt
-  updatedAt
-  isFrozen
-}
-    `;
 export const TokenAssetFragmentDoc = gql`
     fragment TokenAsset on Token {
   kyaHash
@@ -2317,6 +2299,30 @@ export const TokenContractsFragmentDoc = gql`
     address
     status
   }
+}
+    `;
+export const FundraiserWithTokenFragmentDoc = gql`
+    fragment FundraiserWithToken on Fundraiser {
+  ...FundraiserInfo
+  ...FundraiserBaseCurrency
+  token {
+    ...TokenInfo
+    ...TokenAsset
+    ...TokenContracts
+  }
+}
+    ${FundraiserInfoFragmentDoc}
+${FundraiserBaseCurrencyFragmentDoc}
+${TokenInfoFragmentDoc}
+${TokenAssetFragmentDoc}
+${TokenContractsFragmentDoc}`;
+export const TokenHolderFragmentDoc = gql`
+    fragment TokenHolder on TokenHolder {
+  address
+  balance
+  createdAt
+  updatedAt
+  isFrozen
 }
     `;
 export const TokenFundraiserFragmentDoc = gql`

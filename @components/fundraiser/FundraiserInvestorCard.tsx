@@ -1,9 +1,10 @@
 import React, { ReactElement } from 'react';
-import { Card, Col, Row } from 'antd';
+import { Card, Col, Typography, Row } from 'antd';
 import { FundraiserWithTokenFragment } from '@graphql';
-import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined, LoadingOutlined } from '@ant-design/icons';
 import { FundraiserCountdown } from './FundraiserCountdown';
-import { CardAction, FundraiserStatusChart } from '..';
+import { CardAction, FundraiserStatusChart, ImagePreview } from '..';
+import { useKya } from '@app';
 
 export enum FundraiserInvestorAction {
   TokenDetails,
@@ -19,6 +20,8 @@ interface FundraiserInvestorCardProps {
 export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInvestorCardProps): ReactElement {
   const { token, baseCurrency } = fundraiser;
 
+  const { kya } = useKya(token);
+
   const handleTokenDetails = () => {
     onAction(FundraiserInvestorAction.TokenDetails);
   };
@@ -33,6 +36,7 @@ export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInves
 
   return (
     <Card
+      className="c-fundraiser-investor-card"
       title={`${token.name} (${token.symbol})`}
       actions={[
         <CardAction onClick={handleTokenDetails} icon={<AppstoreOutlined />} title="Token details" key={1} />,
@@ -45,24 +49,32 @@ export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInves
         <CardAction onClick={handleContribute} icon={<DollarCircleOutlined />} title="Invest" key={3} />,
       ]}
     >
-      <h2>Token info</h2>
-      <p>TBD: Need to implement freaking KYA first.</p>
-      <p>Will have an image, description, NAV docs, all that shit.</p>
+      <Card.Grid hoverable={false} className="token">
+        {kya ? (
+          <Row gutter={16}>
+            <Col span={8}>
+              <ImagePreview image={kya.token.image} fitWidth />
+            </Col>
+            <Col span={16}>
+              <Typography.Text type="secondary">{kya.token.description.substr(0, 160)}</Typography.Text>
+            </Col>
+          </Row>
+        ) : (
+          <LoadingOutlined />
+        )}
+      </Card.Grid>
 
-      <h2>Fundraiser status</h2>
-      <Row>
-        <Col span={12}>
-          <FundraiserCountdown startDate={fundraiser.startDate} endDate={fundraiser.endDate} />
-        </Col>
-        <Col span={12}>
-          <FundraiserStatusChart
-            softCap={fundraiser.softCap}
-            hardCap={fundraiser.hardCap}
-            amount={fundraiser.amountQualified}
-            decimals={baseCurrency.decimals}
-          />
-        </Col>
-      </Row>
+      <Card.Grid hoverable={false} className="countdown">
+        <FundraiserCountdown startDate={fundraiser.startDate} endDate={fundraiser.endDate} />
+      </Card.Grid>
+      <Card.Grid hoverable={false} className="status">
+        <FundraiserStatusChart
+          softCap={fundraiser.softCap}
+          hardCap={fundraiser.hardCap}
+          amount={fundraiser.amountQualified}
+          decimals={baseCurrency.decimals}
+        />
+      </Card.Grid>
     </Card>
   );
 }

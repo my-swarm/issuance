@@ -6,13 +6,16 @@ export function parseUnits(amount: string | number, decimals: number): BigNumber
   return utils.parseUnits(amount, decimals);
 }
 
-export function formatUnits(bnAmount: BigNumber, decimals: number, ifZero = '0'): string {
-  if (typeof bnAmount === 'string' || typeof bnAmount === 'number') bnAmount = BigNumber.from(bnAmount);
+export function formatUnits(bnAmount: BigNumberish, decimals: number, ifZero = '0'): string {
+  bnAmount = BigNumber.from(bnAmount);
   if (bnAmount.eq(0)) return ifZero;
   return utils.formatUnits(bnAmount, decimals);
 }
 
-export function formatNumber(n: number, decimals = 0): string {
+export function formatNumber(n: number | string, decimals = 0): string {
+  if (typeof n === 'string') {
+    n = parseFloat(n);
+  }
   return new Intl.NumberFormat('en-US', { maximumFractionDigits: decimals }).format(n);
 }
 

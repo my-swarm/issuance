@@ -1,18 +1,19 @@
 import React, { ReactElement, useState } from 'react';
-import { LeftCircleTwoTone, RightCircleTwoTone, SearchOutlined } from '@ant-design/icons';
+import { LeftCircleTwoTone, LoadingOutlined, RightCircleTwoTone, SearchOutlined } from '@ant-design/icons';
 
 import { TokenInfoFragment, TransferFragment } from '@graphql';
 import { renderAddress, tableColumns } from '../manage/listUtils';
-import { formatDatetime, strcmp } from '@lib';
+import { formatDatetime, sameAddress, strcmp } from '@lib';
 import { FilterDropdown, PaginatedTable } from '@components';
 import { formatUnits } from 'ethers/lib/utils';
-import { useEthers } from '@app';
+import { useAppState, useEthers } from '@app';
 
 interface TableRecord {
   from: string;
   to: string;
   value: number;
   createdAt: number;
+  isPending: boolean;
 }
 
 interface TransferHistoryProps {
@@ -24,6 +25,7 @@ interface TransferHistoryProps {
 export function TransferHistory({ token, transfers, direction = false }: TransferHistoryProps): ReactElement {
   const { address } = useEthers();
   const [searchText, setSearchText] = useState<string>('');
+  const [{ pendingTransactions }] = useAppState();
 
   const transferDirectionCols = direction
     ? [
@@ -31,7 +33,9 @@ export function TransferHistory({ token, transfers, direction = false }: Transfe
           title: '',
           key: 'dir',
           render: (val, row) =>
-            row.toAddress === address ? (
+            row.isPending ? (
+              <LoadingOutlined title="Pending transaction" />
+            ) : row.toAddress === address ? (
               <RightCircleTwoTone twoToneColor="green" title="Incoming transfer" />
             ) : (
               <LeftCircleTwoTone twoToneColor="red" label="Outgoing transfer" />
@@ -70,7 +74,7 @@ export function TransferHistory({ token, transfers, direction = false }: Transfe
     },
   ]);
 
-  const dataSource: TableRecord[] = transfers
+  const oldTransfers: TableRecord[] = transfers
     .map((a) => {
       return {
         ...a,
@@ -78,9 +82,23 @@ export function TransferHistory({ token, transfers, direction = false }: Transfe
         to: a.toAddress,
         key: a.id, // for the table
         value: parseFloat(formatUnits(a.value, token.decimals)),
+        isPending: false,
       };
     })
     .filter((a) => `${a.from} ${a.to}`.toLowerCase().includes(searchText.toLowerCase()));
+
+  const pendingTransfers: TableRecord[] = pendingTransactions
+    .filter((tx) => tx.contract === 'src20' && tx.method === 'transfer' && sameAddress(tx.address, token.address))
+    .map((tx) => ({
+      from: tx.address,
+      to: tx.arguments[0],
+      value: parseFloat(formatUnits(tx.arguments[1], token.decimals)),
+      createdAt: Math.round(Date.now() / 1000),
+      isPending: true,
+    }));
+  const dataSource = [...pendingTransfers, ...oldTransfers];
+
+  console.log({ pendingTransactions, pendingTransfers });
   return (
     <>
       <div className="limit-height">

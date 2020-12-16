@@ -125,6 +125,16 @@ interface DeleteFromTokenAccountListAction {
 }
 */
 
+interface AddPendingTransactionAction {
+  type: 'addPendingTransaction';
+  transaction: Transaction;
+}
+
+interface RemovePendingTransactionAction {
+  type: 'removePendingTransaction';
+  transaction: Transaction;
+}
+
 export type Action =
   | resetDataAction
   | AddTokenAction
@@ -144,4 +154,6 @@ export type Action =
   | ApproveSpendingAction
   | ResetSpendingApprovalAction
   | SetAccountPropAction
-  | BatchSetAccountPropAction;
+  | BatchSetAccountPropAction
+  | AddPendingTransactionAction
+  | RemovePendingTransactionAction;

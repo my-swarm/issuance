@@ -141,7 +141,7 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
     case 'startTransaction': {
       return {
         ...state,
-        transaction: action.transaction,
+        transaction: { ...action.transaction, createdAt: new Date() },
       };
     }
 
@@ -197,6 +197,26 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       return unsynced({
         tokens: withUpdatedToken(updatedToken),
       });
+    }
+
+    case 'addPendingTransaction': {
+      return unsynced({
+        pendingTransactions: [...(state.pendingTransactions || []), action.transaction],
+      });
+    }
+
+    case 'removePendingTransaction': {
+      const index = state.pendingTransactions.findIndex((tx) => tx.hash === action.transaction.hash);
+      if (index !== -1) {
+        return unsynced({
+          pendingTransactions: [
+            ...state.pendingTransactions.slice(0, index),
+            ...state.pendingTransactions.slice(index + 1),
+          ],
+        });
+      } else {
+        return state;
+      }
     }
   }
 };

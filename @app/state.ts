@@ -19,4 +19,5 @@ export interface AppState extends ColdState {
 
   transaction?: Transaction;
   spendingApproval?: SpendingApproval;
+  pendingTransactions: Transaction[];
 }

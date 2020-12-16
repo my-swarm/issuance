@@ -18,7 +18,7 @@ export class ContractProxy {
     this._token = onlineToken;
   }
 
-  private handleStateChange(state: TransactionState): void {
+  private handleStateChange(state: TransactionState, transaction?: Transaction): void {
     this.state = state;
     for (const callback of this.callbacks) {
       callback(state);
@@ -55,9 +55,9 @@ export class ContractProxy {
     }
     this.handleStateChange(TransactionState.Signing);
     const transaction = await contract[method](...args, await this.getOptions());
-    this.handleStateChange(TransactionState.Confirming);
+    this.handleStateChange(TransactionState.Confirming, transaction);
     await transaction.wait();
-    this.handleStateChange(TransactionState.Confirmed);
+    this.handleStateChange(TransactionState.Confirmed, transaction);
     return transaction;
   }
 

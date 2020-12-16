@@ -33,6 +33,7 @@ export const StateProvider = ({ reducer, children }: StateProviderProps): ReactE
     isSynced: false,
     accountNames: {},
     accountNotes: {},
+    pendingTransactions: [],
   };
 
   const storage = useStorage();

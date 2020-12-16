@@ -1,4 +1,4 @@
-import { BigNumber, Contract } from 'ethers';
+import { BigNumber, Contract, Transaction as EthersTransaction } from 'ethers';
 
 export enum TransactionState {
   None,
@@ -15,12 +15,14 @@ export interface TransactionStateMeta {
 export type TransactionEventCallback = (event: TransactionState) => void;
 
 export interface Transaction {
+  hash?: string;
   contract?: string;
   method: string;
   arguments?: any[];
   description?: string;
   onSuccess?: () => void;
   address?: string;
+  createdAt: Date;
 }
 
 export interface SpendingApproval {

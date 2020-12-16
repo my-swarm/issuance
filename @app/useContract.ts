@@ -71,11 +71,13 @@ export function useContract(): ContractMap {
   const { signer, networkId } = useEthers();
   const [{ onlineToken }] = useAppState();
   useEffect(() => {
-    if (onlineToken && signer && networkId) {
+    if (signer && networkId) {
       const result = {};
       for (const c of Object.values(contractsMeta)) {
-        const name = c.shortName;
-        result[name] = getContract(name, signer, networkId, onlineToken);
+        if (c.isBase || onlineToken) {
+          const name = c.shortName;
+          result[name] = getContract(name, signer, networkId, onlineToken);
+        }
       }
       setContracts(result);
     }

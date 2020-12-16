@@ -7,7 +7,7 @@ export function parseUnits(amount: string | number, decimals: number): BigNumber
 }
 
 export function formatUnits(bnAmount: BigNumberish, decimals: number, ifZero = '0'): string {
-  bnAmount = BigNumber.from(bnAmount);
+  bnAmount = BigNumber.from(bnAmount || 0);
   if (bnAmount.eq(0)) return ifZero;
   return utils.formatUnits(bnAmount, decimals);
 }

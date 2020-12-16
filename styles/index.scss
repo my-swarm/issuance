@@ -116,3 +116,18 @@ $raiseProgressRadius: 4px;
     height: 128px;
   }
 }
+
+.ant-table-row.special {
+  background: #f0f5ff;
+
+}
+.ant-table-tbody > tr.ant-table-row.special:hover > td {
+  background: unset;
+}
+
+.wallet-table img {
+  width: auto;
+  height: auto;
+  max-height: 24px;
+  max-width: 24px;
+}

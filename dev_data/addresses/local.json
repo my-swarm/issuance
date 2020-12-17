@@ -24,10 +24,10 @@
     "features": "0xc9043db2d6c4812e57cae13b72b3d95e13a0fc78"
   },
   "token5": {
-    "features": "0x50847e97a896c8b446aa3340a2849fa3833b8629",
-    "roles": "0x27d62df6ff9668cd8fd5612d7b8fbc2af7baea8f",
+    "features": "0xe964cc77ab100b8fc5926fcaebd39135c284797a",
+    "roles": "0xd198dd654e2a2bc06663b429964f7ff171acef93",
     "src20": "0x52ede4384c635731cdd3d75fdf271edce1959a30",
-    "fundraiser": "0xd198dd654e2a2bc06663b429964f7ff171acef93",
-    "contributorRestrictions": "0x10b04fc34b8b77aa2e9b45e3871ff5946007c307"
+    "fundraiser": "0x5fecce7baf2aae24fc666844fd600b1b291f956e",
+    "contributorRestrictions": "0x5fd35cf60498bc0c5b9ff326b06394b689d88055"
   }
 }

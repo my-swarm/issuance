@@ -1,30 +1,58 @@
-import React, { ReactElement } from 'react';
-import { useContractAddress, useDispatch, useGraphql } from '@app';
-import { Form } from 'antd';
-import { useTokenStatusQuery } from '@graphql';
-import { Loading } from '@components';
-
-type FormData = {
-  kyaHash: string;
-  kuaUrl: string;
-};
+import React, { ReactElement, useMemo } from 'react';
+import { useContract, useDispatch, useKya } from '@app';
+import { Button, Form } from 'antd';
+import { AssetFormStub, Loading, TokenMetaStub } from '..';
+import { kyaToToken, LocalTokenKya, storeKya, tokenToKya } from '@lib';
 
 export function ManageAsset(): ReactElement {
-  const { src20: src20Address } = useContractAddress();
+  // const [{ onlineToken }] = useAppState();
+  const { kya, nav } = useKya();
+  const { dispatchTransaction } = useDispatch();
+  const { src20 } = useContract();
 
-  const { loading, error, data } = useTokenStatusQuery({
-    variables: { id: src20Address },
-  });
-  const gToken = data?.localToken || undefined;
-  if (loading || !gToken) return <Loading />;
+  const formData = useMemo(() => {
+    if (kya) {
+      return kyaToToken(kya, nav);
+    } else {
+      return undefined;
+    }
+  }, [kya, nav]);
 
-  const handleSubmit = async (values: FormData) => {
-    console.log({ values });
+  if (!kya) return <Loading />;
+
+  const handleSubmit = async (values: LocalTokenKya) => {
+    const { kyaHash, kyaUrl } = await storeKya(tokenToKya(values));
+    dispatchTransaction({
+      contract: 'assetRegistry',
+      method: 'updateKya',
+      description: 'Updating onchain link to your KYA',
+      arguments: [src20.address, kyaHash, kyaUrl],
+      onSuccess: () => {
+        if (values.assetNetValue !== nav) {
+          dispatchTransaction({
+            contract: 'assetRegistry',
+            method: 'updateNav',
+            description: 'Updating your Net Asset Value',
+            arguments: [src20.address, values.assetNetValue],
+          });
+        }
+      },
+    });
+
+    console.log('changing kya');
   };
 
   return (
-    <Form layout="vertical" onFinish={handleSubmit}>
-      <p>Asset management TBD</p>
+    <Form layout="vertical" onFinish={handleSubmit} initialValues={formData}>
+      <Form.Item>
+        <h2>Token Meta information</h2>
+        <TokenMetaStub />
+        <h2>Asset information</h2>
+        <AssetFormStub />
+        <Button type="primary" htmlType="submit">
+          Update your KYA
+        </Button>
+      </Form.Item>
     </Form>
   );
 }

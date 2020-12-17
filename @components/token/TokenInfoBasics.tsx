@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useMemo } from 'react';
 import { Descriptions } from 'antd';
 import { formatNumber, transferRules, tokenFeatures, formatUnits } from '@lib';
 import { useAppState, useKya } from '@app';
@@ -7,6 +7,7 @@ import { ImagePreview, Loading } from '../utility';
 export function TokenInfoBasics(): ReactElement {
   const [{ onlineToken, localToken }] = useAppState();
   const { kya, nav } = useKya();
+
   if (!kya) return <Loading />;
 
   const token = onlineToken || localToken;

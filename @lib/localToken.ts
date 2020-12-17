@@ -39,17 +39,27 @@ export interface LocalFundraiser {
   networks: Record<EthereumNetwork, LocalTokenNetworkData>;
 }
 
-export interface LocalToken {
+export interface LocalTokenKya {
+  description: string;
+  image?: AppImage;
+
+  assetName: string;
+  assetDescription: string;
+  assetNetValue: number;
+  assetNavDocument: AppFile;
+  assetImage: AppImage;
+  assetLegalDocuments: AppFile[];
+}
+
+export interface LocalToken extends LocalTokenKya {
   id: Uuid;
 
   name: string;
   symbol: string;
-  description: string;
   decimals: number;
   initialSupply: number;
   totalSupply?: number;
   allowUnlimitedSupply?: boolean;
-  image?: AppImage;
   transferRestrictionsType: TransferRules;
 
   allowAccountFreeze: boolean;
@@ -57,13 +67,6 @@ export interface LocalToken {
   allowForceTransfer: boolean;
   allowBurn: boolean;
   allowMint: boolean;
-
-  assetName?: string;
-  assetNetValue: number;
-  assetNavDocument?: AppFile;
-  assetDescription?: string;
-  assetImage?: AppImage;
-  assetLegalDocuments: AppFile[];
 
   networks: Record<EthereumNetwork, LocalTokenNetworkData>;
 }

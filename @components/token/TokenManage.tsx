@@ -55,12 +55,11 @@ export function TokenManage(): ReactElement {
           </>
         )}
 
-        {/* this is disabled before we figure out how to store KYA */}
-        {false && (
-          <Collapse.Panel header="Manage asset information" key="asset">
+        {
+          <Collapse.Panel header="Edit token's KYA" key="asset">
             <ManageAsset />
           </Collapse.Panel>
-        )}
+        }
 
         <Collapse.Panel header="Dividend distribution" key="dividend">
           <ManageDividends />

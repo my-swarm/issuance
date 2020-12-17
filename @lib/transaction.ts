@@ -22,7 +22,7 @@ export interface Transaction {
   description?: string;
   onSuccess?: () => void;
   address?: string;
-  createdAt: Date;
+  createdAt?: Date;
 }
 
 export interface SpendingApproval {

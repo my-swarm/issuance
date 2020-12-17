@@ -5,7 +5,7 @@ import { Store } from 'rc-field-form/lib/interface';
 
 import { LocalToken, TransferRules } from '@lib';
 import { tokenFormRules as rules } from './tokenFormRules';
-import { Help, HelpLabel, SingleFileUpload, MultipleFilesUpload } from '@components/index';
+import { Help, HelpLabel, SingleFileUpload, AssetFormStub, TokenMetaStub } from '..';
 import { devDefaultToken, isDev } from '@app';
 
 interface TokenFormProps {
@@ -54,12 +54,7 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
       <Form.Item name="initialSupply" label="Initial Supply" rules={rules.decimals}>
         <InputNumber min={0} placeholder="Gazillion" onChange={(x) => setInitialSupply(parseInt(x.toString()))} />
       </Form.Item>
-      <Form.Item name="image" label="Image/logo" rules={rules.image}>
-        <SingleFileUpload image />
-      </Form.Item>
-      <Form.Item name="description" label="Token description">
-        <Input.TextArea rows={5} />
-      </Form.Item>
+      <TokenMetaStub />
       <h3>Tranfer restrictions</h3>
 
       <div style={{ marginBottom: '1rem' }}>
@@ -126,30 +121,7 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
 
       <h3>Asset details</h3>
       <p>Define your asset, it&apos;s value and other information in detail.</p>
-
-      <Form.Item name="assetName" label="Asset Name">
-        <Input />
-      </Form.Item>
-
-      <Form.Item name="assetNetValue" label="Net Asset Value (USD)">
-        <Input />
-      </Form.Item>
-
-      <Form.Item name="assetNavDocument" label={<HelpLabel name="assetNavDocument" />}>
-        <SingleFileUpload />
-      </Form.Item>
-
-      <Form.Item name="assetDescription" label={<HelpLabel name="assetDescription" />}>
-        <Input.TextArea />
-      </Form.Item>
-
-      <Form.Item name="assetImage" label="Asset Image">
-        <SingleFileUpload image />
-      </Form.Item>
-
-      <Form.Item name="assetLegalDocuments" label="Asset Legal Documents">
-        <MultipleFilesUpload />
-      </Form.Item>
+      <AssetFormStub />
 
       <Form.Item>
         <Space>

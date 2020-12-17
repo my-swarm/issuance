@@ -1,4 +1,4 @@
-import { AppFile, LocalToken, api } from '.';
+import { AppFile, LocalToken, api, LocalTokenKya } from '.';
 
 export type KyaFile = AppFile;
 
@@ -16,7 +16,7 @@ export type Kya = {
   };
 };
 
-export function tokenToKya(token: LocalToken): Kya {
+export function tokenToKya(token: LocalTokenKya): Kya {
   return {
     token: {
       description: token.description,
@@ -29,6 +29,19 @@ export function tokenToKya(token: LocalToken): Kya {
       navDocument: token.assetNavDocument,
       legalDocuments: token.assetLegalDocuments,
     },
+  };
+}
+
+export function kyaToToken(kya: Kya, nav: number): LocalTokenKya {
+  return {
+    image: kya.token.image,
+    description: kya.token.description,
+    assetName: kya.asset.name,
+    assetDescription: kya.asset.description,
+    assetNetValue: nav,
+    assetNavDocument: kya.asset.navDocument,
+    assetImage: kya.asset.image,
+    assetLegalDocuments: kya.asset.legalDocuments,
   };
 }
 

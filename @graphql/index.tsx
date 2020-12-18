@@ -16,6 +16,136 @@ export type Scalars = {
   Bytes: any;
 };
 
+export type Affiliate = {
+  __typename?: 'Affiliate';
+  id: Scalars['ID'];
+  address: Scalars['Bytes'];
+  referral: Scalars['String'];
+  percentage: Scalars['BigInt'];
+  affiliateManager: AffiliateManager;
+  fundraiser: Fundraiser;
+};
+
+export type AffiliateManager = {
+  __typename?: 'AffiliateManager';
+  id: Scalars['ID'];
+  address: Scalars['Bytes'];
+  fundraiser: Fundraiser;
+};
+
+export type AffiliateManager_Filter = {
+  id?: Maybe<Scalars['ID']>;
+  id_not?: Maybe<Scalars['ID']>;
+  id_gt?: Maybe<Scalars['ID']>;
+  id_lt?: Maybe<Scalars['ID']>;
+  id_gte?: Maybe<Scalars['ID']>;
+  id_lte?: Maybe<Scalars['ID']>;
+  id_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  address?: Maybe<Scalars['Bytes']>;
+  address_not?: Maybe<Scalars['Bytes']>;
+  address_in?: Maybe<Array<Scalars['Bytes']>>;
+  address_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  address_contains?: Maybe<Scalars['Bytes']>;
+  address_not_contains?: Maybe<Scalars['Bytes']>;
+  fundraiser?: Maybe<Scalars['String']>;
+  fundraiser_not?: Maybe<Scalars['String']>;
+  fundraiser_gt?: Maybe<Scalars['String']>;
+  fundraiser_lt?: Maybe<Scalars['String']>;
+  fundraiser_gte?: Maybe<Scalars['String']>;
+  fundraiser_lte?: Maybe<Scalars['String']>;
+  fundraiser_in?: Maybe<Array<Scalars['String']>>;
+  fundraiser_not_in?: Maybe<Array<Scalars['String']>>;
+  fundraiser_contains?: Maybe<Scalars['String']>;
+  fundraiser_not_contains?: Maybe<Scalars['String']>;
+  fundraiser_starts_with?: Maybe<Scalars['String']>;
+  fundraiser_not_starts_with?: Maybe<Scalars['String']>;
+  fundraiser_ends_with?: Maybe<Scalars['String']>;
+  fundraiser_not_ends_with?: Maybe<Scalars['String']>;
+};
+
+export enum AffiliateManager_OrderBy {
+  Id = 'id',
+  Address = 'address',
+  Fundraiser = 'fundraiser'
+}
+
+export type Affiliate_Filter = {
+  id?: Maybe<Scalars['ID']>;
+  id_not?: Maybe<Scalars['ID']>;
+  id_gt?: Maybe<Scalars['ID']>;
+  id_lt?: Maybe<Scalars['ID']>;
+  id_gte?: Maybe<Scalars['ID']>;
+  id_lte?: Maybe<Scalars['ID']>;
+  id_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  address?: Maybe<Scalars['Bytes']>;
+  address_not?: Maybe<Scalars['Bytes']>;
+  address_in?: Maybe<Array<Scalars['Bytes']>>;
+  address_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  address_contains?: Maybe<Scalars['Bytes']>;
+  address_not_contains?: Maybe<Scalars['Bytes']>;
+  referral?: Maybe<Scalars['String']>;
+  referral_not?: Maybe<Scalars['String']>;
+  referral_gt?: Maybe<Scalars['String']>;
+  referral_lt?: Maybe<Scalars['String']>;
+  referral_gte?: Maybe<Scalars['String']>;
+  referral_lte?: Maybe<Scalars['String']>;
+  referral_in?: Maybe<Array<Scalars['String']>>;
+  referral_not_in?: Maybe<Array<Scalars['String']>>;
+  referral_contains?: Maybe<Scalars['String']>;
+  referral_not_contains?: Maybe<Scalars['String']>;
+  referral_starts_with?: Maybe<Scalars['String']>;
+  referral_not_starts_with?: Maybe<Scalars['String']>;
+  referral_ends_with?: Maybe<Scalars['String']>;
+  referral_not_ends_with?: Maybe<Scalars['String']>;
+  percentage?: Maybe<Scalars['BigInt']>;
+  percentage_not?: Maybe<Scalars['BigInt']>;
+  percentage_gt?: Maybe<Scalars['BigInt']>;
+  percentage_lt?: Maybe<Scalars['BigInt']>;
+  percentage_gte?: Maybe<Scalars['BigInt']>;
+  percentage_lte?: Maybe<Scalars['BigInt']>;
+  percentage_in?: Maybe<Array<Scalars['BigInt']>>;
+  percentage_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  affiliateManager?: Maybe<Scalars['String']>;
+  affiliateManager_not?: Maybe<Scalars['String']>;
+  affiliateManager_gt?: Maybe<Scalars['String']>;
+  affiliateManager_lt?: Maybe<Scalars['String']>;
+  affiliateManager_gte?: Maybe<Scalars['String']>;
+  affiliateManager_lte?: Maybe<Scalars['String']>;
+  affiliateManager_in?: Maybe<Array<Scalars['String']>>;
+  affiliateManager_not_in?: Maybe<Array<Scalars['String']>>;
+  affiliateManager_contains?: Maybe<Scalars['String']>;
+  affiliateManager_not_contains?: Maybe<Scalars['String']>;
+  affiliateManager_starts_with?: Maybe<Scalars['String']>;
+  affiliateManager_not_starts_with?: Maybe<Scalars['String']>;
+  affiliateManager_ends_with?: Maybe<Scalars['String']>;
+  affiliateManager_not_ends_with?: Maybe<Scalars['String']>;
+  fundraiser?: Maybe<Scalars['String']>;
+  fundraiser_not?: Maybe<Scalars['String']>;
+  fundraiser_gt?: Maybe<Scalars['String']>;
+  fundraiser_lt?: Maybe<Scalars['String']>;
+  fundraiser_gte?: Maybe<Scalars['String']>;
+  fundraiser_lte?: Maybe<Scalars['String']>;
+  fundraiser_in?: Maybe<Array<Scalars['String']>>;
+  fundraiser_not_in?: Maybe<Array<Scalars['String']>>;
+  fundraiser_contains?: Maybe<Scalars['String']>;
+  fundraiser_not_contains?: Maybe<Scalars['String']>;
+  fundraiser_starts_with?: Maybe<Scalars['String']>;
+  fundraiser_not_starts_with?: Maybe<Scalars['String']>;
+  fundraiser_ends_with?: Maybe<Scalars['String']>;
+  fundraiser_not_ends_with?: Maybe<Scalars['String']>;
+};
+
+export enum Affiliate_OrderBy {
+  Id = 'id',
+  Address = 'address',
+  Referral = 'referral',
+  Percentage = 'percentage',
+  AffiliateManager = 'affiliateManager',
+  Fundraiser = 'fundraiser'
+}
+
 
 
 export type Block_Height = {
@@ -312,7 +442,7 @@ export type Fundraiser = {
   supply: Scalars['BigInt'];
   baseCurrency?: Maybe<Erc20Token>;
   tokenPrice?: Maybe<Scalars['BigInt']>;
-  affiliateManager?: Maybe<Scalars['Bytes']>;
+  affiliateManager?: Maybe<AffiliateManager>;
   contributorRestrictions?: Maybe<Scalars['Bytes']>;
   fundraiserManager?: Maybe<Scalars['Bytes']>;
   minter?: Maybe<Scalars['Bytes']>;
@@ -324,6 +454,7 @@ export type Fundraiser = {
   status: FundraiserStatus;
   numContributors: Scalars['Int'];
   contributors?: Maybe<Array<Contributor>>;
+  affiliates?: Maybe<Array<Affiliate>>;
 };
 
 
@@ -333,6 +464,15 @@ export type FundraiserContributorsArgs = {
   orderBy?: Maybe<Contributor_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Contributor_Filter>;
+};
+
+
+export type FundraiserAffiliatesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Affiliate_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Affiliate_Filter>;
 };
 
 export enum FundraiserStatus {
@@ -454,12 +594,20 @@ export type Fundraiser_Filter = {
   tokenPrice_lte?: Maybe<Scalars['BigInt']>;
   tokenPrice_in?: Maybe<Array<Scalars['BigInt']>>;
   tokenPrice_not_in?: Maybe<Array<Scalars['BigInt']>>;
-  affiliateManager?: Maybe<Scalars['Bytes']>;
-  affiliateManager_not?: Maybe<Scalars['Bytes']>;
-  affiliateManager_in?: Maybe<Array<Scalars['Bytes']>>;
-  affiliateManager_not_in?: Maybe<Array<Scalars['Bytes']>>;
-  affiliateManager_contains?: Maybe<Scalars['Bytes']>;
-  affiliateManager_not_contains?: Maybe<Scalars['Bytes']>;
+  affiliateManager?: Maybe<Scalars['String']>;
+  affiliateManager_not?: Maybe<Scalars['String']>;
+  affiliateManager_gt?: Maybe<Scalars['String']>;
+  affiliateManager_lt?: Maybe<Scalars['String']>;
+  affiliateManager_gte?: Maybe<Scalars['String']>;
+  affiliateManager_lte?: Maybe<Scalars['String']>;
+  affiliateManager_in?: Maybe<Array<Scalars['String']>>;
+  affiliateManager_not_in?: Maybe<Array<Scalars['String']>>;
+  affiliateManager_contains?: Maybe<Scalars['String']>;
+  affiliateManager_not_contains?: Maybe<Scalars['String']>;
+  affiliateManager_starts_with?: Maybe<Scalars['String']>;
+  affiliateManager_not_starts_with?: Maybe<Scalars['String']>;
+  affiliateManager_ends_with?: Maybe<Scalars['String']>;
+  affiliateManager_not_ends_with?: Maybe<Scalars['String']>;
   contributorRestrictions?: Maybe<Scalars['Bytes']>;
   contributorRestrictions_not?: Maybe<Scalars['Bytes']>;
   contributorRestrictions_in?: Maybe<Array<Scalars['Bytes']>>;
@@ -550,7 +698,8 @@ export enum Fundraiser_OrderBy {
   AmountWithdrawn = 'amountWithdrawn',
   Status = 'status',
   NumContributors = 'numContributors',
-  Contributors = 'contributors'
+  Contributors = 'contributors',
+  Affiliates = 'affiliates'
 }
 
 export type GreylistedAccount = {
@@ -633,6 +782,10 @@ export type Query = {
   tokenHolders: Array<TokenHolder>;
   fundraiser?: Maybe<Fundraiser>;
   fundraisers: Array<Fundraiser>;
+  affiliateManager?: Maybe<AffiliateManager>;
+  affiliateManagers: Array<AffiliateManager>;
+  affiliate?: Maybe<Affiliate>;
+  affiliates: Array<Affiliate>;
   contributor?: Maybe<Contributor>;
   contributors: Array<Contributor>;
   contribution?: Maybe<Contribution>;
@@ -798,6 +951,38 @@ export type QueryFundraisersArgs = {
 };
 
 
+export type QueryAffiliateManagerArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryAffiliateManagersArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<AffiliateManager_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<AffiliateManager_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryAffiliateArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryAffiliatesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Affiliate_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Affiliate_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
 export type QueryContributorArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
@@ -894,6 +1079,10 @@ export type Subscription = {
   tokenHolders: Array<TokenHolder>;
   fundraiser?: Maybe<Fundraiser>;
   fundraisers: Array<Fundraiser>;
+  affiliateManager?: Maybe<AffiliateManager>;
+  affiliateManagers: Array<AffiliateManager>;
+  affiliate?: Maybe<Affiliate>;
+  affiliates: Array<Affiliate>;
   contributor?: Maybe<Contributor>;
   contributors: Array<Contributor>;
   contribution?: Maybe<Contribution>;
@@ -1055,6 +1244,38 @@ export type SubscriptionFundraisersArgs = {
   orderBy?: Maybe<Fundraiser_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Fundraiser_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionAffiliateManagerArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionAffiliateManagersArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<AffiliateManager_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<AffiliateManager_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionAffiliateArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionAffiliatesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Affiliate_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Affiliate_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -1815,6 +2036,11 @@ export type ContributorFragment = (
   )>> }
 );
 
+export type AffiliateFragment = (
+  { __typename?: 'Affiliate' }
+  & Pick<Affiliate, 'id' | 'address' | 'referral' | 'percentage'>
+);
+
 export type FundraiserContributorsFragment = (
   { __typename?: 'Fundraiser' }
   & { contributors?: Maybe<Array<(
@@ -1823,9 +2049,21 @@ export type FundraiserContributorsFragment = (
   )>> }
 );
 
+export type FundraiserAffiliatesFragment = (
+  { __typename?: 'Fundraiser' }
+  & { affiliates?: Maybe<Array<(
+    { __typename?: 'Affiliate' }
+    & AffiliateFragment
+  )>> }
+);
+
 export type FundraiserInfoFragment = (
   { __typename?: 'Fundraiser' }
-  & Pick<Fundraiser, 'id' | 'label' | 'owner' | 'address' | 'startDate' | 'endDate' | 'softCap' | 'hardCap' | 'supply' | 'tokenPrice' | 'contributionsLocked' | 'amountQualified' | 'amountPending' | 'amountRefunded' | 'amountWithdrawn' | 'status' | 'numContributors' | 'affiliateManager' | 'contributorRestrictions' | 'minter'>
+  & Pick<Fundraiser, 'id' | 'label' | 'owner' | 'address' | 'startDate' | 'endDate' | 'softCap' | 'hardCap' | 'supply' | 'tokenPrice' | 'contributionsLocked' | 'amountQualified' | 'amountPending' | 'amountRefunded' | 'amountWithdrawn' | 'status' | 'numContributors' | 'contributorRestrictions' | 'minter'>
+  & { affiliateManager?: Maybe<(
+    { __typename?: 'AffiliateManager' }
+    & Pick<AffiliateManager, 'address'>
+  )> }
 );
 
 export type FundraiserTokenFragment = (
@@ -1899,6 +2137,7 @@ export type FundraiserWithContributorsQuery = (
     { __typename?: 'Fundraiser' }
     & FundraiserFragment
     & FundraiserContributorsFragment
+    & FundraiserAffiliatesFragment
   )> }
 );
 
@@ -2201,6 +2440,21 @@ export type WhitelistGreylistQuery = (
   )> }
 );
 
+export const AffiliateFragmentDoc = gql`
+    fragment Affiliate on Affiliate {
+  id
+  address
+  referral
+  percentage
+}
+    `;
+export const FundraiserAffiliatesFragmentDoc = gql`
+    fragment FundraiserAffiliates on Fundraiser {
+  affiliates {
+    ...Affiliate
+  }
+}
+    ${AffiliateFragmentDoc}`;
 export const FundraiserInfoFragmentDoc = gql`
     fragment FundraiserInfo on Fundraiser {
   id
@@ -2220,7 +2474,9 @@ export const FundraiserInfoFragmentDoc = gql`
   amountWithdrawn
   status
   numContributors
-  affiliateManager
+  affiliateManager {
+    address
+  }
   contributorRestrictions
   minter
 }
@@ -2503,10 +2759,12 @@ export const FundraiserWithContributorsDocument = gql`
   fundraiser(id: $id) {
     ...Fundraiser
     ...FundraiserContributors
+    ...FundraiserAffiliates
   }
 }
     ${FundraiserFragmentDoc}
-${FundraiserContributorsFragmentDoc}`;
+${FundraiserContributorsFragmentDoc}
+${FundraiserAffiliatesFragmentDoc}`;
 
 /**
  * __useFundraiserWithContributorsQuery__

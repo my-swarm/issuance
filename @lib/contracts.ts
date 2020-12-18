@@ -29,7 +29,7 @@ function getOnlineTokenAddress(token: OnlineToken, contractName: string) {
     case 'ContributorRestrictions':
       return token.currentFundraiser?.contributorRestrictions;
     case 'AffiliateManager':
-      return token.currentFundraiser?.affiliateManager;
+      return token.currentFundraiser?.affiliateManager?.address;
   }
 }
 

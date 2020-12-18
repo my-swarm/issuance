@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
-import { Space, Tag } from 'antd';
-import { VSpace } from '../utility';
+import { Tag } from 'antd';
+import { Loading, VSpace } from '../utility';
 
 interface SwmStakeChartProps {
   total: number;
@@ -14,6 +14,8 @@ const color2 = '#82ca9d';
 const color3 = '#729afd';
 
 export function SwmStakeChart({ total, masternodes, tokens }: SwmStakeChartProps): ReactElement {
+  if (!total || !masternodes || !tokens) return <Loading />;
+
   const circulating = total - masternodes - tokens;
   const data = [{ masternodes, tokens, circulating, name: 'swm' }];
   return (

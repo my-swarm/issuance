@@ -11,4 +11,5 @@ export * from './manage';
 export * from './wallet';
 export * from './common';
 export * from './dashboard';
+export * from './invest';
 export * from './dev';

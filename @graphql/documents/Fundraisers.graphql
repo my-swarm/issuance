@@ -9,9 +9,22 @@ fragment Contributor on Contributor {
   }
 }
 
+fragment Affiliate on Affiliate {
+  id
+  address
+  referral
+  percentage
+}
+
 fragment FundraiserContributors on Fundraiser {
   contributors {
     ...Contributor
+  }
+}
+
+fragment FundraiserAffiliates on Fundraiser {
+  affiliates {
+    ...Affiliate
   }
 }
 
@@ -35,7 +48,9 @@ fragment FundraiserInfo on Fundraiser {
   status
   numContributors
 
-  affiliateManager
+  affiliateManager {
+    address
+  }
   contributorRestrictions
   minter
 }
@@ -85,5 +100,6 @@ query FundraiserWithContributors($id: ID!) {
   fundraiser(id: $id) {
     ...Fundraiser
     ...FundraiserContributors
+    ...FundraiserAffiliates
   }
 }

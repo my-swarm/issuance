@@ -2,6 +2,11 @@ import { LocalFundraiser, LocalToken, TransferRules } from '@lib';
 import moment from 'moment';
 
 export const MANAGE_TABLE_PER_PAGE = 10;
+
+export const MASTERNODE_STAKE = 50000;
+export const SWM_TOTAL_SUPPLY = 100000000;
+export const SWM_STAKE_OLD_REGISTRY = 281842;
+
 const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 18 },

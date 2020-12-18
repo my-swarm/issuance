@@ -1,53 +1,86 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import moment from 'moment';
-import { BuySwmModal, DefaultLayout, MasternodesChart, SwmPriceChart, SwmStakeChart } from '@components';
+import {
+  BuySwmModal,
+  DefaultLayout,
+  InvestFundraisers,
+  MasternodesChart,
+  SwmPriceChart,
+  SwmStakeChart,
+} from '@components';
 import { Button, Card, Col, Divider, Row, Space, Statistic } from 'antd';
 import { PriceData, MasternodesData, RawMasternodeStats } from '@lib';
+import { MASTERNODE_STAKE, SWM_STAKE_OLD_REGISTRY } from '@app';
 
-const cgUrl =
+const cgUrlStats = 'https://api.coingecko.com/api/v3/coins/swarm';
+const cgUrlDaily =
   'https://api.coingecko.com/api/v3/coins/swarm/market_chart?vs_currency=usd&days=14&localization=false&interval=daily';
-const mnUrl = 'https://api.masternode.swarm.fund/api/v1/nodes/states-overview';
+const mnUrlStats = 'https://api.masternode.swarm.fund/api/v1/nodes/statistic';
+const mnUrlDaily = 'https://api.masternode.swarm.fund/api/v1/nodes/states-overview';
 
 interface IndexProps {
   title?: string;
 }
 
 export default function Index({ title }: IndexProps): ReactElement {
-  const colLayout = { xs: 24, md: 12, lg: 6 };
+  const colLayout = { xs: 24, lg: 12, xxl: 6 };
   const [buyingSwm, setBuyingSwm] = useState<boolean>(false);
   const [priceData, setPriceData] = useState<PriceData>();
   const [mnData, setMnData] = useState<MasternodesData>();
+  const [mnRoi, setMnRoi] = useState<number>();
+  const [numMnNodes, setNumMnNodes] = useState<number>();
+  const [swmCircSupply, setSwmCircSupply] = useState<number>();
 
-  useEffect(() => {
-    fetch(cgUrl)
+  const cgRequest = (url: string, callback: (data: any) => void) => {
+    fetch(url)
       .then((response) => response.json())
-      .then((data) => {
-        setPriceData(
-          data.prices.map((record) => ({ date: moment.unix(record[0] / 1000).format('YYYY-MM-DD'), price: record[1] })),
-        );
-      })
+      .then(callback)
       .catch((err) => {
         console.error('CoinGecko error');
         console.error(err.message);
       });
-  }, [cgUrl]);
+  };
+
+  const mnRequest = (url: string, callback: (data: any) => void) => {
+    fetch(url)
+      .then((response) => response.json())
+      .then(callback);
+  };
 
   useEffect(() => {
-    fetch(mnUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('mnn data raw', data);
-        setMnData(
-          Object.entries(data.result).map(([date, nodeStats]: [string, RawMasternodeStats]) => {
-            return {
-              date: date,
-              active: nodeStats.ACTIVE,
-              warmup: nodeStats.WARMUP,
-            };
-          }),
-        );
-      });
-  }, [mnUrl]);
+    cgRequest(cgUrlStats, (data) => setSwmCircSupply(Math.round(data.market_data.circulating_supply)));
+  }, [cgUrlStats]);
+
+  useEffect(() => {
+    cgRequest(cgUrlDaily, (data) => {
+      setPriceData(
+        data.prices.map((record) => ({ date: moment.unix(record[0] / 1000).format('YYYY-MM-DD'), price: record[1] })),
+      );
+    });
+  }, [cgUrlDaily]);
+
+  useEffect(() => {
+    mnRequest(mnUrlDaily, (data) => {
+      console.log({ data });
+      const latest = Object.values(data.result)[0] as RawMasternodeStats;
+      setNumMnNodes(latest.ACTIVE + latest.WARMUP);
+      setMnData(
+        Object.entries(data.result).map(([date, nodeStats]: [string, RawMasternodeStats]) => {
+          return {
+            date: date,
+            active: nodeStats.ACTIVE,
+            warmup: nodeStats.WARMUP,
+          };
+        }),
+      );
+    });
+  }, [mnUrlDaily]);
+
+  useEffect(() => {
+    mnRequest(mnUrlStats, (data) => {
+      setMnRoi(Math.floor(data.result.annualROI * 100) / 100);
+    });
+  }, [mnUrlStats]);
 
   const firstPrice = priceData?.[0].price;
   const lastPrice = priceData?.[priceData.length - 1].price;
@@ -56,12 +89,14 @@ export default function Index({ title }: IndexProps): ReactElement {
     ? (priceDirection === 'up' ? lastPrice / firstPrice - 1 : firstPrice / lastPrice - 1) * 100
     : 0;
 
+  const mnStake = MASTERNODE_STAKE * numMnNodes || undefined;
+
   return (
     <DefaultLayout title="Welcome to MySwarm Investment Portal">
-      <Row gutter={24} className="dashboard">
+      <Row gutter={[24, 24]} className="dashboard">
         <Col {...colLayout}>
           <Card title="SWM stake">
-            <SwmStakeChart total={1000} masternodes={200} tokens={100} />
+            <SwmStakeChart total={swmCircSupply} masternodes={mnStake} tokens={SWM_STAKE_OLD_REGISTRY} />
           </Card>
         </Col>
         <Col {...colLayout}>
@@ -73,21 +108,7 @@ export default function Index({ title }: IndexProps): ReactElement {
               </a>
             }
           >
-            <Row className="mb-3">
-              <Col xs={12}>
-                <Statistic title="Current" value={lastPrice} precision={4} valueStyle={{ color: 'green' }} />
-              </Col>
-              <Col xs={12}>
-                <Statistic
-                  title="Change"
-                  value={priceChangePercent}
-                  precision={2}
-                  suffix="%"
-                  valueStyle={{ color: 'red' }}
-                />
-              </Col>
-            </Row>
-            <SwmPriceChart data={priceData} />
+            <SwmPriceChart data={priceData} lastPrice={lastPrice} changePercent={priceChangePercent} />
           </Card>
         </Col>
         <Col {...colLayout}>
@@ -99,15 +120,7 @@ export default function Index({ title }: IndexProps): ReactElement {
               </a>
             }
           >
-            <Row className="mb-3">
-              <Col xs={12}>
-                <Statistic title="Online nodes" value={404} valueStyle={{ color: 'green' }} />
-              </Col>
-              <Col xs={12}>
-                <Statistic title="Annual ROI" value={6.84} suffix="%" valueStyle={{ color: 'red' }} />
-              </Col>
-            </Row>
-            <MasternodesChart data={mnData} />
+            <MasternodesChart data={mnData} numNodes={numMnNodes} roi={mnRoi} />
           </Card>
         </Col>
         <Col {...colLayout}>
@@ -139,6 +152,8 @@ export default function Index({ title }: IndexProps): ReactElement {
         </Col>
       </Row>
       <Divider />
+      <h2>The hottest investment opportunities</h2>
+      <InvestFundraisers count={3} />
 
       {buyingSwm && <BuySwmModal onClose={() => setBuyingSwm(false)} />}
     </DefaultLayout>

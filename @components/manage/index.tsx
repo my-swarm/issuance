@@ -1,6 +1,7 @@
 export * from './ManageSupply';
 export * from './ManageAccountList';
 export * from './ManageContributors';
+export * from './ManageAffiliates';
 export * from './ManageFundraiserState';
 export * from './ManageTokenHolders';
 export * from './ManageTokenStatus';
@@ -11,4 +12,5 @@ export * from './ManageAsset';
 export * from './ManageDividends';
 export * from './AccountsAddModal';
 export * from './AccountBurnModal';
+export * from './AffiliateEditModal';
 export * from './TransferModal';

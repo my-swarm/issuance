@@ -28,7 +28,7 @@ export function TokenInfoDeployed(): ReactElement {
           address = onlineToken.currentFundraiser?.contributorRestrictions || undefined;
           break;
         case 'affiliateManager':
-          address = onlineToken.currentFundraiser?.affiliateManager || undefined;
+          address = onlineToken.currentFundraiser?.affiliateManager?.address || undefined;
           break;
       }
       if (address === AddressZero) {

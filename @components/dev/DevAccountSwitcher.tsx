@@ -12,6 +12,10 @@ export function DevAccountSwitcher({ onChange, value }): ReactElement {
     onChange(accountId);
   };
 
+  if (process.env.NEXT_PUBLIC_DEV !== '1') {
+    return null;
+  }
+
   const options = devEthereumAccounts.map((account, key) => ({ value: key, label: account.title }));
   return (
     <div style={{ position: 'fixed', right: '4rem', bottom: '1rem', background: 'red', padding: '1rem' }}>

@@ -54,7 +54,6 @@ export default function WalletPage(): ReactElement {
   }, [address]);
 
   useEffect(() => {
-    console.log({ signer, usdc, swm });
     if (signer && usdc && swm) {
       signer.getBalance().then(setEthBalance);
       usdc.balanceOf(address).then(setUsdcBalance);

@@ -32,8 +32,6 @@ export default function TestPage() {
       });
   };
 
-  console.log({ token });
-
   return (
     <DefaultLayout title="Test page">
       <Space>

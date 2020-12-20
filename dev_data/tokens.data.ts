@@ -71,12 +71,12 @@ export const tokens = [
     symbol: 'TT1',
     networks: {
       [EthereumNetwork.Kovan]: {
-        state: TokenState.Deploying,
+        state: TokenState.Deployed,
         deployerState: DeployerState.Roles,
         addresses: addressesKovan.token1,
       },
       [EthereumNetwork.Local]: {
-        state: TokenState.Deploying,
+        state: TokenState.Deployed,
         deployerState: DeployerState.Roles,
         addresses: addressesLocal.token1,
       },

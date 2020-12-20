@@ -50,6 +50,8 @@ export const devDefaultToken: LocalToken = {
   assetDescription: 'Love my condo',
   networks: undefined,
   assetNetValue: 50,
+  assetNavDocument: undefined,
+  assetImage: undefined,
   assetLegalDocuments: [],
 };
 
@@ -65,6 +67,7 @@ export const devDefaultFundraiser: LocalFundraiser = {
   softCap: 500000,
   hardCap: 1000000,
   startNow: true,
+  networks: undefined,
 };
 
 export const devEthereumAccounts = [

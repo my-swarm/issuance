@@ -39,7 +39,7 @@ export function EthersProvider({ children, devAccountId }: EthersProviderProps):
   const [metamask, setMetamask] = useState<Metamask>();
 
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_DEV && devAccountId !== undefined) {
+    if (process.env.NEXT_PUBLIC_DEV === '1' && devAccountId !== undefined) {
       resetJsonRpcProvider();
     } else if (process.browser && window['ethereum']) {
       const m = new Metamask(window['ethereum']);

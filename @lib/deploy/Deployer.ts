@@ -32,7 +32,6 @@ export abstract class Deployer {
   }
 
   public onProgress(callback: DeployerEventCallback): void {
-    console.log('onProgress', callback);
     this.callbacks.push(callback);
   }
 

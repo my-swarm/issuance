@@ -48,7 +48,7 @@ function getTokenList(localTokens: LocalToken[], onlineTokens: OnlineToken[], ne
 
   for (const token of localTokens) {
     const { state, addresses } = token.networks[networkId] || { state: DeployerState.None, address: undefined };
-    if (state < TokenState.Deploying) {
+    if (state <= TokenState.Deploying) {
       result.push({
         ...(({ id, name, symbol }) => ({ id, name, symbol }))(token),
         address: null,
@@ -148,7 +148,6 @@ export default function Tokens(): ReactElement {
   };
 
   const handleSubmit = (newToken: LocalToken) => {
-    console.log({ action, newToken });
     switch (action) {
       case TokenAction.Create:
         dispatch({ type: 'addToken', token: newToken });

@@ -25,7 +25,7 @@ export function FundraiserForm({
   formData = defaultFormData,
   disabled = false,
 }: FundraiserFormProps): ReactElement {
-  const [startNow, setStartNow] = useState(defaultFormData.startNow);
+  const [startNow, setStartNow] = useState(formData?.startNow || false);
   const [form] = Form.useForm();
   const [submitButton, setSubmitButton] = useState<string>();
   const { networkId, network } = useEthers();
@@ -49,10 +49,10 @@ export function FundraiserForm({
   };
 
   const initialValues = {
-    ...formData,
-    startDate: formData.startDate ? moment(formData.startDate) : undefined,
-    endDate: formData.endDate ? moment(formData.endDate) : undefined,
-    label: formData.label || `${tokenName} fundraiser`,
+    ...(formData || {}),
+    startDate: formData?.startDate ? moment(formData.startDate) : undefined,
+    endDate: formData?.endDate ? moment(formData.endDate) : undefined,
+    label: formData?.label || `${tokenName} fundraiser`,
   };
 
   return (
@@ -119,12 +119,30 @@ export function FundraiserForm({
                 </Checkbox>
               </Space>
             }
+            rules={[{ required: !startNow, message: 'Start date is required' }]}
           >
             <DatePicker className="w-full" disabled={disabled || startNow} />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="endDate" label="End date">
+          <Form.Item
+            name="endDate"
+            label="End date"
+            rules={[
+              { required: true, message: 'End date is required' },
+              ({ getFieldValue }) => ({
+                validator(rule, value) {
+                  if (value && startNow && value <= new Date()) {
+                    return Promise.reject('Has to end in the future');
+                  } else if (value && !startNow && value <= getFieldValue('startDate')) {
+                    return Promise.reject('Has to end after start date');
+                  } else {
+                    return Promise.resolve();
+                  }
+                },
+              }),
+            ]}
+          >
             <DatePicker className="w-full" disabled={disabled} />
           </Form.Item>
         </Col>
@@ -133,12 +151,12 @@ export function FundraiserForm({
       <h3>Caps</h3>
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item name="softCap" label="Soft Cap">
+          <Form.Item name="softCap" label="Soft Cap" rules={[{ required: true, message: 'Soft Cap is required' }]}>
             <InputNumber min={1} step={1000} className="w-full" disabled={disabled} />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="hardCap" label="Hard Cap">
+          <Form.Item name="hardCap" label="Hard Cap" rules={[{ required: true, message: 'Hard Cap is required' }]}>
             <InputNumber min={1} step={1000} className="w-full" disabled={disabled} />
           </Form.Item>
         </Col>

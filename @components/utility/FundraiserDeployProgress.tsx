@@ -22,7 +22,6 @@ export function FundraiserDeployProgress({ onClose }: FundraiserDeployProgressPr
   const tokenAddress = onlineToken.address;
 
   const handleDeployProgress = (deployer: FundraiserDeployer) => {
-    console.log('deployer progress', deployer.state, deployer.addresses);
     dispatch({
       type: 'updateFundraiserNetwork',
       tokenAddress: tokenAddress,

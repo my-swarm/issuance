@@ -29,7 +29,6 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
       cache: new InMemoryCache(),
     };
     const client = new ApolloClient(clientConfig);
-    console.log({ clientConfig, client });
     setApolloClient(client);
   }, []);
 

@@ -98,7 +98,6 @@ export function TransferHistory({ token, transfers, direction = false }: Transfe
     }));
   const dataSource = [...pendingTransfers, ...oldTransfers];
 
-  console.log({ pendingTransactions, pendingTransfers });
   return (
     <>
       <div className="limit-height">

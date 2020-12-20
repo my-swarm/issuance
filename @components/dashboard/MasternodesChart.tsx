@@ -14,7 +14,6 @@ const color1 = '#46ce6f';
 const color2 = '#ffbc36';
 
 export function MasternodesChart({ data, numNodes, roi }: MasternodesChartProps): ReactElement {
-  console.log('mn', { data, numNodes, roi });
   if (!data || data.length === 0 || !numNodes || !roi) return <Loading />;
   return (
     <>

@@ -1,33 +1,33 @@
 {
   "token1": {
-    "roles": "0xbe65a1f9a31d5e81d5e2b863aef15bf9b3d92891",
+    "roles": "0x919b4b4b561c72c990dc868f751328ef127c45f4",
     "src20": "0x63e00e15ec3f75dc4ef547ea86ecd2ae323e2f32",
-    "features": "0x919b4b4b561c72c990dc868f751328ef127c45f4"
+    "features": "0x6da02f43c3bdeb30c21b57a24825417f671a8490"
   },
   "token2": {
-    "transferRules": "0x3307c25998c69ec9c37c71d2d2e2df837d254133",
-    "roles": "0xdc150be5af9874dbc233fa4aebb25a252069851b",
+    "transferRules": "0xb63181cd1b0a347003137a9a2703bb1429fa852a",
+    "roles": "0x25c344e14b5df94e89021f3b09dad5f462e9b777",
     "src20": "0xedc43eab736a435bd680b1643c6e7522ecc46029",
-    "features": "0x25c344e14b5df94e89021f3b09dad5f462e9b777"
+    "features": "0x3307c25998c69ec9c37c71d2d2e2df837d254133"
   },
   "token3": {
-    "transferRules": "0x1a4eb93ed4a62d39fac01082bfecff491766241b",
-    "roles": "0x10120c0a9c480c2858c0711a3c40ac872ec62732",
+    "transferRules": "0x840a75c32f70b204ecf3c795b12289e5eeb3a32c",
+    "roles": "0x51f2aa5298badb434d0c66130c01773ac1b12e3d",
     "src20": "0xac9085c8bd3fe353e5a2397759a33269bc9c2c8b",
-    "features": "0x51f2aa5298badb434d0c66130c01773ac1b12e3d"
+    "features": "0x1a4eb93ed4a62d39fac01082bfecff491766241b"
   },
   "token4": {
-    "roles": "0x2209d4e308a2cb2c15c20b483f5f5676db009400",
+    "roles": "0xc9043db2d6c4812e57cae13b72b3d95e13a0fc78",
     "src20": "0xa38034e5c2ef7fc1ae19956dbaf23af4ab012eb9",
-    "fundraiser": "0x12d910a4e63b205fe190eaad7333ad00c2f317d2",
-    "contributorRestrictions": "0x396c75acfaa021db1a58e2747a729ca801ae3728",
-    "features": "0xc9043db2d6c4812e57cae13b72b3d95e13a0fc78"
+    "fundraiser": "0xb8b5ebca69a5a537bad998d706cf7ef0353933b5",
+    "contributorRestrictions": "0x12d910a4e63b205fe190eaad7333ad00c2f317d2",
+    "features": "0xce91a3967b1f8deddbd8414331f43b2592f5cecc"
   },
   "token5": {
-    "features": "0xe964cc77ab100b8fc5926fcaebd39135c284797a",
-    "roles": "0xd198dd654e2a2bc06663b429964f7ff171acef93",
+    "features": "0x27d62df6ff9668cd8fd5612d7b8fbc2af7baea8f",
+    "roles": "0xe964cc77ab100b8fc5926fcaebd39135c284797a",
     "src20": "0x52ede4384c635731cdd3d75fdf271edce1959a30",
-    "fundraiser": "0x5fecce7baf2aae24fc666844fd600b1b291f956e",
-    "contributorRestrictions": "0x5fd35cf60498bc0c5b9ff326b06394b689d88055"
+    "fundraiser": "0x10b04fc34b8b77aa2e9b45e3871ff5946007c307",
+    "contributorRestrictions": "0x5fecce7baf2aae24fc666844fd600b1b291f956e"
   }
 }

@@ -68,7 +68,10 @@ export function InvestContribute({ id }: InvestContributeProps): ReactElement {
       <Descriptions title="Your investor status" column={1} size="small" bordered>
         <Descriptions.Item label="Status">{status}</Descriptions.Item>
         <Descriptions.Item label={`${baseCurrency.symbol} balance`}>
-          {balance.nice} {baseCurrency.symbol}
+          {balance.nice} {baseCurrency.symbol}{' '}
+          <Button type="link" onClick={reloadBalance}>
+            refresh
+          </Button>
         </Descriptions.Item>
         <Descriptions.Item label="Amount contributed">
           {formatUnits(contributed, baseCurrency.decimals)} {baseCurrency.symbol}

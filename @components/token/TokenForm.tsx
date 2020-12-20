@@ -17,9 +17,9 @@ interface TokenFormProps {
 const defaultToken = isDev ? devDefaultToken : undefined;
 
 export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: TokenFormProps): ReactElement {
-  const [initialSupply, setInitialSupply] = useState<number>(formData.initialSupply || 0);
-  const [showMintSection, setShowMintSection] = useState<boolean>(formData.allowMint || false);
-  const [allowUnlimitedSupply, setallowUnlimitedSupply] = useState<boolean>(formData.allowUnlimitedSupply || false);
+  const [initialSupply, setInitialSupply] = useState<number>(formData?.initialSupply || 0);
+  const [showMintSection, setShowMintSection] = useState<boolean>(formData?.allowMint || false);
+  const [allowUnlimitedSupply, setallowUnlimitedSupply] = useState<boolean>(formData?.allowUnlimitedSupply || false);
   const [form] = Form.useForm();
 
   const handleCancel = () => {

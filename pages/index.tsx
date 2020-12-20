@@ -61,7 +61,6 @@ export default function Index({ title }: IndexProps): ReactElement {
 
   useEffect(() => {
     mnRequest(mnUrlDaily, (data) => {
-      console.log({ data });
       const latest = Object.values(data.result)[0] as RawMasternodeStats;
       setNumMnNodes(latest.ACTIVE + latest.WARMUP);
       setMnData(

@@ -8,9 +8,10 @@ import {
   TransactionState,
   transactionStatesMeta,
   deployerStatesMeta,
+  DeployerState,
 } from '@lib';
 import { LoadingOutlined } from '@ant-design/icons';
-import { useDispatch } from '@app';
+import { useDispatch, useGraphql } from '@app';
 
 interface DeployProgressProps {
   deployer: Deployer;
@@ -21,11 +22,19 @@ export function DeployProgress({ deployer, onClose }: DeployProgressProps): Reac
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
   const [transactionState, setTransactionState] = useState<TransactionState>(TransactionState.None);
   const { dispatchError } = useDispatch();
+  const { reset } = useGraphql();
   useEffect(() => {
     if (deployer) {
       deployer.onTransactionProgress(handleTransactionProgress);
+      deployer.onProgress(handleProgress);
     }
   }, [deployer]);
+
+  const handleProgress = (deployer: Deployer) => {
+    if (deployer.state === DeployerState.Finished) {
+      reset();
+    }
+  };
 
   const handleTransactionProgress = (event: TransactionState) => {
     setTransactionState(event);
@@ -60,7 +69,6 @@ export function DeployProgress({ deployer, onClose }: DeployProgressProps): Reac
 
   const state = deployer.state;
   const meta = deployerStatesMeta[state];
-  console.log('deployer', { state, meta });
 
   return (
     <RequireEthers>

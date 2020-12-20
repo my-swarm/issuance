@@ -38,8 +38,6 @@ export function ManageAsset(): ReactElement {
         }
       },
     });
-
-    console.log('changing kya');
   };
 
   return (

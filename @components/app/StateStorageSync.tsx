@@ -19,7 +19,7 @@ export function StateStorageSync(): ReactElement {
 
   useEffect(() => {
     if (isLoaded) {
-      save(_.pick(state, ['tokens', 'version', 'accountNames', 'accountNotes']));
+      save(_.pick(state, ['tokens', 'fundraisers', 'version', 'accountNames', 'accountNotes']));
     }
   }, [version]);
 

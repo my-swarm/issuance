@@ -5,6 +5,7 @@ import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined, LoadingOutli
 import { FundraiserCountdown } from './FundraiserCountdown';
 import { CardAction, FundraiserStatusChart, ImagePreview } from '..';
 import { useKya } from '@app';
+import { OnlineToken } from '@lib';
 
 export enum FundraiserInvestorAction {
   TokenDetails,
@@ -20,7 +21,8 @@ interface FundraiserInvestorCardProps {
 export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInvestorCardProps): ReactElement {
   const { token, baseCurrency } = fundraiser;
 
-  const { kya } = useKya(token);
+  // todo: as OnlineToken is a quick hack. Should restructure the fragments
+  const { kya } = useKya(token as OnlineToken);
 
   const handleTokenDetails = () => {
     onAction(FundraiserInvestorAction.TokenDetails);
@@ -72,7 +74,7 @@ export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInves
           softCap={fundraiser.softCap}
           hardCap={fundraiser.hardCap}
           amount={fundraiser.amountQualified}
-          decimals={baseCurrency.decimals}
+          decimals={baseCurrency?.decimals}
         />
       </Card.Grid>
     </Card>

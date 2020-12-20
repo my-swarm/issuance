@@ -1,7 +1,7 @@
 overwrite: true
 schema:
-  - "http://localhost:8000/subgraphs/name/my-swarm/issuance"
-documents: "./@graphql/documents/*.graphql"
+  - schema.graphql
+documents: "./documents/*.graphql"
 config:
   scalars:
     Datetime: "string"
@@ -11,7 +11,7 @@ config:
   withComponent: false
   withHooks: true
 generates:
-  "./@graphql/index.tsx":
+  "./index.tsx":
     plugins:
       - "typescript"
       - "typescript-operations"

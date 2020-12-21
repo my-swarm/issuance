@@ -1,7 +1,7 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { Descriptions, Form, InputNumber, Typography, Button, Modal } from 'antd';
-import { useFundraiserQuery } from '@graphql';
-import { Address, Help, Loading, VSpace } from '@components';
+import { useFundraiserLazyQuery } from '@graphql';
+import { Address, Help, Loading, RequireEthers, VSpace } from '@components';
 import { useDispatch, useErc20Balance, useEthers, useGraphql } from '@app';
 import { formatUnits, parseUnits } from '@lib';
 
@@ -13,17 +13,27 @@ interface InvestContributeProps {
 
 export function InvestContribute({ id }: InvestContributeProps): ReactElement {
   const { address } = useEthers();
-  const { data, loading } = useFundraiserQuery({ variables: { id, address } });
+  const [loadQuery, { data, loading }] = useFundraiserLazyQuery();
   const { checkAllowance, dispatchTransaction } = useDispatch();
   const { reset } = useGraphql();
   const [balance, reloadBalance] = useErc20Balance(data?.fundraiser?.baseCurrency?.address);
   const [form] = Form.useForm();
 
-  if (loading) return <Loading />;
-  const { fundraiser } = data;
-  const { token, baseCurrency, contributors } = fundraiser;
+  useEffect(() => {
+    if (id && address) {
+      loadQuery({ variables: { id, address } });
+    }
+  }, [address, id]);
 
-  const contributor = contributors.length ? contributors[0] : undefined;
+  if (!data || loading) return <Loading />;
+  const fundraiser = data?.fundraiser;
+  const { token, baseCurrency, contributors } = fundraiser ?? {
+    token: undefined,
+    baseCurrency: undefined,
+    contributors: undefined,
+  };
+
+  const contributor = contributors?.length ? contributors[0] : undefined;
   const contributed = contributor?.amount || 0;
   const status = contributor?.status || 'Not contributed yet';
 

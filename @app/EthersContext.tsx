@@ -1,7 +1,7 @@
 import React, { ReactElement, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { getNetwork, Network, Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
 import { Contract, ethers, Signer, Wallet } from 'ethers';
-import { devEthereumAccounts, devEthereumNode } from './config';
+import { devEthereumAccounts, devEthereumNode, isDev } from './config';
 import { Metamask, EthereumNetwork } from '@lib';
 
 export enum EthersStatus {
@@ -39,7 +39,7 @@ export function EthersProvider({ children, devAccountId }: EthersProviderProps):
   const [metamask, setMetamask] = useState<Metamask>();
 
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_DEV === '1' && devAccountId !== undefined) {
+    if (isDev && devAccountId !== undefined) {
       resetJsonRpcProvider();
     } else if (process.browser && window['ethereum']) {
       const m = new Metamask(window['ethereum']);

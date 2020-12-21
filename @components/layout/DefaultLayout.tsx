@@ -1,11 +1,12 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Layout, PageHeader, Modal } from 'antd';
+import { Layout, PageHeader, Modal, Space } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
 
 import { Logo, MetamaskStatus, StateStorageSync, TransactionModal, SpendingApprovalModal } from '@components';
 import { MainMenu } from '@components/layout/MainMenu';
-import { useAppState } from '@app';
+import { isDev, useAppState } from '@app';
+import { MailOutlined } from '@ant-design/icons';
 
 const { Content, Sider } = Layout;
 
@@ -52,8 +53,30 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
         <div className="side-box mt-4">
           <MetamaskStatus />
         </div>
+        {isDev && (
+          <div className="side-box mt-4">
+            <StateStorageSync />
+          </div>
+        )}
         <div className="side-box mt-4">
-          <StateStorageSync />
+          <h3 className="side-box-title">
+            <Space>
+              <MailOutlined />
+              <span>Contact us</span>
+            </Space>
+          </h3>
+          <div className="side-box-body">
+            <div className="mb-2">
+              email:
+              <br />
+              <a href="mailto:info@myswarm.app">info@myswarm.app</a>
+            </div>
+            <div>
+              telegram:
+              <br />
+              <a href="#">xxxxxx</a>
+            </div>
+          </div>
         </div>
       </Sider>
       <Content>

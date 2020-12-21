@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useMemo, useState } from 'react';
 import { Col, Drawer, Row } from 'antd';
 import {
   FundraiserInvestorAction,
@@ -11,6 +11,7 @@ import {
 import { FundraiserWithTokenFragment, useInvestQuery } from '@graphql';
 import { useDispatch } from '@app';
 import { OnlineToken } from '@lib';
+import dayjs from 'dayjs';
 
 interface InvestFundraisersProps {
   count?: number;
@@ -21,8 +22,13 @@ export function InvestFundraisers({ count }: InvestFundraisersProps): ReactEleme
   const [fundraiser, setFundraiser] = useState<FundraiserWithTokenFragment>();
   const { setToken } = useDispatch();
   const { data, loading } = useInvestQuery();
+
+  const filteredFundraiesrs = useMemo(() => {
+    const nowTs = dayjs.unix(Math.round(Date.now() / 1000));
+    return (data?.fundraisers || []).filter((f) => dayjs.unix(f.endDate) > nowTs);
+  }, [data]);
+
   if (loading) return <Loading />;
-  const { fundraisers } = data;
 
   const handleAction = (newAction: FundraiserInvestorAction, fundraiser: FundraiserWithTokenFragment) => {
     setFundraiser(fundraiser);
@@ -61,7 +67,7 @@ export function InvestFundraisers({ count }: InvestFundraisersProps): ReactEleme
   return (
     <>
       <Row gutter={16}>
-        {fundraisers.map((fundraiser) => (
+        {filteredFundraiesrs.map((fundraiser) => (
           <Col md={12} xxl={8} key={fundraiser.id}>
             <FundraiserInvestorCard fundraiser={fundraiser} onAction={(action) => handleAction(action, fundraiser)} />
           </Col>

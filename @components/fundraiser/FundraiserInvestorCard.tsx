@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react';
-import { Card, Col, Typography, Row } from 'antd';
+import { Card, Col, Typography, Row, Modal } from 'antd';
 import { FundraiserWithTokenFragment } from '@graphql';
 import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined, LoadingOutlined } from '@ant-design/icons';
 import { FundraiserCountdown } from './FundraiserCountdown';
 import { CardAction, FundraiserStatusChart, ImagePreview } from '..';
-import { useKya } from '@app';
+import { useEthers, useKya } from '@app';
 import { OnlineToken } from '@lib';
 
 export enum FundraiserInvestorAction {
@@ -20,6 +20,7 @@ interface FundraiserInvestorCardProps {
 
 export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInvestorCardProps): ReactElement {
   const { token, baseCurrency } = fundraiser;
+  const { address } = useEthers();
 
   // todo: as OnlineToken is a quick hack. Should restructure the fragments
   const { kya } = useKya(token as OnlineToken);
@@ -33,7 +34,14 @@ export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInves
   };
 
   const handleContribute = () => {
-    onAction(FundraiserInvestorAction.Invest);
+    if (!address) {
+      Modal.error({
+        title: 'Not connected',
+        content: 'Please connect to Ethereum network first (using Metamask or similar)',
+      });
+    } else {
+      onAction(FundraiserInvestorAction.Invest);
+    }
   };
 
   return (

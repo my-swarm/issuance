@@ -22,12 +22,16 @@ export default function Fundraisers() {
     </Space>
   );
   return (
-    <DefaultLayout title="My fundraisers" headExtra={renderHeadExtra()} headTableAligned={true}>
-      {fundraisers.map((fundraiser) => (
-        <div className="mb-3" key={fundraiser.id}>
-          <FundraiserIssuerCard fundraiser={fundraiser} />
-        </div>
-      ))}
+    <DefaultLayout title="My fundraisers">
+      {fundraisers.length > 0 ? (
+        fundraisers.map((fundraiser) => (
+          <div className="mb-3" key={fundraiser.id}>
+            <FundraiserIssuerCard fundraiser={fundraiser} />
+          </div>
+        ))
+      ) : (
+        <p>To create your first fundraiser, deploy a token first and then deploy a fundraiser on it.</p>
+      )}
     </DefaultLayout>
   );
 }

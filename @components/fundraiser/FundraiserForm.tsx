@@ -26,6 +26,7 @@ export function FundraiserForm({
   disabled = false,
 }: FundraiserFormProps): ReactElement {
   const [startNow, setStartNow] = useState(formData?.startNow || false);
+  const [supplyAndPriceEmpty, setSupplyAndPriceEmpty] = useState<boolean>(true);
   const [form] = Form.useForm();
   const [submitButton, setSubmitButton] = useState<string>();
   const { networkId, network } = useEthers();
@@ -48,6 +49,11 @@ export function FundraiserForm({
     }
   };
 
+  const handleUpdatedSupplyOrPrice = (resetField: string) => {
+    form.setFieldsValue({ [resetField]: null });
+    setSupplyAndPriceEmpty(!form.getFieldValue('tokensToMint') && !form.getFieldValue('tokenPrice'));
+  };
+
   const initialValues = {
     ...(formData || {}),
     startDate: formData?.startDate ? moment(formData.startDate) : undefined,
@@ -60,7 +66,11 @@ export function FundraiserForm({
       <Form.Item name="label" label="What do you want to call your fundraiser">
         <Input disabled={disabled} />
       </Form.Item>
-      <Form.Item name="baseCurrency" label="Base currency">
+      <Form.Item
+        name="baseCurrency"
+        label="Base currency"
+        rules={[{ required: true, message: 'Base currency is required' }]}
+      >
         <Select defaultActiveFirstOption disabled={disabled}>
           {Object.entries(BASE_CURRENCIES).map(([key, currency]) => {
             const address = currency.addresses[networkId] || undefined;
@@ -83,24 +93,32 @@ export function FundraiserForm({
       </h3>
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item name="tokensToMint" label="Token supply to mint">
+          <Form.Item
+            name="tokensToMint"
+            label="Token supply to mint"
+            rules={[{ required: supplyAndPriceEmpty, message: 'Enter token supply or price' }]}
+          >
             <InputNumber
               min={1}
               step={1000}
               className="w-full"
-              onChange={() => form.setFieldsValue({ tokenPrice: null })}
               disabled={disabled}
+              onChange={() => handleUpdatedSupplyOrPrice('tokenPrice')}
             />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="tokenPrice" label="Token price (USD)">
+          <Form.Item
+            name="tokenPrice"
+            label="Token price (USD)"
+            rules={[{ required: supplyAndPriceEmpty, message: 'Enter token supply or price' }]}
+          >
             <InputNumber
               min={0}
               step={0.1}
               className="w-full"
-              onChange={() => form.setFieldsValue({ tokensToMint: null })}
               disabled={disabled}
+              onChange={() => handleUpdatedSupplyOrPrice('tokensToMint')}
             />
           </Form.Item>
         </Col>

@@ -9,6 +9,7 @@ export function TokenInfoAsset(): ReactElement {
   if (!kya) return <Loading />;
 
   const { asset } = kya;
+  console.log({ kya });
 
   return (
     <Descriptions title="Asset info" layout="horizontal" bordered size="small" className="c-token-info mb-3" column={1}>

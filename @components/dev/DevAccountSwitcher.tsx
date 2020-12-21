@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { devEthereumAccounts } from '@app';
+import { devEthereumAccounts, isDev } from '@app';
 import { Select, Space } from 'antd';
 
 interface DevAccountSwitcherProps {
@@ -12,7 +12,7 @@ export function DevAccountSwitcher({ onChange, value }): ReactElement {
     onChange(accountId);
   };
 
-  if (process.env.NEXT_PUBLIC_DEV !== '1') {
+  if (!isDev) {
     return null;
   }
 

@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { Button, Checkbox, Drawer, Space, Table } from 'antd';
 import { DollarCircleOutlined } from '@ant-design/icons';
 
-import { DefaultLayout, Loading, WalletDetail } from '@components';
+import { DefaultLayout, Loading, RequireEthers, WalletDetail } from '@components';
 import { TokenHolderFragment, TokenInfoFragment, TransferFragment, useWalletLazyQuery } from '@graphql';
 import { formatUnits } from '@lib';
 import { useContract, useEthers, useGraphql } from '@app';
@@ -43,7 +43,7 @@ export default function WalletPage(): ReactElement {
   const [usdcBalance, setUsdcBalance] = useState<BigNumber>();
   const [filter, setFilter] = useState<Filter>(defaultFilter);
   const { usdc, swm } = useContract();
-  const { address, signer } = useEthers();
+  const { connected, address, signer } = useEthers();
   const { reset } = useGraphql();
   const [loadQuery, { data, loading, error }] = useWalletLazyQuery();
 
@@ -54,12 +54,12 @@ export default function WalletPage(): ReactElement {
   }, [address]);
 
   useEffect(() => {
-    if (signer && usdc && swm) {
+    if (address && signer && usdc && swm) {
       signer.getBalance().then(setEthBalance);
       usdc.balanceOf(address).then(setUsdcBalance);
       swm.balanceOf(address).then(setSwmBalance);
     }
-  }, [signer, usdc, swm]);
+  }, [address, signer, usdc, swm]);
 
   if (loading) return <Loading />;
 
@@ -104,7 +104,7 @@ export default function WalletPage(): ReactElement {
   if (!filter.nonzeroBalance || ethBalance.gt(0)) {
     wallet.unshift({
       token: { name: 'Swarm Token', symbol: 'SWM', decimals: 18 } as TokenInfoFragment,
-      holder: { balance: ethBalance } as TokenHolderFragment,
+      holder: { balance: swmBalance } as TokenHolderFragment,
       special: true,
       image: '/images/swarm-symbol.svg',
     });
@@ -120,7 +120,7 @@ export default function WalletPage(): ReactElement {
   if (!filter.nonzeroBalance || swmBalance.gt(0)) {
     wallet.unshift({
       token: { name: 'Ethereum', symbol: 'ETH', decimals: 18 } as TokenInfoFragment,
-      holder: { balance: swmBalance } as TokenHolderFragment,
+      holder: { balance: ethBalance } as TokenHolderFragment,
       special: true,
       image: '/images/ethereum.svg',
     });
@@ -160,7 +160,8 @@ export default function WalletPage(): ReactElement {
       key: 'action',
       align: 'right' as AlignType,
       render: (record) =>
-        !record.special && (
+        !record.special &&
+        connected && (
           <Space size="small">
             <Button size="small" onClick={() => handleAction(WalletAction.Detail, record)}>
               Detail
@@ -197,20 +198,23 @@ export default function WalletPage(): ReactElement {
 
   return (
     <DefaultLayout title="Wallet">
-      <p>
-        <Checkbox
-          checked={filter.nonzeroBalance}
-          onChange={(val) => handleUpdateFilter('nonzeroBalance', val.target.checked)}
-        >
-          Show non-zero balances only
-        </Checkbox>
-      </p>
+      {connected && (
+        <p>
+          <Checkbox
+            checked={filter.nonzeroBalance}
+            onChange={(val) => handleUpdateFilter('nonzeroBalance', val.target.checked)}
+          >
+            Show non-zero balances only
+          </Checkbox>
+        </p>
+      )}
       <Table
         dataSource={wallet}
         columns={columns}
         className="wallet-table"
         rowClassName={(record) => record.special && 'special'}
       />
+      <RequireEthers message="The balances will only show when you connect to Ethereum" />
       <Drawer
         title={getActionTitle()}
         visible={action !== undefined}

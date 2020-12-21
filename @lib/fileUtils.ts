@@ -8,6 +8,7 @@ export interface AppFile {
   thumbUrl?: string;
   type: string;
   content: string;
+  url?: string;
 }
 
 export type AppImage = AppFile;

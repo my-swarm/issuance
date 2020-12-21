@@ -18,6 +18,7 @@ export type KyaFile = {
   thumbUrl?: string;
   type: string;
   content: string;
+  url?: string;
 };
 
 export type Kya = {
@@ -103,7 +104,8 @@ export class KyaStorage {
     if (found && found[1]) {
       const data = await this.ipfsCat(found[1], 'base64');
       const content = `data:${file.type};base64,${data}`;
-      return { ...file, content };
+      const url = KyaStorage.ipfsUrl(found[1]);
+      return { ...file, content, url };
     }
     throw new Error('Could not convert KyaFile content to CID');
   }
@@ -120,5 +122,9 @@ export class KyaStorage {
   private async ipfsCat(cid: string, encoding = 'utf-8'): Promise<string> {
     const data = uint8Array.concat(await all(this.ipfs.cat(cid)));
     return uint8Array.toString(data, encoding);
+  }
+
+  public static ipfsUrl(cid: string): string {
+    return `https://ipfs.io/ipfs/${cid}`;
   }
 }

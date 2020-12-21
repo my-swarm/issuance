@@ -13,7 +13,12 @@ export function FilePreview({ file }: FilePreviewProps): ReactElement {
 
   return (
     <div className="c-file-preview">
-      {file.name} <DownloadOutlined />
+      {file.name}{' '}
+      {file.url && (
+        <a href={file.url} target="_blank" rel="noopener noreferrer">
+          <DownloadOutlined />
+        </a>
+      )}
     </div>
   );
 }

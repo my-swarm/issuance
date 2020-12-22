@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Collapse } from 'antd';
+import { AddressZero } from '@ethersproject/constants';
 import { useAppState } from '@app';
 import {
   ManageAccountList,
@@ -41,7 +42,7 @@ export function TokenManage(): ReactElement {
           <ManageTransferHistory />
         </Collapse.Panel>
 
-        {token.transferRules && (
+        {token.transferRules?.address !== AddressZero && (
           <>
             <Collapse.Panel header="Transfer requests" key="requests">
               <ManageTransferRequests />

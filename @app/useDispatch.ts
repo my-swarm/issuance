@@ -87,13 +87,12 @@ export function useDispatch(): UseDispatchResult {
   };
 
   const setAccountProp = (address, prop, value) => {
-    dispatch({ type: 'setAccountProp', address, prop, value, networkId });
+    dispatch({ type: 'setAccountProp', address, prop, value });
   };
 
   const batchSetAccountProp = (items: AccountsMeta) => {
     dispatch({
       type: 'batchSetAccountProp',
-      networkId,
       items,
     });
   };

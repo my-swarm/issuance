@@ -106,8 +106,6 @@ interface SetAccountPropAction {
   type: 'setAccountProp';
   prop: 'name' | 'note';
   address: string;
-  // tokenId: string;
-  networkId: EthereumNetwork;
   value: string;
 }
 

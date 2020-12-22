@@ -172,13 +172,13 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       switch (prop) {
         case 'name':
           return unsynced({
-            accountNames: { ...(state.accountNames || {}), [address]: value },
+            accountNames: { ...(state.accountNames || {}), [address.toLowerCase()]: value },
           });
         case 'note':
           return unsynced({
             accountNotes: {
               ...(state.accountNotes || {}),
-              [tokenAddress]: { ...((state.accountNotes || {})[tokenAddress] || {}), [address]: value },
+              [tokenAddress]: { ...((state.accountNotes || {})[tokenAddress] || {}), [address.toLowerCase()]: value },
             },
           });
       }
@@ -186,16 +186,22 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
     }
 
     case 'batchSetAccountProp': {
-      const { networkId, items } = action;
-      const id = state.localToken.id;
+      const { items } = action;
+      const tokenAddress = state.onlineToken?.address;
 
-      const updatedToken = findToken(id);
-      for (const [address, { name, note }] of Object.entries(items)) {
-        if (name) _.set(updatedToken, ['networks', networkId, 'accounts', address.toLowerCase(), 'name'], name);
-        if (note) _.set(updatedToken, ['networks', networkId, 'accounts', address.toLowerCase(), 'note'], note);
+      const names: Record<string, string> = {};
+      const notes: Record<string, string> = {};
+      for (const [address, meta] of Object.entries(items)) {
+        names[address.toLowerCase()] = meta.name;
+        notes[address.toLowerCase()] = meta.note;
       }
+
       return unsynced({
-        tokens: withUpdatedToken(updatedToken),
+        accountNames: { ...(state.accountNames || {}), ...names },
+        accountNotes: {
+          ...(state.accountNotes || {}),
+          [tokenAddress]: { ...((state.accountNotes || {})[tokenAddress] || {}), ...notes },
+        },
       });
     }
 

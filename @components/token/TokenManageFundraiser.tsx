@@ -23,7 +23,7 @@ export function TokenManageFundraiser(): ReactElement {
 
   return (
     <div>
-      <Collapse defaultActiveKey={['status']}>
+      <Collapse defaultActiveKey={[]}>
         <Collapse.Panel header="Overview" key="overview">
           <Space direction="vertical">
             <FundraiserInfoCommon fundraiser={fundraiser} column={2} />
@@ -38,7 +38,7 @@ export function TokenManageFundraiser(): ReactElement {
             <ManageAffiliates affiliates={fundraiser.affiliates} />
           </Collapse.Panel>
         )}
-        <Collapse.Panel header="Status control" key="status">
+        <Collapse.Panel header="Stake &amp; Mint" key="status">
           <ManageFundraiserState fundraiser={fundraiser} />
         </Collapse.Panel>
       </Collapse>

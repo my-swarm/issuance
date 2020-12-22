@@ -59,20 +59,21 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
 
   const raisedSoft = (
     <>
-      Soft Cap <strong>{formatUnits(amountQualified, baseCurrency.decimals)}</strong> of{' '}
+      Soft Cap: raised <strong>{formatUnits(amountQualified, baseCurrency.decimals)}</strong> of{' '}
       <strong>{formatUnits(softCap, baseCurrency.decimals)}</strong> {baseCurrency.symbol}
     </>
   );
 
   const raisedHard = (
     <>
-      Hard Cap <strong>{formatUnits(amountQualified, baseCurrency.decimals)}</strong> of{' '}
+      Hard Cap: raised <strong>{formatUnits(amountQualified, baseCurrency.decimals)}</strong> of{' '}
       <strong>{formatUnits(hardCap, baseCurrency.decimals)}</strong> {baseCurrency.symbol}
     </>
   );
 
   return (
     <div>
+      {/*
       {!statusFinished && (
         <>
           <h2>Cancel fundraiser</h2>
@@ -90,21 +91,24 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
         </>
       )}
       <h2>Stake and mint</h2>
+*/}
       {statusFinished ? (
         <p>Fundraiser is finished and your tokens should already be minted</p>
       ) : (
         <>
-          <p>When fundraiser is finished, you&apos;ll ba able to Stake SWM and mint your tokens here</p>
-          <p>
-            {statusRunning ? (
-              <Tag color="green">
-                <CheckOutlined /> Fundraiser is running
-              </Tag>
-            ) : (
-              <Tag color="red">
-                <WarningOutlined /> Fundraiser status is <strong>{fundraiser.status}</strong>
-              </Tag>
-            )}
+          {allowStakeAndMint ? (
+            <p>Your token is ready to be minted</p>
+          ) : (
+            <>
+              <p>Tokens can be minted when one of these conditions is true:</p>
+              <ul>
+                <li>Hard Cap is reached</li>
+                <li>Soft Cap is reached and the fundraiser is beyond the end date</li>
+              </ul>
+            </>
+          )}
+
+          <div className="mb-2">
             {raisedEnoughSoft ? (
               <Tag color="green">
                 <CheckOutlined /> {raisedSoft}
@@ -114,6 +118,8 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
                 <WarningOutlined /> {raisedSoft}
               </Tag>
             )}
+          </div>
+          <div className="mb-2">
             {raisedEnoughHard ? (
               <Tag color="green">
                 <CheckOutlined /> {raisedHard}
@@ -123,16 +129,19 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
                 <WarningOutlined /> {raisedHard}
               </Tag>
             )}
+          </div>
+          <div className="mb-2">
             {afterEndDate ? (
               <Tag color="green">
-                <CheckOutlined /> End Date reached
+                <CheckOutlined /> End Date: reached
               </Tag>
             ) : (
               <Tag color="red">
-                <WarningOutlined /> End Date not reached
+                <WarningOutlined /> End Date: not reached
               </Tag>
             )}
-          </p>
+          </div>
+
           <p>
             <Button disabled={!allowStakeAndMint} size="large" type="primary" onClick={handleStakeAndMint}>
               Stake &amp; Mint

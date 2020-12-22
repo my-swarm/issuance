@@ -128,3 +128,7 @@ export const tokenFeatures = {
   allowBurn: 'Allow Burn',
   allowMint: 'Allow Mint',
 };
+
+export function processNewToken(token: LocalToken) {
+  return { ...token, assetLegalDocuments: token.assetLegalDocuments || [] };
+}

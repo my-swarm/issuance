@@ -39,7 +39,7 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
       <Form.Item name="name" label="Token name" rules={rules.name}>
         <Input placeholder="Your token name" />
       </Form.Item>
-      <Form.Item name="symbol" label="Symbol" rules={rules.symbol}>
+      <Form.Item name="symbol" label="Symbol" rules={rules.symbol} normalize={(x) => x.toUpperCase()}>
         <Input placeholder="XXX" />
       </Form.Item>
       <Form.Item name="decimals" label="Decimals" rules={rules.decimals}>

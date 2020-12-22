@@ -20,7 +20,7 @@ export function TokenInfoBasics(): ReactElement {
     return (
       <>
         <Descriptions.Item label="Max Token supply">
-          {formatNumber(localToken.totalSupply)} {token.symbol}
+          {localToken.totalSupply ? `${formatNumber(localToken.totalSupply)} ${token.symbol}` : 'unlimited'}
         </Descriptions.Item>
         <Descriptions.Item label="Transfer restrictions">
           {transferRules[localToken.transferRestrictionsType]}

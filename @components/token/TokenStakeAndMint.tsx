@@ -2,8 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { Button, Divider, Form, Input, InputNumber } from 'antd';
 
 import { useAppState, useContract, useDispatch, useGraphql } from '@app';
-import { Box, StakeTable, TokenInfoMinting, TokenInfoStaking } from '..';
-import { BigNumber } from 'ethers';
+import { Box, StakeTable, TokenInfoStaking } from '..';
 import { formatUnits, parseUnits } from '@lib';
 
 interface TokenStakeAndMintProps {

@@ -10,6 +10,5 @@ export * from './TokenInfoDeploy';
 export * from './TokenInfoAsset';
 export * from './TokenInfoDeployed';
 export * from './TokenInfoStaking';
-export * from './TokenInfoMinting';
 export * from './TokenStartFundraiser';
 export * from './TokenManageFundraiser';

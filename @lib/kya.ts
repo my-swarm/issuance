@@ -27,7 +27,7 @@ export function tokenToKya(token: LocalTokenKya): Kya {
       description: token.assetDescription,
       image: token.assetImage,
       navDocument: token.assetNavDocument,
-      legalDocuments: token.assetLegalDocuments,
+      legalDocuments: token.assetLegalDocuments || [],
     },
   };
 }
@@ -41,7 +41,7 @@ export function kyaToToken(kya: Kya, nav: number): LocalTokenKya {
     assetNetValue: nav,
     assetNavDocument: kya.asset.navDocument,
     assetImage: kya.asset.image,
-    assetLegalDocuments: kya.asset.legalDocuments,
+    assetLegalDocuments: kya.asset.legalDocuments || [],
   };
 }
 

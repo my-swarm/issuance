@@ -11,6 +11,7 @@ import {
   tokenStates,
   OnlineToken,
   DeployerState,
+  processNewToken,
 } from '@lib';
 import { useTokensQuery } from '@graphql';
 import {
@@ -150,7 +151,7 @@ export default function Tokens(): ReactElement {
   const handleSubmit = (newToken: LocalToken) => {
     switch (action) {
       case TokenAction.Create:
-        dispatch({ type: 'addToken', token: newToken });
+        dispatch({ type: 'addToken', token: processNewToken(newToken) });
         break;
       case TokenAction.Edit:
         dispatch({ type: 'updateToken', token: { id: localToken.id, ...newToken } });

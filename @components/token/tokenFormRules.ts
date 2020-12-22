@@ -37,8 +37,18 @@ export const tokenFormRules = {
   allowBurn: [],
   allowMint: [],
 
-  assetName: [],
-  assetNetValue: [],
+  assetName: [
+    {
+      required: true,
+      message: 'Give your asset a name',
+    },
+  ],
+  assetNetValue: [
+    {
+      required: true,
+      message: `Enter your asset's net value`,
+    },
+  ],
   assetNavDocument: [],
   assetDescription: [],
   assetImage: [],

@@ -9,7 +9,7 @@ export function TokenInfoDeploy(): ReactElement {
   return (
     <Descriptions title="General token info" layout="vertical" size="small" className="mb-3">
       <Descriptions.Item label="Max Token supply">
-        {formatNumber(localToken.totalSupply)} {localToken.symbol}
+        {localToken.totalSupply ? `${formatNumber(localToken.totalSupply)} ${localToken.symbol}` : 'unlimited'}
       </Descriptions.Item>
       <Descriptions.Item label="Initial token price">{formatNumber(123, 3)} USD</Descriptions.Item>
       <Descriptions.Item label="Future minting allowed">{localToken.allowMint ? 'Yes' : 'No'}</Descriptions.Item>

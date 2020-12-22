@@ -20,7 +20,7 @@ export function TransactionModal(): ReactElement {
       const contract: string | [string, string] = transaction.address
         ? [transaction.contract, transaction.address]
         : transaction.contract;
-      proxy.call(contract, transaction.method, transaction.arguments).catch((e) => {
+      proxy.call(contract, transaction.method, transaction.arguments, {}, transaction.overrides || {}).catch((e) => {
         console.error(e);
         setTransactionState(TransactionState.Error);
         if (e.code === 4001) {

@@ -40,12 +40,16 @@ export function ManageDividends(): ReactElement {
     const sum = Object.values(addresses).reduce((sum, x) => sum + x, 0);
     const recipients = Object.keys(addresses);
     const values = Object.values(addresses).map((ratio) => parseUnits((ratio / sum) * data.amount, decimals));
+    const sumUnits = values.reduce((sum = BigNumber.from(0), x) => sum.add(x));
 
     if (data.type === 'eth') {
       dispatchTransaction({
-        method: 'disperse.disperseEth',
+        method: 'disperse.disperseEther',
         arguments: [recipients, values],
         description: 'Distributing Eth',
+        overrides: {
+          value: sumUnits,
+        },
       });
     } else {
       dispatchTransaction({
@@ -106,7 +110,7 @@ export function ManageDividends(): ReactElement {
           label="Amount to distribute"
           rules={[{ required: true, message: 'Amount is required' }]}
         >
-          <InputNumber min={1} />
+          <InputNumber min={0} />
         </Form.Item>
         <Form.Item
           name="addresses"

@@ -1,11 +1,6 @@
-import { Contract, Signer, Transaction, Event } from 'ethers';
+import { Contract, Signer, Transaction, Event, CallOverrides } from 'ethers';
 import { EthereumNetwork, OnlineToken, TransactionEventCallback, TransactionState } from '@lib';
 import { getContractFactory, getContract, getContractAbi } from './contracts';
-
-interface ContractOptions {
-  gasPrice?: number;
-  gasLimit?: number;
-}
 
 export class ContractProxy {
   private readonly _signer: Signer;
@@ -29,7 +24,7 @@ export class ContractProxy {
     console.log('ContractProxy.deploy', { contractName, args });
     const contractFactory = getContractFactory(contractName, this.signer);
     this.handleStateChange(TransactionState.Signing);
-    const contractInstance = await contractFactory.deploy(...args, await this.getOptions());
+    const contractInstance = await contractFactory.deploy(...args, await this.getOverrides());
     this.handleStateChange(TransactionState.Confirming);
     await contractInstance.deployTransaction.wait();
     this.handleStateChange(TransactionState.Confirmed);
@@ -41,8 +36,9 @@ export class ContractProxy {
     method: string,
     args: Array<any> = [],
     events: { [index: string]: (event: Event) => void } = {},
+    overrides: CallOverrides = {},
   ): Promise<Transaction> {
-    console.log('ContractProxy.call', { contractName, method, args, events });
+    console.log('ContractProxy.call', { contractName, method, args, events, overrides });
     this.handleStateChange(TransactionState.None);
     let contract;
     if (typeof contractName === 'string') {
@@ -54,20 +50,23 @@ export class ContractProxy {
       contract.once(eventName, (oldValue, newValue) => eventHandler(newValue));
     }
     this.handleStateChange(TransactionState.Signing);
-    const transaction = await contract[method](...args, await this.getOptions());
+    const transaction = await contract[method](...args, await this.getOverrides(overrides));
     this.handleStateChange(TransactionState.Confirming, transaction);
     await transaction.wait();
     this.handleStateChange(TransactionState.Confirmed, transaction);
     return transaction;
   }
 
-  private async getOptions(): Promise<ContractOptions> {
-    const result: ContractOptions = {};
+  private async getOverrides(overrides: CallOverrides = {}): Promise<CallOverrides> {
+    const result: CallOverrides = {};
     const networkId = await this.signer.getChainId();
     if (networkId === EthereumNetwork.Kovan) {
       result.gasPrice = 1000000000; // 1 gwei
     }
-    return result;
+    return {
+      ...overrides,
+      ...result,
+    };
   }
 
   public onProgress(callback: TransactionEventCallback): void {

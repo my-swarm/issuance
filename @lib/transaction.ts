@@ -1,4 +1,4 @@
-import { BigNumber, Contract, Transaction as EthersTransaction } from 'ethers';
+import { BigNumber, CallOverrides, Contract, Transaction as EthersTransaction } from 'ethers';
 
 export enum TransactionState {
   None,
@@ -19,6 +19,7 @@ export interface Transaction {
   contract?: string;
   method: string;
   arguments?: any[];
+  overrides?: CallOverrides;
   description?: string;
   onSuccess?: () => void;
   address?: string;

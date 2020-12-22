@@ -26,7 +26,9 @@ export function FundraiserForm({
   disabled = false,
 }: FundraiserFormProps): ReactElement {
   const [startNow, setStartNow] = useState(formData?.startNow || false);
-  const [supplyAndPriceEmpty, setSupplyAndPriceEmpty] = useState<boolean>(true);
+  const [supplyAndPriceEmpty, setSupplyAndPriceEmpty] = useState<boolean>(
+    !formData?.tokensToMint && !formData?.tokenPrice,
+  );
   const [form] = Form.useForm();
   const [submitButton, setSubmitButton] = useState<string>();
   const { networkId, network } = useEthers();

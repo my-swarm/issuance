@@ -69,19 +69,17 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
           <h3 className="side-box-title">
             <Space>
               <MailOutlined />
-              <span>Contact us</span>
+              <span>Get in touch</span>
             </Space>
           </h3>
           <div className="side-box-body">
             <div className="mb-2">
-              email:
-              <br />
               <a href="mailto:info@myswarm.app">info@myswarm.app</a>
             </div>
             <div>
-              telegram:
-              <br />
-              <a href="#">xxxxxx</a>
+              <a href="https://t.me/joinchat/G8Tp9xgq2FpCSuKs6W4IXg" target="_blank" rel="noreferrer noopener">
+                telegram
+              </a>
             </div>
           </div>
         </div>

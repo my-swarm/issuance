@@ -101,5 +101,6 @@ query FundraiserWithContributors($id: ID!) {
     ...Fundraiser
     ...FundraiserContributors
     ...FundraiserAffiliates
+    ...FundraiserToken
   }
 }

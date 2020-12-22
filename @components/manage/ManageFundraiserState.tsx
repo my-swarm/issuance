@@ -1,14 +1,13 @@
 import React, { ReactElement } from 'react';
 import { Button, Popconfirm, Tag } from 'antd';
 import { useContractAddress, useDispatch, useGraphql } from '@app';
-import { FundraiserInfoFragment, FundraiserStatus } from '@graphql';
+import { FundraiserStatus, FundraiserWithContributorsFragment } from '@graphql';
 import { BigNumber } from 'ethers';
 import { CheckOutlined, WarningOutlined } from '@ant-design/icons';
 import { formatUnits, parseUnits, BASE_CURRENCIES, SWM_TOKEN_DECIMALS } from '@lib';
-import dayjs from 'dayjs';
 
 interface ManageFundraiserStateProps {
-  fundraiser: FundraiserInfoFragment;
+  fundraiser: FundraiserWithContributorsFragment;
 }
 
 const baseCurrency = BASE_CURRENCIES.USDC;
@@ -28,16 +27,24 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
     });
   };
 
-  const handleStakeAndMint = () => {
-    checkAllowance('registry', swmAddress, parseUnits(1000, SWM_TOKEN_DECIMALS), () => {
-      dispatchTransaction({
-        method: 'fundraiser.stakeAndMint',
-        description: 'Staking and minting...',
-        onSuccess: () => {
-          reset();
-        },
-      });
-    });
+  const handleStakeAndMint = async () => {
+    const stakeAmount = 1000; //await minter.calcStake(fundraiser.token.nav);
+    checkAllowance(
+      ['fundraiser', fundraiser.address],
+      fundraiser.token.address,
+      parseUnits(1000, SWM_TOKEN_DECIMALS),
+      () => {
+        checkAllowance('registry', swmAddress, parseUnits(1000, SWM_TOKEN_DECIMALS), () => {
+          dispatchTransaction({
+            method: 'fundraiser.stakeAndMint',
+            description: 'Staking and minting...',
+            onSuccess: () => {
+              reset();
+            },
+          });
+        });
+      },
+    );
   };
 
   const statusFinished = fundraiser.status === FundraiserStatus.Finished;
@@ -66,18 +73,22 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
 
   return (
     <div>
-      <h2>Cancel fundraiser</h2>
-      <p>Stops the fundraiser and returns all funds back to contributors.</p>
-      <p>
-        <Popconfirm
-          title="Are you 100% sure you want to cancel the fundraiser? There is no way back!"
-          onConfirm={handleCancel}
-        >
-          <Button size="large" type="primary" danger>
-            Cancel fundraiser
-          </Button>
-        </Popconfirm>
-      </p>
+      {!statusFinished && (
+        <>
+          <h2>Cancel fundraiser</h2>
+          <p>Stops the fundraiser and returns all funds back to contributors.</p>
+          <p>
+            <Popconfirm
+              title="Are you 100% sure you want to cancel the fundraiser? There is no way back!"
+              onConfirm={handleCancel}
+            >
+              <Button size="large" type="primary" danger>
+                Cancel fundraiser
+              </Button>
+            </Popconfirm>
+          </p>
+        </>
+      )}
       <h2>Stake and mint</h2>
       {statusFinished ? (
         <p>Fundraiser is finished and your tokens should already be minted</p>

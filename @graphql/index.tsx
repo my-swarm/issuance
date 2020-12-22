@@ -2141,6 +2141,7 @@ export type FundraiserWithContributorsQuery = (
     & FundraiserFragment
     & FundraiserContributorsFragment
     & FundraiserAffiliatesFragment
+    & FundraiserTokenFragment
   )> }
 );
 
@@ -2763,11 +2764,13 @@ export const FundraiserWithContributorsDocument = gql`
     ...Fundraiser
     ...FundraiserContributors
     ...FundraiserAffiliates
+    ...FundraiserToken
   }
 }
     ${FundraiserFragmentDoc}
 ${FundraiserContributorsFragmentDoc}
-${FundraiserAffiliatesFragmentDoc}`;
+${FundraiserAffiliatesFragmentDoc}
+${FundraiserTokenFragmentDoc}`;
 
 /**
  * __useFundraiserWithContributorsQuery__

@@ -33,7 +33,7 @@ export function bnCompare(a: BigNumber, b: BigNumber) {
   return 0;
 }
 
-export function bnRatio(a: BigNumberish, b: BigNumberish, precision = 16) {
+export function bnRatio(a: BigNumberish, b: BigNumberish, precision = 8) {
   const multiplier = BigNumber.from(10).pow(precision);
   return BigNumber.from(a).mul(multiplier).div(BigNumber.from(b)).toNumber() / 10 ** precision;
 }

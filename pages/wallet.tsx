@@ -111,7 +111,7 @@ export default function WalletPage(): ReactElement {
   }
   if (!filter.nonzeroBalance || usdcBalance.gt(0)) {
     wallet.unshift({
-      token: { name: 'Stable Coin', symbol: 'USDC', decimals: 18 } as TokenInfoFragment,
+      token: { name: 'Stable Coin', symbol: 'USDC', decimals: 6 } as TokenInfoFragment,
       holder: { balance: usdcBalance } as TokenHolderFragment,
       special: true,
       image: '/images/usdc.svg',

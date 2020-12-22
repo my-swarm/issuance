@@ -43,7 +43,7 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
   const statusRunning = fundraiser.status === FundraiserStatus.Running;
   const amountQualified = BigNumber.from(fundraiser.amountQualified);
   const softCap = BigNumber.from(fundraiser.softCap);
-  const raisedEnough = amountQualified.gt(softCap);
+  const raisedEnough = amountQualified.gte(softCap);
   const allowStakeAndMint = statusRunning && raisedEnough;
 
   const raised = (

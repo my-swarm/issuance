@@ -3,8 +3,15 @@ import { Layout, PageHeader, Modal, Space } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
 
-import { Logo, MetamaskStatus, StateStorageSync, TransactionModal, SpendingApprovalModal } from '@components';
-import { MainMenu } from '@components/layout/MainMenu';
+import {
+  Logo,
+  MetamaskStatus,
+  StateStorageSync,
+  TransactionModal,
+  SpendingApprovalModal,
+  MainMenu,
+  Footer,
+} from '@components';
 import { isDev, useAppState } from '@app';
 import { MailOutlined } from '@ant-design/icons';
 
@@ -80,13 +87,18 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
         </div>
       </Sider>
       <Content>
-        <PageHeader
-          title={title}
-          backIcon={false}
-          extra={headExtra}
-          className={headTableAligned ? `table-aligned` : ``}
-        />
-        {children}
+        <div className="content-content">
+          <PageHeader
+            title={title}
+            backIcon={false}
+            extra={headExtra}
+            className={headTableAligned ? `table-aligned` : ``}
+          />
+          {children}
+        </div>
+        <div className="content-footer">
+          <Footer />
+        </div>
         {transaction && <TransactionModal />}
         {spendingApproval && <SpendingApprovalModal />}
       </Content>

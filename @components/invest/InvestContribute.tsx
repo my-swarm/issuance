@@ -4,6 +4,7 @@ import { useFundraiserLazyQuery } from '@graphql';
 import { Address, Help, Loading, RequireEthers, VSpace } from '@components';
 import { useDispatch, useErc20Balance, useEthers, useGraphql } from '@app';
 import { formatUnits, parseUnits } from '@lib';
+import { BigNumber } from 'ethers';
 
 const { Title } = Typography;
 
@@ -100,7 +101,7 @@ export function InvestContribute({ id }: InvestContributeProps): ReactElement {
           <InputNumber min={1} max={balance.raw ? parseFloat(balance.nice) : 1} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" disabled={balance && (balance.raw as BigNumber).gt(0)}>
             Contribute
           </Button>
         </Form.Item>

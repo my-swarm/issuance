@@ -66,7 +66,7 @@ export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInves
               <ImagePreview image={kya.token.image} fitWidth />
             </Col>
             <Col span={16}>
-              <Typography.Text type="secondary">{kya.token.description.substr(0, 160)}</Typography.Text>
+              <Typography.Text type="secondary">{(kya.token.description || '').substr(0, 160)}</Typography.Text>
             </Col>
           </Row>
         ) : (

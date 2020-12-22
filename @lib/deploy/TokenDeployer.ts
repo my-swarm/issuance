@@ -74,7 +74,7 @@ export class TokenDeployer extends Deployer {
     const { kyaHash, kyaUrl } = await storeKya(kya);
 
     let supply = totalSupply;
-    if (allowUnlimitedSupply) {
+    if (!supply || allowUnlimitedSupply) {
       supply = 0;
     }
 

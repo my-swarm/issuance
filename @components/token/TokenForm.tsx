@@ -53,7 +53,15 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
         mint your tokens later.
       </p>
       <Space size="large">
-        <Form.Item name="totalSupply">
+        <Form.Item
+          name="totalSupply"
+          rules={[
+            {
+              required: !allowUnlimitedSupply,
+              message: 'Enter maximum supply or check unlimited',
+            },
+          ]}
+        >
           <InputNumber disabled={allowUnlimitedSupply} />
         </Form.Item>
         <Form.Item name="allowUnlimitedSupply" valuePropName="checked">

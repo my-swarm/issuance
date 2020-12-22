@@ -19,8 +19,8 @@ export function TokenInfoBasics(): ReactElement {
 
     return (
       <>
-        <Descriptions.Item label="Initial Token supply">
-          {formatNumber(localToken.initialSupply)} {token.symbol}
+        <Descriptions.Item label="Max Token supply">
+          {formatNumber(localToken.totalSupply)} {token.symbol}
         </Descriptions.Item>
         <Descriptions.Item label="Transfer restrictions">
           {transferRules[localToken.transferRestrictionsType]}

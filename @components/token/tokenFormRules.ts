@@ -21,12 +21,6 @@ export const tokenFormRules = {
       message: 'Enter your token decimals. 18 is the sweet spot value',
     },
   ],
-  initialSupply: [
-    {
-      required: true,
-      message: 'Enter initial token supply',
-    },
-  ],
   image: [],
   description: [],
 

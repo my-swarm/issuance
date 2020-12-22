@@ -38,7 +38,6 @@ export const devDefaultToken: LocalToken = {
   symbol: 'NWT',
   decimals: 18,
   description: 'Completely new token',
-  initialSupply: 1000,
   totalSupply: 5000,
   transferRestrictionsType: TransferRules.None,
   allowAccountFreeze: true,

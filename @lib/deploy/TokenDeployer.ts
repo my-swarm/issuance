@@ -68,27 +68,14 @@ export class TokenDeployer extends Deployer {
     if (this.state > DeployerState.Token) return;
 
     this.handleStateChange(DeployerState.Token);
-    const {
-      name,
-      symbol,
-      decimals,
-      initialSupply,
-      allowUnlimitedSupply,
-      totalSupply,
-      allowMint,
-      assetNetValue,
-    } = this.token;
+    const { name, symbol, decimals, allowUnlimitedSupply, totalSupply, allowMint, assetNetValue } = this.token;
 
     const kya = tokenToKya(this.token);
     const { kyaHash, kyaUrl } = await storeKya(kya);
 
-    let supply = initialSupply;
-    if (allowMint) {
-      if (allowUnlimitedSupply) {
-        supply = 0;
-      } else if (totalSupply > initialSupply) {
-        supply = totalSupply;
-      }
+    let supply = totalSupply;
+    if (allowUnlimitedSupply) {
+      supply = 0;
     }
 
     const params = [

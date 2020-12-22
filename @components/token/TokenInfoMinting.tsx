@@ -10,15 +10,12 @@ export function TokenInfoMinting(): ReactElement {
 
   return (
     <Descriptions title="Minting information" layout="vertical" size="small" className="mb-3" bordered column={3}>
-      <Descriptions.Item label="Initial Token supply">
-        {formatNumber(localToken.initialSupply)} {token.symbol}
+      <Descriptions.Item label="Max Token supply">
+        {formatNumber(localToken.totalSupply)} {token.symbol}
       </Descriptions.Item>
       <Descriptions.Item label="Future minting allowed">{localToken.allowMint ? 'Yes' : 'No'}</Descriptions.Item>
       <Descriptions.Item label="Maximum supply">
-        {localToken.allowUnlimitedSupply
-          ? 'Unlimited'
-          : formatNumber(localToken.totalSupply || localToken.initialSupply)}{' '}
-        {token.symbol}
+        {localToken.allowUnlimitedSupply ? 'Unlimited' : formatNumber(localToken.totalSupply)} {token.symbol}
       </Descriptions.Item>
     </Descriptions>
   );

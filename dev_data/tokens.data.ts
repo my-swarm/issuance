@@ -26,7 +26,6 @@ function createImage(name) {
 
 const tokenDefaults: Partial<LocalToken> = {
   decimals: 18,
-  initialSupply: 10000,
   description:
     'Testing token description. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nulla metus, tempus non mauris vitae, faucibus congue magna. Vestibulum non cursus dui, eget euismod turpis. Sed id tristique odio, vel pulvinar nunc. Nam facilisis vitae odio eu pharetra. Ut tempor faucibus odio. Mauris eu faucibus quam. Duis odio mauris, commodo in sodales id, auctor vel orci. Nulla mollis ultrices diam, sed consequat magna tempor sit amet. Maecenas malesuada felis eros, vitae venenatis purus porta a. Suspendisse gravida fringilla lorem, at vehicula turpis porttitor at. Nullam sed efficitur magna.',
   transferRestrictionsType: TransferRules.WhitelistOrGreylist,

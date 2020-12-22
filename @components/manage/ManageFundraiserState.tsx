@@ -5,6 +5,7 @@ import { FundraiserInfoFragment, FundraiserStatus } from '@graphql';
 import { BigNumber } from 'ethers';
 import { CheckOutlined, WarningOutlined } from '@ant-design/icons';
 import { formatUnits, parseUnits, BASE_CURRENCIES, SWM_TOKEN_DECIMALS } from '@lib';
+import dayjs from 'dayjs';
 
 interface ManageFundraiserStateProps {
   fundraiser: FundraiserInfoFragment;
@@ -43,13 +44,23 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
   const statusRunning = fundraiser.status === FundraiserStatus.Running;
   const amountQualified = BigNumber.from(fundraiser.amountQualified);
   const softCap = BigNumber.from(fundraiser.softCap);
-  const raisedEnough = amountQualified.gte(softCap);
-  const allowStakeAndMint = statusRunning && raisedEnough;
+  const hardCap = BigNumber.from(fundraiser.hardCap);
+  const raisedEnoughSoft = amountQualified.gte(softCap);
+  const raisedEnoughHard = amountQualified.gte(hardCap);
+  const afterEndDate = fundraiser.endDate < Date.now() / 1000;
+  const allowStakeAndMint = statusRunning && (raisedEnoughHard || (raisedEnoughSoft && afterEndDate));
 
-  const raised = (
+  const raisedSoft = (
     <>
-      Raised <strong>{formatUnits(amountQualified, baseCurrency.decimals)}</strong> of{' '}
+      Soft Cap <strong>{formatUnits(amountQualified, baseCurrency.decimals)}</strong> of{' '}
       <strong>{formatUnits(softCap, baseCurrency.decimals)}</strong> {baseCurrency.symbol}
+    </>
+  );
+
+  const raisedHard = (
+    <>
+      Hard Cap <strong>{formatUnits(amountQualified, baseCurrency.decimals)}</strong> of{' '}
+      <strong>{formatUnits(hardCap, baseCurrency.decimals)}</strong> {baseCurrency.symbol}
     </>
   );
 
@@ -83,13 +94,31 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
                 <WarningOutlined /> Fundraiser status is <strong>{fundraiser.status}</strong>
               </Tag>
             )}
-            {raisedEnough ? (
+            {raisedEnoughSoft ? (
               <Tag color="green">
-                <CheckOutlined /> {raised}
+                <CheckOutlined /> {raisedSoft}
               </Tag>
             ) : (
               <Tag color="red">
-                <CheckOutlined /> {raised}
+                <WarningOutlined /> {raisedSoft}
+              </Tag>
+            )}
+            {raisedEnoughHard ? (
+              <Tag color="green">
+                <CheckOutlined /> {raisedHard}
+              </Tag>
+            ) : (
+              <Tag color="red">
+                <WarningOutlined /> {raisedHard}
+              </Tag>
+            )}
+            {afterEndDate ? (
+              <Tag color="green">
+                <CheckOutlined /> End Date reached
+              </Tag>
+            ) : (
+              <Tag color="red">
+                <WarningOutlined /> End Date not reached
               </Tag>
             )}
           </p>

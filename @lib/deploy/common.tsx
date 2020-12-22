@@ -74,8 +74,8 @@ export const deployerStatesMeta: DeployerStatesMeta = {
     percent: 75,
   },
   [DeployerState.Finished]: {
-    message: 'Token deployment is finished',
-    description: <p>You can now mint or start a fundraiser</p>,
+    message: 'Deployment is finished',
+    description: null,
     percent: 100,
   },
   /*

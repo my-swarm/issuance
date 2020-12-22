@@ -10,8 +10,8 @@ export function useGraphql() {
   const timeouts = [3000, 9000];
 
   function doReset() {
-    client.stop();
-    client.cache.reset();
+    // client.stop();
+    // client.cache.reset();
     client.resetStore();
   }
 

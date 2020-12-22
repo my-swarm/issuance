@@ -101,7 +101,7 @@ export function InvestContribute({ id }: InvestContributeProps): ReactElement {
           <InputNumber min={1} max={balance.raw ? parseFloat(balance.nice) : 1} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" disabled={balance && (balance.raw as BigNumber).gt(0)}>
+          <Button type="primary" htmlType="submit" disabled={!balance.raw || (balance.raw as BigNumber).eq(0)}>
             Contribute
           </Button>
         </Form.Item>

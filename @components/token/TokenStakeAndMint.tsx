@@ -1,50 +1,96 @@
-import React, { ReactElement } from 'react';
-import { Button, Divider } from 'antd';
+import React, { ReactElement, useState } from 'react';
+import { Button, Divider, Form, Input, InputNumber } from 'antd';
 
 import { useAppState, useContract, useDispatch, useGraphql } from '@app';
-import { StakeTable, TokenInfoMinting, TokenInfoStaking } from '..';
+import { Box, StakeTable, TokenInfoMinting, TokenInfoStaking } from '..';
 import { BigNumber } from 'ethers';
+import { formatUnits, parseUnits } from '@lib';
 
 interface TokenStakeAndMintProps {
   onCancel: () => void;
 }
 
+interface FormData {
+  supply: string;
+}
+
 export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactElement {
-  const [{ onlineToken: token, localToken }] = useAppState();
+  const [{ onlineToken: token }] = useAppState();
   const { swm, minter } = useContract();
   const { checkAllowance, dispatchTransaction } = useDispatch();
   const { reset } = useGraphql();
+  const [form] = Form.useForm();
+  const [isStaked, setIsStaked] = useState<boolean>(false);
 
-  const handleStakeAndMint = async () => {
+  const handleStakeAndMint = async (values: FormData) => {
     const stakeAmount = await minter.calcStake(token.nav);
+    console.log('handleStakeANdMint', values, stakeAmount);
 
     checkAllowance('registry', swm.address, stakeAmount, () => {
       dispatchTransaction({
         method: 'minter.stakeAndMint',
-        arguments: [token.address, localToken.initialSupply],
+        arguments: [token.address, parseUnits(values.supply, token.decimals)],
         description: 'Minting Your Token...',
         onSuccess: () => {
           reset();
+          setIsStaked(true);
         },
       });
     });
   };
 
+  const maxSupply = parseFloat(formatUnits(token.maxSupply, token.decimals));
+  console.log({ token, maxSupply });
+
+  const normalizeSupply = (x) => {
+    const supply = parseFloat(x);
+    return maxSupply === 0 ? supply || '' : Math.min(maxSupply, supply) || '';
+  };
+
   return (
     <div>
       <TokenInfoStaking />
-      <TokenInfoMinting />
-      <div className="mb-3">
-        {BigNumber.from(token.stake).gt(0) ? (
-          <Button size="large" onClick={onCancel}>
-            Token minted! Close.
-          </Button>
-        ) : (
-          <Button type="primary" size="large" onClick={handleStakeAndMint}>
-            Stake &amp; Mint
-          </Button>
-        )}
-      </div>
+
+      {isStaked ? (
+        <>
+          <p>Your token has been minted!</p>
+          <p>
+            <Button onClick={onCancel}>Close</Button>
+          </p>
+        </>
+      ) : (
+        <Box>
+          <Form
+            form={form}
+            onFinish={handleStakeAndMint}
+            layout="horizontal"
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 14 }}
+          >
+            <Form.Item label="Maximum supply">
+              <strong>{maxSupply === 0 ? 'unlimited' : `${maxSupply} ${token.symbol}`}</strong>
+            </Form.Item>
+            <Form.Item
+              name="supply"
+              label="Initial supply"
+              normalize={normalizeSupply}
+              rules={[
+                { required: true, message: 'Enter initial supply' },
+                // { type: 'number' },
+                // ...(maxSupply === 0 ? [] : [{ max: maxSupply, message: 'Cannot exceed maximum supply' }]),
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
+              <Button htmlType="submit" type="primary" size="large">
+                Stake &amp; Mint
+              </Button>
+            </Form.Item>
+          </Form>
+        </Box>
+      )}
+
       <Divider />
 
       <h3>How does this work</h3>

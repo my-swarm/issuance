@@ -57,7 +57,6 @@ export interface LocalToken extends LocalTokenKya {
   name: string;
   symbol: string;
   decimals: number;
-  initialSupply: number;
   totalSupply?: number;
   allowUnlimitedSupply?: boolean;
   transferRestrictionsType: TransferRules;

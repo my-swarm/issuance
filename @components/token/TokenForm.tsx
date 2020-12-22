@@ -17,8 +17,6 @@ interface TokenFormProps {
 const defaultToken = isDev ? devDefaultToken : undefined;
 
 export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: TokenFormProps): ReactElement {
-  const [initialSupply, setInitialSupply] = useState<number>(formData?.initialSupply || 0);
-  const [showMintSection, setShowMintSection] = useState<boolean>(formData?.allowMint || false);
   const [allowUnlimitedSupply, setallowUnlimitedSupply] = useState<boolean>(formData?.allowUnlimitedSupply || false);
   const [form] = Form.useForm();
 
@@ -29,10 +27,6 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
 
   const handleSubmit = (token: Store) => {
     onSubmit(token as LocalToken);
-  };
-
-  const handleToggleAdditionalMinting = (e: CheckboxChangeEvent) => {
-    setShowMintSection(e.target.checked);
   };
 
   const handleToggleallowUnlimitedSupply = (e: CheckboxChangeEvent) => {
@@ -51,12 +45,23 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
       <Form.Item name="decimals" label="Decimals" rules={rules.decimals}>
         <InputNumber min={0} max={36} placeholder="18" />
       </Form.Item>
-      <Form.Item name="initialSupply" label="Initial Supply" rules={rules.decimals}>
-        <InputNumber min={0} placeholder="Gazillion" onChange={(x) => setInitialSupply(parseInt(x.toString()))} />
-      </Form.Item>
       <TokenMetaStub />
-      <h3>Tranfer restrictions</h3>
 
+      <h3>Token supply</h3>
+      <p>
+        Set the maximum possible number of tokens that can ever be minted. The actual initial supply is decided when you
+        mint your tokens later.
+      </p>
+      <Space size="large">
+        <Form.Item name="totalSupply">
+          <InputNumber disabled={allowUnlimitedSupply} />
+        </Form.Item>
+        <Form.Item name="allowUnlimitedSupply" valuePropName="checked">
+          <Checkbox onChange={handleToggleallowUnlimitedSupply}>Unlimited total supply</Checkbox>
+        </Form.Item>
+      </Space>
+
+      <h3>Tranfer restrictions</h3>
       <div style={{ marginBottom: '1rem' }}>
         <Space>
           Select if you want to be able to restrict token transfers.
@@ -97,27 +102,7 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
             <HelpLabel name="allowBurn" />
           </Checkbox>
         </Form.Item>
-        <Form.Item name="allowMint" valuePropName="checked" className="no-margin">
-          <Checkbox onChange={handleToggleAdditionalMinting}>
-            <HelpLabel name="allowMint" />
-          </Checkbox>
-        </Form.Item>
       </Form.Item>
-
-      {showMintSection && (
-        <div>
-          <h3>Additional minting setup</h3>
-          <p>Set the maximum possible number of tokens that can ever be minted.</p>
-          <Space size="large">
-            <Form.Item name="totalSupply">
-              <InputNumber min={initialSupply} disabled={allowUnlimitedSupply} />
-            </Form.Item>
-            <Form.Item name="allowUnlimitedSupply" valuePropName="checked">
-              <Checkbox onChange={handleToggleallowUnlimitedSupply}>Unlimited total supply</Checkbox>
-            </Form.Item>
-          </Space>
-        </div>
-      )}
 
       <h3>Asset details</h3>
       <p>Define your asset, it&apos;s value and other information in detail.</p>

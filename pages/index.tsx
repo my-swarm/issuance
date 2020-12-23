@@ -151,7 +151,7 @@ export default function Index({ title }: IndexProps): ReactElement {
         </Col>
       </Row>
       <Divider />
-      <h2>The hottest investment opportunities</h2>
+      <h2>Latest investment opportunities</h2>
       <InvestFundraisers count={3} />
 
       {buyingSwm && <BuySwmModal onClose={() => setBuyingSwm(false)} />}

@@ -1,9 +1,11 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useState, useEffect } from 'react';
 import { Button, Divider, Form, Input, InputNumber } from 'antd';
 
-import { useAppState, useContract, useDispatch, useGraphql } from '@app';
+import { useAppState, useContract, useDispatch, useGraphql, useSwmBalance } from '@app';
 import { Box, StakeTable, TokenInfoStaking } from '..';
 import { formatUnits, parseUnits } from '@lib';
+import { BigNumber } from 'ethers';
+import { useStakeInfo } from '../../@app/useStakeInfo';
 
 interface TokenStakeAndMintProps {
   onCancel: () => void;
@@ -15,23 +17,24 @@ interface FormData {
 
 export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactElement {
   const [{ onlineToken: token }] = useAppState();
-  const { swm, minter } = useContract();
+  const { swm } = useContract();
   const { checkAllowance, dispatchTransaction } = useDispatch();
   const { reset } = useGraphql();
   const [form] = Form.useForm();
   const [isStaked, setIsStaked] = useState<boolean>(false);
+  const { lowSwmBalance, stake, reloadSwmBalance } = useStakeInfo();
 
   const handleStakeAndMint = async (values: FormData) => {
-    const stakeAmount = await minter.calcStake(token.nav);
-    console.log('handleStakeANdMint', values, stakeAmount);
+    console.log('handleStakeANdMint', values, stake);
 
-    checkAllowance('registry', swm.address, stakeAmount, () => {
+    checkAllowance('registry', swm.address, stake, () => {
       dispatchTransaction({
         method: 'minter.stakeAndMint',
         arguments: [token.address, parseUnits(values.supply, token.decimals)],
         description: 'Minting Your Token...',
         onSuccess: () => {
           reset();
+          reloadSwmBalance();
           setIsStaked(true);
         },
       });
@@ -39,8 +42,6 @@ export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactEl
   };
 
   const maxSupply = parseFloat(formatUnits(token.maxSupply, token.decimals));
-  console.log({ token, maxSupply });
-
   const normalizeSupply = (x) => {
     const supply = parseFloat(x);
     return maxSupply === 0 ? supply || '' : Math.min(maxSupply, supply) || '';
@@ -82,7 +83,7 @@ export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactEl
               <Input />
             </Form.Item>
             <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
-              <Button htmlType="submit" type="primary" size="large">
+              <Button htmlType="submit" type="primary" size="large" disabled={lowSwmBalance}>
                 Stake &amp; Mint
               </Button>
             </Form.Item>

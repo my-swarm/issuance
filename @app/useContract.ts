@@ -85,7 +85,7 @@ export function useContract(): ContractMap {
   return contracts;
 }
 
-interface ContractValue {
+export interface ContractValue {
   raw?: BigNumber | number | string | boolean;
   nice?: string;
 }

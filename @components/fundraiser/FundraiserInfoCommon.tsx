@@ -29,7 +29,7 @@ export function FundraiserInfoCommon({ fundraiser, column = 1 }: FundraiserInfoC
           {formatUnits(fundraiser.supply, token.decimals, 'N/A')}
         </Descriptions.Item>
         <Descriptions.Item label="Token price">
-          {formatUnits(fundraiser.tokenPrice, token.decimals, 'N/A')}
+          {formatUnits(fundraiser.tokenPrice, baseCurrency.decimals, 'N/A')} USD
         </Descriptions.Item>
         <Descriptions.Item label="Start Date">{formatDate(fundraiser.startDate)}</Descriptions.Item>
         <Descriptions.Item label="End Date">{formatDate(fundraiser.endDate)}</Descriptions.Item>

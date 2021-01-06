@@ -2,6 +2,7 @@ import { useAppState } from './StateContext';
 import { useEthers } from './EthersContext';
 import { getContract, getContractAbi, LocalToken, AccountsMeta, Transaction, OnlineToken } from '@lib';
 import { BigNumber, Contract } from 'ethers';
+import { unlimitedAllowance } from './config';
 
 interface UseDispatchResult {
   setToken: (localToken: LocalToken, onlineToken: OnlineToken) => void;
@@ -10,7 +11,7 @@ interface UseDispatchResult {
   checkAllowance: (
     contractName: string | [string, string],
     tokenAddress: string,
-    amount: BigNumber,
+    amount: BigNumber | null,
     onSuccess: () => void,
   ) => void;
   setAccountProp: (address: string, prop: string, value: string) => void;
@@ -52,7 +53,7 @@ export function useDispatch(): UseDispatchResult {
   const checkAllowance = async (
     spender: string | [string, string],
     tokenAddress: string,
-    amount: BigNumber,
+    amount: BigNumber | null,
     onSuccess: () => void,
   ) => {
     let spenderName;
@@ -69,7 +70,7 @@ export function useDispatch(): UseDispatchResult {
 
     const tokenContract = new Contract(tokenAddress, getContractAbi('erc20'), signer);
     const currentAllowance = await tokenContract.allowance(address, spenderAddress);
-    if (currentAllowance.lt(amount)) {
+    if (currentAllowance.lt(amount || unlimitedAllowance)) {
       dispatch({
         type: 'approveSpending',
         spendingApproval: {

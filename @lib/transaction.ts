@@ -30,7 +30,7 @@ export interface SpendingApproval {
   spenderName: string;
   spenderAddress: string;
   tokenContract: Contract;
-  amount: BigNumber;
+  amount: BigNumber | null; // null means unlimited
   currentAllowance: BigNumber;
   onSuccess: () => void;
 }

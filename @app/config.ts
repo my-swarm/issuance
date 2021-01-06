@@ -1,5 +1,6 @@
 import { LocalFundraiser, LocalToken, TransferRules } from '@lib';
 import moment from 'moment';
+import { BigNumber } from 'ethers';
 
 export const MANAGE_TABLE_PER_PAGE = 10;
 
@@ -18,6 +19,8 @@ export const colors = {
   red: '#bd395a',
   green: '#44a75a',
 };
+
+export const unlimitedAllowance = BigNumber.from(2).pow(256).sub(1);
 
 const layout = {
   labelCol: { span: 6 },

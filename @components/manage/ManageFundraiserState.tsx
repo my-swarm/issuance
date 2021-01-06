@@ -20,7 +20,7 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
   const value = useMemo(() => {
     return getUnitsAsNumber(fundraiser.amountQualified, baseCurrency.decimals);
   }, [fundraiser]);
-  const { lowSwmBalance } = useStakeInfo(value);
+  const { lowSwmBalance, stake } = useStakeInfo(value);
 
   const handleCancel = () => {
     dispatchTransaction({
@@ -33,13 +33,12 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
   };
 
   const handleStakeAndMint = async () => {
-    const stakeAmount = 1000; //await minter.calcStake(fundraiser.token.nav);
     checkAllowance(
       ['fundraiser', fundraiser.address],
       fundraiser.token.address,
-      parseUnits(1000, SWM_TOKEN_DECIMALS),
+      null, // unlimited
       () => {
-        checkAllowance('registry', swmAddress, parseUnits(1000, SWM_TOKEN_DECIMALS), () => {
+        checkAllowance('registry', swmAddress, stake, () => {
           dispatchTransaction({
             method: 'fundraiser.stakeAndMint',
             description: 'Staking and minting...',

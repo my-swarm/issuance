@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { Button, Modal, Space } from 'antd';
-import { useAppState, useDispatch, useEthers } from '@app';
+import { unlimitedAllowance, useAppState, useDispatch, useEthers } from '@app';
 import { formatUnits, getContractAddress } from '@lib';
 import { BigNumber } from 'ethers';
 
@@ -33,7 +33,7 @@ export function SpendingApprovalModal(): ReactElement {
   if (!tokenInfo) return null;
 
   const handleAllow = (unlimited: boolean) => {
-    const realAmount = unlimited ? BigNumber.from(2).pow(256).sub(1) : amount;
+    const realAmount = unlimited ? unlimitedAllowance : amount;
     const transaction = {
       method: 'erc20.approve',
       address: tokenContract.address,
@@ -51,31 +51,44 @@ export function SpendingApprovalModal(): ReactElement {
 
   return (
     <Modal title="Approve spending" footer={null} visible={true} closable={false}>
-      <p>
-        The <strong>{spenderName}</strong> contract needs to spend{' '}
-        <strong>{formatUnits(amount, tokenInfo.decimals)}</strong> {tokenInfo.symbol} on your behalf. Please allow
-        limited or unlimited spending
-      </p>
-      <p>
-        Current allowance:{' '}
-        <strong>
-          {formatUnits(currentAllowance, tokenInfo.decimals)} {tokenInfo.symbol}
-        </strong>
-      </p>
-      <p>
-        Required spending:{' '}
-        <strong>
-          {formatUnits(amount, tokenInfo.decimals)} {tokenInfo.symbol}
-        </strong>
-      </p>
+      {amount === null ? (
+        <>
+          <p>
+            The <strong>{spenderName}</strong> contract needs to be able to spend your {tokenInfo.symbol} tokens. Please
+            approve unlimited allowance
+          </p>
+        </>
+      ) : (
+        <>
+          <p>
+            The <strong>{spenderName}</strong> contract needs to spend{' '}
+            <strong>{formatUnits(amount, tokenInfo.decimals)}</strong> {tokenInfo.symbol} on your behalf. Please allow
+            limited or unlimited spending
+          </p>
+          <p>
+            Current allowance:{' '}
+            <strong>
+              {formatUnits(currentAllowance, tokenInfo.decimals)} {tokenInfo.symbol}
+            </strong>
+          </p>
+          <p>
+            Required spending:{' '}
+            <strong>
+              {formatUnits(amount, tokenInfo.decimals)} {tokenInfo.symbol}
+            </strong>
+          </p>
+        </>
+      )}
 
       <Space>
         <Button onClick={() => handleAllow(true)} type="primary">
-          Allow unlimited
+          Approve unlimited allowance
         </Button>
-        <Button onClick={() => handleAllow(false)} type="primary">
-          Allow {formatUnits(amount, tokenInfo.decimals)} {tokenInfo.symbol}
-        </Button>
+        {amount !== null && (
+          <Button onClick={() => handleAllow(false)} type="primary">
+            Approve {formatUnits(amount, tokenInfo.decimals)} {tokenInfo.symbol}
+          </Button>
+        )}
         <Button onClick={handleClose}>Cancel</Button>
       </Space>
     </Modal>

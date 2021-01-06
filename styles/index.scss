@@ -89,15 +89,15 @@ $raiseProgressRadius: 4px;
 
 .raise-progress {
   //background: #a0d911;
-  background: rgba(0, 0, 0, .05);
-  border: 1px solid rgba(0, 0, 0, .1);
+  background: $bright;
+  border: $grey3;
   border-radius: $raiseProgressRadius;
   position: relative;
   height: $raiseProgressHeight;
   .raised {
     z-index: 1;
-    background: #f4ffb8;
-    border: 1px solid #f4ffb8;
+    background: $blue;
+    border: 1px solid $blue;
     border-radius: $raiseProgressRadius 0 0 $raiseProgressRadius;
     position: absolute;
     left: 0;
@@ -106,12 +106,13 @@ $raiseProgressRadius: 4px;
   }
   .softcap {
     z-index: 2;
-    background: #a0d911;
+    background: $green;
     position: absolute;
-    top: -2px;
-    width: .25rem;
-    height: calc(#{$raiseProgressHeight} + 2px);
+    top: -3px;
+    width: 5px;
+    height: calc(#{$raiseProgressHeight} + 5px);
     border-radius: 2px;
+    border: 1px solid $white;
   }
 }
 
@@ -134,8 +135,8 @@ $raiseProgressRadius: 4px;
 
 .ant-table-row.special {
   background: #f0f5ff;
-
 }
+
 .ant-table-tbody > tr.ant-table-row.special:hover > td {
   background: unset;
 }

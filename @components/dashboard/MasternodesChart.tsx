@@ -1,8 +1,9 @@
 import React, { ReactElement } from 'react';
-import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, XAxis } from 'recharts';
-import { MasternodesData, PriceData } from '@lib';
-import { Card, Col, Row, Statistic } from 'antd';
+import { Area, AreaChart, ResponsiveContainer, XAxis } from 'recharts';
+import { MasternodesData } from '@lib';
+import { Col, Row, Statistic } from 'antd';
 import { Loading } from '../utility';
+import { colors } from '@app';
 
 interface MasternodesChartProps {
   data: MasternodesData;
@@ -10,28 +11,24 @@ interface MasternodesChartProps {
   roi: number;
 }
 
-const color1 = '#46ce6f';
-const color2 = '#ffbc36';
-
 export function MasternodesChart({ data, numNodes, roi }: MasternodesChartProps): ReactElement {
   if (!data || data.length === 0 || !numNodes || !roi) return <Loading />;
   return (
     <>
       <Row className="mb-3">
         <Col xs={12}>
-          <Statistic title="Active nodes" value={numNodes} valueStyle={{ color: 'green' }} />
+          <Statistic title="Active nodes" value={numNodes} valueStyle={{ color: colors.blue }} />
         </Col>
         <Col xs={12}>
-          <Statistic title="Annual ROI" value={roi} suffix="%" valueStyle={{ color: 'red' }} />
+          <Statistic title="Annual ROI" value={roi} suffix="%" valueStyle={{ color: colors.green }} />
         </Col>
       </Row>
 
       <ResponsiveContainer width="99%" minWidth={200} height={120}>
-        <BarChart width={400} height={120} data={data}>
+        <AreaChart width={400} height={120} data={data}>
           <XAxis dataKey="date" />
-          <Bar dataKey="active" stackId="a" fill={color1} />
-          <Bar dataKey="warmup" stackId="a" fill={color2} />
-        </BarChart>
+          <Area dataKey="active" stackId="a" fill={colors.blue} stroke={colors.blue} />
+        </AreaChart>
       </ResponsiveContainer>
     </>
   );

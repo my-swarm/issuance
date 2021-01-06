@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 import { BigNumber, BigNumberish } from 'ethers';
-import { Col, Progress, Row, Space, Statistic, Tooltip } from 'antd';
-import { formatUnits, parseUnits } from '@lib';
+import { formatNumber, formatUnits } from '@lib';
 
 interface FundraiserStatusChartProps {
   softCap: BigNumberish;
@@ -33,14 +32,14 @@ export function FundraiserStatusChart({
       <div style={{ fontSize: '11px' }}>
         {amountPercentSoftcap < 100 ? (
           <>
-            {amountPercentSoftcap} % of {formatUnits(softCap, decimals)} (soft cap)
+            {amountPercentSoftcap} % of soft cap ({formatNumber(formatUnits(softCap, decimals))} USD)
           </>
         ) : (
           <>
-            {amountPercentHardcap} % of {formatUnits(hardCap, decimals)} (hard cap)
+            {amountPercentHardcap} % of hard cap ({formatNumber(formatUnits(hardCap, decimals))} USD)
           </>
         )}{' '}
-        USD raised
+        raised
       </div>
     </div>
   );

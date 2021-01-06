@@ -75,3 +75,16 @@ h4.ant-typography {
   margin: 16px;
   width: auto;
 }
+
+
+.ant-layout-sider {
+  background: $darkBlue1;
+}
+
+.ant-menu.ant-menu-dark, .ant-menu-dark .ant-menu-sub, .ant-menu.ant-menu-dark .ant-menu-sub {
+  background: $darkBlue1;
+}
+
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background: $blue;
+}

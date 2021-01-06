@@ -14,6 +14,7 @@ import moment from 'moment';
 import _ from 'lodash';
 import { formatUnits } from 'ethers/lib/utils';
 import { BigNumber } from 'ethers';
+import { colors } from '@app';
 
 interface FundraiserChartProps {
   fundraiser: FundraiserWithContributorsFragment;
@@ -41,7 +42,6 @@ const lineAttrs: Partial<LineProps> = {
   strokeWidth: 2,
   activeDot: { r: 6 },
 };
-const palette = { qualified: '#82ca9d', pending: '#8884d8', hardCap: 'red', softCap: 'green' };
 
 function aggregateDailyContributions(contributors: ContributorFragment[]): ChartData {
   const result: { [index: string]: ChartRecord } = {};
@@ -99,13 +99,13 @@ export function FundraiserProgressChart({ fundraiser }: FundraiserChartProps): R
       <LineChart data={data}>
         <XAxis dataKey="date" />
         <CartesianGrid strokeDasharray="1 2" strokeWidth={1} />
-        <Line {...lineAttrs} dataKey="qualified" stroke={palette.qualified} />
-        <Line {...lineAttrs} dataKey="pending" stroke={palette.pending} />
-        <ReferenceLine y={softCap} label="Soft Cap" stroke={palette.softCap} strokeDasharray="2 2" />
+        <Line {...lineAttrs} dataKey="qualified" stroke={colors.green} />
+        <Line {...lineAttrs} dataKey="pending" stroke={colors.blue} />
+        <ReferenceLine y={softCap} label="Soft Cap" stroke={colors.green} strokeDasharray="2 2" />
         <ReferenceLine
           y={hardCap}
           label="Hard Cap"
-          stroke={palette.hardCap}
+          stroke={colors.red}
           ifOverflow="extendDomain"
           strokeDasharray="2 2"
         />

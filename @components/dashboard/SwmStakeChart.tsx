@@ -1,7 +1,9 @@
 import React, { ReactElement } from 'react';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
-import { Tag } from 'antd';
+import { Row, Col, Tag } from 'antd';
 import { Loading, VSpace } from '../utility';
+import { formatNumber } from '@lib';
+import { colors } from '@app';
 
 interface SwmStakeChartProps {
   total: number;
@@ -9,15 +11,26 @@ interface SwmStakeChartProps {
   tokens: number;
 }
 
-const color1 = '#8884d8';
-const color2 = '#82ca9d';
-const color3 = '#729afd';
-
 export function SwmStakeChart({ total, masternodes, tokens }: SwmStakeChartProps): ReactElement {
   if (!total || !masternodes || !tokens) return <Loading />;
 
   const circulating = total - masternodes - tokens;
   const data = [{ masternodes, tokens, circulating, name: 'swm' }];
+
+  function renderLegend(color: string, title: string, amount: number) {
+    return (
+      <Row gutter={8} className="mb-1" justify="space-between">
+        <Col flex="1rem">
+          <div style={{ width: '1rem', height: '100%', background: color }} />
+        </Col>
+        <Col flex="auto">{title}:</Col>
+        <Col flex="auto" style={{ textAlign: 'right' }}>
+          {formatNumber(amount)} SWM
+        </Col>
+      </Row>
+    );
+  }
+
   return (
     <>
       <ResponsiveContainer width="99%" minWidth={100} height={40}>
@@ -30,23 +43,15 @@ export function SwmStakeChart({ total, masternodes, tokens }: SwmStakeChartProps
         >
           <XAxis type="number" hide />
           <YAxis type="category" dataKey="name" hide />
-          <Bar dataKey="masternodes" stackId="a" fill={color1} />
-          <Bar dataKey="tokens" stackId="a" fill={color2} />
-          <Bar dataKey="circulating" stackId="a" fill={color3} />
+          <Bar dataKey="masternodes" stackId="a" fill={colors.blue} />
+          <Bar dataKey="tokens" stackId="a" fill={colors.orange} />
+          <Bar dataKey="circulating" stackId="a" fill={colors.grey1} />
         </BarChart>
       </ResponsiveContainer>
       <VSpace />
-      <div>
-        <Tag color={color1}>
-          Staked by masternodes: <strong>{masternodes} SWM</strong>
-        </Tag>
-        <Tag color={color2}>
-          Staked with token issuance: <strong>{tokens} SWM</strong>
-        </Tag>
-        <Tag color={color3}>
-          Circulating supply: <strong>{circulating} SWM</strong>
-        </Tag>
-      </div>
+      {renderLegend(colors.blue, 'Staked by masternodes', masternodes)}
+      {renderLegend(colors.orange, 'Staked with token issuance', tokens)}
+      {renderLegend(colors.grey1, 'Circulating supply', circulating)}
     </>
   );
 }

@@ -7,14 +7,13 @@ import {
   ExclamationCircleTwoTone,
   SearchOutlined,
 } from '@ant-design/icons';
-import { Button, Checkbox, Dropdown, Menu, Select, Space, Table, Tooltip } from 'antd';
+import { Checkbox, Dropdown, Menu, Select, Space, Table, Tooltip } from 'antd';
 
-import { ContributorFragment, ContributorStatus } from '@graphql';
-import { useAccountNotes, useAppState, useDispatch, useEthers, useGraphql } from '@app';
-import { FilterDropdown, EditableCell, AccountsAddModal } from '@components';
+import { ContributorFragment, ContributorStatus, FundraiserWithContributorsFragment } from '@graphql';
+import { useAccountNotes, useAppState, useDispatch, useGraphql } from '@app';
+import { Address, EditableCell, FilterDropdown } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
-import { Address } from '@components';
-import { strcmp, BASE_CURRENCIES } from '@lib';
+import { strcmp } from '@lib';
 
 interface TableRecord {
   address: string;
@@ -25,10 +24,10 @@ interface TableRecord {
 }
 
 interface ManageContributorsProps {
-  contributors: ContributorFragment[];
+  fundraiser: FundraiserWithContributorsFragment;
 }
 
-export function ManageContributors({ contributors }: ManageContributorsProps): ReactElement {
+export function ManageContributors({ fundraiser }: ManageContributorsProps): ReactElement {
   const { reset } = useGraphql();
   const [paginate, setPaginate] = useState<boolean>(true);
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -36,8 +35,7 @@ export function ManageContributors({ contributors }: ManageContributorsProps): R
   const [{ onlineToken }] = useAppState();
   const accountNotes = useAccountNotes(onlineToken.address);
   const { dispatchTransaction, setAccountProp } = useDispatch();
-  const baseCurrency = BASE_CURRENCIES.USDC;
-
+  const { baseCurrency, contributors } = fundraiser;
   const statusFilterOptions = ['all', 'live', 'qualified', 'pending', 'deleted'];
 
   const handleConfirm = (address) => {

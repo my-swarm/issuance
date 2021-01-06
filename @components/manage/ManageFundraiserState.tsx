@@ -4,7 +4,7 @@ import { useContractAddress, useDispatch, useGraphql, useStakeInfo } from '@app'
 import { FundraiserStatus, FundraiserWithContributorsFragment } from '@graphql';
 import { BigNumber } from 'ethers';
 import { CheckOutlined, WarningOutlined } from '@ant-design/icons';
-import { formatUnits, parseUnits, BASE_CURRENCIES, SWM_TOKEN_DECIMALS, getUnitsAsNumber } from '@lib';
+import { formatUnits, parseUnits, SWM_TOKEN_DECIMALS, getUnitsAsNumber } from '@lib';
 import { TokenInfoStaking } from '../token';
 import { StakeTable } from '../misc';
 
@@ -12,14 +12,13 @@ interface ManageFundraiserStateProps {
   fundraiser: FundraiserWithContributorsFragment;
 }
 
-const baseCurrency = BASE_CURRENCIES.USDC;
-
 export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps): ReactElement {
   const { dispatchTransaction, checkAllowance } = useDispatch();
   const { swm: swmAddress } = useContractAddress();
   const { reset } = useGraphql();
+  const baseCurrency = fundraiser.baseCurrency;
   const value = useMemo(() => {
-    return getUnitsAsNumber(fundraiser.amountQualified, fundraiser.baseCurrency.decimals);
+    return getUnitsAsNumber(fundraiser.amountQualified, baseCurrency.decimals);
   }, [fundraiser]);
   const { lowSwmBalance } = useStakeInfo(value);
 

@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Descriptions } from 'antd';
-import { formatDate, formatNumber, BASE_CURRENCIES } from '@lib';
+import { formatDate, formatNumber } from '@lib';
 import { formatUnits } from '@lib';
 import { FundraiserFragment } from '@graphql';
 import { Address } from '../utility';

@@ -31,7 +31,7 @@ export function TokenManageFundraiser(): ReactElement {
           </Space>
         </Collapse.Panel>
         <Collapse.Panel header="Contributors" key="contributors">
-          <ManageContributors contributors={fundraiser.contributors} />
+          <ManageContributors fundraiser={fundraiser} />
         </Collapse.Panel>
         {fundraiser.affiliateManager && (
           <Collapse.Panel header="Affiliates" key="affiliates">

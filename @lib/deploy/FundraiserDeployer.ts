@@ -1,23 +1,26 @@
 import { Contract } from 'ethers';
 import moment from 'moment';
 
-import { BASE_CURRENCIES, LocalFundraiser } from '@lib';
+import { BASE_CURRENCIES, EthereumToken, LocalFundraiser } from '@lib';
 
 import { parseUnits, getUnixTimestamp, DeployerState } from '..';
 import { Deployer } from '.';
-
-const baseCurrency = BASE_CURRENCIES.USDC;
 
 export class FundraiserDeployer extends Deployer {
   private fundraiser: LocalFundraiser;
   private tokenDecimals: number;
   private tokenAddress: string;
   private fundraiserContract: Contract;
+  private baseCurrency: EthereumToken;
 
   public async setup(fundraiser?: LocalFundraiser, tokenAddress?: string, tokenDecimals?: number): Promise<void> {
     this.fundraiser = fundraiser;
     this.tokenAddress = tokenAddress;
     this.tokenDecimals = tokenDecimals;
+    this.baseCurrency = BASE_CURRENCIES[fundraiser.baseCurrency];
+    if (!this.baseCurrency) {
+      throw new Error(`Base currency not defined: ${fundraiser.baseCurrency}`);
+    }
     await super.setup();
   }
 
@@ -31,7 +34,7 @@ export class FundraiserDeployer extends Deployer {
 
   private async deployFundraiser() {
     if (this.state > DeployerState.Fundraiser) return;
-    const { fundraiser, tokenDecimals } = this;
+    const { fundraiser, tokenDecimals, baseCurrency } = this;
     const startDate = fundraiser.startNow ? moment().add(1, 'minute') : fundraiser.startDate;
     const params = [
       fundraiser.label, // label
@@ -72,12 +75,8 @@ export class FundraiserDeployer extends Deployer {
   private async setupFundraiser() {
     if (this.state > DeployerState.Setup) return;
 
-    const fundraiser = this.fundraiser;
+    const { fundraiser, baseCurrency } = this;
     this.handleStateChange(DeployerState.Setup);
-    const baseCurrency = BASE_CURRENCIES[fundraiser.baseCurrency];
-    if (!baseCurrency) {
-      throw new Error(`Base currency not defined: ${fundraiser.baseCurrency}`);
-    }
 
     const tokenPrice = parseUnits(fundraiser.tokenPrice || 0, baseCurrency.decimals);
 

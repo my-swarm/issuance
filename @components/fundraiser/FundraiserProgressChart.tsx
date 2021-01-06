@@ -14,7 +14,6 @@ import moment from 'moment';
 import _ from 'lodash';
 import { formatUnits } from 'ethers/lib/utils';
 import { BigNumber } from 'ethers';
-import { BASE_CURRENCIES } from '@lib';
 
 interface FundraiserChartProps {
   fundraiser: FundraiserWithContributorsFragment;
@@ -90,7 +89,7 @@ function contributorsToChartData(contributors: ContributorFragment[], decimals: 
 }
 
 export function FundraiserProgressChart({ fundraiser }: FundraiserChartProps): ReactElement {
-  const baseCurrency = BASE_CURRENCIES.USDC;
+  const { baseCurrency } = fundraiser;
   const data = contributorsToChartData(fundraiser.contributors, baseCurrency.decimals);
   const softCap = parseFloat(formatUnits(fundraiser.softCap, baseCurrency.decimals));
   const hardCap = parseFloat(formatUnits(fundraiser.hardCap, baseCurrency.decimals));

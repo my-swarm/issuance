@@ -12,4 +12,5 @@ export * from './wallet';
 export * from './common';
 export * from './dashboard';
 export * from './invest';
+export * from './staking';
 export * from './dev';

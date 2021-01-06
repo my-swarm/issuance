@@ -1,18 +1,13 @@
-import React, { ReactElement, useState, useEffect } from 'react';
-import { Button, Divider, Form, Input, InputNumber } from 'antd';
+import React, { ReactElement, useState } from 'react';
+import { Button, Divider } from 'antd';
 
-import { useAppState, useContract, useDispatch, useGraphql, useSwmBalance } from '@app';
-import { Box, StakeTable, TokenInfoStaking } from '..';
-import { formatUnits, parseUnits } from '@lib';
-import { BigNumber } from 'ethers';
+import { useAppState, useContract, useDispatch, useGraphql } from '@app';
+import { parseUnits } from '@lib';
+import { StakeTable, StakingForm, StakingFormData, TokenInfoStaking } from '..';
 import { useStakeInfo } from '../../@app/useStakeInfo';
 
 interface TokenStakeAndMintProps {
   onCancel: () => void;
-}
-
-interface FormData {
-  supply: string;
 }
 
 export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactElement {
@@ -20,11 +15,10 @@ export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactEl
   const { swm } = useContract();
   const { checkAllowance, dispatchTransaction } = useDispatch();
   const { reset } = useGraphql();
-  const [form] = Form.useForm();
   const [isStaked, setIsStaked] = useState<boolean>(false);
-  const { lowSwmBalance, stake, reloadSwmBalance } = useStakeInfo();
+  const { stake, reloadSwmBalance } = useStakeInfo();
 
-  const handleStakeAndMint = async (values: FormData) => {
+  const handleStakeAndMint = async (values: StakingFormData) => {
     console.log('handleStakeANdMint', values, stake);
 
     checkAllowance('registry', swm.address, stake, () => {
@@ -41,12 +35,6 @@ export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactEl
     });
   };
 
-  const maxSupply = parseFloat(formatUnits(token.maxSupply, token.decimals));
-  const normalizeSupply = (x) => {
-    const supply = parseFloat(x);
-    return maxSupply === 0 ? supply || '' : Math.min(maxSupply, supply) || '';
-  };
-
   return (
     <div>
       <TokenInfoStaking />
@@ -59,36 +47,7 @@ export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactEl
           </p>
         </>
       ) : (
-        <Box>
-          <Form
-            form={form}
-            onFinish={handleStakeAndMint}
-            layout="horizontal"
-            labelCol={{ span: 6 }}
-            wrapperCol={{ span: 14 }}
-          >
-            <Form.Item label="Maximum supply">
-              <strong>{maxSupply === 0 ? 'unlimited' : `${maxSupply} ${token.symbol}`}</strong>
-            </Form.Item>
-            <Form.Item
-              name="supply"
-              label="Initial supply"
-              normalize={normalizeSupply}
-              rules={[
-                { required: true, message: 'Enter initial supply' },
-                // { type: 'number' },
-                // ...(maxSupply === 0 ? [] : [{ max: maxSupply, message: 'Cannot exceed maximum supply' }]),
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
-              <Button htmlType="submit" type="primary" size="large" disabled={lowSwmBalance}>
-                Stake &amp; Mint
-              </Button>
-            </Form.Item>
-          </Form>
-        </Box>
+        <StakingForm value={token.nav} onSubmit={handleStakeAndMint} />
       )}
 
       <Divider />

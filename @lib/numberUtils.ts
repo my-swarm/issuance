@@ -12,6 +12,12 @@ export function formatUnits(bnAmount: BigNumberish, decimals: number, ifZero = '
   return utils.formatUnits(bnAmount, decimals);
 }
 
+export function getUnitsAsNumber(bnAmount: BigNumberish, decimals: number): number {
+  bnAmount = BigNumber.from(bnAmount || 0);
+  if (bnAmount.eq(0)) return 0;
+  return parseFloat(utils.formatUnits(bnAmount, decimals));
+}
+
 export function formatNumber(n: number | string, decimals = 0): string {
   if (typeof n === 'string') {
     n = parseFloat(n);

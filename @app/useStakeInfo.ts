@@ -10,10 +10,10 @@ interface Return {
   reloadSwmBalance: () => void;
   stake: BigNumber;
   swmPrice: string;
-  lowSwmBalance: boolean;
+  lowSwmBalance: boolean | undefined;
 }
 
-export function useStakeInfo(): Return {
+export function useStakeInfo(value?: number): Return {
   const { address } = useEthers();
   const [{ onlineToken: token }] = useAppState();
   const [swmBalance, reloadSwmBalance] = useSwmBalance();
@@ -23,7 +23,7 @@ export function useStakeInfo(): Return {
 
   useEffect(() => {
     if (minter && swmPriceOracle && swm) {
-      minter.calcStake(token.nav).then((val) => setStake(val));
+      minter.calcStake(value || token.nav).then((val) => setStake(val));
       swmPriceOracle.getPrice().then(({ numerator, denominator }) => {
         setSwmPrice(formatNumber(numerator.toNumber() / denominator.toNumber(), 4));
       });
@@ -34,7 +34,7 @@ export function useStakeInfo(): Return {
     if (swmBalance.raw && stake) {
       return BigNumber.from(swmBalance.raw).lt(stake);
     } else {
-      return true;
+      return undefined;
     }
   }, [swmBalance, stake]);
 

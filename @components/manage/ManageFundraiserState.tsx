@@ -1,10 +1,11 @@
-import React, { ReactElement } from 'react';
-import { Button, Popconfirm, Tag } from 'antd';
-import { useContractAddress, useDispatch, useGraphql } from '@app';
+import React, { ReactElement, useMemo } from 'react';
+import { Button, Tag, Alert } from 'antd';
+import { useContractAddress, useDispatch, useGraphql, useStakeInfo } from '@app';
 import { FundraiserStatus, FundraiserWithContributorsFragment } from '@graphql';
 import { BigNumber } from 'ethers';
 import { CheckOutlined, WarningOutlined } from '@ant-design/icons';
-import { formatUnits, parseUnits, BASE_CURRENCIES, SWM_TOKEN_DECIMALS } from '@lib';
+import { formatUnits, parseUnits, BASE_CURRENCIES, SWM_TOKEN_DECIMALS, getUnitsAsNumber } from '@lib';
+import { TokenInfoStaking } from '../token';
 
 interface ManageFundraiserStateProps {
   fundraiser: FundraiserWithContributorsFragment;
@@ -16,6 +17,10 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
   const { dispatchTransaction, checkAllowance } = useDispatch();
   const { swm: swmAddress } = useContractAddress();
   const { reset } = useGraphql();
+  const value = useMemo(() => {
+    return getUnitsAsNumber(fundraiser.amountQualified, fundraiser.baseCurrency.decimals);
+  }, [fundraiser]);
+  const { lowSwmBalance } = useStakeInfo(value);
 
   const handleCancel = () => {
     dispatchTransaction({
@@ -93,11 +98,14 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
       <h2>Stake and mint</h2>
 */}
       {statusFinished ? (
-        <p>Fundraiser is finished and your tokens should already be minted</p>
+        <p>Fundraiser is finished and your tokens have already been minted</p>
       ) : (
         <>
           {allowStakeAndMint ? (
-            <p>Your token is ready to be minted</p>
+            <>
+              <Alert type="success" message="Your token is ready to be minted" className="mb-3" showIcon />
+              <TokenInfoStaking fundraiser={fundraiser} />
+            </>
           ) : (
             <>
               <p>Tokens can be minted when one of these conditions is true:</p>
@@ -105,45 +113,53 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
                 <li>Hard Cap is reached</li>
                 <li>Soft Cap is reached and the fundraiser is beyond the end date</li>
               </ul>
+
+              <div className="mb-2">
+                {raisedEnoughSoft ? (
+                  <Tag color="green">
+                    <CheckOutlined /> {raisedSoft}
+                  </Tag>
+                ) : (
+                  <Tag color="red">
+                    <WarningOutlined /> {raisedSoft}
+                  </Tag>
+                )}
+              </div>
+              <div className="mb-2">
+                {raisedEnoughHard ? (
+                  <Tag color="green">
+                    <CheckOutlined /> {raisedHard}
+                  </Tag>
+                ) : (
+                  <Tag color="red">
+                    <WarningOutlined /> {raisedHard}
+                  </Tag>
+                )}
+              </div>
+              <div className="mb-2">
+                {afterEndDate ? (
+                  <Tag color="green">
+                    <CheckOutlined /> End Date: reached
+                  </Tag>
+                ) : (
+                  <Tag color="red">
+                    <WarningOutlined /> End Date: not reached
+                  </Tag>
+                )}
+              </div>
             </>
           )}
 
-          <div className="mb-2">
-            {raisedEnoughSoft ? (
-              <Tag color="green">
-                <CheckOutlined /> {raisedSoft}
-              </Tag>
-            ) : (
-              <Tag color="red">
-                <WarningOutlined /> {raisedSoft}
-              </Tag>
-            )}
-          </div>
-          <div className="mb-2">
-            {raisedEnoughHard ? (
-              <Tag color="green">
-                <CheckOutlined /> {raisedHard}
-              </Tag>
-            ) : (
-              <Tag color="red">
-                <WarningOutlined /> {raisedHard}
-              </Tag>
-            )}
-          </div>
-          <div className="mb-2">
-            {afterEndDate ? (
-              <Tag color="green">
-                <CheckOutlined /> End Date: reached
-              </Tag>
-            ) : (
-              <Tag color="red">
-                <WarningOutlined /> End Date: not reached
-              </Tag>
-            )}
-          </div>
-
+          {lowSwmBalance && (
+            <Alert type="error" message="Not enough SWM balance to mint your token!" showIcon className="mb-3" />
+          )}
           <p>
-            <Button disabled={!allowStakeAndMint} size="large" type="primary" onClick={handleStakeAndMint}>
+            <Button
+              disabled={!allowStakeAndMint || lowSwmBalance !== false}
+              size="large"
+              type="primary"
+              onClick={handleStakeAndMint}
+            >
               Stake &amp; Mint
             </Button>
           </p>

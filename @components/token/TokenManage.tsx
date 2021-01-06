@@ -56,11 +56,9 @@ export function TokenManage(): ReactElement {
           </>
         )}
 
-        {
-          <Collapse.Panel header="Edit token's KYA" key="asset">
-            <ManageAsset />
-          </Collapse.Panel>
-        }
+        <Collapse.Panel header="Edit token's KYA" key="asset">
+          <ManageAsset />
+        </Collapse.Panel>
 
         <Collapse.Panel header="Dividend distribution" key="dividend">
           <ManageDividends />

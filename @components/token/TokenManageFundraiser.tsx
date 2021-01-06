@@ -9,6 +9,7 @@ import {
   ManageContributors,
   ManageAffiliates,
   ManageFundraiserState,
+  ManageAsset,
 } from '..';
 
 export function TokenManageFundraiser(): ReactElement {
@@ -30,14 +31,21 @@ export function TokenManageFundraiser(): ReactElement {
             <FundraiserProgressChart fundraiser={fundraiser} />
           </Space>
         </Collapse.Panel>
+
         <Collapse.Panel header="Contributors" key="contributors">
           <ManageContributors fundraiser={fundraiser} />
         </Collapse.Panel>
+
+        <Collapse.Panel header="Edit token's KYA" key="asset">
+          <ManageAsset />
+        </Collapse.Panel>
+
         {fundraiser.affiliateManager && (
           <Collapse.Panel header="Affiliates" key="affiliates">
             <ManageAffiliates affiliates={fundraiser.affiliates} />
           </Collapse.Panel>
         )}
+
         <Collapse.Panel header="Stake &amp; Mint" key="status">
           <ManageFundraiserState fundraiser={fundraiser} />
         </Collapse.Panel>

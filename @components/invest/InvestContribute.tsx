@@ -1,9 +1,9 @@
-import React, { ReactElement, useEffect } from 'react';
-import { Descriptions, Form, InputNumber, Typography, Button, Modal } from 'antd';
+import React, { ReactElement, useState, useEffect } from 'react';
+import { Button, Descriptions, Form, Input, InputNumber, Modal, Typography } from 'antd';
 import { useFundraiserLazyQuery } from '@graphql';
-import { Address, Help, Loading, RequireEthers, VSpace } from '@components';
+import { Address, Box, Help, Loading, VSpace } from '@components';
 import { useDispatch, useErc20Balance, useEthers, useGraphql } from '@app';
-import { formatUnits, parseUnits } from '@lib';
+import { formatUnits, getUnitsAsNumber, parseUnits } from '@lib';
 import { BigNumber } from 'ethers';
 
 const { Title } = Typography;
@@ -16,6 +16,7 @@ export function InvestContribute({ id }: InvestContributeProps): ReactElement {
   const { address } = useEthers();
   const [loadQuery, { data, loading }] = useFundraiserLazyQuery();
   const { checkAllowance, dispatchTransaction } = useDispatch();
+  const [amount, setAmount] = useState<number>(0);
   const { reset } = useGraphql();
   const [balance, reloadBalance] = useErc20Balance(data?.fundraiser?.baseCurrency?.address);
   const [form] = Form.useForm();
@@ -40,11 +41,12 @@ export function InvestContribute({ id }: InvestContributeProps): ReactElement {
 
   const handleContribute = (values) => {
     const amount = parseUnits(values.amount, baseCurrency.decimals);
+    console.log('contribute', { values, amount });
     checkAllowance(['fundraiser', fundraiser.address], baseCurrency.address, amount, () => {
       dispatchTransaction({
         method: 'fundraiser.contribute',
         address: fundraiser.address,
-        arguments: [amount],
+        arguments: [amount, values.referral],
         description: 'Contributing...',
         onSuccess: () => {
           Modal.info({
@@ -65,6 +67,9 @@ export function InvestContribute({ id }: InvestContributeProps): ReactElement {
       });
     });
   };
+
+  const balanceNumber = balance.raw ? getUnitsAsNumber(balance.raw as BigNumber, baseCurrency.decimals) : 0;
+  const canContribute = amount > 0 && balanceNumber >= amount;
 
   return (
     <div>
@@ -96,16 +101,21 @@ export function InvestContribute({ id }: InvestContributeProps): ReactElement {
         <Address short>{fundraiser.address}</Address>). You will be asked to sign the transaction and you can verify the
         parameters in the Metamask popup window.
       </p>
-      <Form onFinish={handleContribute} layout="inline" form={form}>
-        <Form.Item name="amount" label="Amount to contribute">
-          <InputNumber min={1} max={balance.raw ? parseFloat(balance.nice) : 1} />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" disabled={!balance.raw || (balance.raw as BigNumber).eq(0)}>
-            Contribute
-          </Button>
-        </Form.Item>
-      </Form>
+      <Box>
+        <Form onFinish={handleContribute} form={form} labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
+          <Form.Item name="amount" label="Amount to invest">
+            <Input onChange={(e) => setAmount(parseFloat(e.target.value))} suffix="USD" />
+          </Form.Item>
+          <Form.Item name="referral" label="Referral code">
+            <Input />
+          </Form.Item>
+          <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
+            <Button type="primary" htmlType="submit" disabled={!canContribute}>
+              Invest
+            </Button>
+          </Form.Item>
+        </Form>
+      </Box>
     </div>
   );
 }

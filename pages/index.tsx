@@ -94,7 +94,18 @@ export default function Index({ title }: IndexProps): ReactElement {
     <DefaultLayout title="Welcome to MySwarm Investment Portal">
       <Row gutter={[24, 24]} className="dashboard">
         <Col {...colLayout}>
-          <Card title="SWM stake">
+          <Card
+            title="SWARM token"
+            extra={
+              <a
+                href="https://etherscan.io/token/0x3505f494c3f0fed0b594e01fa41dd3967645ca39"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                more
+              </a>
+            }
+          >
             <SwmStakeChart total={swmCircSupply} masternodes={mnStake} tokens={SWM_STAKE_OLD_REGISTRY} />
           </Card>
         </Col>

@@ -62,10 +62,10 @@ export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInves
       <Card.Grid hoverable={false} className="token">
         {kya ? (
           <Row gutter={16}>
-            <Col span={8}>
+            <Col span={10}>
               <ImagePreview image={kya.token.image} fitWidth />
             </Col>
-            <Col span={16}>
+            <Col span={14}>
               <Typography.Text type="secondary">{(kya.token.description || '').substr(0, 160)}</Typography.Text>
             </Col>
           </Row>

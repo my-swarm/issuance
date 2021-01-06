@@ -66,13 +66,13 @@ export function InvestFundraisers({ count }: InvestFundraisersProps): ReactEleme
 
   return (
     <>
-      <Row gutter={16}>
+      <div className="clearfix">
         {filteredFundraiesrs.map((fundraiser) => (
-          <Col md={12} xxl={8} key={fundraiser.id}>
+          <div className="fundraiser-card" key={fundraiser.address}>
             <FundraiserInvestorCard fundraiser={fundraiser} onAction={(action) => handleAction(action, fundraiser)} />
-          </Col>
+          </div>
         ))}
-      </Row>
+      </div>
       <Drawer
         title={getActionTitle()}
         visible={action !== undefined}

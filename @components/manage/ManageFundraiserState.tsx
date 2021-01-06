@@ -1,11 +1,12 @@
 import React, { ReactElement, useMemo } from 'react';
-import { Button, Tag, Alert } from 'antd';
+import { Button, Tag, Alert, Divider } from 'antd';
 import { useContractAddress, useDispatch, useGraphql, useStakeInfo } from '@app';
 import { FundraiserStatus, FundraiserWithContributorsFragment } from '@graphql';
 import { BigNumber } from 'ethers';
 import { CheckOutlined, WarningOutlined } from '@ant-design/icons';
 import { formatUnits, parseUnits, BASE_CURRENCIES, SWM_TOKEN_DECIMALS, getUnitsAsNumber } from '@lib';
 import { TokenInfoStaking } from '../token';
+import { StakeTable } from '../misc';
 
 interface ManageFundraiserStateProps {
   fundraiser: FundraiserWithContributorsFragment;
@@ -163,6 +164,13 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
               Stake &amp; Mint
             </Button>
           </p>
+
+          {allowStakeAndMint && (
+            <>
+              <Divider />
+              <StakeTable />
+            </>
+          )}
         </>
       )}
     </div>

@@ -11,7 +11,7 @@ export function StakeTable(): ReactElement {
           label={item.to === Infinity ? `${item.from} USD or more` : `${item.from} to ${item.to} USD`}
           key={key}
         >
-          {item.absolute ? `${item.absolute} USD flat` : `${item.relative} %`}
+          {item.absolute ? `${item.absolute} USD flat` : `${item.relative * 100} %`}
         </Descriptions.Item>
       ))}
     </Descriptions>

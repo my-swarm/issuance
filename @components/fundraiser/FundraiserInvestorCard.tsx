@@ -46,7 +46,7 @@ export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInves
 
   return (
     <Card
-      className="c-fundraiser-investor-card"
+      className="c-fundraiser-investor-card mb-3"
       title={`${token.name} (${token.symbol})`}
       actions={[
         <CardAction onClick={handleTokenDetails} icon={<AppstoreOutlined />} title="Token details" key={1} />,

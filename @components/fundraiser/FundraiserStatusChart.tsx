@@ -33,11 +33,11 @@ export function FundraiserStatusChart({
       <div style={{ fontSize: '11px' }}>
         {amountPercentSoftcap < 100 ? (
           <>
-            {amountPercentSoftcap} % of {formatUnits(BigNumber.from(softCap.toString()), decimals)} (soft cap)
+            {amountPercentSoftcap} % of {formatUnits(softCap, decimals)} (soft cap)
           </>
         ) : (
           <>
-            {amountPercentHardcap} % of {formatUnits(BigNumber.from(softCap.toString()), decimals)} (hard cap)
+            {amountPercentHardcap} % of {formatUnits(hardCap, decimals)} (hard cap)
           </>
         )}{' '}
         USD raised

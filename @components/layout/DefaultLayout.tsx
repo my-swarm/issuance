@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Layout, PageHeader, Modal, Space } from 'antd';
+import { Layout, PageHeader, Modal, Space, Divider } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
 
@@ -57,6 +57,7 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
           </a>
         </Link>
         <MainMenu />
+        <Divider />
         <div className="side-box mt-4">
           <MetamaskStatus />
         </div>

@@ -7,6 +7,7 @@ import {
   UserOutlined,
   LineChartOutlined,
   WalletOutlined,
+  InfoCircleOutlined,
 } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 
@@ -39,6 +40,11 @@ export function MainMenu(): ReactElement {
           </Link>
         </Menu.Item>
       </Menu.SubMenu>
+      <Menu.Item key="about" icon={<InfoCircleOutlined />}>
+        <a href="https://www.swarmnetwork.org/" target="_blank" rel="noreferrer noopener">
+          About
+        </a>
+      </Menu.Item>
     </Menu>
   );
 }

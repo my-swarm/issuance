@@ -69,3 +69,9 @@ td.editable-cell input {
 h4.ant-typography {
   font-size: 16px; // we want it consistent with the <Descriptions> component
 }
+
+.ant-layout-sider-dark .ant-divider {
+  border-top: 1px solid rgba(255, 255, 255, .33);
+  margin: 16px;
+  width: auto;
+}

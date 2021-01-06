@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { SyncOutlined, CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons/lib';
 import * as devData from 'dev_data';
 
-import { useAppState, useStorage } from '@app';
+import { isDev, useAppState, useStorage } from '@app';
 import { formatDatetime } from '@lib';
 
 export function StateStorageSync(): ReactElement {
@@ -12,7 +12,9 @@ export function StateStorageSync(): ReactElement {
   const { isLoaded, isSaving, isSynced, version } = state;
 
   const handleResetDev = () => {
-    dispatch({ type: 'restoreState', data: { ...devData, version: 0 } });
+    if (isDev) {
+      dispatch({ type: 'restoreState', data: { ...devData, version: 0 } });
+    }
   };
 
   const { save, isWorking } = useStorage();
@@ -30,6 +32,9 @@ export function StateStorageSync(): ReactElement {
       window.setTimeout(() => dispatch({ type: 'endSaving' }), 500);
     }
   }, [isWorking]);
+
+  // don't render the UI. Works still.
+  if (!isDev) return null;
 
   function renderCardTitle() {
     return (

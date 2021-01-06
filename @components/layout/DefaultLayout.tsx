@@ -61,11 +61,9 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
         <div className="side-box mt-4">
           <MetamaskStatus />
         </div>
-        {isDev && (
-          <div className="side-box mt-4">
-            <StateStorageSync />
-          </div>
-        )}
+        <div className="side-box mt-4">
+          <StateStorageSync />
+        </div>
         <div className="side-box mt-4">
           <h3 className="side-box-title">
             <Space>

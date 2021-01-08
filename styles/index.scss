@@ -94,25 +94,37 @@ $raiseProgressRadius: 4px;
   border-radius: $raiseProgressRadius;
   position: relative;
   height: $raiseProgressHeight;
+  .raised, .softcap, .hardcap {
+    position: absolute;
+  }
   .raised {
     z-index: 1;
     background: $blue;
     border: 1px solid $blue;
     border-radius: $raiseProgressRadius 0 0 $raiseProgressRadius;
-    position: absolute;
     left: 0;
     top: 0;
     height: 100%;
   }
+  .softcap, .hardcap {
+    border: 1px solid $white;
+  }
   .softcap {
-    z-index: 2;
+    z-index: 3;
     background: $green;
-    position: absolute;
     top: -3px;
     width: 5px;
     height: calc(#{$raiseProgressHeight} + 5px);
     border-radius: 2px;
-    border: 1px solid $white;
+  }
+  .hardcap {
+    z-index: 2;
+    background: $red;
+    width: 6px;
+    top: -1px;
+    right: -1px;
+    height: calc(#{$raiseProgressHeight} + 2px);
+    border-radius: 0 $raiseProgressRadius $raiseProgressRadius 0;
   }
 }
 

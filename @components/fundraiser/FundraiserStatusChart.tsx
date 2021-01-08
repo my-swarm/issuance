@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import { BigNumber, BigNumberish } from 'ethers';
 import { formatNumber, formatUnits } from '@lib';
+import { Tooltip } from 'antd';
 
 interface FundraiserStatusChartProps {
   softCap: BigNumberish;
@@ -21,25 +22,36 @@ export function FundraiserStatusChart({
   const softCapPercent = softCap.mul(100).div(hardCap).toNumber();
   const amountPercentHardcap = amount.mul(100).div(hardCap).toNumber();
   const amountPercentSoftcap = amount.mul(100).div(softCap).toNumber();
+  const amountNumber = formatNumber(formatUnits(amount, decimals));
+  const softCapNumber = formatNumber(formatUnits(softCap, decimals));
+  const hardCapNumber = formatNumber(formatUnits(hardCap, decimals));
 
   return (
     <div>
       <h3>Amount raised</h3>
       <div style={{ width: '100%' }} className="mb-1 raise-progress">
-        {softCap.gt(0) && <div className="softcap" style={{ left: `${softCapPercent}%` }} />}
-        <div className="raised" style={{ width: `${amountPercentHardcap}%` }} />
+        {softCap.gt(0) && (
+          <Tooltip title={`Soft Cap: ${softCapNumber} USD`}>
+            <div className="softcap" style={{ left: `${softCapPercent}%` }} />
+          </Tooltip>
+        )}
+        <Tooltip title={`Hard Cap: ${hardCapNumber} USD`}>
+          <div className="hardcap" />
+        </Tooltip>
+        <Tooltip title={`Raised so far ${amountNumber} USD`}>
+          <div className="raised" style={{ width: `${amountPercentHardcap}%` }} />
+        </Tooltip>
       </div>
       <div style={{ fontSize: '11px' }}>
         {amountPercentSoftcap < 100 ? (
           <>
-            {amountPercentSoftcap} % of soft cap ({formatNumber(formatUnits(softCap, decimals))} USD)
+            {amountPercentSoftcap} % of soft cap ({softCapNumber} USD)
           </>
         ) : (
           <>
-            {amountPercentHardcap} % of hard cap ({formatNumber(formatUnits(hardCap, decimals))} USD)
+            {amountPercentHardcap} % of hard cap ({hardCapNumber} USD)
           </>
-        )}{' '}
-        raised
+        )}
       </div>
     </div>
   );

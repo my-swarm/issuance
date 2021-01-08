@@ -15,6 +15,8 @@ type FormData = {
   addresses: string;
 };
 
+const distributeBatchSize = 5;
+
 export function ManageDistribute(): ReactElement {
   const { address: myAddress } = useEthers();
   const { dispatchTransaction } = useDispatch();
@@ -34,6 +36,32 @@ export function ManageDistribute(): ReactElement {
     (c) => c.status === ContributorStatus.Qualified && BigNumber.from(c.amount).gt(0),
   );
   const pendingContributors = contributors.filter((c) => c.status === ContributorStatus.Pending);
+
+  async function distributeBatch(amounts, addresses, totalCount, totalAmount) {
+    const numBatches = Math.ceil(totalCount / distributeBatchSize);
+    const oneBatch = numBatches === 1;
+    const amountsBatch = amounts.slice(0, distributeBatchSize);
+    const addressesBatch = addresses.slice(0, distributeBatchSize);
+    const amountsLeft = amounts.slice(distributeBatchSize);
+    const addressesLeft = addresses.slice(distributeBatchSize);
+    const batchesLeft = Math.ceil(amountsLeft.length / distributeBatchSize);
+    const batchNum = numBatches - batchesLeft;
+    dispatchTransaction({
+      method: 'src20.bulkTransfer',
+      arguments: [addressesBatch, amountsBatch],
+      description: `Distributing ${totalAmount} ${token.symbol} to ${addresses.length} accounts${
+        oneBatch ? `` : ` (batch ${batchNum} of ${numBatches}, ${distributeBatchSize} per batch)`
+      }`,
+      onSuccess: () => {
+        reset();
+        if (amountsLeft.length > 0) {
+          distributeBatch(amountsLeft, addressesLeft, totalCount, totalAmount);
+        } else {
+          form.resetFields();
+        }
+      },
+    });
+  }
 
   const handleSubmit = async (data: FormData) => {
     let amount: BigNumber;
@@ -71,16 +99,7 @@ export function ManageDistribute(): ReactElement {
         </>
       ),
 
-      onOk: () =>
-        dispatchTransaction({
-          method: 'src20.bulkTransfer',
-          arguments: [addresses, amounts],
-          description: `Distributing ${niceAmount} ${token.symbol} to ${addresses.length} accounts`,
-          onSuccess: () => {
-            reset();
-            form.resetFields();
-          },
-        }),
+      onOk: () => distributeBatch(amounts, addresses, amounts.length, niceAmount),
     });
   };
 

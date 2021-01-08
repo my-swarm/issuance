@@ -4,16 +4,16 @@ import { Button, Drawer, Table } from 'antd';
 import { useAppState, useDispatch, useEthers, useGraphql } from '@app';
 import {
   BaseError,
+  DeployerState,
   LocalToken,
+  OnlineToken,
+  processNewToken,
   TokenAction,
   TokenRecord,
   TokenState,
   tokenStates,
-  OnlineToken,
-  DeployerState,
-  processNewToken,
 } from '@lib';
-import { useTokensQuery } from '@graphql';
+import { useTokensLazyQuery } from '@graphql';
 import {
   Address,
   DefaultLayout,
@@ -74,7 +74,10 @@ export default function Tokens(): ReactElement {
   const { setToken } = useDispatch();
   const [action, setAction] = useState<TokenAction>();
   const [{ tokens, localToken }, dispatch] = useAppState();
-  const query = useTokensQuery({ variables: { owner: address } });
+  const [loadQuery, query] = useTokensLazyQuery();
+  useEffect(() => {
+    if (address) loadQuery({ variables: { owner: address } });
+  }, [address]);
   const { reset } = useGraphql();
   const { data, loading, error } = query;
 

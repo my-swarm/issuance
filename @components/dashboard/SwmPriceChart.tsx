@@ -15,7 +15,7 @@ export function SwmPriceChart({ data, lastPrice, changePercent }: SwmPriceChartP
     <>
       <Row className="mb-3">
         <Col xs={12}>
-          <Statistic title="Current" value={lastPrice} precision={4} valueStyle={{ color: colors.blue }} />
+          <Statistic title="Current" value={lastPrice} precision={4} valueStyle={{ color: colors.blue }} suffix="USD" />
         </Col>
         <Col xs={12}>
           <Statistic

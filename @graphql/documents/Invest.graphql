@@ -8,8 +8,9 @@ fragment FundraiserWithToken on Fundraiser{
   }
 
 }
-query Invest {
-  fundraisers {
+query Invest($limit: Int!, $offset: Int!, $search: String!) {
+
+  fundraisers(first: $limit, skip: $offset, where: { search_contains: $search}) {
     ...FundraiserWithToken
   }
 }

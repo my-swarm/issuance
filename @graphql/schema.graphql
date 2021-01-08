@@ -415,13 +415,13 @@ type Fundraiser {
   softCap: BigInt!
   hardCap: BigInt!
   supply: BigInt!
-  baseCurrency: Erc20Token
-  tokenPrice: BigInt
+  baseCurrency: Erc20Token!
+  tokenPrice: BigInt!
   affiliateManager: AffiliateManager
-  contributorRestrictions: Bytes
-  fundraiserManager: Bytes
-  minter: Bytes
-  contributionsLocked: Boolean
+  contributorRestrictions: Bytes!
+  fundraiserManager: Bytes!
+  minter: Bytes!
+  contributionsLocked: Boolean!
   amountQualified: BigInt!
   amountPending: BigInt!
   amountRefunded: BigInt!
@@ -430,6 +430,7 @@ type Fundraiser {
   numContributors: Int!
   contributors(skip: Int = 0, first: Int = 100, orderBy: Contributor_orderBy, orderDirection: OrderDirection, where: Contributor_filter): [Contributor!]
   affiliates(skip: Int = 0, first: Int = 100, orderBy: Affiliate_orderBy, orderDirection: OrderDirection, where: Affiliate_filter): [Affiliate!]
+  search: String
 }
 
 input Fundraiser_filter {
@@ -621,6 +622,20 @@ input Fundraiser_filter {
   numContributors_lte: Int
   numContributors_in: [Int!]
   numContributors_not_in: [Int!]
+  search: String
+  search_not: String
+  search_gt: String
+  search_lt: String
+  search_gte: String
+  search_lte: String
+  search_in: [String!]
+  search_not_in: [String!]
+  search_contains: String
+  search_not_contains: String
+  search_starts_with: String
+  search_not_starts_with: String
+  search_ends_with: String
+  search_not_ends_with: String
 }
 
 enum Fundraiser_orderBy {
@@ -649,6 +664,7 @@ enum Fundraiser_orderBy {
   numContributors
   contributors
   affiliates
+  search
 }
 
 enum FundraiserStatus {

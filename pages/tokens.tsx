@@ -17,6 +17,7 @@ import { useTokensLazyQuery } from '@graphql';
 import {
   Address,
   DefaultLayout,
+  Loading,
   TokenActions,
   TokenActionTitle,
   TokenDeploy,
@@ -79,7 +80,8 @@ export default function Tokens(): ReactElement {
     if (address) loadQuery({ variables: { owner: address } });
   }, [address]);
   const { reset } = useGraphql();
-  const { data, loading, error } = query;
+  const { data, loading } = query;
+  if (loading) return <Loading />;
 
   // reloads current token if tokens update ????
   /*

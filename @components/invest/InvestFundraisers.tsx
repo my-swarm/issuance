@@ -14,16 +14,18 @@ import { OnlineToken } from '@lib';
 import dayjs from 'dayjs';
 
 interface InvestFundraisersProps {
-  count?: number;
+  limit?: number;
+  offset?: number;
+  search?: string;
 }
 
-export function InvestFundraisers({ count }: InvestFundraisersProps): ReactElement {
+export function InvestFundraisers({ limit = 100, offset = 0, search = '' }: InvestFundraisersProps): ReactElement {
   const [action, setAction] = useState<FundraiserInvestorAction>();
   const [fundraiser, setFundraiser] = useState<FundraiserWithTokenFragment>();
   const { setToken } = useDispatch();
-  const { data, loading } = useInvestQuery();
+  const { data, loading } = useInvestQuery({ variables: { limit, search, offset } });
 
-  const filteredFundraiesrs = useMemo(() => {
+  const filteredFundraiesers = useMemo(() => {
     const nowTs = dayjs.unix(Math.round(Date.now() / 1000));
     return (data?.fundraisers || []).filter((f) => dayjs.unix(f.endDate) > nowTs);
   }, [data]);
@@ -67,7 +69,7 @@ export function InvestFundraisers({ count }: InvestFundraisersProps): ReactEleme
   return (
     <>
       <div className="clearfix">
-        {filteredFundraiesrs.map((fundraiser) => (
+        {filteredFundraiesers.map((fundraiser) => (
           <div className="fundraiser-card" key={fundraiser.address}>
             <FundraiserInvestorCard fundraiser={fundraiser} onAction={(action) => handleAction(action, fundraiser)} />
           </div>

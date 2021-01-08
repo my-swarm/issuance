@@ -20,3 +20,20 @@ export const gettingBaseCurrency = {
     </div>
   ),
 };
+
+export const search = {
+  title: 'Filtering the fundraisers',
+  content: (
+    <div>
+      <p>The following fields are searched:</p>
+      <ul>
+        <li>Token name and symbol</li>
+        <li>Fundraiser label</li>
+        <li>Token and fundraiser addresses</li>
+      </ul>
+      <p>
+        <strong>Note that due to system constraints, search is case sensitive (i.e. 'dog' is not 'Dog')</strong>
+      </p>
+    </div>
+  ),
+};

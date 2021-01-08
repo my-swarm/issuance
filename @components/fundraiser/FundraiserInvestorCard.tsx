@@ -3,9 +3,11 @@ import { Card, Col, Typography, Row, Modal } from 'antd';
 import { FundraiserWithTokenFragment } from '@graphql';
 import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined, LoadingOutlined } from '@ant-design/icons';
 import { FundraiserCountdown } from './FundraiserCountdown';
-import { CardAction, FundraiserStatusChart, ImagePreview } from '..';
+import { Address, CardAction, FundraiserStatusChart, ImagePreview } from '..';
 import { useEthers, useKya } from '@app';
 import { OnlineToken } from '@lib';
+
+const { Text } = Typography;
 
 export enum FundraiserInvestorAction {
   TokenDetails,
@@ -47,7 +49,14 @@ export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInves
   return (
     <Card
       className="c-fundraiser-investor-card mb-3"
-      title={`${token.name} (${token.symbol})`}
+      title={
+        <>
+          <div>
+            {token.name} ({token.symbol})
+          </div>
+          <Text type="secondary">{fundraiser.label}</Text>
+        </>
+      }
       actions={[
         <CardAction onClick={handleTokenDetails} icon={<AppstoreOutlined />} title="Token details" key={1} />,
         <CardAction

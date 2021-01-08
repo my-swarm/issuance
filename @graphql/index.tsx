@@ -443,13 +443,13 @@ export type Fundraiser = {
   softCap: Scalars['BigInt'];
   hardCap: Scalars['BigInt'];
   supply: Scalars['BigInt'];
-  baseCurrency?: Maybe<Erc20Token>;
-  tokenPrice?: Maybe<Scalars['BigInt']>;
+  baseCurrency: Erc20Token;
+  tokenPrice: Scalars['BigInt'];
   affiliateManager?: Maybe<AffiliateManager>;
-  contributorRestrictions?: Maybe<Scalars['Bytes']>;
-  fundraiserManager?: Maybe<Scalars['Bytes']>;
-  minter?: Maybe<Scalars['Bytes']>;
-  contributionsLocked?: Maybe<Scalars['Boolean']>;
+  contributorRestrictions: Scalars['Bytes'];
+  fundraiserManager: Scalars['Bytes'];
+  minter: Scalars['Bytes'];
+  contributionsLocked: Scalars['Boolean'];
   amountQualified: Scalars['BigInt'];
   amountPending: Scalars['BigInt'];
   amountRefunded: Scalars['BigInt'];
@@ -458,6 +458,7 @@ export type Fundraiser = {
   numContributors: Scalars['Int'];
   contributors?: Maybe<Array<Contributor>>;
   affiliates?: Maybe<Array<Affiliate>>;
+  search?: Maybe<Scalars['String']>;
 };
 
 
@@ -667,6 +668,20 @@ export type Fundraiser_Filter = {
   numContributors_lte?: Maybe<Scalars['Int']>;
   numContributors_in?: Maybe<Array<Scalars['Int']>>;
   numContributors_not_in?: Maybe<Array<Scalars['Int']>>;
+  search?: Maybe<Scalars['String']>;
+  search_not?: Maybe<Scalars['String']>;
+  search_gt?: Maybe<Scalars['String']>;
+  search_lt?: Maybe<Scalars['String']>;
+  search_gte?: Maybe<Scalars['String']>;
+  search_lte?: Maybe<Scalars['String']>;
+  search_in?: Maybe<Array<Scalars['String']>>;
+  search_not_in?: Maybe<Array<Scalars['String']>>;
+  search_contains?: Maybe<Scalars['String']>;
+  search_not_contains?: Maybe<Scalars['String']>;
+  search_starts_with?: Maybe<Scalars['String']>;
+  search_not_starts_with?: Maybe<Scalars['String']>;
+  search_ends_with?: Maybe<Scalars['String']>;
+  search_not_ends_with?: Maybe<Scalars['String']>;
 };
 
 export enum Fundraiser_OrderBy {
@@ -694,7 +709,8 @@ export enum Fundraiser_OrderBy {
   Status = 'status',
   NumContributors = 'numContributors',
   Contributors = 'contributors',
-  Affiliates = 'affiliates'
+  Affiliates = 'affiliates',
+  Search = 'search'
 }
 
 export enum FundraiserStatus {
@@ -2079,10 +2095,10 @@ export type FundraiserTokenFragment = (
 
 export type FundraiserBaseCurrencyFragment = (
   { __typename?: 'Fundraiser' }
-  & { baseCurrency?: Maybe<(
+  & { baseCurrency: (
     { __typename?: 'Erc20Token' }
     & Pick<Erc20Token, 'address' | 'name' | 'symbol' | 'decimals'>
-  )> }
+  ) }
 );
 
 export type FundraiserFragment = (
@@ -2179,7 +2195,11 @@ export type FundraiserWithTokenFragment = (
   & FundraiserBaseCurrencyFragment
 );
 
-export type InvestQueryVariables = Exact<{ [key: string]: never; }>;
+export type InvestQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+  search: Scalars['String'];
+}>;
 
 
 export type InvestQuery = (
@@ -2841,8 +2861,8 @@ export type HoldingsQueryHookResult = ReturnType<typeof useHoldingsQuery>;
 export type HoldingsLazyQueryHookResult = ReturnType<typeof useHoldingsLazyQuery>;
 export type HoldingsQueryResult = Apollo.QueryResult<HoldingsQuery, HoldingsQueryVariables>;
 export const InvestDocument = gql`
-    query Invest {
-  fundraisers {
+    query Invest($limit: Int!, $offset: Int!, $search: String!) {
+  fundraisers(first: $limit, skip: $offset, where: {search_contains: $search}) {
     ...FundraiserWithToken
   }
 }
@@ -2860,10 +2880,13 @@ export const InvestDocument = gql`
  * @example
  * const { data, loading, error } = useInvestQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      search: // value for 'search'
  *   },
  * });
  */
-export function useInvestQuery(baseOptions?: Apollo.QueryHookOptions<InvestQuery, InvestQueryVariables>) {
+export function useInvestQuery(baseOptions: Apollo.QueryHookOptions<InvestQuery, InvestQueryVariables>) {
         return Apollo.useQuery<InvestQuery, InvestQueryVariables>(InvestDocument, baseOptions);
       }
 export function useInvestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InvestQuery, InvestQueryVariables>) {

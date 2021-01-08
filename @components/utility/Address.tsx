@@ -8,13 +8,19 @@ interface AddressProps {
   children: ReactNode;
   link?: boolean;
   short?: boolean;
+  shorter?: boolean;
 }
 
 function getEtherscanUrl(networkId, address) {
   return `https://${etherscanDomains[networkId]}/address/${address}`;
 }
 
-export function Address({ children, link = false, short = false }: AddressProps): ReactElement | null | undefined {
+export function Address({
+  children,
+  link = false,
+  short = false,
+  shorter = false,
+}: AddressProps): ReactElement | null | undefined {
   const { networkId } = useEthers();
 
   const handleCopyToClipboard = useCallback(() => {
@@ -33,12 +39,13 @@ export function Address({ children, link = false, short = false }: AddressProps)
 
   let result;
 
-  if (short) {
+  if (short || shorter) {
+    const len = short ? 6 : 4;
     result = (
       <span className="c-address" title={children}>
-        <span>{children.substr(0, 8)}</span>
+        <span>{children.substr(0, len + 2)}</span>
         <span>…</span>
-        <span>{children.substr(-6)}</span>
+        <span>{children.substr(-len)}</span>
       </span>
     );
   } else {

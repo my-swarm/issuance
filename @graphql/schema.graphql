@@ -412,6 +412,7 @@ type Fundraiser {
   label: String!
   startDate: Int!
   endDate: Int!
+  createdAt: Int!
   softCap: BigInt!
   hardCap: BigInt!
   supply: BigInt!
@@ -498,6 +499,14 @@ input Fundraiser_filter {
   endDate_lte: Int
   endDate_in: [Int!]
   endDate_not_in: [Int!]
+  createdAt: Int
+  createdAt_not: Int
+  createdAt_gt: Int
+  createdAt_lt: Int
+  createdAt_gte: Int
+  createdAt_lte: Int
+  createdAt_in: [Int!]
+  createdAt_not_in: [Int!]
   softCap: BigInt
   softCap_not: BigInt
   softCap_gt: BigInt
@@ -646,6 +655,7 @@ enum Fundraiser_orderBy {
   label
   startDate
   endDate
+  createdAt
   softCap
   hardCap
   supply

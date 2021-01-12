@@ -10,7 +10,7 @@ fragment FundraiserWithToken on Fundraiser{
 }
 query Invest($limit: Int!, $offset: Int!, $search: String!) {
 
-  fundraisers(first: $limit, skip: $offset, where: { search_contains: $search}) {
+  fundraisers(orderBy: createdAt, orderDirection: desc, first: $limit, skip: $offset, where: { search_contains: $search}) {
     ...FundraiserWithToken
   }
 }

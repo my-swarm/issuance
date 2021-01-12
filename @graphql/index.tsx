@@ -440,6 +440,7 @@ export type Fundraiser = {
   label: Scalars['String'];
   startDate: Scalars['Int'];
   endDate: Scalars['Int'];
+  createdAt: Scalars['Int'];
   softCap: Scalars['BigInt'];
   hardCap: Scalars['BigInt'];
   supply: Scalars['BigInt'];
@@ -544,6 +545,14 @@ export type Fundraiser_Filter = {
   endDate_lte?: Maybe<Scalars['Int']>;
   endDate_in?: Maybe<Array<Scalars['Int']>>;
   endDate_not_in?: Maybe<Array<Scalars['Int']>>;
+  createdAt?: Maybe<Scalars['Int']>;
+  createdAt_not?: Maybe<Scalars['Int']>;
+  createdAt_gt?: Maybe<Scalars['Int']>;
+  createdAt_lt?: Maybe<Scalars['Int']>;
+  createdAt_gte?: Maybe<Scalars['Int']>;
+  createdAt_lte?: Maybe<Scalars['Int']>;
+  createdAt_in?: Maybe<Array<Scalars['Int']>>;
+  createdAt_not_in?: Maybe<Array<Scalars['Int']>>;
   softCap?: Maybe<Scalars['BigInt']>;
   softCap_not?: Maybe<Scalars['BigInt']>;
   softCap_gt?: Maybe<Scalars['BigInt']>;
@@ -692,6 +701,7 @@ export enum Fundraiser_OrderBy {
   Label = 'label',
   StartDate = 'startDate',
   EndDate = 'endDate',
+  CreatedAt = 'createdAt',
   SoftCap = 'softCap',
   HardCap = 'hardCap',
   Supply = 'supply',
@@ -2862,7 +2872,13 @@ export type HoldingsLazyQueryHookResult = ReturnType<typeof useHoldingsLazyQuery
 export type HoldingsQueryResult = Apollo.QueryResult<HoldingsQuery, HoldingsQueryVariables>;
 export const InvestDocument = gql`
     query Invest($limit: Int!, $offset: Int!, $search: String!) {
-  fundraisers(first: $limit, skip: $offset, where: {search_contains: $search}) {
+  fundraisers(
+    orderBy: createdAt
+    orderDirection: desc
+    first: $limit
+    skip: $offset
+    where: {search_contains: $search}
+  ) {
     ...FundraiserWithToken
   }
 }

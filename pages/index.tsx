@@ -81,13 +81,6 @@ export default function Index({ title }: IndexProps): ReactElement {
     });
   }, [mnUrlStats]);
 
-  const firstPrice = priceData?.[0].price;
-  const lastPrice = priceData?.[priceData.length - 1].price;
-  const priceDirection: 'up' | 'down' = firstPrice > lastPrice ? 'up' : 'down';
-  const priceChangePercent = firstPrice
-    ? (priceDirection === 'up' ? lastPrice / firstPrice - 1 : firstPrice / lastPrice - 1) * 100
-    : 0;
-
   const mnStake = MASTERNODE_STAKE * numMnNodes || undefined;
 
   return (
@@ -118,7 +111,7 @@ export default function Index({ title }: IndexProps): ReactElement {
               </a>
             }
           >
-            <SwmPriceChart data={priceData} lastPrice={lastPrice} changePercent={priceChangePercent} />
+            <SwmPriceChart data={priceData} />
           </Card>
         </Col>
         <Col {...colLayout}>

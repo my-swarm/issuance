@@ -6,11 +6,17 @@ import { colors } from '@app';
 
 interface SwmPriceChartProps {
   data: PriceData;
-  lastPrice: number;
-  changePercent: number;
 }
 
-export function SwmPriceChart({ data, lastPrice, changePercent }: SwmPriceChartProps): ReactElement {
+export function SwmPriceChart({ data }: SwmPriceChartProps): ReactElement {
+  const firstPrice = data?.[0].price;
+  const lastPrice = data?.[data.length - 1].price;
+  const priceDirection: 'up' | 'down' = firstPrice > lastPrice ? 'down' : 'up';
+  const changePercent = firstPrice
+    ? (priceDirection === 'up' ? 1 - firstPrice / lastPrice : lastPrice / firstPrice - 1) * 100
+    : 0;
+  console.log({ data, firstPrice, lastPrice, priceDirection, changePercent });
+
   return (
     <>
       <Row className="mb-3">

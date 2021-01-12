@@ -49,7 +49,7 @@ export function InvestFundraisers({ limit = 100, offset = 0, search = '' }: Inve
       case FundraiserInvestorAction.FundraiserDetails:
         return 'Fundraiser details';
       case FundraiserInvestorAction.Invest:
-        return 'Invest';
+        return 'Contribute';
     }
   }
 

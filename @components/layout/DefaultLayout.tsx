@@ -19,7 +19,7 @@ const { Content, Sider } = Layout;
 
 interface PageProps {
   children: ReactNode;
-  title: string;
+  title?: string;
   subtitle?: string;
   description?: string;
 }
@@ -48,7 +48,7 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
   return (
     <Layout>
       <Head>
-        <title>{title}</title>
+        <title>{title || 'My Swarm'}</title>
       </Head>
       <Sider trigger={null} collapsible collapsed={siderCollapsed}>
         <Link href="/">
@@ -85,12 +85,14 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
       </Sider>
       <Content>
         <div className="content-content">
-          <PageHeader
-            title={title}
-            backIcon={false}
-            extra={headExtra}
-            className={headTableAligned ? `table-aligned` : ``}
-          />
+          {title && (
+            <PageHeader
+              title={title}
+              backIcon={false}
+              extra={headExtra}
+              className={headTableAligned ? `table-aligned` : ``}
+            />
+          )}
           {children}
         </div>
         <div className="content-footer">

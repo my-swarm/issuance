@@ -65,7 +65,7 @@ export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInves
           title="Fundraiser details"
           key={2}
         />,
-        <CardAction onClick={handleContribute} icon={<DollarCircleOutlined />} title="Invest" key={3} />,
+        <CardAction onClick={handleContribute} icon={<DollarCircleOutlined />} title="Contribute" key={3} />,
       ]}
     >
       <Card.Grid hoverable={false} className="token">

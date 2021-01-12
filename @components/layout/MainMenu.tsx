@@ -8,6 +8,7 @@ import {
   LineChartOutlined,
   WalletOutlined,
   InfoCircleOutlined,
+  DashboardOutlined,
 } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 
@@ -16,10 +17,15 @@ export function MainMenu(): ReactElement {
 
   return (
     <Menu theme="dark" mode="inline" defaultOpenKeys={['investor', 'issuer']} defaultSelectedKeys={[router.pathname]}>
+      <Menu.Item key="/" icon={<DashboardOutlined />}>
+        <Link href="/">
+          <a>Dashboard</a>
+        </Link>
+      </Menu.Item>{' '}
       <Menu.SubMenu key="investor" title={<span>Investor</span>} icon={<UserOutlined />} popupOffset={[16, 0]}>
         <Menu.Item key="/invest" icon={<DollarCircleOutlined />}>
           <Link href="/invest">
-            <a>Invest</a>
+            <a>Contribute</a>
           </Link>
         </Menu.Item>
         <Menu.Item key="/wallet" icon={<WalletOutlined />}>

@@ -84,7 +84,7 @@ export default function Index({ title }: IndexProps): ReactElement {
   const mnStake = MASTERNODE_STAKE * numMnNodes || undefined;
 
   return (
-    <DefaultLayout title="Welcome to MySwarm Investment Portal">
+    <DefaultLayout title="Swarm Dashboard">
       <Row gutter={[24, 24]} className="dashboard">
         <Col {...colLayout}>
           <Card

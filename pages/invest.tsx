@@ -7,7 +7,7 @@ export default function InvestPage(): ReactElement {
 
   console.log({ filter });
   return (
-    <DefaultLayout title="Invest" headExtra={<InvestFilter onSearch={(values) => setFilter(values)} />}>
+    <DefaultLayout title="Contribute" headExtra={<InvestFilter onSearch={(values) => setFilter(values)} />}>
       <InvestFundraisers search={filter.search} />
     </DefaultLayout>
   );

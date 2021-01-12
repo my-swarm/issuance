@@ -94,7 +94,7 @@ export function InvestContribute({ id }: InvestContributeProps): ReactElement {
         </Descriptions.Item>
       </Descriptions>
       <VSpace />
-      <Title level={4}>Invest</Title>
+      <Title level={4}>Contribute</Title>
       <p>
         When you contribute, {baseCurrency.symbol} tokens are sent from your current account (
         <Address short>{address}</Address>) to the Fundraiser contract address (

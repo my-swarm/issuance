@@ -68,7 +68,7 @@ export class TokenDeployer extends Deployer {
     if (this.state > DeployerState.Token) return;
 
     this.handleStateChange(DeployerState.Token);
-    const { name, symbol, decimals, allowUnlimitedSupply, totalSupply, allowMint, assetNetValue } = this.token;
+    const { name, symbol, decimals, allowUnlimitedSupply, totalSupply, assetNetValue } = this.token;
 
     const kya = tokenToKya(this.token);
     const { kyaHash, kyaUrl } = await storeKya(kya);
@@ -85,7 +85,7 @@ export class TokenDeployer extends Deployer {
       parseUnits(supply, decimals),
       kyaHash,
       kyaUrl,
-      assetNetValue,
+      assetNetValue || 0,
       [
         this.getAddress('transferRules'),
         this.getAddress('roles'),

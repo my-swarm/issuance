@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import { Alert, Button, Form, Input, Modal } from 'antd';
 import { useDispatch } from '@app';
-import { ArrowDownOutlined } from '@ant-design/icons';
+import { ArrowDownOutlined } from '@lib/icons';
 import { formatNumber } from '@lib';
 
 interface BuySwmModalProps {

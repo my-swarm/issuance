@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tooltip } from 'antd';
 import { getNetwork } from '@ethersproject/networks';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined } from '@lib/icons';
 
 import { EthereumNetwork } from '@lib';
 import { EthersStatus, useEthers } from '@app';

@@ -1,19 +1,12 @@
 import React, { ReactElement, useState } from 'react';
-import { formatUnits } from 'ethers/lib/utils';
-import {
-  CheckCircleTwoTone,
-  DeleteTwoTone,
-  DownOutlined,
-  ExclamationCircleTwoTone,
-  SearchOutlined,
-} from '@ant-design/icons';
+import { CheckCircleTwoTone, DeleteTwoTone, DownOutlined, ExclamationCircleTwoTone, SearchOutlined } from '@lib/icons';
 import { Checkbox, Dropdown, Menu, Select, Space, Table, Tooltip } from 'antd';
 
 import { ContributorFragment, ContributorStatus, FundraiserWithContributorsFragment } from '@graphql';
 import { useAccountNotes, useAppState, useDispatch, useGraphql } from '@app';
 import { Address, EditableCell, FilterDropdown } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
-import { strcmp } from '@lib';
+import { formatUnits, strcmp } from '@lib';
 
 interface TableRecord {
   address: string;

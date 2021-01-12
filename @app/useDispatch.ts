@@ -1,7 +1,8 @@
 import { useAppState } from './StateContext';
 import { useEthers } from './EthersContext';
 import { getContract, getContractAbi, LocalToken, AccountsMeta, Transaction, OnlineToken } from '@lib';
-import { BigNumber, Contract } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
+import { Contract } from '@ethersproject/contracts';
 import { unlimitedAllowance } from './config';
 
 interface UseDispatchResult {

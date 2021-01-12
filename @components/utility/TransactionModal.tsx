@@ -1,9 +1,9 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { Alert, Button, Modal, Space } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from '@lib/icons';
 import { useAppState, useEthers } from '@app';
 import { ContractProxy, TransactionState, transactionStatesMeta } from '@lib';
-import { Transaction } from 'ethers';
+import { Transaction } from '@ethersproject/transactions';
 
 export function TransactionModal(): ReactElement {
   const { signer } = useEthers();

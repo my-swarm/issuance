@@ -1,6 +1,6 @@
 import { LocalFundraiser, LocalToken, TransferRules } from '@lib';
-import moment from 'moment';
-import { BigNumber } from 'ethers';
+import dayjs from 'dayjs';
+import { BigNumber } from '@ethersproject/bignumber';
 
 export const MANAGE_TABLE_PER_PAGE = 10;
 
@@ -76,8 +76,8 @@ export const devDefaultFundraiser: LocalFundraiser = {
   contributionsLocked: false,
   tokensToMint: 100000,
   tokenPrice: null,
-  startDate: moment().format('YYYY-MM-DD'),
-  endDate: moment().add(1, 'M').format('YYYY-MM-DD'),
+  startDate: dayjs().format('YYYY-MM-DD'),
+  endDate: dayjs().add(1, 'M').format('YYYY-MM-DD'),
   softCap: 500000,
   hardCap: 1000000,
   startNow: true,

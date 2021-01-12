@@ -10,6 +10,7 @@ import {
   ManageAffiliates,
   ManageFundraiserState,
   ManageAsset,
+  ManageFundraiserEmbed,
 } from '..';
 
 export function TokenManageFundraiser(): ReactElement {
@@ -48,6 +49,10 @@ export function TokenManageFundraiser(): ReactElement {
 
         <Collapse.Panel header="Stake &amp; Mint" key="status">
           <ManageFundraiserState fundraiser={fundraiser} />
+        </Collapse.Panel>
+
+        <Collapse.Panel header="Embed widget" key="embed">
+          <ManageFundraiserEmbed fundraiser={fundraiser} />
         </Collapse.Panel>
       </Collapse>
     </div>

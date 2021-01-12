@@ -8,7 +8,7 @@ import {
   RocketOutlined,
   FundOutlined,
   DollarCircleOutlined,
-} from '@ant-design/icons';
+} from '@lib/icons';
 import { useEthers } from '@app';
 
 interface TokenActionsProps {

@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Button, Checkbox, Col, Popconfirm, Row, Table } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined } from '@lib/icons';
 
 import { Account, AccountList, RawAccountList } from '@lib';
 import { useAppState, useDispatch, useEthers, useGraphql, useAccountNotes } from '@app';
@@ -51,7 +51,7 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
       return {
         key: a.address, // for the table
         ...a,
-        createdAt: moment(a.createdAt).toDate(),
+        createdAt: dayjs(a.createdAt).toDate(),
         ...accountNotes[a.address],
       };
     })

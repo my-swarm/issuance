@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {
   BuySwmModal,
   DefaultLayout,
@@ -54,7 +54,7 @@ export default function Index({ title }: IndexProps): ReactElement {
   useEffect(() => {
     cgRequest(cgUrlDaily, (data) => {
       setPriceData(
-        data.prices.map((record) => ({ date: moment.unix(record[0] / 1000).format('YYYY-MM-DD'), price: record[1] })),
+        data.prices.map((record) => ({ date: dayjs.unix(record[0] / 1000).format('YYYY-MM-DD'), price: record[1] })),
       );
     });
   }, [cgUrlDaily]);

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, ChangeEventHandler, ReactElement, useRef, useState } from 'react';
 import { Input, Space } from 'antd';
-import { CloseCircleOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined } from '@lib/icons';
 
 interface FilterDropdownProps {
   onChange: (value: string) => void;

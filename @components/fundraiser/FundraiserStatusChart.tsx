@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { BigNumber, BigNumberish } from 'ethers';
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { formatNumber, formatUnits } from '@lib';
 import { Tooltip } from 'antd';
 

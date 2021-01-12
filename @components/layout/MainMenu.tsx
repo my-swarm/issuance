@@ -9,7 +9,7 @@ import {
   WalletOutlined,
   InfoCircleOutlined,
   DashboardOutlined,
-} from '@ant-design/icons';
+} from '@lib/icons';
 import { useRouter } from 'next/router';
 
 export function MainMenu(): ReactElement {

@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { Button, Modal, Space } from 'antd';
 import { unlimitedAllowance, useAppState, useDispatch, useEthers } from '@app';
 import { formatUnits, getContractAddress } from '@lib';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 
 interface TokenInfo {
   name: string;

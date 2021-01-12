@@ -96,6 +96,12 @@ query Fundraiser($id: ID!, $address: Bytes!) {
   }
 }
 
+query FundraiserWidget($id: ID!) {
+  fundraiser(id: $id) {
+    ...FundraiserWithToken
+  }
+}
+
 query FundraiserWithContributors($id: ID!) {
   fundraiser(id: $id) {
     ...Fundraiser

@@ -1,13 +1,12 @@
 import React, { ReactElement, useState } from 'react';
-import { formatUnits } from 'ethers/lib/utils';
-import { DownOutlined, SearchOutlined } from '@ant-design/icons';
+import { DownOutlined, SearchOutlined } from '@lib/icons';
 import { Button, Checkbox, Dropdown, Menu, Table } from 'antd';
 
 import { AffiliateFragment } from '@graphql';
 import { useAccountNotes, useAppState, useDispatch, useGraphql } from '@app';
 import { Address, AffiliateEditModal, EditableCell, FilterDropdown } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
-import { parseUnits, strcmp } from '@lib';
+import { formatUnits, parseUnits, strcmp } from '@lib';
 
 interface TableRecord {
   address: string;

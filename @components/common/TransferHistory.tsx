@@ -1,11 +1,10 @@
 import React, { ReactElement, useState } from 'react';
-import { LeftCircleTwoTone, LoadingOutlined, RightCircleTwoTone, SearchOutlined } from '@ant-design/icons';
+import { LeftCircleTwoTone, LoadingOutlined, RightCircleTwoTone, SearchOutlined } from '@lib/icons';
 
 import { TokenInfoFragment, TransferFragment } from '@graphql';
 import { renderAddress, tableColumns } from '../manage/listUtils';
-import { formatDatetime, sameAddress, strcmp } from '@lib';
+import { formatDatetime, sameAddress, strcmp, formatUnits } from '@lib';
 import { FilterDropdown, PaginatedTable } from '@components';
-import { formatUnits } from 'ethers/lib/utils';
 import { useAppState, useEthers } from '@app';
 
 interface TableRecord {

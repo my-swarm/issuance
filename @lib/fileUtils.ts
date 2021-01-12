@@ -1,4 +1,4 @@
-import { UploadFile } from 'antd/lib/upload/interface';
+import { UploadFile } from 'antd/es/upload/interface';
 import { InvalidStateError } from './errors';
 
 export interface AppFile {

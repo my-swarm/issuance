@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactNode, useCallback } from 'react';
-import { CopyOutlined } from '@ant-design/icons';
+import { CopyOutlined } from '@lib/icons';
 
 import { EthereumNetwork, etherscanDomains } from '@lib';
 import { useEthers } from '@app';

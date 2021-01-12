@@ -1,19 +1,12 @@
 import React, { ReactElement, useState } from 'react';
 import { Checkbox, Dropdown, Menu, Select, Space, Table, Tooltip } from 'antd';
-import {
-  CheckCircleTwoTone,
-  DeleteTwoTone,
-  DownOutlined,
-  ExclamationCircleTwoTone,
-  SearchOutlined,
-} from '@ant-design/icons';
 
 import { useAppState, useDispatch, useGraphql, useAccountNotes } from '@app';
 import { TransferRequestStatus, useTransferRequestsQuery } from '@graphql';
 import { FilterDropdown, Loading } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
-import { AccountMeta, formatDatetime, strcmp } from '@lib';
-import { formatUnits } from 'ethers/lib/utils';
+import { formatUnits, AccountMeta, formatDatetime, strcmp } from '@lib';
+import { CheckCircleTwoTone, DeleteTwoTone, DownOutlined, ExclamationCircleTwoTone, SearchOutlined } from '@lib/icons';
 
 interface TableRecord {
   requestId: number;

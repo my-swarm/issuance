@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { BigNumber, BigNumberish } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { Typography, Button, Descriptions, Space } from 'antd';
-import { ReloadOutlined } from '@ant-design/icons';
+import { ReloadOutlined } from '@lib/icons';
 const { Text } = Typography;
 
 import { formatNumber, formatUnits, SWM_TOKEN_DECIMALS } from '@lib';

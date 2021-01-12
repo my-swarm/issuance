@@ -2155,6 +2155,19 @@ export type FundraiserQuery = (
   )> }
 );
 
+export type FundraiserWidgetQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type FundraiserWidgetQuery = (
+  { __typename?: 'Query' }
+  & { fundraiser?: Maybe<(
+    { __typename?: 'Fundraiser' }
+    & FundraiserWithTokenFragment
+  )> }
+);
+
 export type FundraiserWithContributorsQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -2788,6 +2801,39 @@ export function useFundraiserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type FundraiserQueryHookResult = ReturnType<typeof useFundraiserQuery>;
 export type FundraiserLazyQueryHookResult = ReturnType<typeof useFundraiserLazyQuery>;
 export type FundraiserQueryResult = Apollo.QueryResult<FundraiserQuery, FundraiserQueryVariables>;
+export const FundraiserWidgetDocument = gql`
+    query FundraiserWidget($id: ID!) {
+  fundraiser(id: $id) {
+    ...FundraiserWithToken
+  }
+}
+    ${FundraiserWithTokenFragmentDoc}`;
+
+/**
+ * __useFundraiserWidgetQuery__
+ *
+ * To run a query within a React component, call `useFundraiserWidgetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFundraiserWidgetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFundraiserWidgetQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFundraiserWidgetQuery(baseOptions: Apollo.QueryHookOptions<FundraiserWidgetQuery, FundraiserWidgetQueryVariables>) {
+        return Apollo.useQuery<FundraiserWidgetQuery, FundraiserWidgetQueryVariables>(FundraiserWidgetDocument, baseOptions);
+      }
+export function useFundraiserWidgetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FundraiserWidgetQuery, FundraiserWidgetQueryVariables>) {
+          return Apollo.useLazyQuery<FundraiserWidgetQuery, FundraiserWidgetQueryVariables>(FundraiserWidgetDocument, baseOptions);
+        }
+export type FundraiserWidgetQueryHookResult = ReturnType<typeof useFundraiserWidgetQuery>;
+export type FundraiserWidgetLazyQueryHookResult = ReturnType<typeof useFundraiserWidgetLazyQuery>;
+export type FundraiserWidgetQueryResult = Apollo.QueryResult<FundraiserWidgetQuery, FundraiserWidgetQueryVariables>;
 export const FundraiserWithContributorsDocument = gql`
     query FundraiserWithContributors($id: ID!) {
   fundraiser(id: $id) {

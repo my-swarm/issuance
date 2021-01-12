@@ -1,5 +1,6 @@
 import React, { ReactElement, useState, useEffect } from 'react';
-import { BigNumber, Contract } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
+import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
 

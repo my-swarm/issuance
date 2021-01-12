@@ -1,6 +1,6 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import { Upload } from 'antd';
-import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface';
+import { UploadFile, UploadChangeParam } from 'antd/es/upload/interface';
 
 import { convertFileToUpload, convertUploadToFile, AppFile } from '@lib';
 import { FORM } from '@app';

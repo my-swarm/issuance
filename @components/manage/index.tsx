@@ -14,3 +14,4 @@ export * from './AccountsAddModal';
 export * from './AccountBurnModal';
 export * from './AffiliateEditModal';
 export * from './TransferModal';
+export * from './ManageFundraiserEmbed';

@@ -1,5 +1,5 @@
-import { Contract } from 'ethers';
-import moment from 'moment';
+import { Contract } from '@ethersproject/contracts';
+import dayjs from 'dayjs';
 
 import { BASE_CURRENCIES, EthereumToken, LocalFundraiser } from '@lib';
 
@@ -35,7 +35,7 @@ export class FundraiserDeployer extends Deployer {
   private async deployFundraiser() {
     if (this.state > DeployerState.Fundraiser) return;
     const { fundraiser, tokenDecimals, baseCurrency } = this;
-    const startDate = fundraiser.startNow ? moment().add(1, 'minute') : fundraiser.startDate;
+    const startDate = fundraiser.startNow ? dayjs().add(1, 'minute') : fundraiser.startDate;
     const params = [
       fundraiser.label, // label
       this.tokenAddress, // token (address)

@@ -1,4 +1,5 @@
-import { BigNumber, CallOverrides, Contract, Transaction as EthersTransaction } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
+import { CallOverrides, Contract } from '@ethersproject/contracts';
 
 export enum TransactionState {
   None,

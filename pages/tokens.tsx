@@ -29,7 +29,7 @@ import {
   TokenStartFundraiser,
 } from '@components';
 import { renderAddress, tableColumns } from '@components/manage/listUtils';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 
 /**
  * Merges local underploed tokens with deployedTokens.

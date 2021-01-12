@@ -1,21 +1,22 @@
-import { BigNumber, BigNumberish, utils } from 'ethers';
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
+import { parseUnits as _parseUnits, formatUnits as _formatUnits } from '@ethersproject/units'
 
 export function parseUnits(amount: string | number, decimals: number): BigNumber {
   if (!amount) return BigNumber.from(0);
   if (typeof amount === 'number') amount = amount.toString();
-  return utils.parseUnits(amount, decimals);
+  return _parseUnits(amount, decimals);
 }
 
 export function formatUnits(bnAmount: BigNumberish, decimals: number, ifZero = '0'): string {
   bnAmount = BigNumber.from(bnAmount || 0);
   if (bnAmount.eq(0)) return ifZero;
-  return utils.formatUnits(bnAmount, decimals);
+  return _formatUnits(bnAmount, decimals);
 }
 
 export function getUnitsAsNumber(bnAmount: BigNumberish, decimals: number): number {
   bnAmount = BigNumber.from(bnAmount || 0);
   if (bnAmount.eq(0)) return 0;
-  return parseFloat(utils.formatUnits(bnAmount, decimals));
+  return parseFloat(_formatUnits(bnAmount, decimals));
 }
 
 export function formatNumber(n: number | string, decimals = 0): string {

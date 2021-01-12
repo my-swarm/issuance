@@ -3,7 +3,7 @@ import { Button, Col, Form, Input, InputNumber, Row, Space, Descriptions } from 
 import { Address, Box, VSpace } from '@components';
 import { formatUnits, parseUnits } from '@lib';
 import { useDispatch, useEthers } from '@app';
-import { BigNumber, BigNumberish } from 'ethers';
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { TokenInfoFragment } from '@graphql';
 
 interface TransferFormProps {

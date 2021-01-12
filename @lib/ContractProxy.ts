@@ -1,4 +1,6 @@
-import { Contract, Signer, Transaction, Event, CallOverrides } from 'ethers';
+import { Contract, CallOverrides, Event } from '@ethersproject/contracts';
+import { Signer } from '@ethersproject/abstract-signer';
+import { Transaction } from '@ethersproject/transactions';
 import { EthereumNetwork, OnlineToken, TransactionEventCallback, TransactionState } from '@lib';
 import { getContractFactory, getContract, getContractAbi } from './contracts';
 

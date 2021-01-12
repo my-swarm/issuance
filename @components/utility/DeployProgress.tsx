@@ -10,7 +10,7 @@ import {
   deployerStatesMeta,
   DeployerState,
 } from '@lib';
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from '@lib/icons';
 import { useDispatch, useGraphql } from '@app';
 
 interface DeployProgressProps {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { CardAction, DefaultLayout } from '@components';
 import { Card, Col, Divider, Row, Space, Tag } from 'antd';
-import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined, WalletOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined, WalletOutlined } from '@lib/icons';
 
 interface AboutProps {
   title?: string;

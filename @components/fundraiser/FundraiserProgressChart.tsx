@@ -10,10 +10,10 @@ import {
   XAxis,
 } from 'recharts';
 import { ContributorFragment, FundraiserWithContributorsFragment } from '@graphql';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import _ from 'lodash';
-import { formatUnits } from 'ethers/lib/utils';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
+import { formatUnits } from '@lib';
 import { colors } from '@app';
 
 interface FundraiserChartProps {
@@ -49,7 +49,7 @@ function aggregateDailyContributions(contributors: ContributorFragment[]): Chart
     const { status, contributions } = contributor;
     for (const contribution of contributions) {
       if (contribution.type === status) {
-        const date = moment.unix(contribution.timestamp).format('YYYY/MM/DD');
+        const date = dayjs.unix(contribution.timestamp).format('YYYY/MM/DD');
         const row = result[date] || { date, ...emptyRow };
         const key = status.toLowerCase();
         row[key] = row[key].add(contribution.amount);

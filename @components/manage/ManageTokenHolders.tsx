@@ -1,13 +1,12 @@
 import React, { ReactElement, useState } from 'react';
 import { Checkbox, Dropdown, Menu, Space, Table, Tooltip } from 'antd';
-import { CheckCircleTwoTone, DownOutlined, ExclamationCircleTwoTone, SearchOutlined } from '@ant-design/icons';
+import { CheckCircleTwoTone, DownOutlined, ExclamationCircleTwoTone, SearchOutlined } from '@lib/icons';
 
 import { useAppState, useDispatch, useGraphql, useAccountNotes } from '@app';
 import { useTokenHoldersQuery } from '@graphql';
 import { AccountBurnModal, Address, EditableCell, FilterDropdown, Loading, TransferModal } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
-import { formatDatetime, strcmp } from '@lib';
-import { formatUnits } from 'ethers/lib/utils';
+import { formatUnits, formatDatetime, strcmp } from '@lib';
 
 interface TableRecord {
   address: string;

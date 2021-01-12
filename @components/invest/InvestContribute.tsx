@@ -4,7 +4,7 @@ import { useFundraiserLazyQuery } from '@graphql';
 import { Address, Box, Help, Loading, VSpace } from '@components';
 import { useDispatch, useErc20Balance, useEthers, useGraphql } from '@app';
 import { formatUnits, getUnitsAsNumber, parseUnits } from '@lib';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 
 const { Title } = Typography;
 

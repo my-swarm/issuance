@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { TableProps } from 'antd/lib/table';
+import { TableProps } from 'antd/es/table';
 import { Checkbox, Space, Table } from 'antd';
 import { createPagination } from '../manage/listUtils';
 

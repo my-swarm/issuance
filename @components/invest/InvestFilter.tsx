@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Button, Form, Input } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined } from '@lib/icons';
 import { Help } from '../utility';
 
 export interface InvestFilterFields {

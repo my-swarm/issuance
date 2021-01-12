@@ -1,6 +1,8 @@
 import React, { ReactElement, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { getNetwork, Network, Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
-import { Contract, ethers, Signer, Wallet } from 'ethers';
+import { Contract } from '@ethersproject/contracts';
+import { Signer } from '@ethersproject/abstract-signer';
+import { Wallet } from '@ethersproject/wallet';
 import { devEthereumAccounts, devEthereumNode, isDev } from './config';
 import { Metamask, EthereumNetwork } from '@lib';
 
@@ -72,7 +74,7 @@ export function EthersProvider({ children, devAccountId }: EthersProviderProps):
       setStatus(EthersStatus.FAILED);
       return;
     }
-    const _provider = new ethers.providers.Web3Provider(ethereum);
+    const _provider = new Web3Provider(ethereum);
     const _signer = _provider && _provider.getSigner();
 
     setProvider(_provider);
@@ -97,7 +99,7 @@ export function EthersProvider({ children, devAccountId }: EthersProviderProps):
   async function resetJsonRpcProvider() {
     const url = `${devEthereumNode.address}`;
     const devAccount = devEthereumAccounts[devAccountId];
-    const _provider = new ethers.providers.JsonRpcProvider(url, devEthereumNode.networkId);
+    const _provider = new JsonRpcProvider(url, devEthereumNode.networkId);
     if (!_provider) {
       setStatus(EthersStatus.FAILED);
       return;

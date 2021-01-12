@@ -1,4 +1,4 @@
-import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
+import { ColumnType, TablePaginationConfig } from 'antd/es/table';
 import { MANAGE_TABLE_PER_PAGE } from '@app';
 import { Address } from '@components';
 import React, { ReactElement } from 'react';

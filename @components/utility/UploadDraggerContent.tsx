@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { InboxOutlined } from '@ant-design/icons/lib';
+import { InboxOutlined } from '@lib/icons';
 import { Space } from 'antd';
 
 interface UploadDraggerContentProps {

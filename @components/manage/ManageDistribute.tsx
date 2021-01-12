@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { Descriptions, Alert, Button, Form, Input, Modal, Radio, Space, Table } from 'antd';
 
 import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';

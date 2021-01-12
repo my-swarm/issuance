@@ -2,9 +2,9 @@ import React, { ReactElement, useMemo } from 'react';
 import { Button, Tag, Alert, Divider } from 'antd';
 import { useContractAddress, useDispatch, useGraphql, useStakeInfo } from '@app';
 import { FundraiserStatus, FundraiserWithContributorsFragment } from '@graphql';
-import { BigNumber } from 'ethers';
-import { CheckOutlined, WarningOutlined } from '@ant-design/icons';
+import { BigNumber } from '@ethersproject/bignumber';
 import { formatUnits, parseUnits, SWM_TOKEN_DECIMALS, getUnitsAsNumber } from '@lib';
+import { CheckOutlined, WarningOutlined } from '@lib/icons';
 import { TokenInfoStaking } from '../token';
 import { StakeTable } from '../misc';
 

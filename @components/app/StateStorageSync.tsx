@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect } from 'react';
 import { Space, Tooltip } from 'antd';
 import _ from 'lodash';
-import { SyncOutlined, CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons/lib';
+import { SyncOutlined, CheckCircleOutlined, ExclamationCircleOutlined } from '@lib/icons';
 import * as devData from 'dev_data';
 
 import { isDev, useAppState, useStorage } from '@app';

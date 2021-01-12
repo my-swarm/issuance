@@ -1,4 +1,4 @@
-import { Signer } from 'ethers';
+import { Signer } from '@ethersproject/abstract-signer';
 import { EthereumAddress, EthereumNetwork } from '@lib';
 
 import { ContractProxy, getContractAddress, LocalToken, LocalTokenAddresses, TransactionEventCallback } from '..';

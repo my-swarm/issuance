@@ -1,7 +1,7 @@
 import { ContractValue, useContract, useSwmBalance } from './useContract';
 import { useEffect, useMemo, useState } from 'react';
 import { formatNumber, OnlineToken } from '@lib';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { useEthers } from './EthersContext';
 import { useAppState } from './StateContext';
 

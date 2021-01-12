@@ -1,7 +1,7 @@
 import React, { ReactElement, ReactNode } from 'react';
 import * as help from '@help';
 import { Popover } from 'antd';
-import { QuestionCircleTwoTone as HelpIcon } from '@ant-design/icons/lib/icons';
+import { QuestionCircleTwoTone } from '@lib/icons';
 
 interface HelpProps {
   name: string;
@@ -19,7 +19,7 @@ export function Help({ name, type = 'popover' }: HelpProps): ReactElement {
         content={help[name].content}
         placement="top"
       >
-        <HelpIcon />
+        <QuestionCircleTwoTone />
       </Popover>
     );
   }

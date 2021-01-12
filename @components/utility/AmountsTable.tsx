@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { Address } from '@components';
 import { formatUnits, LocalToken } from '@lib';
 import { Table } from 'antd';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 
 interface AmountsTableProps {
   addresses: string[];

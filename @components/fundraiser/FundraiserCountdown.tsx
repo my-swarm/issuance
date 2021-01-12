@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
-import moment from 'moment';
-import { Datelike, toMoment } from '@lib';
+import dayjs from 'dayjs';
+import { Datelike, toDayjs } from '@lib';
 import { Countdown } from '../utility';
 
 interface FundraiserCountdownProps {
@@ -9,9 +9,9 @@ interface FundraiserCountdownProps {
 }
 
 export function FundraiserCountdown({ startDate, endDate }: FundraiserCountdownProps): ReactElement {
-  const start = toMoment(startDate);
-  const end = toMoment(endDate);
-  const now = moment();
+  const start = toDayjs(startDate);
+  const end = toDayjs(endDate);
+  const now = dayjs();
   if (start.isAfter(end)) return null;
   return (
     <div>

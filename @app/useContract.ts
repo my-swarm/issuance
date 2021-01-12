@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { BigNumber, Contract } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
+import { Contract } from '@ethersproject/contracts';
 import { formatUnits, getContract, getContractAbi, getContractAddress, SWM_TOKEN_DECIMALS } from '@lib';
 import { useEthers, useAppState } from '.';
 import { contractsMeta } from '@contracts';

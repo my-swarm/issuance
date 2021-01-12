@@ -1,27 +1,28 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import { Datelike, toMoment } from '@lib';
-import { Space, Statistic } from 'antd';
-import moment, { Moment } from 'moment';
+import { Datelike, toDayjs } from '@lib';
+import dayjs, { Dayjs } from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
 
 interface CountdownProps {
   to: Datelike;
 }
 
 export function Countdown({ to }: CountdownProps): ReactElement {
-  const [now, setNow] = useState<Moment>();
+  const [now, setNow] = useState<Dayjs>();
 
   useEffect(() => {
     handleUpdate();
   }, []);
 
   const handleUpdate = () => {
-    setNow(moment());
+    setNow(dayjs());
     window.setTimeout(handleUpdate, 1000);
   };
 
-  const end = toMoment(to);
+  const end = toDayjs(to);
   const diff = end.isAfter(now) ? end.diff(now) : 0;
-  const duration = moment.duration(diff);
+  const duration = dayjs.duration(diff);
 
   return (
     <div className="c-countdown">

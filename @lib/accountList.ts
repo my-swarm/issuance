@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { getAddress } from '@ethersproject/address';
 
 export function parseAddressesInput<T>(input: string, convert: (meta: string[]) => T): { [key: string]: T } {
   if (input.trim() === '') {
@@ -13,7 +13,7 @@ export function parseAddressesInput<T>(input: string, convert: (meta: string[]) 
     let address;
 
     try {
-      address = ethers.utils.getAddress(uncheckedAddress);
+      address = getAddress(uncheckedAddress);
     } catch (e) {
       throw { message: 'Error parsing address list', description: `${e.reason}: ${uncheckedAddress}` };
     }

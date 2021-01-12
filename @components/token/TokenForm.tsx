@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
 import { Form, Input, InputNumber, Button, Checkbox, Space, Radio } from 'antd';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Store } from 'rc-field-form/lib/interface';
 
 import { LocalToken, TransferRules } from '@lib';

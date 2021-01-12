@@ -5,8 +5,10 @@ import '../styles/index.scss';
 import { EthersProvider, StateProvider, reducer } from '@app';
 import { MetamaskNotReadyError } from '@lib';
 import { DevAccountSwitcher, StateStorageSync } from '@components';
+import { useRouter } from 'next/router';
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
+  const router = useRouter();
   const [apolloClient, setApolloClient] = useState<ApolloClient<NormalizedCacheObject>>();
   const [devAccountId, setDevAccountId] = useState<number>(1);
 
@@ -33,6 +35,18 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
   }, []);
 
   if (!apolloClient) return null;
+  /*
+
+  const isWidget = router.pathname.match(/^\/widgets\//);
+
+  if (isWidget) {
+    return (
+      <ApolloProvider client={apolloClient}>
+        <Component {...pageProps} />
+      </ApolloProvider>
+    );
+  }
+*/
 
   return (
     <StateProvider reducer={reducer}>

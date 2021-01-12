@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { DownloadOutlined } from '@ant-design/icons';
+import { DownloadOutlined } from '@lib/icons';
 import { AppFile } from '@lib';
 
 interface FilePreviewProps {

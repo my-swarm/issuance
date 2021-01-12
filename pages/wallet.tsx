@@ -1,13 +1,13 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { Button, Checkbox, Drawer, Space, Table } from 'antd';
-import { DollarCircleOutlined } from '@ant-design/icons';
+import { DollarCircleOutlined } from '@lib/icons';
 
 import { DefaultLayout, Loading, RequireEthers, WalletDetail } from '@components';
 import { TokenHolderFragment, TokenInfoFragment, TransferFragment, useWalletLazyQuery } from '@graphql';
 import { formatUnits } from '@lib';
 import { useContract, useEthers, useGraphql } from '@app';
 import { AlignType } from 'rc-table/es/interface';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 
 enum WalletAction {
   Detail,

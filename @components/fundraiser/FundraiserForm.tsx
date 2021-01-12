@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Form, DatePicker, Input, InputNumber, Button, Space, Select, Row, Col, Checkbox } from 'antd';
 
 import { LocalFundraiser, BASE_CURRENCIES } from '@lib';
@@ -58,8 +58,8 @@ export function FundraiserForm({
 
   const initialValues = {
     ...(formData || {}),
-    startDate: formData?.startDate ? moment(formData.startDate) : undefined,
-    endDate: formData?.endDate ? moment(formData.endDate) : undefined,
+    startDate: formData?.startDate ? dayjs(formData.startDate) : undefined,
+    endDate: formData?.endDate ? dayjs(formData.endDate) : undefined,
     label: formData?.label || `${tokenName} fundraiser`,
   };
 

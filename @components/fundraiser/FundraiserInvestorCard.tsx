@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react';
 import { Card, Col, Typography, Row, Modal } from 'antd';
 import { FundraiserWithTokenFragment } from '@graphql';
-import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined, LoadingOutlined } from '@ant-design/icons';
 import { FundraiserCountdown } from './FundraiserCountdown';
 import { Address, CardAction, FundraiserStatusChart, ImagePreview } from '..';
 import { useEthers, useKya } from '@app';
+import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined, LoadingOutlined } from '@lib/icons';
 import { OnlineToken } from '@lib';
 
 const { Text } = Typography;
@@ -17,13 +17,21 @@ export enum FundraiserInvestorAction {
 
 interface FundraiserInvestorCardProps {
   fundraiser: FundraiserWithTokenFragment;
-  onAction: (action: FundraiserInvestorAction) => void;
+  onAction?: (action: FundraiserInvestorAction) => void;
+  embed?: boolean;
 }
 
-export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInvestorCardProps): ReactElement {
+export function FundraiserInvestorCard({
+  fundraiser,
+  onAction = () => {
+    console.log('no action handler');
+  },
+  embed = false,
+}: FundraiserInvestorCardProps): ReactElement {
   const { token, baseCurrency } = fundraiser;
   const { address } = useEthers();
 
+  console.log({ token });
   // todo: as OnlineToken is a quick hack. Should restructure the fragments
   const { kya } = useKya(token as OnlineToken);
 
@@ -48,7 +56,7 @@ export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInves
 
   return (
     <Card
-      className="c-fundraiser-investor-card mb-3"
+      className={`c-fundraiser-investor-card ${embed ? 'standalone' : ''}`}
       title={
         <>
           <div>
@@ -57,16 +65,20 @@ export function FundraiserInvestorCard({ fundraiser, onAction }: FundraiserInves
           <Text type="secondary">{fundraiser.label}</Text>
         </>
       }
-      actions={[
-        <CardAction onClick={handleTokenDetails} icon={<AppstoreOutlined />} title="Token details" key={1} />,
-        <CardAction
-          onClick={handleFundraiserDetails}
-          icon={<LineChartOutlined />}
-          title="Fundraiser details"
-          key={2}
-        />,
-        <CardAction onClick={handleContribute} icon={<DollarCircleOutlined />} title="Contribute" key={3} />,
-      ]}
+      actions={
+        !embed
+          ? [
+              <CardAction onClick={handleTokenDetails} icon={<AppstoreOutlined />} title="Token details" key={1} />,
+              <CardAction
+                onClick={handleFundraiserDetails}
+                icon={<LineChartOutlined />}
+                title="Fundraiser details"
+                key={2}
+              />,
+              <CardAction onClick={handleContribute} icon={<DollarCircleOutlined />} title="Contribute" key={3} />,
+            ]
+          : undefined
+      }
     >
       <Card.Grid hoverable={false} className="token">
         {kya ? (

@@ -1,4 +1,5 @@
-import { Contract, ContractFactory, Signer } from 'ethers';
+import { Contract, ContractFactory } from '@ethersproject/contracts';
+import { Signer } from '@ethersproject/abstract-signer';
 import { abis, addresses, bytecodes, contractsMeta, contractNameMap } from '@contracts';
 import { LocalToken, OnlineToken } from './localToken';
 

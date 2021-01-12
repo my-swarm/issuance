@@ -13,7 +13,7 @@ import {
   Footer,
 } from '@components';
 import { isDev, useAppState } from '@app';
-import { MailOutlined } from '@ant-design/icons';
+import { MailOutlined } from '@lib/icons';
 
 const { Content, Sider } = Layout;
 

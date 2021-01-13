@@ -46,7 +46,7 @@ export function InvestContribute({ id }: InvestContributeProps): ReactElement {
       dispatchTransaction({
         method: 'fundraiser.contribute',
         address: fundraiser.address,
-        arguments: [amount, values.referral],
+        arguments: [amount, values.referral || ''],
         description: 'Contributing...',
         onSuccess: () => {
           Modal.info({

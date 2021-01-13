@@ -24,8 +24,8 @@ export function MasternodesChart({ data, numNodes, roi }: MasternodesChartProps)
         </Col>
       </Row>
 
-      <ResponsiveContainer width="99%" minWidth={200} height={120}>
-        <AreaChart width={400} height={120} data={data}>
+      <ResponsiveContainer width="99%" minWidth={200} height={160}>
+        <AreaChart width={400} height={160} data={data}>
           <XAxis dataKey="date" />
           <Area dataKey="active" stackId="a" fill={colors.blue} stroke={colors.blue} />
         </AreaChart>

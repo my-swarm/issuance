@@ -33,8 +33,8 @@ export function SwmPriceChart({ data }: SwmPriceChartProps): ReactElement {
           />
         </Col>
       </Row>
-      <ResponsiveContainer width="99%" minWidth={200} height={120}>
-        <AreaChart width={400} height={120} data={data}>
+      <ResponsiveContainer width="99%" minWidth={200} height={160}>
+        <AreaChart width={400} height={160} data={data}>
           <XAxis dataKey="date" />
           <Area dataKey="price" fill={colors.blue} stroke={colors.blue} />
         </AreaChart>

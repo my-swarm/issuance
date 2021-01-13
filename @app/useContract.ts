@@ -1,8 +1,15 @@
 import { useEffect, useState } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';
 import { Contract } from '@ethersproject/contracts';
-import { formatUnits, getContract, getContractAbi, getContractAddress, SWM_TOKEN_DECIMALS } from '@lib';
-import { useEthers, useAppState } from '.';
+import {
+  formatUnits,
+  getContract,
+  getContractAbi,
+  getContractAddress,
+  getUnitsAsNumber,
+  SWM_TOKEN_DECIMALS,
+} from '@lib';
+import { useEthers, useAppState, isDev, devSwmBalances } from '.';
 import { contractsMeta } from '@contracts';
 
 enum ContractValueType {
@@ -89,6 +96,7 @@ export function useContract(): ContractMap {
 export interface ContractValue {
   raw?: BigNumber | number | string | boolean;
   nice?: string;
+  number?: number;
 }
 
 type UseContractValueResult = [ContractValue | undefined, () => void];
@@ -111,17 +119,31 @@ export function useSwmAllowance(): UseContractValueResult {
   return [value, () => setTimestamp(Date.now())];
 }
 
-export function useSwmBalance(): UseContractValueResult {
+export function useSwmBalance(account?: string): UseContractValueResult {
   const { address } = useEthers();
   const { swm } = useContract();
   const [value, setValue] = useState<ContractValue>({});
   const [timestamp, setTimestamp] = useState<number>(Date.now());
 
+  if (!account) account = address;
+
   useEffect(() => {
-    if (swm && address) {
-      swm.balanceOf(address).then((raw) => {
-        setValue({ raw, nice: formatUnits(raw, SWM_TOKEN_DECIMALS) });
-      });
+    if (swm && account) {
+      if (isDev && devSwmBalances[account]) {
+        setValue({
+          raw: devSwmBalances[account],
+          nice: devSwmBalances[account].toString(),
+          number: devSwmBalances[account],
+        });
+      } else {
+        swm.balanceOf(account).then((raw) => {
+          setValue({
+            raw,
+            nice: formatUnits(raw, SWM_TOKEN_DECIMALS),
+            number: getUnitsAsNumber(raw, SWM_TOKEN_DECIMALS),
+          });
+        });
+      }
     }
   }, [swm, address, timestamp]);
 
@@ -146,7 +168,7 @@ export function useErc20Balance(erc20Address): UseContractValueResult {
   useEffect(() => {
     if (contract && address && decimals) {
       contract.balanceOf(address).then((raw) => {
-        setValue({ raw, nice: formatUnits(raw, decimals) });
+        setValue({ raw, nice: formatUnits(raw, decimals), number: getUnitsAsNumber(raw, decimals) });
       });
     }
   }, [contract, address, decimals, timestamp]);

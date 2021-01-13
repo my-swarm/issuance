@@ -1,57 +1,94 @@
 import React, { ReactElement } from 'react';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
-import { Row, Col, Tag } from 'antd';
+import { Row, Col, Tag, Tooltip } from 'antd';
 import { Loading, VSpace } from '../utility';
 import { formatNumber } from '@lib';
-import { colors } from '@app';
+import { colors, knownAccounts, useSwmBalance } from '@app';
 
 interface SwmStakeChartProps {
   total: number;
-  masternodes: number;
-  tokens: number;
+  mnStake: number;
+  issuerStake: number;
 }
 
-export function SwmStakeChart({ total, masternodes, tokens }: SwmStakeChartProps): ReactElement {
-  if (!total || !masternodes || !tokens) return <Loading />;
+interface Metric {
+  label: string;
+  amount: number;
+  color: string;
+}
 
-  const circulating = total - masternodes - tokens;
-  const data = [{ masternodes, tokens, circulating, name: 'swm' }];
+type Metrics = Record<string, Metric>;
 
-  function renderLegend(color: string, title: string, amount: number) {
+export function SwmStakeChart({ total, mnStake, issuerStake }: SwmStakeChartProps): ReactElement {
+  const [treasuryBalance] = useSwmBalance(knownAccounts.swarmTreasury);
+  const [mnRewardsBalance] = useSwmBalance(knownAccounts.swarmMnRewards);
+  if (!total || !mnStake || !issuerStake) return <Loading />;
+
+  const circulating = total - mnStake - issuerStake;
+  const metrics: Metrics = {
+    treasuryBalance: {
+      label: 'Swarm Network Treasury',
+      amount: treasuryBalance.number,
+      color: colors.orange,
+    },
+    mnRewardsBalance: {
+      label: 'Swarm MN Rewards',
+      amount: mnRewardsBalance.number,
+      color: colors.yellow,
+    },
+    mnStake: {
+      label: 'Staked by Masternodes',
+      amount: mnStake,
+      color: colors.blue,
+    },
+    issuerStake: {
+      label: 'Staked by Issuers',
+      amount: issuerStake,
+      color: colors.green,
+    },
+    circulating: {
+      label: 'Circulating',
+      amount: circulating,
+      color: colors.grey2,
+    },
+  };
+  const sum = Object.values(metrics)
+    .map((metric) => metric.amount)
+    .reduce((a, b) => a + b, 0);
+
+  function renderLegend(key: string) {
+    const metric = metrics[key];
+    const percent = Math.round((metric.amount / sum) * 100 * 100) / 100;
     return (
       <Row gutter={8} className="mb-1" justify="space-between">
         <Col flex="1rem">
-          <div style={{ width: '1rem', height: '100%', background: color }} />
+          <div style={{ width: '1rem', height: '100%', background: metric.color }} />
         </Col>
-        <Col flex="auto">{title}:</Col>
+        <Col flex="auto">{metric.label}:</Col>
         <Col flex="auto" style={{ textAlign: 'right' }}>
-          {formatNumber(amount)} SWM
+          {percent} %<br />
+          <span className="xs">{formatNumber(metric.amount)} SWM</span>
         </Col>
       </Row>
     );
   }
 
+  function renderBar(key: string) {
+    const metric = metrics[key];
+    const percent = Math.round((metric.amount / sum) * 100 * 100) / 100;
+    const width = Math.max(1, percent);
+    return (
+      <Tooltip title={`${metric.label}: ${percent} %`}>
+        <div style={{ width: `${width}%`, backgroundColor: metric.color }} />
+      </Tooltip>
+    );
+  }
+
   return (
     <>
-      <ResponsiveContainer width="99%" minWidth={100} height={40}>
-        <BarChart
-          width={400}
-          height={40}
-          data={data}
-          layout="vertical"
-          margin={{ top: 0, left: 0, bottom: 0, right: 0 }}
-        >
-          <XAxis type="number" hide />
-          <YAxis type="category" dataKey="name" hide />
-          <Bar dataKey="masternodes" stackId="a" fill={colors.blue} />
-          <Bar dataKey="tokens" stackId="a" fill={colors.orange} />
-          <Bar dataKey="circulating" stackId="a" fill={colors.grey1} />
-        </BarChart>
-      </ResponsiveContainer>
+      <div className="share-chart">{Object.keys(metrics).map((key) => renderBar(key))}</div>
       <VSpace />
-      {renderLegend(colors.blue, 'Staked by masternodes', masternodes)}
-      {renderLegend(colors.orange, 'Staked with token issuance', tokens)}
-      {renderLegend(colors.grey1, 'Circulating supply', circulating)}
+      <div className="share-table">{Object.keys(metrics).map((key) => renderLegend(key))}</div>
     </>
   );
 }

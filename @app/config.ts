@@ -7,8 +7,19 @@ export const MANAGE_TABLE_PER_PAGE = 10;
 export const MASTERNODE_STAKE = 50000;
 export const SWM_STAKE_OLD_REGISTRY = 281842;
 
+export const knownAccounts = {
+  swarmTreasury: '0x689a20daa8b813a73f86717b572e8fa3a42398d6',
+  swarmMnRewards: '0x11db72f40e88899af7d3270a6206287003dda5fb',
+};
+
+export const devSwmBalances = {
+  [knownAccounts.swarmTreasury]: 8360425,
+  [knownAccounts.swarmMnRewards]: 5898828,
+};
+
 export const colors = {
   orange: '#f3902d',
+  orangeAlt: '#fcad25',
   yellow: '#f9d854',
   blue: '#608db9',
   bright: '#f2f4ed',

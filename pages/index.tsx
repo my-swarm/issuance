@@ -99,7 +99,7 @@ export default function Index({ title }: IndexProps): ReactElement {
               </a>
             }
           >
-            <SwmStakeChart total={swmCircSupply} masternodes={mnStake} tokens={SWM_STAKE_OLD_REGISTRY} />
+            <SwmStakeChart total={swmCircSupply} mnStake={mnStake} issuerStake={SWM_STAKE_OLD_REGISTRY} />
           </Card>
         </Col>
         <Col {...colLayout}>

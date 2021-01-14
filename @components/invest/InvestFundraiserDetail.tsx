@@ -20,7 +20,7 @@ export function InvestFundraiserDetails({ id }: InvestTokenDetailsProps): ReactE
       <FundraiserInfoBaseCurrency fundraiser={fundraiser} />
       <div className="mb-3" />
       <h3>
-        <strong>Fundraise progress</strong>
+        <strong>Fundraiser progress</strong>
       </h3>
       <FundraiserProgressChart fundraiser={fundraiser} />
     </div>

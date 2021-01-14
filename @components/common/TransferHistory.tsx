@@ -6,6 +6,7 @@ import { renderAddress, tableColumns } from '../manage/listUtils';
 import { formatDatetime, sameAddress, strcmp, formatUnits } from '@lib';
 import { FilterDropdown, PaginatedTable } from '@components';
 import { useAppState, useEthers } from '@app';
+import { Tooltip } from 'antd';
 
 interface TableRecord {
   from: string;
@@ -35,9 +36,13 @@ export function TransferHistory({ token, transfers, direction = false }: Transfe
             row.isPending ? (
               <LoadingOutlined title="Pending transaction" />
             ) : row.toAddress === address ? (
-              <RightCircleTwoTone twoToneColor="green" title="Incoming transfer" />
+              <Tooltip title="Incoming transfer">
+                <RightCircleTwoTone twoToneColor="green" />
+              </Tooltip>
             ) : (
-              <LeftCircleTwoTone twoToneColor="red" label="Outgoing transfer" />
+              <Tooltip title="Outgoing transfer">
+                <LeftCircleTwoTone twoToneColor="red" />
+              </Tooltip>
             ),
         },
       ]

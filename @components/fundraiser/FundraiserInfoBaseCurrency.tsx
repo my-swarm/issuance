@@ -14,7 +14,7 @@ export function FundraiserInfoBaseCurrency({ fundraiser }: FundraiserInfoBaseCur
 
   return (
     <>
-      <Descriptions title="Base currency" column={2} size="small">
+      <Descriptions title="Base currency" column={1} bordered size="small" labelStyle={{ width: '40%' }}>
         <Descriptions.Item label="Address">
           <Address short>{baseCurrency.address}</Address>
         </Descriptions.Item>

@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
-import { Descriptions } from 'antd';
+import { Descriptions, Divider } from 'antd';
 import { formatDate, formatNumber } from '@lib';
 import { formatUnits } from '@lib';
 import { FundraiserFragment } from '@graphql';
-import { Address } from '../utility';
+import { Address, VSpace } from '../utility';
 
 interface FundraiserInfoCommonProps {
   fundraiser: FundraiserFragment;
@@ -20,11 +20,17 @@ export function FundraiserInfoCommon({ fundraiser, column = 1 }: FundraiserInfoC
 
   return (
     <>
-      <Descriptions title="Fundraiser status" column={column} size="small">
+      <Descriptions
+        title="Fundraiser setup"
+        column={1}
+        bordered
+        size="small"
+        className="mb-4"
+        labelStyle={{ width: '40%' }}
+      >
         <Descriptions.Item label="Owner address">
           <Address short>{fundraiser.owner}</Address>
         </Descriptions.Item>
-        <Descriptions.Item label="Status">{fundraiser.status}</Descriptions.Item>
         <Descriptions.Item label="Token supply">
           {formatUnits(fundraiser.supply, token.decimals, 'N/A')}
         </Descriptions.Item>
@@ -35,6 +41,9 @@ export function FundraiserInfoCommon({ fundraiser, column = 1 }: FundraiserInfoC
         <Descriptions.Item label="End Date">{formatDate(fundraiser.endDate)}</Descriptions.Item>
         <Descriptions.Item label="Soft cap">{softCap} USD</Descriptions.Item>
         <Descriptions.Item label="Hard cap">{hardCap} USD</Descriptions.Item>
+      </Descriptions>
+      <Descriptions title="Fundraiser status" column={1} bordered size="small" labelStyle={{ width: '40%' }}>
+        <Descriptions.Item label="Status">{fundraiser.status}</Descriptions.Item>
         <Descriptions.Item label="Amount raised">
           {amountQualified} USD ({formatNumber(raisedPercent, 2)} %)
         </Descriptions.Item>

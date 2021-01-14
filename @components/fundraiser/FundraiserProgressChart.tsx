@@ -94,6 +94,8 @@ export function FundraiserProgressChart({ fundraiser }: FundraiserChartProps): R
   const softCap = parseFloat(formatUnits(fundraiser.softCap, baseCurrency.decimals));
   const hardCap = parseFloat(formatUnits(fundraiser.hardCap, baseCurrency.decimals));
 
+  if (data.length < 2) return <p>A fancy chart will display here when there are enough contriutions.</p>;
+
   return (
     <ResponsiveContainer minWidth={300} height={200} width="99%">
       <LineChart data={data}>

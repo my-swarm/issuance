@@ -134,6 +134,7 @@ export default function Index({ title }: IndexProps): ReactElement {
                 icon={<img src="/images/balancer.svg" alt="Balancer icon" />}
                 size="large"
                 block
+                href="https://balancer.exchange/#/swap?inputCurrency=ETH&outputCurrency=0x3505f494c3f0fed0b594e01fa41dd3967645ca39"
               >
                 Balancer
               </Button>
@@ -142,6 +143,7 @@ export default function Index({ title }: IndexProps): ReactElement {
                 icon={<img src="/images/uniswap.svg" alt="Uniswap icon" />}
                 size="large"
                 block
+                href="https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x3505f494c3f0fed0b594e01fa41dd3967645ca39"
               >
                 Uniswap
               </Button>
@@ -155,7 +157,7 @@ export default function Index({ title }: IndexProps): ReactElement {
         </Col>
       </Row>
       <Divider />
-      <h2>Latest investment opportunities</h2>
+      <h2>Powered by Swarm</h2>
       <InvestFundraisers limit={3} />
 
       {buyingSwm && <BuySwmModal onClose={() => setBuyingSwm(false)} />}

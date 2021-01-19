@@ -19,6 +19,17 @@ interface InvestFundraisersProps {
   search?: string;
 }
 
+export function getFundraiserActionTitle(action: FundraiserInvestorAction): string {
+  switch (action) {
+    case FundraiserInvestorAction.TokenDetails:
+      return 'Token details';
+    case FundraiserInvestorAction.FundraiserDetails:
+      return 'Fundraiser details';
+    case FundraiserInvestorAction.Invest:
+      return 'Contribute';
+  }
+}
+
 export function InvestFundraisers({ limit = 100, offset = 0, search = '' }: InvestFundraisersProps): ReactElement {
   const [action, setAction] = useState<FundraiserInvestorAction>();
   const [fundraiser, setFundraiser] = useState<FundraiserWithTokenFragment>();
@@ -41,17 +52,6 @@ export function InvestFundraisers({ limit = 100, offset = 0, search = '' }: Inve
   const handleClearAction = () => {
     setAction(undefined);
   };
-
-  function getActionTitle() {
-    switch (action) {
-      case FundraiserInvestorAction.TokenDetails:
-        return 'Token details';
-      case FundraiserInvestorAction.FundraiserDetails:
-        return 'Fundraiser details';
-      case FundraiserInvestorAction.Invest:
-        return 'Contribute';
-    }
-  }
 
   function renderAction() {
     if (!fundraiser) return null;
@@ -76,7 +76,7 @@ export function InvestFundraisers({ limit = 100, offset = 0, search = '' }: Inve
         ))}
       </div>
       <Drawer
-        title={getActionTitle()}
+        title={getFundraiserActionTitle(action)}
         visible={action !== undefined}
         width="50%"
         closable={true}

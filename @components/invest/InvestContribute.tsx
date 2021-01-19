@@ -123,9 +123,9 @@ export function InvestContribute({ id }: InvestContributeProps): ReactElement {
             <Form.Item name="referral" label="Referral code">
               <Input />
             </Form.Item>
-            <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
+            <Form.Item wrapperCol={{ md: { offset: 10, span: 12 } }}>
               <Button type="primary" htmlType="submit" disabled={!canContribute}>
-                Invest
+                Contribute
               </Button>
             </Form.Item>
           </Form>

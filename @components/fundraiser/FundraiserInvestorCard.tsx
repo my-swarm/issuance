@@ -55,18 +55,11 @@ export function FundraiserInvestorCard({
   };
 
   const extra = embed ? <PoweredBySwarm /> : null;
-  const actions = embed
-    ? null
-    : [
-        <CardAction onClick={handleTokenDetails} icon={<AppstoreOutlined />} title="Token details" key={1} />,
-        <CardAction
-          onClick={handleFundraiserDetails}
-          icon={<LineChartOutlined />}
-          title="Fundraiser details"
-          key={2}
-        />,
-        <CardAction onClick={handleContribute} icon={<DollarCircleOutlined />} title="Contribute" key={3} />,
-      ];
+  const actions = [
+    <CardAction onClick={handleTokenDetails} icon={<AppstoreOutlined />} title="Token details" key={1} />,
+    <CardAction onClick={handleFundraiserDetails} icon={<LineChartOutlined />} title="Fundraiser details" key={2} />,
+    <CardAction onClick={handleContribute} icon={<DollarCircleOutlined />} title="Contribute" key={3} />,
+  ];
 
   return (
     <Card

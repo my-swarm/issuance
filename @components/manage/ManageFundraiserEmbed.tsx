@@ -9,7 +9,7 @@ interface ManageFundraiserStateProps {
 export function ManageFundraiserEmbed({ fundraiser }: ManageFundraiserStateProps): ReactElement {
   const url = new URL(window.location.href);
   const src = `${url.protocol}//${url.hostname}/widgets/fundraiser/?address=${fundraiser.address}`;
-  const embedCode = `<iframe src="${src}" width="440" height="420"></iframe>`;
+  const embedCode = `<iframe src="${src}" width="440" height="490"></iframe>`;
   return (
     <div>
       <Form layout="vertical">

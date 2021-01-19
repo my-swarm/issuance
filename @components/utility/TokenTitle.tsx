@@ -13,9 +13,8 @@ export function TokenTitle({ token }: Props) {
   const { name, symbol } = token;
 
   return (
-    <Space size={2}>
-      <Icon name={symbol.toLowerCase()} />
-      <span>{symbol}</span>
-    </Space>
+    <span>
+      <Icon name={symbol.toLowerCase()} /> <span>{symbol}</span>
+    </span>
   );
 }

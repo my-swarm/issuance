@@ -1,7 +1,7 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import { Button, Descriptions, Form, Input, InputNumber, Modal, Typography } from 'antd';
 import { useFundraiserLazyQuery } from '@graphql';
-import { Address, Box, Help, Loading, VSpace } from '@components';
+import { Address, Box, Help, Loading, VSpace, Icon, TokenTitle } from '@components';
 import { useDispatch, useErc20Balance, useEthers, useGraphql } from '@app';
 import { formatUnits, getUnitsAsNumber, parseUnits } from '@lib';
 import { BigNumber } from '@ethersproject/bignumber';
@@ -74,16 +74,26 @@ export function InvestContribute({ id }: InvestContributeProps): ReactElement {
   return (
     <div>
       <p>
-        Funds are contributed in <strong>{baseCurrency.symbol}</strong>. If you don&apos;t own any, please get them
-        first <Help name="gettingBaseCurrency" />
+        Funds are contributed in <TokenTitle token={baseCurrency} />. If you don&apos;t own any, please get them first{' '}
+        <Help name="gettingBaseCurrency" />
       </p>
       <p>
-        On succesful raise, you&apos;ll get you share of the <strong>{token.symbol}</strong> token ({token.name}).
+        This project&apos;s tokens ({token.symbol}) can be requested from the fundraise issuer -{' '}
+        <strong>post raise</strong>, please contact the issuer for more details on distribution.
       </p>
-      <p>TBD: Info about what happens after contribution, when user gets his tokens etc.</p>
+      <p>
+        Contributions are automatically set at <strong>pending</strong> until <strong>approved</strong> by the token
+        issuer.
+      </p>
       <Descriptions title="Your investor status" column={1} size="small" bordered>
         <Descriptions.Item label="Status">{status}</Descriptions.Item>
-        <Descriptions.Item label={`${baseCurrency.symbol} balance`}>
+        <Descriptions.Item
+          label={
+            <span>
+              <TokenTitle token={baseCurrency} /> balance
+            </span>
+          }
+        >
           {balance.nice} {baseCurrency.symbol}{' '}
           <Button type="link" onClick={reloadBalance}>
             refresh
@@ -101,21 +111,26 @@ export function InvestContribute({ id }: InvestContributeProps): ReactElement {
         <Address short>{fundraiser.address}</Address>). You will be asked to sign the transaction and you can verify the
         parameters in the Metamask popup window.
       </p>
-      <Box>
-        <Form onFinish={handleContribute} form={form} labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
-          <Form.Item name="amount" label="Amount to invest">
-            <Input onChange={(e) => setAmount(parseFloat(e.target.value))} suffix="USD" />
-          </Form.Item>
-          <Form.Item name="referral" label="Referral code">
-            <Input />
-          </Form.Item>
-          <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
-            <Button type="primary" htmlType="submit" disabled={!canContribute}>
-              Invest
-            </Button>
-          </Form.Item>
-        </Form>
-      </Box>
+      <div style={{ maxWidth: '480px' }}>
+        <Box>
+          <Form onFinish={handleContribute} form={form} labelCol={{ span: 10 }} wrapperCol={{ span: 12 }}>
+            <Form.Item name="amount" label="Amount to invest">
+              <Input
+                onChange={(e) => setAmount(parseFloat(e.target.value))}
+                suffix={<TokenTitle token={baseCurrency} />}
+              />
+            </Form.Item>
+            <Form.Item name="referral" label="Referral code">
+              <Input />
+            </Form.Item>
+            <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
+              <Button type="primary" htmlType="submit" disabled={!canContribute}>
+                Invest
+              </Button>
+            </Form.Item>
+          </Form>
+        </Box>
+      </div>
     </div>
   );
 }

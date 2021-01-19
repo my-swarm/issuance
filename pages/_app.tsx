@@ -35,10 +35,10 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
   }, []);
 
   if (!apolloClient) return null;
-  /*
 
   const isWidget = router.pathname.match(/^\/widgets\//);
 
+  /*
   if (isWidget) {
     return (
       <ApolloProvider client={apolloClient}>
@@ -55,7 +55,7 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
           <Component {...pageProps} />
         </ApolloProvider>
       </EthersProvider>
-      <DevAccountSwitcher value={devAccountId} onChange={setDevAccountId} />
+      {!isWidget && <DevAccountSwitcher value={devAccountId} onChange={setDevAccountId} />}
     </StateProvider>
   );
 }

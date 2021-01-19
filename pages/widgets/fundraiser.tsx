@@ -24,7 +24,7 @@ export default function FundraiserWidget() {
   }, [data]);
 
   return (
-    <div>
+    <div className="widget-fundraiser">
       {error ? (
         <Alert message={error} type="error" showIcon />
       ) : loading || !data ? (

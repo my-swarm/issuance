@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { Card, Col, Typography, Row, Modal } from 'antd';
 import { FundraiserWithTokenFragment } from '@graphql';
 import { FundraiserCountdown } from './FundraiserCountdown';
-import { Address, CardAction, FundraiserStatusChart, ImagePreview } from '..';
+import { Address, CardAction, FundraiserStatusChart, ImagePreview, PoweredBySwarm } from '..';
 import { useEthers, useKya } from '@app';
 import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined, LoadingOutlined } from '@lib/icons';
 import { OnlineToken } from '@lib';
@@ -54,6 +54,20 @@ export function FundraiserInvestorCard({
     }
   };
 
+  const extra = embed ? <PoweredBySwarm /> : null;
+  const actions = embed
+    ? null
+    : [
+        <CardAction onClick={handleTokenDetails} icon={<AppstoreOutlined />} title="Token details" key={1} />,
+        <CardAction
+          onClick={handleFundraiserDetails}
+          icon={<LineChartOutlined />}
+          title="Fundraiser details"
+          key={2}
+        />,
+        <CardAction onClick={handleContribute} icon={<DollarCircleOutlined />} title="Contribute" key={3} />,
+      ];
+
   return (
     <Card
       className={`c-fundraiser-investor-card ${embed ? 'standalone' : ''}`}
@@ -65,20 +79,8 @@ export function FundraiserInvestorCard({
           <Text type="secondary">{fundraiser.label}</Text>
         </>
       }
-      actions={
-        !embed
-          ? [
-              <CardAction onClick={handleTokenDetails} icon={<AppstoreOutlined />} title="Token details" key={1} />,
-              <CardAction
-                onClick={handleFundraiserDetails}
-                icon={<LineChartOutlined />}
-                title="Fundraiser details"
-                key={2}
-              />,
-              <CardAction onClick={handleContribute} icon={<DollarCircleOutlined />} title="Contribute" key={3} />,
-            ]
-          : undefined
-      }
+      actions={actions}
+      extra={extra}
     >
       <Card.Grid hoverable={false} className="token">
         {kya ? (

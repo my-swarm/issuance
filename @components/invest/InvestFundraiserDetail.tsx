@@ -1,9 +1,7 @@
 import React, { ReactElement } from 'react';
-import { FundraiserInfoCommon, FundraiserProgressChart, Loading } from '@components';
 import { useFundraiserWithContributorsQuery } from '@graphql';
-import { FundraiserInfoBaseCurrency } from '../fundraiser/FundraiserInfoBaseCurrency';
+import { FundraiserInfo, Loading } from '..';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface InvestTokenDetailsProps {
   id: string;
 }
@@ -13,16 +11,5 @@ export function InvestFundraiserDetails({ id }: InvestTokenDetailsProps): ReactE
   if (loading) return <Loading />;
   const { fundraiser } = data;
 
-  return (
-    <div>
-      <FundraiserInfoCommon fundraiser={fundraiser} column={2} />
-      <div className="mb-3" />
-      <FundraiserInfoBaseCurrency fundraiser={fundraiser} />
-      <div className="mb-3" />
-      <h3>
-        <strong>Fundraiser progress</strong>
-      </h3>
-      <FundraiserProgressChart fundraiser={fundraiser} />
-    </div>
-  );
+  return <FundraiserInfo fundraiser={fundraiser} />;
 }

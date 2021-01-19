@@ -4,13 +4,12 @@ import { useContractAddress } from '@app';
 import { useFundraiserWithContributorsQuery } from '@graphql';
 import {
   Loading,
-  FundraiserProgressChart,
-  FundraiserInfoCommon,
   ManageContributors,
   ManageAffiliates,
   ManageFundraiserState,
   ManageAsset,
   ManageFundraiserEmbed,
+  FundraiserInfo,
 } from '..';
 
 export function TokenManageFundraiser(): ReactElement {
@@ -27,10 +26,7 @@ export function TokenManageFundraiser(): ReactElement {
     <div>
       <Collapse defaultActiveKey={[]}>
         <Collapse.Panel header="Overview" key="overview">
-          <Space direction="vertical">
-            <FundraiserInfoCommon fundraiser={fundraiser} column={2} />
-            <FundraiserProgressChart fundraiser={fundraiser} />
-          </Space>
+          <FundraiserInfo fundraiser={fundraiser} />
         </Collapse.Panel>
 
         <Collapse.Panel header="Contributors" key="contributors">

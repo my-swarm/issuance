@@ -75,12 +75,12 @@
 
 
 .c-box {
-  padding: 16px;
-  border: 1px dotted $cSwarm;
-  background: $cSwarmBg;
-  button {
-    background: $cSwarm !important;
-    border: 1px solid $cSwarm !important;
+  padding: 24px;
+  border: 2px solid $blue;
+  border-radius: 4px;
+  background: $blueBg;
+  .ant-row:last-child {
+    margin-bottom: 0;
   }
 }
 

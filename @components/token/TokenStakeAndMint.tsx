@@ -1,10 +1,9 @@
 import React, { ReactElement, useState } from 'react';
-import { Button, Divider } from 'antd';
+import { Alert, Button, Divider } from 'antd';
 
-import { useAppState, useContract, useDispatch, useGraphql } from '@app';
+import { useAppState, useContract, useDispatch, useGraphql, useStakeInfo } from '@app';
 import { parseUnits } from '@lib';
 import { StakeTable, StakingForm, StakingFormData, TokenInfoStaking } from '..';
-import { useStakeInfo } from '../../@app/useStakeInfo';
 
 interface TokenStakeAndMintProps {
   onCancel: () => void;
@@ -41,9 +40,11 @@ export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactEl
 
       {isStaked ? (
         <>
-          <p>Your token has been minted!</p>
+          <Alert type="info" message="Your token has been minted!" className="mb-3" showIcon />
           <p>
-            <Button onClick={onCancel}>Close</Button>
+            <Button onClick={onCancel} type="primary">
+              Close
+            </Button>
           </p>
         </>
       ) : (

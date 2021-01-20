@@ -9,3 +9,9 @@ export const navToStakeBase = [
 ];
 
 export const SWM_TOKEN_DECIMALS = 18;
+
+export const swmToken = {
+  name: 'Swarm Token',
+  symbol: 'SWM',
+  decimals: SWM_TOKEN_DECIMALS,
+};

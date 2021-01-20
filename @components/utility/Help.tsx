@@ -9,16 +9,12 @@ interface HelpProps {
 }
 
 export function Help({ name, type = 'popover' }: HelpProps): ReactElement {
+  const helpItem = help?.[name] || { title: name, content: `No help for ${name}` };
   if (type === 'render') {
-    return <div className="mb-3">{help[name].content}</div>;
+    return <div className="mb-3">{helpItem.content}</div>;
   } else {
     return (
-      <Popover
-        className="c-help"
-        title={<strong>{help[name].title}</strong>}
-        content={help[name].content}
-        placement="top"
-      >
+      <Popover className="c-help" title={<strong>{helpItem.title}</strong>} content={helpItem.content} placement="top">
         <QuestionCircleTwoTone />
       </Popover>
     );

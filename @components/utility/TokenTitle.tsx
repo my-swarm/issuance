@@ -1,6 +1,5 @@
 import React from 'react';
-import { Space, Tooltip } from 'antd';
-import { Icon } from '..';
+import { Icon } from './Icon';
 
 interface Props {
   token: {

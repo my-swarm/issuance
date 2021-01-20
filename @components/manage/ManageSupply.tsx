@@ -1,14 +1,16 @@
 import React, { ReactElement, useState } from 'react';
 import { useAppState, useContract, useDispatch, useEthers, useGraphql, useSwmAllowance, useSwmBalance } from '@app';
-import { Button, Col, Divider, Form, InputNumber, Row, Statistic } from 'antd';
+import { Button, Checkbox, Col, Divider, Form, InputNumber, Row, Statistic, Space } from 'antd';
 import { formatInt, parseUnits, formatUnits, SWM_TOKEN_DECIMALS } from '@lib';
 import { useTokenQuery } from '@graphql';
-import { Loading } from '@components';
+import { Help, Loading } from '@components';
+import { BigNumber, BigNumberish } from 'ethers';
 
 export function ManageSupply(): ReactElement {
   const { reset } = useGraphql();
   const { address } = useEthers();
   const [{ onlineToken }] = useAppState();
+  const [showExactValues, setShowExactValues] = useState<boolean>(false);
   const [swmAllowance, reloadSwmAllowance] = useSwmAllowance();
   const [swmBalance, reloadSwmBalance] = useSwmBalance();
 
@@ -76,61 +78,66 @@ export function ManageSupply(): ReactElement {
     });
   };
 
+  function renderStat(
+    title: ReactElement | string,
+    help: string,
+    value: BigNumberish,
+    decimals: number = token.decimals,
+    suffix: string = token.symbol,
+  ) {
+    let color: string;
+    value = BigNumber.from(value || 0);
+    color = value.gt(0) ? 'blue' : 'red';
+    if (help === 'maxSupply' && value.eq(0)) {
+      color = 'blue';
+      value = 'Unlimited';
+      suffix = '';
+    } else {
+      value = formatUnits(value, decimals);
+    }
+    return (
+      <Col xs={24} md={12} lg={8}>
+        <Statistic
+          className={`statistic-${color}`}
+          valueStyle={{ fontSize: `${showExactValues ? '16' : '22'}px` }}
+          title={
+            <Space size="small">
+              <span>{title}</span>
+              <Help name={help} />
+            </Space>
+          }
+          value={value}
+          suffix={suffix}
+          precision={showExactValues ? 8 : 0}
+        />
+      </Col>
+    );
+  }
+
   return (
     <>
+      <p>
+        <Checkbox checked={showExactValues} onChange={(e) => setShowExactValues(e.target.checked)}>
+          Show more decimal values
+        </Checkbox>
+      </p>
       <Row gutter={[24, 16]}>
-        <Col xs={24} md={12} lg={8}>
-          <Statistic
-            title="Supply"
-            value={formatUnits(token.supply, token.decimals)}
-            suffix={token.symbol}
-            precision={2}
-          />
-        </Col>
-        <Col xs={24} md={12} lg={8}>
-          <Statistic
-            title="Max Supply"
-            value={formatUnits(token.maxSupply, token.decimals)}
-            suffix={token.symbol}
-            precision={2}
-          />
-        </Col>
-        <Col xs={24} md={12} lg={8}>
-          <Statistic
-            title="Available Supply"
-            value={formatUnits(token.availableSupply, token.decimals)}
-            suffix={token.symbol}
-            precision={2}
-          />
-        </Col>
-        <Col xs={24} md={12} lg={8}>
-          <Statistic
-            title="Current stake"
-            value={formatUnits(token.stake, SWM_TOKEN_DECIMALS)}
-            suffix="SWM"
-            precision={2}
-          />
-        </Col>
-        <Col xs={24} md={12} lg={8}>
-          <Statistic title="SWM Balance" value={swmBalance.nice} suffix="SWM" precision={2} />
-        </Col>
-        <Col xs={24} md={12} lg={8}>
-          <Statistic title="SWM Allowance" value={swmAllowance.nice} suffix="SWM" precision={2} />
-        </Col>
+        {renderStat('Supply', 'supply', token.supply)}
+        {renderStat('Max Supply', 'maxSupply', token.maxSupply)}
+        {renderStat('Available Supply', 'availableSupply', token.availableSupply)}
+        {renderStat('Current stake', 'currentStake', token.stake, SWM_TOKEN_DECIMALS, 'SWM')}
+        {renderStat('SWM Balance', 'swmBalance', swmBalance.raw as BigNumber, SWM_TOKEN_DECIMALS, 'SWM')}
+        {renderStat('SWM Allowance', 'swmAllowance', swmAllowance.raw as BigNumber, SWM_TOKEN_DECIMALS, 'SWM')}
       </Row>
 
       <Divider />
 
-      <h3 className="mt-3">Increase supply</h3>
+      <h3 className="mt-3">
+        Increase supply <Help name="increaseSupply" />
+      </h3>
       <Form form={increaseForm} onFinish={handleIncreaseSupply} layout="inline" className="mb-3">
         <Form.Item name="supply_add" label="Increase by">
-          <InputNumber
-            min={0}
-            placeholder="Gazillion"
-            onChange={(x) => handleSupplyChange(x, false)}
-            formatter={formatInt}
-            parser={parseInt}
-          />
+          <InputNumber min={0} onChange={(x) => handleSupplyChange(x, false)} formatter={formatInt} parser={parseInt} />
         </Form.Item>
         <Form.Item label="Stake required">
           <InputNumber disabled value={stakeRequired} />
@@ -142,16 +149,12 @@ export function ManageSupply(): ReactElement {
         </Form.Item>
       </Form>
 
-      <h3>Decrease supply</h3>
+      <h3>
+        Decrease supply <Help name="decreaseSupply" />
+      </h3>
       <Form form={decreaseForm} onFinish={handleDecreaseSupply} layout="inline">
         <Form.Item name="supply_sub" label="Decrease by">
-          <InputNumber
-            min={0}
-            placeholder="Gazillion"
-            onChange={(x) => handleSupplyChange(x, true)}
-            formatter={formatInt}
-            parser={parseInt}
-          />
+          <InputNumber min={0} onChange={(x) => handleSupplyChange(x, true)} formatter={formatInt} parser={parseInt} />
         </Form.Item>
         <Form.Item label="Stake returned">
           <InputNumber disabled value={stakeReturned} />

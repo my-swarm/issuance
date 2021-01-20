@@ -90,3 +90,22 @@ h4.ant-typography {
 .ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
   background: $blue;
 }
+
+
+.statistic-red {
+  .ant-statistic-content-value, .ant-statistic-content-suffix {
+    color: $red;
+  }
+}
+
+.statistic-green {
+  .ant-statistic-content-value, .ant-statistic-content-suffix {
+    color: $green;
+  }
+}
+
+.statistic-blue {
+  .ant-statistic-content-value, .ant-statistic-content-suffix {
+    color: $blue;
+  }
+}

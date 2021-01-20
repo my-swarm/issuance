@@ -12,6 +12,7 @@ import {
   ManageDividends,
   ManageAsset,
   ManageDistribute,
+  Help,
 } from '..';
 
 export function TokenManage(): ReactElement {
@@ -26,7 +27,7 @@ export function TokenManage(): ReactElement {
           </Collapse.Panel>
         )}
 
-        <Collapse.Panel header="Token supply (Mint & Burn)" key="supply">
+        <Collapse.Panel header="Token supply (Mint & Burn)" key="supply" extra={<Help name="manageSupply" />}>
           <ManageSupply />
         </Collapse.Panel>
 

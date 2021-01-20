@@ -22,7 +22,7 @@ export function TokenManage(): ReactElement {
     <div>
       <Collapse defaultActiveKey={[]}>
         {token.features.tokenFreeze && (
-          <Collapse.Panel header="Freeze token" key="status">
+          <Collapse.Panel header="Freeze token" key="status" extra={<Help name="manageFreeze" />}>
             <ManageTokenStatus />
           </Collapse.Panel>
         )}

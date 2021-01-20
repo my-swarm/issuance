@@ -8,3 +8,4 @@ export * from './helpFundraiserForm';
 export * from './helpInvest';
 export * from './helpContracts';
 export * from './helpManageSupply';
+export * from './helpManageFreeze';

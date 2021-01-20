@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';
 import { Contract } from '@ethersproject/contracts';
 import {
+  EthereumNetwork,
   formatUnits,
   getContract,
   getContractAbi,
@@ -9,50 +10,8 @@ import {
   getUnitsAsNumber,
   SWM_TOKEN_DECIMALS,
 } from '@lib';
-import { useEthers, useAppState, isDev, devSwmBalances } from '.';
+import { useEthers, useAppState, devSwmBalances } from '.';
 import { contractsMeta } from '@contracts';
-
-enum ContractValueType {
-  Integer,
-  Decimal,
-  TokenAmount,
-  SwmTokenAmount,
-}
-
-const contractValues = {
-  nav: {
-    name: 'assetRegistry',
-    method: 'getNetAssetValueUSD',
-    type: ContractValueType.Integer,
-    implicitArgs: { 0: 'address.src20' },
-  },
-  currentSupply: { name: 'src20', method: 'totalSupply', type: ContractValueType.TokenAmount },
-  maxSupply: { name: 'src20', method: '_maxTotalSupply', type: ContractValueType.TokenAmount },
-  availableSupply: {
-    name: 'src20',
-    method: 'balanceOf',
-    type: ContractValueType.TokenAmount,
-    implicitArgs: {
-      0: 'address.ethers',
-    },
-  },
-  swmAllowance: {
-    name: 'swm',
-    method: 'allowance',
-    type: ContractValueType.SwmTokenAmount,
-    implicitArgs: {
-      0: 'address.ethers',
-      1: 'address.registry',
-    },
-  },
-  swmStake: {
-    name: 'registry',
-    method: 'getStake',
-    type: ContractValueType.SwmTokenAmount,
-    implicitArgs: { 0: 'address.src20' },
-  },
-  computeStake: { name: 'registry', method: 'computeStake', type: ContractValueType.SwmTokenAmount },
-};
 
 type ContractAddressMap = { [key: string]: string };
 type ContractMap = { [key: string]: Contract };
@@ -120,7 +79,7 @@ export function useSwmAllowance(): UseContractValueResult {
 }
 
 export function useSwmBalance(account?: string): UseContractValueResult {
-  const { address } = useEthers();
+  const { address, networkId } = useEthers();
   const { swm } = useContract();
   const [value, setValue] = useState<ContractValue>({});
   const [timestamp, setTimestamp] = useState<number>(Date.now());
@@ -129,7 +88,7 @@ export function useSwmBalance(account?: string): UseContractValueResult {
 
   useEffect(() => {
     if (swm && account) {
-      if (isDev && devSwmBalances[account]) {
+      if (networkId !== EthereumNetwork.Main && devSwmBalances[account]) {
         setValue({
           raw: devSwmBalances[account],
           nice: devSwmBalances[account].toString(),

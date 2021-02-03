@@ -10,6 +10,7 @@ import {
   ManageAsset,
   ManageFundraiserEmbed,
   FundraiserInfo,
+  Help,
 } from '..';
 
 export function TokenManageFundraiser(): ReactElement {
@@ -25,29 +26,29 @@ export function TokenManageFundraiser(): ReactElement {
   return (
     <div>
       <Collapse defaultActiveKey={[]}>
-        <Collapse.Panel header="Overview" key="overview">
+        <Collapse.Panel header="Overview" key="overview" extra={<Help name="manageFundraiserOverview" />}>
           <FundraiserInfo fundraiser={fundraiser} />
         </Collapse.Panel>
 
-        <Collapse.Panel header="Contributors" key="contributors">
+        <Collapse.Panel header="Contributors" key="contributors" extra={<Help name="manageContributors" />}>
           <ManageContributors fundraiser={fundraiser} />
         </Collapse.Panel>
 
-        <Collapse.Panel header="Edit token's KYA" key="asset">
+        <Collapse.Panel header="Edit token's KYA" key="asset" extra={<Help name="manageAsset" />}>
           <ManageAsset />
         </Collapse.Panel>
 
         {fundraiser.affiliateManager && (
-          <Collapse.Panel header="Affiliates" key="affiliates">
+          <Collapse.Panel header="Affiliates" key="affiliates" extra={<Help name="manageAffiliates" />}>
             <ManageAffiliates affiliates={fundraiser.affiliates} />
           </Collapse.Panel>
         )}
 
-        <Collapse.Panel header="Stake &amp; Mint" key="status">
+        <Collapse.Panel header="Stake &amp; Mint" key="status" extra={<Help name="manageFundraiserStatus" />}>
           <ManageFundraiserState fundraiser={fundraiser} />
         </Collapse.Panel>
 
-        <Collapse.Panel header="Embed widget" key="embed">
+        <Collapse.Panel header="Embed widget" key="embed" extra={<Help name="manageFundraiserEmbed" />}>
           <ManageFundraiserEmbed fundraiser={fundraiser} />
         </Collapse.Panel>
       </Collapse>

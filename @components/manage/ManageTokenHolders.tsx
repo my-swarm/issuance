@@ -89,7 +89,7 @@ export function ManageTokenHolders(): ReactElement {
     if (enableFreeze || enableUnfreeze || enableBurn || enableTransfer) {
       const menu = (
         <Menu>
-          <Menu.Item onClick={() => setTransferingFrom(record.address)}>Transfer tokens</Menu.Item>
+          {enableTransfer && <Menu.Item onClick={() => setTransferingFrom(record.address)}>Transfer tokens</Menu.Item>}
           {enableFreeze && <Menu.Item onClick={() => handleFreeze(record.address)}>Freeze account</Menu.Item>}
           {enableUnfreeze && <Menu.Item onClick={() => handleUnfreeze(record.address)}>Unfreeze account</Menu.Item>}
           {enableBurn && <Menu.Item onClick={() => setBurningAccount(record.address)}>Burn tokens</Menu.Item>}

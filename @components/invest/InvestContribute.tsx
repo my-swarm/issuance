@@ -48,6 +48,7 @@ export function InvestContribute({ id }: InvestContributeProps): ReactElement {
         address: fundraiser.address,
         arguments: [amount, values.referral || ''],
         description: 'Contributing...',
+        autoclose: true,
         onSuccess: () => {
           Modal.info({
             title: 'Thank you for your contribution!',

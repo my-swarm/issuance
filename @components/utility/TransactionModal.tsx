@@ -34,14 +34,13 @@ export function TransactionModal(): ReactElement {
 
   const handleTransactionProgress = (state: TransactionState, tx?: Transaction) => {
     setTransactionState(state);
-    if (state === TransactionState.Confirmed && transaction.onSuccess) {
-      transaction.onSuccess();
-    }
     if (tx) transaction.hash = tx.hash;
     if (state === TransactionState.Confirming) {
       dispatch({ type: 'addPendingTransaction', transaction });
     } else if (state === TransactionState.Confirmed) {
       dispatch({ type: 'removePendingTransaction', transaction });
+      if (transaction.onSuccess) transaction.onSuccess();
+      if (transaction.autoclose) handleClose();
     }
   };
 

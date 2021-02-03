@@ -25,6 +25,7 @@ export interface Transaction {
   onSuccess?: () => void;
   address?: string;
   createdAt?: Date;
+  autoclose?: boolean;
 }
 
 export interface SpendingApproval {

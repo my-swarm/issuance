@@ -88,31 +88,59 @@ function contributorsToChartData(contributors: ContributorFragment[], decimals: 
   return dataToNumbers(sumDailyContribution(aggregateDailyContributions(contributors)), decimals);
 }
 
+function createDummyData(hardCap: number): ChartData {
+  const result: ChartData = [];
+  let pending = 0;
+  let qualified = 0;
+  for (let i = 1; i < 10; i++) {
+    pending += (hardCap / 10) * Math.random();
+    qualified += (hardCap / 20) * Math.random();
+    result.push({
+      date: dayjs().format('YYYY-MM-DD'),
+      qualified,
+      pending,
+      removed: 0,
+      refunded: 0,
+    });
+  }
+  return result;
+}
+
 export function FundraiserProgressChart({ fundraiser }: FundraiserChartProps): ReactElement {
   const { baseCurrency } = fundraiser;
   const data = contributorsToChartData(fundraiser.contributors, baseCurrency.decimals);
   const softCap = parseFloat(formatUnits(fundraiser.softCap, baseCurrency.decimals));
   const hardCap = parseFloat(formatUnits(fundraiser.hardCap, baseCurrency.decimals));
 
-  if (data.length < 2) return <p>A fancy chart will display here when there are enough contriutions.</p>;
+  const isRealData = data.length >= 2;
+  const displayData = isRealData ? data : createDummyData(hardCap);
 
   return (
-    <ResponsiveContainer minWidth={300} height={200} width="99%">
-      <LineChart data={data}>
-        <XAxis dataKey="date" />
-        <CartesianGrid strokeDasharray="1 2" strokeWidth={1} />
-        <Line {...lineAttrs} dataKey="qualified" stroke={colors.green} />
-        <Line {...lineAttrs} dataKey="pending" stroke={colors.blue} />
-        <ReferenceLine y={softCap} label="Soft Cap" stroke={colors.green} strokeDasharray="2 2" />
-        <ReferenceLine
-          y={hardCap}
-          label="Hard Cap"
-          stroke={colors.red}
-          ifOverflow="extendDomain"
-          strokeDasharray="2 2"
-        />
-        <Tooltip />
-      </LineChart>
-    </ResponsiveContainer>
+    <>
+      {!isRealData && <p>Fundraise progress chart will display after sufficient contributions received</p>}
+
+      <ResponsiveContainer minWidth={300} height={200} width="99%">
+        <LineChart data={displayData}>
+          {isRealData && <XAxis dataKey="date" />}
+          <CartesianGrid strokeDasharray="1 2" strokeWidth={1} />
+          <Line {...lineAttrs} dataKey="qualified" stroke={isRealData ? colors.green : colors.grey2} />
+          <Line {...lineAttrs} dataKey="pending" stroke={isRealData ? colors.blue : colors.grey3} />
+          <ReferenceLine
+            y={softCap}
+            label="Soft Cap"
+            stroke={isRealData ? colors.green : colors.grey2}
+            strokeDasharray="2 2"
+          />
+          <ReferenceLine
+            y={hardCap}
+            label="Hard Cap"
+            stroke={isRealData ? colors.red : colors.grey3}
+            ifOverflow="extendDomain"
+            strokeDasharray="2 2"
+          />
+          {isRealData && <Tooltip />}
+        </LineChart>
+      </ResponsiveContainer>
+    </>
   );
 }

@@ -160,7 +160,12 @@ export default function Index({ title }: IndexProps): ReactElement {
         </Col>
       </Row>
       <Divider />
-      <h2>Powered by Swarm</h2>
+      <h2>
+        <Space>
+          <img src="/images/swarm-symbol.svg" alt="Swarm symbol" className="h-4 w-a" />
+          <span>Powered by Swarm</span>
+        </Space>
+      </h2>
       <InvestFundraisers limit={3} />
 
       {buyingSwm && <BuySwmModal onClose={() => setBuyingSwm(false)} />}

@@ -50,7 +50,7 @@ export function SpendingApprovalModal(): ReactElement {
   };
 
   return (
-    <Modal title="Approve spending" footer={null} visible={true} closable={false}>
+    <Modal title="Approve spending" footer={null} visible={true} closable={true} onCancel={handleClose}>
       {amount === null ? (
         <>
           <p>
@@ -82,14 +82,13 @@ export function SpendingApprovalModal(): ReactElement {
 
       <Space>
         <Button onClick={() => handleAllow(true)} type="primary">
-          Approve unlimited allowance
+          Approve unlimited
         </Button>
         {amount !== null && (
           <Button onClick={() => handleAllow(false)} type="primary">
             Approve {formatUnits(amount, tokenInfo.decimals)} {tokenInfo.symbol}
           </Button>
         )}
-        <Button onClick={handleClose}>Cancel</Button>
       </Space>
     </Modal>
   );

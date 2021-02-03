@@ -9,10 +9,13 @@ import {
   TokenInfo,
   InvestFundraiserDetails,
   InvestContribute,
+  MetamaskConnect,
+  TransactionModal,
+  SpendingApprovalModal,
 } from '@components';
 import { useFundraiserWidgetLazyQuery } from '@graphql';
 import { useRouter } from 'next/router';
-import { useDispatch } from '@app';
+import { useAppState, useDispatch, useEthers } from '@app';
 import { OnlineToken } from '@lib';
 
 export default function FundraiserWidget() {
@@ -22,6 +25,8 @@ export default function FundraiserWidget() {
   const [loadQuery, { data, loading }] = useFundraiserWidgetLazyQuery();
   const fundraiser = data?.fundraiser;
   const { setToken } = useDispatch();
+  const { connected } = useEthers();
+  const [{ transaction, spendingApproval }] = useAppState();
 
   useEffect(() => {
     if (typeof router?.query?.address === 'string') {
@@ -56,7 +61,16 @@ export default function FundraiserWidget() {
       case FundraiserInvestorAction.FundraiserDetails:
         return <InvestFundraiserDetails id={fundraiser.id} />;
       case FundraiserInvestorAction.Invest:
-        return <InvestContribute id={fundraiser.id} />;
+        return (
+          <div>
+            {!connected && (
+              <div className="mb-3">
+                <MetamaskConnect />
+              </div>
+            )}
+            <InvestContribute id={fundraiser.id} />
+          </div>
+        );
     }
   }
 
@@ -78,6 +92,8 @@ export default function FundraiserWidget() {
           >
             {renderAction()}
           </Drawer>
+          {transaction && <TransactionModal />}
+          {spendingApproval && <SpendingApprovalModal />}
         </>
       ) : null}
     </div>

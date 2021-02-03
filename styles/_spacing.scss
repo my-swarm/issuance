@@ -13,6 +13,8 @@
 $sizeUnit: rem;
 $marginKey: 'm';
 $paddingKey: 'p';
+$heightKey: 'h';
+$widthKey: 'w';
 $separator: '-';
 $allKey: '';
 $verticalKey: 'y';
@@ -81,4 +83,16 @@ $sizes: (
       padding-#{$posValue}: size-value($sizeValue);
     }
   }
+
+  // height and width:
+  .#{$heightKey}#{$separator}#{$sizeKey} {
+    height: size-value($sizeValue);
+  }
+  .#{$widthKey}#{$separator}#{$sizeKey} {
+    width: size-value($sizeValue);
+  }
+
 }
+
+.w-a { width: auto; }
+.h-a { height: auto; }

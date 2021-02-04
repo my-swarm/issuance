@@ -21,6 +21,7 @@
     "@ant-design/icons": "^4.3.0",
     "@apollo/client": "^3.2.9",
     "@coingecko/cg-api-ts": "^0.0.41",
+    "@zeit/next-less": "^1.0.1",
     "@zeit/next-source-maps": "^0.0.3",
     "antd": "^4.12.2",
     "antd-dayjs-webpack-plugin": "^1.0.6",
@@ -28,13 +29,13 @@
     "babel-plugin-inline-import": "^3.0.0",
     "ethers": "^5.0.25",
     "graphql": "^15.4.0",
+    "less": "^4.1.1",
     "lodash": "^4.17.19",
     "next": "^9.3.2",
     "parse-data-url": "^2.0.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "recharts": "^1.8.5",
-    "sass": "^1.26.10",
     "uuid": "^8.2.0"
   },
   "devDependencies": {

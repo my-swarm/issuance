@@ -37,10 +37,6 @@
   }
 }
 
-.c-logo {
-  padding: 1rem 1.5rem;
-}
-
 .ant-table.ant-table-small .ant-table-tbody > tr > td.editable-cell {
   padding: 2px;
   width: 128px;
@@ -61,40 +57,28 @@ td.editable-cell input {
   width: 100%;
   padding: 4px;
 }
-/*
 
-.ant-descriptions-title {
-  margin-bottom: 8px;
-}
-*/
 
 h4.ant-typography {
   font-size: 16px; // we want it consistent with the <Descriptions> component
 }
 
-.ant-menu.ant-menu-dark, .ant-menu-dark .ant-menu-sub, .ant-menu.ant-menu-dark .ant-menu-sub {
-  background: $darkBlue1;
-}
-
-.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
-  background: $blue;
-}
-
+.ant-menu-dark.ant-menu-inline { background: transparent; } // setting the variable doesn't help?
 
 .statistic-red {
   .ant-statistic-content-value, .ant-statistic-content-suffix {
-    color: $red;
+    color: @red;
   }
 }
 
 .statistic-green {
   .ant-statistic-content-value, .ant-statistic-content-suffix {
-    color: $green;
+    color: @green;
   }
 }
 
 .statistic-blue {
   .ant-statistic-content-value, .ant-statistic-content-suffix {
-    color: $blue;
+    color: @blue;
   }
 }

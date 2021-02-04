@@ -1,0 +1,114 @@
+// FOR LOOP
+.for(@i, @n) {
+  .-each(@i)
+}
+
+.for(@n) when (isnumber(@n)) {
+  .for(1, @n)
+}
+
+.for(@i, @n) when not (@i =@n) {
+  .for((@i + (@n - @i) / abs(@n - @i)), @n);
+}
+
+
+// FOR EACH LOOP
+.for(@array) when (default()) {
+  .for-impl_(length(@array))
+}
+
+.for-impl_(@i) when (@i > 1) {
+  .for-impl_((@i - 1))
+}
+
+.for-impl_(@i) when (@i > 0) {
+  .-each(extract(@array, @i))
+}
+
+
+
+///////////////
+// variables //
+///////////////
+@screen-xs: 0;
+@screen-sm: 480px;
+@screen-md: 768px;
+@screen-lg: 992px;
+@screen-xl: 1600px;
+
+
+
+
+@values-array: 0 0, 1 .25rem, 2 .5rem, 3 1rem, 4 1.5rem;
+
+
+
+// global
+@media (min-width: @screen-xs) {
+  .make-space(@prefix: xs-);
+}
+// mobile
+@media (min-width: @screen-sm) {
+  .make-space(@prefix: sm-);
+}
+// tablet
+@media (min-width: @screen-md) {
+  .make-space(@prefix: md-);
+}
+// desktop
+@media (min-width: @screen-lg) {
+  .make-space(@prefix: lg-);
+}
+// large screens
+@media (min-width: @screen-xl) {
+  .make-space(@prefix: xl-);
+}
+
+.for(@values-array);
+.-each(@keyvalue) {
+  @key: extract(@keyvalue, 1);
+  @value: extract(@keyvalue, 2);
+  .p-@{key} { padding: ~"@{value}"; }
+  .px-@{key} { padding-left: ~"@{value}"; padding-right: ~"@{value}"; }
+  .py-@{key} { padding-top: ~"@{value}"; padding-bottom: ~"@{value}"; }
+  .pt-@{key} { padding-top: ~"@{value}"; }
+  .pl-@{key} { padding-left: ~"@{value}"; }
+  .pr-@{key} { padding-right: ~"@{value}"; }
+  .pb-@{key} { padding-bottom: ~"@{value}"; }
+  .m-@{key} { margin: ~"@{value}"; }
+  .mx-@{key} { margin-left: ~"@{value}"; margin-right: ~"@{value}"; }
+  .my-@{key} { margin-top: ~"@{value}"; margin-bottom: ~"@{value}"; }
+  .mt-@{key} { margin-top: ~"@{value}"; }
+  .ml-@{key} { margin-left: ~"@{value}"; }
+  .mr-@{key} { margin-right: ~"@{value}"; }
+  .mb-@{key} { margin-bottom: ~"@{value}"; }
+  .h-@{key} { height: ~"@{value}"; }
+  .w-@{key} { width: ~"@{value}"; }
+}
+
+
+
+// init functions
+.make-space(@prefix) {
+  .for(@values-array);
+  .-each(@keyvalue) {
+    @key: extract(@keyvalue, 1);
+    @value: extract(@keyvalue, 2);
+    .@{prefix}-p-@{key} { padding: ~"@{value}"; }
+    .@{prefix}-px-@{key} { padding-left: ~"@{value}"; padding-right: ~"@{value}"; }
+    .@{prefix}-py-@{key} { padding-top: ~"@{value}"; padding-bottom: ~"@{value}"; }
+    .@{prefix}-pt-@{key} { padding-top: ~"@{value}"; }
+    .@{prefix}-pl-@{key} { padding-left: ~"@{value}"; }
+    .@{prefix}-pr-@{key} { padding-right: ~"@{value}"; }
+    .@{prefix}-pb-@{key} { padding-bottom: ~"@{value}"; }
+    .@{prefix}-m-@{key} { margin: ~"@{value}"; }
+    .@{prefix}-mx-@{key} { margin-left: ~"@{value}"; margin-right: ~"@{value}"; }
+    .@{prefix}-my-@{key} { margin-top: ~"@{value}"; margin-bottom: ~"@{value}"; }
+    .@{prefix}-mt-@{key} { margin-top: ~"@{value}"; }
+    .@{prefix}-ml-@{key} { margin-left: ~"@{value}"; }
+    .@{prefix}-mr-@{key} { margin-right: ~"@{value}"; }
+    .@{prefix}-mb-@{key} { margin-bottom: ~"@{value}"; }
+    .@{prefix}-h-@{key} { height: ~"@{value}"; }
+    .@{prefix}-w-@{key} { width: ~"@{value}"; }
+  }
+}

@@ -5,22 +5,27 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin');
+const withLess = require('@zeit/next-less');
 
-module.exports = withBundleAnalyzer(
-  withSourceMaps({
-    webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-      // Note: we provide webpack above so you should not `require` it
-      // Perform customizations to webpack config
-      // Important: return the modified config
-      config.plugins.push(new webpack.IgnorePlugin(/\/__tests__\//));
-      config.plugins.push(new AntdDayjsWebpackPlugin());
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        '@ant-design/icons$': path.resolve(__dirname, '@lib/icons.tsx'),
-      };
-
-      return config;
-    },
-  }),
+module.exports = withLess(
+  withBundleAnalyzer(
+    withSourceMaps({
+      webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+        // Note: we provide webpack above so you should not `require` it
+        // Perform customizations to webpack config
+        // Important: return the modified config
+        config.plugins.push(new webpack.IgnorePlugin(/\/__tests__\//));
+        config.plugins.push(new AntdDayjsWebpackPlugin());
+        config.resolve.alias = {
+          ...config.resolve.alias,
+          '@ant-design/icons$': path.resolve(__dirname, '@lib/icons.tsx'),
+        };
+        return config;
+      },
+      lessLoaderOptions: {
+        javascriptEnabled: true,
+      },
+    }),
+  ),
 );
 ``;

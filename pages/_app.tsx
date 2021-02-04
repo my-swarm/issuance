@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
 import { ApolloProvider, ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
-import '../styles/index.scss';
+import '../styles/index.less';
 import { EthersProvider, StateProvider, reducer } from '@app';
 import { MetamaskNotReadyError } from '@lib';
 import { DevAccountSwitcher, StateStorageSync } from '@components';

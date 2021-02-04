@@ -5,7 +5,7 @@ import { Divider, Layout, Space } from 'antd';
 import { MailOutlined } from '../../@lib/icons';
 
 interface Props {
-  fullUi: boolean;
+  fullUi?: boolean;
 }
 
 export function Sidebar({ fullUi = false }: Props): ReactElement {
@@ -23,10 +23,10 @@ export function Sidebar({ fullUi = false }: Props): ReactElement {
       <div className="side-box mt-4">
         <MetamaskStatus />
       </div>
-      <div className="side-box mt-4">
+      <div className="side-box mt-3">
         <StateStorageSync />
       </div>
-      <div className="side-box mt-4">
+      <div className="side-box mt-3">
         <h3 className="side-box-title">
           <Space>
             <MailOutlined />
@@ -34,7 +34,7 @@ export function Sidebar({ fullUi = false }: Props): ReactElement {
           </Space>
         </h3>
         <div className="side-box-body">
-          <div className="mb-2">
+          <div className="mb-1">
             <a href="mailto:info@myswarm.app">info@myswarm.app</a>
           </div>
           <div>

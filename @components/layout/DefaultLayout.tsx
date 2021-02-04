@@ -1,19 +1,10 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Layout, PageHeader, Modal, Space, Divider, Button, Drawer, Row, Col } from 'antd';
+import { Button, Col, Drawer, Layout, Modal, PageHeader, Row } from 'antd';
 import Head from 'next/head';
-import Link from 'next/link';
 
-import {
-  Logo,
-  MetamaskStatus,
-  StateStorageSync,
-  TransactionModal,
-  SpendingApprovalModal,
-  MainMenu,
-  Footer,
-} from '@components';
-import { isDev, useAppState } from '@app';
-import { MailOutlined, MenuOutlined, CloseOutlined } from '@lib/icons';
+import { Footer, Logo, SpendingApprovalModal, TransactionModal } from '@components';
+import { useAppState } from '@app';
+import { CloseOutlined, MenuOutlined } from '@lib/icons';
 import { Sidebar } from './Sidebar';
 
 const { Header, Content, Sider } = Layout;
@@ -51,7 +42,7 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
   };
 
   return (
-    <Layout>
+    <Layout className="dark">
       <Head>
         <title>{title || 'My Swarm'}</title>
       </Head>

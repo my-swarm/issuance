@@ -1,0 +1,41 @@
+.ant-layout-header {
+  padding: 0 24px;
+  background: $darkBlue1;
+  @media (min-width: 992px) {
+    display: none;
+  }
+
+  .c-logo {
+    padding: 0;
+    img {
+      width: 6rem;
+    }
+  }
+}
+
+.ant-drawer.with-sidebar {
+  .ant-drawer-body {
+    padding: 64px 0 0 0;
+    background: $darkBlue1;
+  }
+  .ant-drawer-close {
+    padding-right: 0;
+    margin-right: 0;
+    left: 0;
+  }
+
+}
+
+.ant-layout-sider-dark, .ant-drawer.with-sidebar {
+  .ant-divider {
+    border-top: 1px solid rgba(255, 255, 255, .33);
+    margin: 16px;
+    width: auto;
+    min-width: auto;
+  }
+}
+
+
+.ant-layout-sider {
+  background: $darkBlue1;
+}

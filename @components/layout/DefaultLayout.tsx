@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Layout, PageHeader, Modal, Space, Divider } from 'antd';
+import { Layout, PageHeader, Modal, Space, Divider, Button, Drawer, Row, Col } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
 
@@ -13,9 +13,10 @@ import {
   Footer,
 } from '@components';
 import { isDev, useAppState } from '@app';
-import { MailOutlined } from '@lib/icons';
+import { MailOutlined, MenuOutlined, CloseOutlined } from '@lib/icons';
+import { Sidebar } from './Sidebar';
 
-const { Content, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 
 interface PageProps {
   children: ReactNode;
@@ -30,8 +31,8 @@ interface DefaultLayoutProps extends PageProps {
 }
 
 export function DefaultLayout({ title, headExtra, children, headTableAligned = false }: DefaultLayoutProps) {
-  const [siderCollapsed, setSiderCollapsed] = useState(false);
   const [{ error, transaction, spendingApproval }, dispatch] = useAppState();
+  const [hasMobileMenu, setHasMobileMenu] = useState(false);
 
   useEffect(() => {
     if (error) {
@@ -45,62 +46,58 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
     }
   }, [error]);
 
+  const toggleMobileMenu = () => {
+    setHasMobileMenu(!hasMobileMenu);
+  };
+
   return (
     <Layout>
       <Head>
         <title>{title || 'My Swarm'}</title>
       </Head>
-      <Sider trigger={null} collapsible collapsed={siderCollapsed}>
-        <Link href="/">
-          <a>
+      <Header>
+        <Row justify="space-between">
+          <Col span={12}>
+            <Button icon={<MenuOutlined />} type="primary" ghost onClick={toggleMobileMenu} />
+          </Col>
+          <Col span={12} style={{ textAlign: 'right' }}>
             <Logo />
-          </a>
-        </Link>
-        <MainMenu />
-        <Divider />
-        <div className="side-box mt-4">
-          <MetamaskStatus />
-        </div>
-        <div className="side-box mt-4">
-          <StateStorageSync />
-        </div>
-        <div className="side-box mt-4">
-          <h3 className="side-box-title">
-            <Space>
-              <MailOutlined />
-              <span>Get in touch</span>
-            </Space>
-          </h3>
-          <div className="side-box-body">
-            <div className="mb-2">
-              <a href="mailto:info@myswarm.app">info@myswarm.app</a>
-            </div>
-            <div>
-              <a href="https://t.me/joinchat/G8Tp9xgq2FpCSuKs6W4IXg" target="_blank" rel="noreferrer noopener">
-                telegram
-              </a>
-            </div>
+          </Col>
+        </Row>
+      </Header>
+      <Layout>
+        <Sider trigger={null} breakpoint="lg" collapsedWidth={0}>
+          <Sidebar fullUi />
+        </Sider>
+        <Content>
+          <div className="content-content">
+            {title && (
+              <PageHeader
+                title={title}
+                backIcon={false}
+                extra={headExtra}
+                className={headTableAligned ? `table-aligned` : ``}
+              />
+            )}
+            {children}
           </div>
-        </div>
-      </Sider>
-      <Content>
-        <div className="content-content">
-          {title && (
-            <PageHeader
-              title={title}
-              backIcon={false}
-              extra={headExtra}
-              className={headTableAligned ? `table-aligned` : ``}
-            />
-          )}
-          {children}
-        </div>
-        <div className="content-footer">
-          <Footer />
-        </div>
-        {transaction && <TransactionModal />}
-        {spendingApproval && <SpendingApprovalModal />}
-      </Content>
+          <div className="content-footer">
+            <Footer />
+          </div>
+          {transaction && <TransactionModal />}
+          {spendingApproval && <SpendingApprovalModal />}
+          <Drawer
+            width={200}
+            placement="left"
+            visible={hasMobileMenu}
+            onClose={() => setHasMobileMenu(false)}
+            className="with-sidebar"
+            closeIcon={<Button icon={<CloseOutlined />} type="primary" ghost />}
+          >
+            <Sidebar />
+          </Drawer>
+        </Content>
+      </Layout>
     </Layout>
   );
 }

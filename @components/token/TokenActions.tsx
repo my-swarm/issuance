@@ -1,13 +1,15 @@
 import React, { ReactElement } from 'react';
 import { TokenState, TokenAction, TokenRecord } from '@lib';
-import { Button, Popconfirm } from 'antd';
+import { Button, Popconfirm, Tooltip } from 'antd';
 import {
-  EditOutlined,
   InfoCircleOutlined,
   DeleteOutlined,
   RocketOutlined,
   FundOutlined,
   DollarCircleOutlined,
+  LineChartOutlined,
+  SlidersOutlined,
+  FormOutlined,
 } from '@lib/icons';
 import { useEthers } from '@app';
 
@@ -28,78 +30,66 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
 
   if (localState === TokenState.Created) {
     actions.push(
-      <Button key="edit" size="small" onClick={() => onAction(TokenAction.Edit)} icon={<EditOutlined />}>
-        Edit
-      </Button>,
+      <Tooltip title="Edit undeployed token">
+        <Button key="edit" onClick={() => onAction(TokenAction.Edit)} icon={<FormOutlined />} />
+      </Tooltip>,
     );
   }
   if (localState === TokenState.Created || localState === TokenState.Deploying) {
     actions.push(
-      <Button key="deploy" size="small" onClick={() => onAction(TokenAction.Deploy)} icon={<RocketOutlined />}>
-        {localState === TokenState.Deploying ? 'Resume Deploy' : 'Deploy'}
-      </Button>,
+      <Tooltip title={localState === TokenState.Deploying ? 'Resume token deployment' : 'Deploy your token'}>
+        <Button key="deploy" onClick={() => onAction(TokenAction.Deploy)} icon={<RocketOutlined />}>
+          {localState === TokenState.Deploying ? 'Resume' : 'Deploy'}
+        </Button>
+      </Tooltip>,
     );
   }
 
   if (localState === TokenState.DeployingFundraiser) {
     actions.push(
-      <Button
-        key="startFundraise"
-        size="small"
-        onClick={() => onAction(TokenAction.StartFundraise)}
-        icon={<EditOutlined />}
-      >
-        Resume fundraiser deploy
+      <Button key="startFundraise" onClick={() => onAction(TokenAction.StartFundraise)} icon={<RocketOutlined />}>
+        Resume
       </Button>,
     );
   } else if (token.address && !token.isFundraising && !token.isMinted) {
     actions.push(
-      <Button
-        key="fundraiser"
-        size="small"
-        onClick={() => onAction(TokenAction.StartFundraise)}
-        icon={<FundOutlined />}
-      >
-        Start fundraiser
+      <Button key="fundraiser" onClick={() => onAction(TokenAction.StartFundraise)} icon={<RocketOutlined />}>
+        Fundraise
       </Button>,
     );
     actions.push(
-      <Button
-        key="stake"
-        size="small"
-        onClick={() => onAction(TokenAction.StakeAndMint)}
-        icon={<DollarCircleOutlined />}
-      >
-        Stake &amp; Mint
-      </Button>,
+      <Tooltip title="Stake and Mint">
+        <Button key="stake" onClick={() => onAction(TokenAction.StakeAndMint)} icon={<DollarCircleOutlined />}>
+          Mint
+        </Button>
+      </Tooltip>,
     );
   }
 
   if (token.isFundraising) {
     actions.push(
-      <Button
-        key="manageFundraise"
-        size="small"
-        onClick={() => onAction(TokenAction.ManageFundraise)}
-        icon={<EditOutlined />}
-      >
-        Manage fundraiser
-      </Button>,
+      <Tooltip title="Manage your fundraiser">
+        <Button
+          key="manageFundraise"
+          onClick={() => onAction(TokenAction.ManageFundraise)}
+          icon={<LineChartOutlined />}
+        />
+      </Tooltip>,
     );
   }
 
   if (token.isMinted) {
     actions.push(
-      <Button key="manageToken" size="small" onClick={() => onAction(TokenAction.ManageToken)} icon={<EditOutlined />}>
-        Manage token
-      </Button>,
+      <Tooltip title="Manage your token">
+        <Button key="manageToken" onClick={() => onAction(TokenAction.ManageToken)} icon={<SlidersOutlined />} />
+      </Tooltip>,
     );
   }
 
   actions.push(
-    <Button key="info" size="small" onClick={() => onAction(TokenAction.Info)} icon={<InfoCircleOutlined />}>
-      Info
-    </Button>,
+    <Tooltip title="Token information">
+      <Button key="info" onClick={() => onAction(TokenAction.Info)} icon={<InfoCircleOutlined />} type="dashed" />
+    </Tooltip>,
   );
 
   if (!token.address) {
@@ -109,9 +99,9 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
         title={`Are you sure you want to delete '${token.name}`}
         onConfirm={() => onAction(TokenAction.Delete)}
       >
-        <Button key="delete" size="small" icon={<DeleteOutlined />}>
-          Delete
-        </Button>
+        <Tooltip title="Delete undeployed token">
+          <Button key="delete" icon={<DeleteOutlined />} type="dashed" danger ghost />
+        </Tooltip>
       </Popconfirm>,
     );
   }

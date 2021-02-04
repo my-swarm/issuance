@@ -4,6 +4,7 @@ export { default as CheckOutlined } from '@ant-design/icons/lib/icons/CheckOutli
 export { default as CheckCircleOutlined } from '@ant-design/icons/lib/icons/CheckCircleOutlined';
 export { default as CheckCircleTwoTone } from '@ant-design/icons/lib/icons/CheckCircleTwoTone';
 export { default as CloseCircleOutlined } from '@ant-design/icons/lib/icons/CloseCircleOutlined';
+export { default as CloseOutlined } from '@ant-design/icons/lib/icons/CloseOutlined';
 export { default as CopyOutlined } from '@ant-design/icons/lib/icons/CopyOutlined';
 export { default as DashboardOutlined } from '@ant-design/icons/lib/icons/DashboardOutlined';
 export { default as DeleteOutlined } from '@ant-design/icons/lib/icons/DeleteOutlined';
@@ -31,3 +32,6 @@ export { default as SyncOutlined } from '@ant-design/icons/lib/icons/SyncOutline
 export { default as UserOutlined } from '@ant-design/icons/lib/icons/UserOutlined';
 export { default as WalletOutlined } from '@ant-design/icons/lib/icons/WalletOutlined';
 export { default as WarningOutlined } from '@ant-design/icons/lib/icons/WarningOutlined';
+export { default as MenuOutlined } from '@ant-design/icons/lib/icons/MenuOutlined';
+export { default as SlidersOutlined } from '@ant-design/icons/lib/icons/SlidersOutlined';
+export { default as FormOutlined } from '@ant-design/icons/lib/icons/FormOutlined';

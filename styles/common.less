@@ -1,0 +1,198 @@
+.button-with-image {
+  img {
+    width: 20px;
+    position: relative;
+    left: -4px;
+    top: -2px;
+  }
+}
+
+.c-address {
+  font-family: monospace;
+  span {
+    display: inline-block;
+  }
+}
+
+.c-help {
+  cursor: help;
+}
+
+.c-image-preview {
+  position: relative;
+
+  img {
+    max-height: 12rem;
+    max-width: 12rem;
+    display: block;
+    height: auto;
+    width: auto;
+  }
+
+  &.fit-width {
+    width: 100%;
+    height: 10rem;
+    border: 2px solid rgba(0, 0, 0, .1);
+    padding: .25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img {
+      height: auto;
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+
+  .expand {
+    position: absolute;
+    left: 2px;
+    bottom: 2px;
+    background: #fff;
+    line-height: 1;
+    padding: .25rem;
+  }
+}
+
+
+.code-sample {
+  font-size: 12px;
+  background: rgba(0, 10, 20, .05);
+  border: 1px solid rgba(0, 10, 20, .2);
+  padding: .5em;
+}
+
+
+.c-box {
+  padding: 24px;
+  border: 2px solid @blue;
+  border-radius: 4px;
+  background: @blueBg;
+  .ant-row:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@raiseProgressHeight: 24px;
+@raiseProgressRadius: 4px;
+
+.raise-progress {
+  //background: #a0d911;
+  background: @bright;
+  border: @grey3;
+  border-radius: @raiseProgressRadius;
+  position: relative;
+  height: @raiseProgressHeight;
+  .raised, .softcap, .hardcap {
+    position: absolute;
+  }
+  .raised {
+    z-index: 1;
+    background: @blue;
+    border: 1px solid @blue;
+    border-radius: @raiseProgressRadius 0 0 @raiseProgressRadius;
+    left: 0;
+    top: 0;
+    height: 100%;
+  }
+  .softcap, .hardcap {
+    border: 1px solid @white;
+  }
+  .softcap {
+    z-index: 3;
+    background: @green;
+    top: -3px;
+    width: 5px;
+    height: calc(@raiseProgressHeight + 5px);
+    border-radius: 2px;
+  }
+  .hardcap {
+    z-index: 2;
+    background: @red;
+    width: 6px;
+    top: -1px;
+    right: -1px;
+    height: calc(@raiseProgressHeight + 2px);
+    border-radius: 0 @raiseProgressRadius @raiseProgressRadius 0;
+  }
+}
+
+.c-fundraiser-investor-card {
+  max-width: 28rem;
+  float: left;
+@extend .mr-3;
+@extend .mb-3;
+  &.standalone {
+    margin-right: 0;
+    margin-bottom: 0;
+    float: none;
+  }
+
+  .token {
+    width: 100%;
+    p {
+      font-size: 14px;
+    }
+  }
+  .countdown, .status {
+    width: 50%;
+    height: 128px;
+  }
+}
+
+.ant-table-row.special {
+  background: #f0f5ff;
+}
+
+.ant-table-tbody > tr.ant-table-row.special:hover > td {
+  background: unset;
+}
+
+.wallet-table img {
+  width: auto;
+  height: auto;
+  max-height: 24px;
+  max-width: 24px;
+}
+
+.content-content {
+  min-height: 80vh;
+}
+
+.disclaimer {
+  font-size: 11px;
+  color: rgba(0, 0, 0, .66);
+}
+
+.disclaimer-divider {
+  width: 33%;
+  border-top: 1px solid rgba(0, 0, 0, .33);
+@extend .my-3;
+}
+
+.share-chart {
+  height: 32px;
+  display: flex;
+  > div {
+    height: 100%;
+  }
+}
+
+.share-table {
+  .ant-col:nth-child(2) {
+    line-height: 2.4;
+  }
+  .ant-col:nth-child(3) {
+    line-height: 1.2;
+    padding-bottom: 2px;
+  }
+}
+
+.c-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+

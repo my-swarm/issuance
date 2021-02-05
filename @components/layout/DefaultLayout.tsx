@@ -37,14 +37,23 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
     }
   }, [error]);
 
+  useEffect(() => {
+    window.less = {
+      async: true,
+      env: 'production',
+    };
+  }, []);
+
   const toggleMobileMenu = () => {
     setHasMobileMenu(!hasMobileMenu);
   };
 
   return (
-    <Layout className="dark">
+    <Layout>
       <Head>
         <title>{title || 'My Swarm'}</title>
+        <link rel="stylesheet/less" type="text/css" href="/color.less" />
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.7.2/less.min.js"></script>
       </Head>
       <Header>
         <Row justify="space-between">

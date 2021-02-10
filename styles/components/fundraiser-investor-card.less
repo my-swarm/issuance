@@ -1,0 +1,22 @@
+.c-fundraiser-investor-card {
+  max-width: 28rem;
+  float: left;
+  &:extend(.mr-3);
+  &:extend(.mb-3);
+  &.standalone {
+    margin-right: 0;
+    margin-bottom: 0;
+    float: none;
+  }
+
+  .token {
+    width: 100%;
+    p {
+      font-size: 14px;
+    }
+  }
+  .countdown, .status {
+    width: 50%;
+    height: 128px;
+  }
+}

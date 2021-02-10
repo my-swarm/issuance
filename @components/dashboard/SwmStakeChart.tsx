@@ -49,7 +49,7 @@ export function SwmStakeChart({ total, mnStake, issuerStake }: SwmStakeChartProp
     circulating: {
       label: 'Circulating',
       amount: circulating,
-      color: colors.grey2,
+      color: colors.grey1,
     },
   };
   const sum = Object.values(metrics)
@@ -85,10 +85,10 @@ export function SwmStakeChart({ total, mnStake, issuerStake }: SwmStakeChartProp
   }
 
   return (
-    <>
-      <div className="share-chart">{Object.keys(metrics).map((key) => renderBar(key))}</div>
+    <div className="c-swm-stake-chart">
+      <div className="chart">{Object.keys(metrics).map((key) => renderBar(key))}</div>
       <VSpace />
-      <div className="share-table">{Object.keys(metrics).map((key) => renderLegend(key))}</div>
-    </>
+      <div className="table">{Object.keys(metrics).map((key) => renderLegend(key))}</div>
+    </div>
   );
 }

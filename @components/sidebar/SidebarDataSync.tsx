@@ -6,8 +6,9 @@ import * as devData from 'dev_data';
 
 import { isDev, useAppState, useStorage } from '@app';
 import { formatDatetime } from '@lib';
+import { SideBox } from '../utility';
 
-export function StateStorageSync(): ReactElement {
+export function SidebarDataSync(): ReactElement {
   const [state, dispatch] = useAppState();
   const { isLoaded, isSaving, isSynced, version } = state;
 
@@ -56,11 +57,11 @@ export function StateStorageSync(): ReactElement {
   }
 
   return (
-    <>
-      <h3 className="side-box-title" style={{ marginLeft: '1px' }}>
+    <SideBox>
+      <h3 className="title" style={{ marginLeft: '1px' }}>
         {renderCardTitle()}
       </h3>
-      <div className="side-box-body">
+      <div className="body">
         <div className="mb-1">{formatDatetime(Math.round(version / 1000))}</div>
         <Space size="small">
           <span onClick={handleResetDev} className="link">
@@ -68,6 +69,6 @@ export function StateStorageSync(): ReactElement {
           </span>
         </Space>
       </div>
-    </>
+    </SideBox>
   );
 }

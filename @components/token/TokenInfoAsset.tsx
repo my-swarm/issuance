@@ -12,7 +12,15 @@ export function TokenInfoAsset(): ReactElement {
   console.log({ kya });
 
   return (
-    <Descriptions title="Asset info" layout="horizontal" bordered size="small" className="c-token-info mb-3" column={1}>
+    <Descriptions
+      title="Asset info"
+      layout="horizontal"
+      bordered
+      size="small"
+      className="c-token-info mb-3"
+      column={1}
+      labelStyle={{ width: '30%' }}
+    >
       <Descriptions.Item label="Asset name">{asset.name}</Descriptions.Item>
       <Descriptions.Item label="Asset Net Value">{formatNumber(nav)}</Descriptions.Item>
       <Descriptions.Item label="NAV Supporting document">

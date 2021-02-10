@@ -6,7 +6,9 @@
 @orange: #f3902d;
 @yellow: #f9d854;
 @blue: #608db9;
-@blueBg: rgba(96, 161, 185, .1);
+@blueBg: #353D42;
+@blueBgDarker: #1f2528;
+@blueBgDarkest: #101315;
 @bright: #f2f4ed;
 @grey1: #3f4243;
 @grey2: #727272;
@@ -16,8 +18,11 @@
 @red: #bd395a;
 @green: #44a75a;
 @white: #fff;
+@usdc-color: #2775CA;
+@eth-color: #999;
 
 @darkBlue1: #192736;
+@box-bg: rgba(255, 255, 255, .04);
 
 .color-orange { color: @orange }
 .color-yellow { color: @yellow }
@@ -26,6 +31,17 @@
 .color-green { color: @green }
 
 // antd customize
-@primary-color: @blue;
+@body-background: @blueBgDarkest;
+@component-background: @blueBgDarker;
+@primary-color: @orange;
 @layout-header-background: @blueBg;
 @menu-dark-inline-submenu-bg: @blueBg;
+@menu-highlight-color: @orange;
+@menu-item-active-border-width: 0;
+@highlight-color: @orange;
+
+// whiter text clor
+@text-color: @white;
+@text-color-secondary: fade(@white, 75%);
+@heading-color: @text-color;
+@table-header-bg: @blueBg;

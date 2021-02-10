@@ -42,7 +42,7 @@ export function DefaultLayout({ title, headExtra, children, headTableAligned = f
   };
 
   return (
-    <Layout className="dark">
+    <Layout>
       <Head>
         <title>{title || 'My Swarm'}</title>
       </Head>

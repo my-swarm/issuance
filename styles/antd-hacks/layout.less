@@ -1,0 +1,57 @@
+.ant-layout {
+  min-height: 100vh;
+}
+.ant-layout-content {
+  padding: 1rem 1.5rem;
+}
+
+
+.ant-page-header {
+  padding-left: 0;
+  &.table-aligned {
+    padding-left: 16px;
+  }
+}
+
+
+.ant-layout-header {
+  padding: 0 24px;
+  @media (min-width: 992px) {
+    display: none;
+  }
+}
+
+// ant-drawer.with-sidebar is the mobile menu
+
+.ant-drawer.with-sidebar {
+  .ant-drawer-body {
+    padding: 64px 0 0 0;
+    background: @darkBlue1;
+  }
+  .ant-drawer-close {
+    padding-right: 0;
+    margin-right: 0;
+    left: 0;
+  }
+
+}
+
+
+.ant-layout-sider {
+  //background: @darkBlue1;
+  border-right: 1px solid @orange;
+}
+
+
+.ant-layout-sider, .ant-drawer.with-sidebar {
+  .ant-divider {
+    border-top: 1px solid rgba(255, 255, 255, .33);
+    margin: 16px;
+    width: auto;
+    min-width: auto;
+  }
+}
+
+.ant-menu.ant-menu-inline { background: transparent; } // setting the variable doesn't help?
+
+

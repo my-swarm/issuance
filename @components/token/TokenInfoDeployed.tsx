@@ -47,7 +47,15 @@ export function TokenInfoDeployed(): ReactElement {
   }
 
   return (
-    <Descriptions title="Deployed addresses" layout="horizontal" bordered size="small" className="mb-3" column={1}>
+    <Descriptions
+      title="Deployed addresses"
+      layout="horizontal"
+      bordered
+      size="small"
+      className="mb-3"
+      column={1}
+      labelStyle={{ width: '30%' }}
+    >
       <Descriptions.Item label={<HelpLabel name="contractsSrc20" />}>{printAddress('src20')}</Descriptions.Item>
       <Descriptions.Item label={<HelpLabel name="contractsFeatures" />}>{printAddress('features')}</Descriptions.Item>
       <Descriptions.Item label={<HelpLabel name="contractsRoles" />}>{printAddress('roles')}</Descriptions.Item>

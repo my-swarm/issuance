@@ -1,0 +1,43 @@
+@raiseProgressHeight: 24px;
+@raiseProgressRadius: 4px;
+
+.c-fundraiser-status {
+  //background: #a0d911;
+  background: @body-background;
+  border: @body-background;
+  border-radius: @raiseProgressRadius;
+  position: relative;
+  height: @raiseProgressHeight;
+  .raised, .softcap, .hardcap {
+    position: absolute;
+  }
+  .raised {
+    z-index: 1;
+    background: @blue;
+    border: 1px solid @blue;
+    border-radius: @raiseProgressRadius 0 0 @raiseProgressRadius;
+    left: 0;
+    top: 0;
+    height: 100%;
+  }
+  .softcap, .hardcap {
+    box-shadow: 0 0 2px @body-background;
+  }
+  .softcap {
+    z-index: 3;
+    background: @green;
+    top: -2px;
+    width: 4px;
+    height: calc(@raiseProgressHeight + 5px);
+    border-radius: 2px;
+  }
+  .hardcap {
+    z-index: 2;
+    background: @orange;
+    width: 4px;
+    top: -1px;
+    right: -1px;
+    height: calc(@raiseProgressHeight + 2px);
+    border-radius: 0 @raiseProgressRadius @raiseProgressRadius 0;
+  }
+}

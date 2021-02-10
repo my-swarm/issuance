@@ -10,7 +10,7 @@ interface HelpLabelProps {
 export function HelpLabel({ name }: HelpLabelProps): ReactElement {
   return (
     <Space>
-      <span>{help[name].title}</span>
+      <span>{help[name].shortTitle || help[name].title}</span>
       <Help name={name} />
     </Space>
   );

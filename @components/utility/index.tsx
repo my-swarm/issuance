@@ -21,3 +21,4 @@ export * from './TokenTitle';
 export * from './CardAction';
 export * from './WrapWhen';
 export * from './PoweredBySwarm';
+export * from './SideBox';

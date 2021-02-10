@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { AppFile } from '@lib';
-import { ExpandOutlined } from '@lib/icons';
+import { ZoomInOutlined } from '@lib/icons';
 
 interface FilePreviewProps {
   image: AppFile;
@@ -19,7 +19,7 @@ export function ImagePreview({ image, fitWidth = false }: FilePreviewProps): Rea
         {image?.url && (
           <div className="expand">
             <a href={image.url} target="_blank" rel="noopener noreferrer">
-              <ExpandOutlined alt="Open full image" />
+              <ZoomInOutlined alt="Open full image" />
             </a>
           </div>
         )}

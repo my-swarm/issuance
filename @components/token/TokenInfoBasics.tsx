@@ -53,7 +53,15 @@ export function TokenInfoBasics(): ReactElement {
   }
 
   return (
-    <Descriptions title="Basic info" layout="horizontal" bordered size="small" className="c-token-info mb-3" column={1}>
+    <Descriptions
+      title="Basic info"
+      layout="horizontal"
+      bordered
+      size="small"
+      className="c-token-info mb-3"
+      column={1}
+      labelStyle={{ width: '30%' }}
+    >
       <Descriptions.Item label="Token name">{token.name}</Descriptions.Item>
       <Descriptions.Item label="Token symbol">{token.symbol}</Descriptions.Item>
       <Descriptions.Item label="Token description">{kya.token.description}</Descriptions.Item>

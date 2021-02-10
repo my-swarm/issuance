@@ -8,6 +8,7 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
+  Label,
 } from 'recharts';
 import { ContributorFragment, FundraiserWithContributorsFragment } from '@graphql';
 import dayjs from 'dayjs';
@@ -115,6 +116,9 @@ export function FundraiserProgressChart({ fundraiser }: FundraiserChartProps): R
   const isRealData = data.length >= 2;
   const displayData = isRealData ? data : createDummyData(hardCap);
 
+  const softCapColor = isRealData ? colors.green : colors.grey2;
+  const hardCapColor = isRealData ? colors.red : colors.grey3;
+
   return (
     <>
       {!isRealData && <p>Fundraise progress chart will display after sufficient contributions received</p>}
@@ -122,21 +126,19 @@ export function FundraiserProgressChart({ fundraiser }: FundraiserChartProps): R
       <ResponsiveContainer minWidth={300} height={200} width="99%">
         <LineChart data={displayData}>
           {isRealData && <XAxis dataKey="date" />}
-          <CartesianGrid strokeDasharray="1 2" strokeWidth={1} />
+          <CartesianGrid strokeDasharray="1 2" strokeWidth={0.5} />
           <Line {...lineAttrs} dataKey="qualified" stroke={isRealData ? colors.green : colors.grey2} />
           <Line {...lineAttrs} dataKey="pending" stroke={isRealData ? colors.blue : colors.grey3} />
           <ReferenceLine
             y={softCap}
-            label="Soft Cap"
-            stroke={isRealData ? colors.green : colors.grey2}
-            strokeDasharray="2 2"
+            stroke={softCapColor}
+            label={<Label style={{ fill: softCapColor }} value="Soft Cap" />}
           />
           <ReferenceLine
             y={hardCap}
-            label="Hard Cap"
-            stroke={isRealData ? colors.red : colors.grey3}
+            stroke={hardCapColor}
             ifOverflow="extendDomain"
-            strokeDasharray="2 2"
+            label={<Label style={{ fill: hardCapColor }} value="Hard Cap" />}
           />
           {isRealData && <Tooltip />}
         </LineChart>

@@ -5,9 +5,9 @@ import { ExclamationCircleOutlined } from '@lib/icons';
 
 import { EthereumNetwork } from '@lib';
 import { EthersStatus, useEthers } from '@app';
-import { Address } from '@components';
+import { Address, SideBox } from '@components';
 
-export function MetamaskStatus() {
+export function SidebarMetamask() {
   const { status, connect, address, networkId } = useEthers();
 
   const supportedNetworks = [EthereumNetwork.Main, EthereumNetwork.Kovan];
@@ -17,7 +17,7 @@ export function MetamaskStatus() {
     case EthersStatus.DISCONNECTED:
       cardTitle = 'Disconnected';
       cardBody = (
-        <div className="side-box-body">
+        <div className="body">
           <a onClick={() => connect(false)} className="link">
             connect
           </a>
@@ -28,7 +28,7 @@ export function MetamaskStatus() {
       cardTitle = 'Connected';
 
       cardBody = (
-        <div className="side-box-body">
+        <div className="body">
           <div className="mb-1">{address ? <Address short>{address}</Address> : 'unknown address'}</div>
           <div>
             network:{' '}
@@ -49,11 +49,11 @@ export function MetamaskStatus() {
   }
 
   return (
-    <>
-      <h3 className="side-box-title">
+    <SideBox margin={4}>
+      <h3 className="title">
         <img src="/images/metamask-fox.svg" alt="Metamask icon" className="image-1" /> {cardTitle}
       </h3>
       <div>{cardBody}</div>
-    </>
+    </SideBox>
   );
 }

@@ -1,14 +1,12 @@
 import React, { ReactElement } from 'react';
 import Link from 'next/link';
-import { Menu, Tag } from 'antd';
+import { Menu } from 'antd';
 import {
   AppstoreOutlined,
-  DollarCircleOutlined,
-  UserOutlined,
-  LineChartOutlined,
-  WalletOutlined,
-  InfoCircleOutlined,
   DashboardOutlined,
+  DollarCircleOutlined,
+  InfoCircleOutlined,
+  WalletOutlined,
 } from '@lib/icons';
 import { useRouter } from 'next/router';
 
@@ -16,7 +14,7 @@ export function MainMenu(): ReactElement {
   const router = useRouter();
 
   return (
-    <Menu theme="dark" mode="inline" defaultOpenKeys={['investor', 'issuer']} defaultSelectedKeys={[router.pathname]}>
+    <Menu mode="inline" defaultOpenKeys={['investor', 'issuer']} defaultSelectedKeys={[router.pathname]}>
       <Menu.Item key="/" icon={<DashboardOutlined />}>
         <Link href="/">
           <a>Dashboard</a>

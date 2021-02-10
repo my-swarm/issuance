@@ -196,6 +196,10 @@ export default function WalletPage(): ReactElement {
     }
   }
 
+  function rowClassName(record) {
+    return record.special && record.token.symbol.toLowerCase();
+  }
+
   return (
     <DefaultLayout title="Wallet">
       {connected && (
@@ -208,12 +212,7 @@ export default function WalletPage(): ReactElement {
           </Checkbox>
         </p>
       )}
-      <Table
-        dataSource={wallet}
-        columns={columns}
-        className="wallet-table"
-        rowClassName={(record) => record.special && 'special'}
-      />
+      <Table dataSource={wallet} columns={columns} className="wallet-table" rowClassName={rowClassName} />
       <RequireEthers message="The balances will only show when you connect to Ethereum" />
       <Drawer
         title={getActionTitle()}

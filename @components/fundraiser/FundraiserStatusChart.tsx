@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { formatNumber, formatUnits } from '@lib';
-import { Tooltip } from 'antd';
+import { Card, Tooltip } from 'antd';
 
 interface FundraiserStatusChartProps {
   softCap: BigNumberish;
@@ -29,7 +29,7 @@ export function FundraiserStatusChart({
   return (
     <div>
       <h3>Amount raised</h3>
-      <div style={{ width: '100%' }} className="mb-1 raise-progress">
+      <div style={{ width: '100%' }} className="mb-1 c-fundraiser-status">
         {softCap.gt(0) && (
           <Tooltip title={`Soft Cap: ${softCapNumber} USD`}>
             <div className="softcap" style={{ left: `${softCapPercent}%` }} />

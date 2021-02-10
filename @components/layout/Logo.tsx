@@ -1,11 +1,14 @@
 import React from 'react';
+import Link from 'next/link';
 
-interface LogoProps {}
-
-export function Logo({}: LogoProps) {
+export function Logo() {
   return (
     <div className="c-logo">
-      <img src="/images/logo.svg" alt="Logo" />
+      <Link href="/">
+        <a>
+          <img src="/images/logo.svg" alt="Logo" />
+        </a>
+      </Link>
     </div>
   );
 }

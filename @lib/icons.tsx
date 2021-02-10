@@ -12,7 +12,6 @@ export { default as DeleteTwoTone } from '@ant-design/icons/lib/icons/DeleteTwoT
 export { default as DollarCircleOutlined } from '@ant-design/icons/lib/icons/DollarCircleOutlined';
 export { default as DownOutlined } from '@ant-design/icons/lib/icons/DownOutlined';
 export { default as DownloadOutlined } from '@ant-design/icons/lib/icons/DownloadOutlined';
-export { default as EditOutlined } from '@ant-design/icons/lib/icons/EditOutlined';
 export { default as ExclamationCircleOutlined } from '@ant-design/icons/lib/icons/ExclamationCircleOutlined';
 export { default as ExclamationCircleTwoTone } from '@ant-design/icons/lib/icons/ExclamationCircleTwoTone';
 export { default as ExpandOutlined } from '@ant-design/icons/lib/icons/ExpandOutlined';
@@ -35,3 +34,4 @@ export { default as WarningOutlined } from '@ant-design/icons/lib/icons/WarningO
 export { default as MenuOutlined } from '@ant-design/icons/lib/icons/MenuOutlined';
 export { default as SlidersOutlined } from '@ant-design/icons/lib/icons/SlidersOutlined';
 export { default as FormOutlined } from '@ant-design/icons/lib/icons/FormOutlined';
+export { default as ZoomInOutlined } from '@ant-design/icons/lib/icons/ZoomInOutlined';

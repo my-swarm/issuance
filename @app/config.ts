@@ -29,6 +29,7 @@ export const colors = {
   grey4: '#f6f7f7',
   red: '#bd395a',
   green: '#44a75a',
+  white: '#ffffff',
 };
 
 export const unlimitedAllowance = BigNumber.from(2).pow(256).sub(1);

@@ -19,6 +19,7 @@
   @media (min-width: 992px) {
     display: none;
   }
+  border-bottom: 1px solid @orange;
 }
 
 // ant-drawer.with-sidebar is the mobile menu
@@ -37,9 +38,11 @@
 }
 
 
-.ant-layout-sider {
-  //background: @darkBlue1;
-  border-right: 1px solid @orange;
+@media (min-width: 992px) {
+  .ant-layout-sider {
+    //background: @darkBlue1;
+    border-right: 1px solid @orange;
+  }
 }
 
 

@@ -24,13 +24,7 @@ export const tokenFormRules = {
   image: [],
   description: [],
 
-  transferRestrictionsType: [
-    {
-      required: true,
-      message: 'Select transfer restriction type',
-    },
-  ],
-
+  allowTransferRules: [],
   allowAccountFreeze: [],
   allowContractFreeze: [],
   allowForceTransfer: [],

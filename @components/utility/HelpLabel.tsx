@@ -8,6 +8,7 @@ interface HelpLabelProps {
 }
 
 export function HelpLabel({ name }: HelpLabelProps): ReactElement {
+  if (!help[name]) throw new Error(`Help not found: ${name}`);
   return (
     <Space>
       <span>{help[name].shortTitle || help[name].title}</span>

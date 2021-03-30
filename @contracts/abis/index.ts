@@ -1,8 +1,5 @@
-import AssetRegistry from './AssetRegistry.json';
 import Features from './Features.json';
 import TokenMinter from './TokenMinter.json';
-import SRC20Roles from './SRC20Roles.json';
-import SRC20Factory from './SRC20Factory.json';
 import SRC20Registry from './SRC20Registry.json';
 import SwmToken from './SwmToken.json';
 import TransferRules from './TransferRules.json';
@@ -19,10 +16,7 @@ import ERC20 from './ERC20.json';
 export const abis = {
   TransferRules,
   Features,
-  SRC20Roles,
-  AssetRegistry,
   TokenMinter,
-  SRC20Factory,
   SRC20Registry,
   SwmToken,
   SWMPriceOracle,

@@ -8,7 +8,7 @@
   "scripts": {
     "codegen": "(cd @graphql && ./update-schema.sh && graphql-codegen --config codegen.yml)",
     "codegen:watch": "(cd @graphql && ./update-schema.sh &&  graphql-codegen --config codegen.yml --watch)",
-    "dev": "yarn codegen && concurrently --names 'RUN,CGN,SRV' --prefix '({name})' --prefix-colors 'greenBright.bold,yellow.bold' 'next -p 5070' 'yarn codegen:watch' '(cd server && yarn dev)'",
+    "dev": "yarn codegen && concurrently --names 'RUN,CGN,SRV' --prefix '({name})' --prefix-colors 'greenBright.bold,yellow.bold,blue.bold' 'next -p 5070' 'yarn codegen:watch' '(cd server && yarn dev)'",
     "build": "next build",
     "start": "next start -p 5070",
     "test": "jest",

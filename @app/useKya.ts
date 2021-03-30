@@ -11,7 +11,7 @@ export function useKya(token?: OnlineToken): { kya: Kya; nav: number } {
   useEffect(() => {
     const t = token || onlineToken;
     if (t) {
-      api.getKya(t.kyaUrl).then((kya) => setKya(kya));
+      api.getKya(t.kyaUri).then((kya) => setKya(kya));
       setNav(t.nav);
     } else if (localToken) {
       setKya(tokenToKya(localToken));

@@ -22,3 +22,16 @@ export const contributionsLocked = {
     </div>
   ),
 };
+
+export const contributorRestrictions = {
+  title: 'Contributor restrictions',
+  content: (
+    <div>
+      <p>
+        Limit the number of contributors or the amount a single investor can contribute (you can specify a minimum,
+        maximum or both). The limits are inclusive (minimum 20 USD means 20 USD or more)
+      </p>
+      <p>Leave empty or put zero for no limit</p>
+    </div>
+  ),
+};

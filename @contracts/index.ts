@@ -10,8 +10,6 @@ interface ContractMeta {
 
 export const contractsMeta: { [key: string]: ContractMeta } = {
   SRC20Registry: { shortName: 'registry', isBase: true },
-  SRC20Factory: { shortName: 'factory', isBase: true },
-  AssetRegistry: { shortName: 'assetRegistry', isBase: true },
   TokenMinter: { shortName: 'minter', isBase: true },
   SWMPriceOracle: { shortName: 'swmPriceOracle', isBase: true },
   FundraiserManager: { shortName: 'fundraiserManager', isBase: true },
@@ -21,7 +19,6 @@ export const contractsMeta: { [key: string]: ContractMeta } = {
 
   SRC20: { shortName: 'src20', isBase: false },
   Features: { shortName: 'features', isBase: false },
-  SRC20Roles: { shortName: 'roles', isBase: false },
   TransferRules: { shortName: 'transferRules', isBase: false },
   Fundraiser: { shortName: 'fundraiser', isBase: false },
   ContributorRestrictions: { shortName: 'contributorRestrictions', isBase: false },

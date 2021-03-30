@@ -1,33 +1,31 @@
 {
   "token1": {
-    "roles": "0x919b4b4b561c72c990dc868f751328ef127c45f4",
-    "src20": "0x63e00e15ec3f75dc4ef547ea86ecd2ae323e2f32",
-    "features": "0x6da02f43c3bdeb30c21b57a24825417f671a8490"
+    "src20": "0x8464135c8f25da09e49bc8782676a84730c318bc",
+    "features": "0x8398bcd4f633c72939f9043db78c574a91c99c0a",
+    "transferRules": "0x0000000000000000000000000000000000000000"
   },
   "token2": {
-    "transferRules": "0xb63181cd1b0a347003137a9a2703bb1429fa852a",
-    "roles": "0x25c344e14b5df94e89021f3b09dad5f462e9b777",
-    "src20": "0xedc43eab736a435bd680b1643c6e7522ecc46029",
-    "features": "0x3307c25998c69ec9c37c71d2d2e2df837d254133"
+    "transferRules": "0xb0c6421bde3e29683f5eed0361bf58589de95fc7",
+    "src20": "0x71c95911e9a5d330f4d621842ec243ee1343292e",
+    "features": "0x127ac224013f1918823affeb7053b867c496527f"
   },
   "token3": {
-    "transferRules": "0x840a75c32f70b204ecf3c795b12289e5eeb3a32c",
-    "roles": "0x51f2aa5298badb434d0c66130c01773ac1b12e3d",
-    "src20": "0xac9085c8bd3fe353e5a2397759a33269bc9c2c8b",
-    "features": "0x1a4eb93ed4a62d39fac01082bfecff491766241b"
+    "transferRules": "0x16f57a4fb463cfc280c6e24a2310683725b4167b",
+    "src20": "0x90118d110b07abb82ba8980d1c5cc96eea810d2c",
+    "features": "0xc2ac82860fa561d3bebe07e1f5ae9d9e624be835"
   },
   "token4": {
-    "roles": "0xc9043db2d6c4812e57cae13b72b3d95e13a0fc78",
-    "src20": "0xa38034e5c2ef7fc1ae19956dbaf23af4ab012eb9",
-    "fundraiser": "0xb8b5ebca69a5a537bad998d706cf7ef0353933b5",
-    "contributorRestrictions": "0x12d910a4e63b205fe190eaad7333ad00c2f317d2",
-    "features": "0xce91a3967b1f8deddbd8414331f43b2592f5cecc"
+    "src20": "0xafe1b5bdebd4ae65af2024738bf0735fbb65d44b",
+    "fundraiser": "0x2fc631e4b3018258759c52af169200213e84abab",
+    "contributorRestrictions": "0x8edfefe2fbec2f521339b999ba4b09c19ee5e24d",
+    "features": "0x1ba420b66a21e3253ac435799c5cde24ff20006b",
+    "transferRules": "0x0000000000000000000000000000000000000000"
   },
   "token5": {
-    "features": "0xce91a3967b1f8deddbd8414331f43b2592f5cecc",
-    "roles": "0xc9043db2d6c4812e57cae13b72b3d95e13a0fc78",
-    "src20": "0xa38034e5c2ef7fc1ae19956dbaf23af4ab012eb9",
-    "fundraiser": "0xb8b5ebca69a5a537bad998d706cf7ef0353933b5",
-    "contributorRestrictions": "0x12d910a4e63b205fe190eaad7333ad00c2f317d2"
+    "features": "0x0200444768937873b2525336092278acf0d917a1",
+    "src20": "0x7290f72b5c67052dde8e6e179f7803c493e90d3f",
+    "fundraiser": "0x0afdacd509e73115ea1654b1a770f1a807e7c9c0",
+    "contributorRestrictions": "0xdd46b07866802c95861624eb3a48aad922c98a55",
+    "transferRules": "0x0000000000000000000000000000000000000000"
   }
 }

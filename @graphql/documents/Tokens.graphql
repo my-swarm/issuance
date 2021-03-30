@@ -4,7 +4,7 @@ fragment TokenInfo on Token {
   symbol
   address
   availableSupply
-  stake
+  fee
   decimals
   supply
   maxSupply
@@ -17,15 +17,13 @@ fragment TokenInfo on Token {
 }
 
 fragment TokenAsset on Token {
-  kyaHash
-  kyaUrl
+  kyaUri
   nav
 }
 
 fragment TokenContracts on Token {
   transferRules { address },
   features { address }
-  roles { address }
   currentFundraiser { address, status }
 }
 

@@ -21,8 +21,6 @@ function getOnlineTokenAddress(token: OnlineToken, contractName: string) {
       return token.address;
     case 'Features':
       return token.features.address;
-    case 'SRC20Roles':
-      return token.roles.address;
     case 'TransferRules':
       return token.transferRules?.address;
     case 'Fundraiser':

@@ -17,7 +17,6 @@ export function TokenInfoDeployed(): ReactElement {
           address = onlineToken.address;
           break;
         case 'features':
-        case 'roles':
         case 'transferRules':
           address = onlineToken[type].address;
           break;
@@ -58,7 +57,6 @@ export function TokenInfoDeployed(): ReactElement {
     >
       <Descriptions.Item label={<HelpLabel name="contractsSrc20" />}>{printAddress('src20')}</Descriptions.Item>
       <Descriptions.Item label={<HelpLabel name="contractsFeatures" />}>{printAddress('features')}</Descriptions.Item>
-      <Descriptions.Item label={<HelpLabel name="contractsRoles" />}>{printAddress('roles')}</Descriptions.Item>
       <Descriptions.Item label={<HelpLabel name="contractsTransferRules" />}>
         {printAddress('transferRules')}
       </Descriptions.Item>

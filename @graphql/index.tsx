@@ -372,6 +372,7 @@ export type Features = {
   tokenFreeze: Scalars['Boolean'];
   accountFreeze: Scalars['Boolean'];
   accountBurn: Scalars['Boolean'];
+  transferRules: Scalars['Boolean'];
 };
 
 export type Features_Filter = {
@@ -419,6 +420,10 @@ export type Features_Filter = {
   accountBurn_not?: Maybe<Scalars['Boolean']>;
   accountBurn_in?: Maybe<Array<Scalars['Boolean']>>;
   accountBurn_not_in?: Maybe<Array<Scalars['Boolean']>>;
+  transferRules?: Maybe<Scalars['Boolean']>;
+  transferRules_not?: Maybe<Scalars['Boolean']>;
+  transferRules_in?: Maybe<Array<Scalars['Boolean']>>;
+  transferRules_not_in?: Maybe<Array<Scalars['Boolean']>>;
 };
 
 export enum Features_OrderBy {
@@ -428,7 +433,74 @@ export enum Features_OrderBy {
   ForceTransfer = 'forceTransfer',
   TokenFreeze = 'tokenFreeze',
   AccountFreeze = 'accountFreeze',
-  AccountBurn = 'accountBurn'
+  AccountBurn = 'accountBurn',
+  TransferRules = 'transferRules'
+}
+
+export type Fee = {
+  __typename?: 'Fee';
+  id: Scalars['ID'];
+  token?: Maybe<Token>;
+  total: Scalars['BigInt'];
+  treasury: Scalars['BigInt'];
+  rewardPool: Scalars['BigInt'];
+};
+
+export type Fee_Filter = {
+  id?: Maybe<Scalars['ID']>;
+  id_not?: Maybe<Scalars['ID']>;
+  id_gt?: Maybe<Scalars['ID']>;
+  id_lt?: Maybe<Scalars['ID']>;
+  id_gte?: Maybe<Scalars['ID']>;
+  id_lte?: Maybe<Scalars['ID']>;
+  id_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  token?: Maybe<Scalars['String']>;
+  token_not?: Maybe<Scalars['String']>;
+  token_gt?: Maybe<Scalars['String']>;
+  token_lt?: Maybe<Scalars['String']>;
+  token_gte?: Maybe<Scalars['String']>;
+  token_lte?: Maybe<Scalars['String']>;
+  token_in?: Maybe<Array<Scalars['String']>>;
+  token_not_in?: Maybe<Array<Scalars['String']>>;
+  token_contains?: Maybe<Scalars['String']>;
+  token_not_contains?: Maybe<Scalars['String']>;
+  token_starts_with?: Maybe<Scalars['String']>;
+  token_not_starts_with?: Maybe<Scalars['String']>;
+  token_ends_with?: Maybe<Scalars['String']>;
+  token_not_ends_with?: Maybe<Scalars['String']>;
+  total?: Maybe<Scalars['BigInt']>;
+  total_not?: Maybe<Scalars['BigInt']>;
+  total_gt?: Maybe<Scalars['BigInt']>;
+  total_lt?: Maybe<Scalars['BigInt']>;
+  total_gte?: Maybe<Scalars['BigInt']>;
+  total_lte?: Maybe<Scalars['BigInt']>;
+  total_in?: Maybe<Array<Scalars['BigInt']>>;
+  total_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  treasury?: Maybe<Scalars['BigInt']>;
+  treasury_not?: Maybe<Scalars['BigInt']>;
+  treasury_gt?: Maybe<Scalars['BigInt']>;
+  treasury_lt?: Maybe<Scalars['BigInt']>;
+  treasury_gte?: Maybe<Scalars['BigInt']>;
+  treasury_lte?: Maybe<Scalars['BigInt']>;
+  treasury_in?: Maybe<Array<Scalars['BigInt']>>;
+  treasury_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  rewardPool?: Maybe<Scalars['BigInt']>;
+  rewardPool_not?: Maybe<Scalars['BigInt']>;
+  rewardPool_gt?: Maybe<Scalars['BigInt']>;
+  rewardPool_lt?: Maybe<Scalars['BigInt']>;
+  rewardPool_gte?: Maybe<Scalars['BigInt']>;
+  rewardPool_lte?: Maybe<Scalars['BigInt']>;
+  rewardPool_in?: Maybe<Array<Scalars['BigInt']>>;
+  rewardPool_not_in?: Maybe<Array<Scalars['BigInt']>>;
+};
+
+export enum Fee_OrderBy {
+  Id = 'id',
+  Token = 'token',
+  Total = 'total',
+  Treasury = 'treasury',
+  RewardPool = 'rewardPool'
 }
 
 export type Fundraiser = {
@@ -785,6 +857,90 @@ export enum GreylistedAccount_OrderBy {
   Token = 'token'
 }
 
+export type Minter = {
+  __typename?: 'Minter';
+  id: Scalars['ID'];
+  address: Scalars['Bytes'];
+  createdAt: Scalars['BigInt'];
+  registry: Registry;
+  feeTotal: Scalars['BigInt'];
+  feeTreasury: Scalars['BigInt'];
+  feeRewardPool: Scalars['BigInt'];
+};
+
+export type Minter_Filter = {
+  id?: Maybe<Scalars['ID']>;
+  id_not?: Maybe<Scalars['ID']>;
+  id_gt?: Maybe<Scalars['ID']>;
+  id_lt?: Maybe<Scalars['ID']>;
+  id_gte?: Maybe<Scalars['ID']>;
+  id_lte?: Maybe<Scalars['ID']>;
+  id_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  address?: Maybe<Scalars['Bytes']>;
+  address_not?: Maybe<Scalars['Bytes']>;
+  address_in?: Maybe<Array<Scalars['Bytes']>>;
+  address_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  address_contains?: Maybe<Scalars['Bytes']>;
+  address_not_contains?: Maybe<Scalars['Bytes']>;
+  createdAt?: Maybe<Scalars['BigInt']>;
+  createdAt_not?: Maybe<Scalars['BigInt']>;
+  createdAt_gt?: Maybe<Scalars['BigInt']>;
+  createdAt_lt?: Maybe<Scalars['BigInt']>;
+  createdAt_gte?: Maybe<Scalars['BigInt']>;
+  createdAt_lte?: Maybe<Scalars['BigInt']>;
+  createdAt_in?: Maybe<Array<Scalars['BigInt']>>;
+  createdAt_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  registry?: Maybe<Scalars['String']>;
+  registry_not?: Maybe<Scalars['String']>;
+  registry_gt?: Maybe<Scalars['String']>;
+  registry_lt?: Maybe<Scalars['String']>;
+  registry_gte?: Maybe<Scalars['String']>;
+  registry_lte?: Maybe<Scalars['String']>;
+  registry_in?: Maybe<Array<Scalars['String']>>;
+  registry_not_in?: Maybe<Array<Scalars['String']>>;
+  registry_contains?: Maybe<Scalars['String']>;
+  registry_not_contains?: Maybe<Scalars['String']>;
+  registry_starts_with?: Maybe<Scalars['String']>;
+  registry_not_starts_with?: Maybe<Scalars['String']>;
+  registry_ends_with?: Maybe<Scalars['String']>;
+  registry_not_ends_with?: Maybe<Scalars['String']>;
+  feeTotal?: Maybe<Scalars['BigInt']>;
+  feeTotal_not?: Maybe<Scalars['BigInt']>;
+  feeTotal_gt?: Maybe<Scalars['BigInt']>;
+  feeTotal_lt?: Maybe<Scalars['BigInt']>;
+  feeTotal_gte?: Maybe<Scalars['BigInt']>;
+  feeTotal_lte?: Maybe<Scalars['BigInt']>;
+  feeTotal_in?: Maybe<Array<Scalars['BigInt']>>;
+  feeTotal_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  feeTreasury?: Maybe<Scalars['BigInt']>;
+  feeTreasury_not?: Maybe<Scalars['BigInt']>;
+  feeTreasury_gt?: Maybe<Scalars['BigInt']>;
+  feeTreasury_lt?: Maybe<Scalars['BigInt']>;
+  feeTreasury_gte?: Maybe<Scalars['BigInt']>;
+  feeTreasury_lte?: Maybe<Scalars['BigInt']>;
+  feeTreasury_in?: Maybe<Array<Scalars['BigInt']>>;
+  feeTreasury_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  feeRewardPool?: Maybe<Scalars['BigInt']>;
+  feeRewardPool_not?: Maybe<Scalars['BigInt']>;
+  feeRewardPool_gt?: Maybe<Scalars['BigInt']>;
+  feeRewardPool_lt?: Maybe<Scalars['BigInt']>;
+  feeRewardPool_gte?: Maybe<Scalars['BigInt']>;
+  feeRewardPool_lte?: Maybe<Scalars['BigInt']>;
+  feeRewardPool_in?: Maybe<Array<Scalars['BigInt']>>;
+  feeRewardPool_not_in?: Maybe<Array<Scalars['BigInt']>>;
+};
+
+export enum Minter_OrderBy {
+  Id = 'id',
+  Address = 'address',
+  CreatedAt = 'createdAt',
+  Registry = 'registry',
+  FeeTotal = 'feeTotal',
+  FeeTreasury = 'feeTreasury',
+  FeeRewardPool = 'feeRewardPool'
+}
+
 export enum OrderDirection {
   Asc = 'asc',
   Desc = 'desc'
@@ -792,8 +948,14 @@ export enum OrderDirection {
 
 export type Query = {
   __typename?: 'Query';
+  registry?: Maybe<Registry>;
+  registries: Array<Registry>;
+  minter?: Maybe<Minter>;
+  minters: Array<Minter>;
   token?: Maybe<Token>;
   tokens: Array<Token>;
+  fee?: Maybe<Fee>;
+  fees: Array<Fee>;
   erc20Token?: Maybe<Erc20Token>;
   erc20Tokens: Array<Erc20Token>;
   whitelistedAccount?: Maybe<WhitelistedAccount>;
@@ -802,7 +964,6 @@ export type Query = {
   greylistedAccounts: Array<GreylistedAccount>;
   transferRules: Array<TransferRules>;
   features: Array<Features>;
-  roles: Array<Roles>;
   transferRequest?: Maybe<TransferRequest>;
   transferRequests: Array<TransferRequest>;
   transfer?: Maybe<Transfer>;
@@ -822,6 +983,38 @@ export type Query = {
 };
 
 
+export type QueryRegistryArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryRegistriesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Registry_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Registry_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryMinterArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryMintersArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Minter_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Minter_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
 export type QueryTokenArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
@@ -834,6 +1027,22 @@ export type QueryTokensArgs = {
   orderBy?: Maybe<Token_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Token_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryFeeArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryFeesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Fee_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Fee_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -902,16 +1111,6 @@ export type QueryFeaturesArgs = {
   orderBy?: Maybe<Features_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Features_Filter>;
-  block?: Maybe<Block_Height>;
-};
-
-
-export type QueryRolesArgs = {
-  skip?: Maybe<Scalars['Int']>;
-  first?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Roles_OrderBy>;
-  orderDirection?: Maybe<OrderDirection>;
-  where?: Maybe<Roles_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -1043,14 +1242,28 @@ export type QueryContributionsArgs = {
   block?: Maybe<Block_Height>;
 };
 
-export type Roles = {
-  __typename?: 'Roles';
+export type Registry = {
+  __typename?: 'Registry';
   id: Scalars['ID'];
-  address?: Maybe<Scalars['Bytes']>;
-  token: Token;
+  address: Scalars['Bytes'];
+  treasury: Scalars['Bytes'];
+  rewardPool: Scalars['Bytes'];
+  numTokens: Scalars['Int'];
+  numTokensActive: Scalars['Int'];
+  numTokensFundraising: Scalars['Int'];
+  minters: Array<Minter>;
 };
 
-export type Roles_Filter = {
+
+export type RegistryMintersArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Minter_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Minter_Filter>;
+};
+
+export type Registry_Filter = {
   id?: Maybe<Scalars['ID']>;
   id_not?: Maybe<Scalars['ID']>;
   id_gt?: Maybe<Scalars['ID']>;
@@ -1065,32 +1278,65 @@ export type Roles_Filter = {
   address_not_in?: Maybe<Array<Scalars['Bytes']>>;
   address_contains?: Maybe<Scalars['Bytes']>;
   address_not_contains?: Maybe<Scalars['Bytes']>;
-  token?: Maybe<Scalars['String']>;
-  token_not?: Maybe<Scalars['String']>;
-  token_gt?: Maybe<Scalars['String']>;
-  token_lt?: Maybe<Scalars['String']>;
-  token_gte?: Maybe<Scalars['String']>;
-  token_lte?: Maybe<Scalars['String']>;
-  token_in?: Maybe<Array<Scalars['String']>>;
-  token_not_in?: Maybe<Array<Scalars['String']>>;
-  token_contains?: Maybe<Scalars['String']>;
-  token_not_contains?: Maybe<Scalars['String']>;
-  token_starts_with?: Maybe<Scalars['String']>;
-  token_not_starts_with?: Maybe<Scalars['String']>;
-  token_ends_with?: Maybe<Scalars['String']>;
-  token_not_ends_with?: Maybe<Scalars['String']>;
+  treasury?: Maybe<Scalars['Bytes']>;
+  treasury_not?: Maybe<Scalars['Bytes']>;
+  treasury_in?: Maybe<Array<Scalars['Bytes']>>;
+  treasury_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  treasury_contains?: Maybe<Scalars['Bytes']>;
+  treasury_not_contains?: Maybe<Scalars['Bytes']>;
+  rewardPool?: Maybe<Scalars['Bytes']>;
+  rewardPool_not?: Maybe<Scalars['Bytes']>;
+  rewardPool_in?: Maybe<Array<Scalars['Bytes']>>;
+  rewardPool_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  rewardPool_contains?: Maybe<Scalars['Bytes']>;
+  rewardPool_not_contains?: Maybe<Scalars['Bytes']>;
+  numTokens?: Maybe<Scalars['Int']>;
+  numTokens_not?: Maybe<Scalars['Int']>;
+  numTokens_gt?: Maybe<Scalars['Int']>;
+  numTokens_lt?: Maybe<Scalars['Int']>;
+  numTokens_gte?: Maybe<Scalars['Int']>;
+  numTokens_lte?: Maybe<Scalars['Int']>;
+  numTokens_in?: Maybe<Array<Scalars['Int']>>;
+  numTokens_not_in?: Maybe<Array<Scalars['Int']>>;
+  numTokensActive?: Maybe<Scalars['Int']>;
+  numTokensActive_not?: Maybe<Scalars['Int']>;
+  numTokensActive_gt?: Maybe<Scalars['Int']>;
+  numTokensActive_lt?: Maybe<Scalars['Int']>;
+  numTokensActive_gte?: Maybe<Scalars['Int']>;
+  numTokensActive_lte?: Maybe<Scalars['Int']>;
+  numTokensActive_in?: Maybe<Array<Scalars['Int']>>;
+  numTokensActive_not_in?: Maybe<Array<Scalars['Int']>>;
+  numTokensFundraising?: Maybe<Scalars['Int']>;
+  numTokensFundraising_not?: Maybe<Scalars['Int']>;
+  numTokensFundraising_gt?: Maybe<Scalars['Int']>;
+  numTokensFundraising_lt?: Maybe<Scalars['Int']>;
+  numTokensFundraising_gte?: Maybe<Scalars['Int']>;
+  numTokensFundraising_lte?: Maybe<Scalars['Int']>;
+  numTokensFundraising_in?: Maybe<Array<Scalars['Int']>>;
+  numTokensFundraising_not_in?: Maybe<Array<Scalars['Int']>>;
 };
 
-export enum Roles_OrderBy {
+export enum Registry_OrderBy {
   Id = 'id',
   Address = 'address',
-  Token = 'token'
+  Treasury = 'treasury',
+  RewardPool = 'rewardPool',
+  NumTokens = 'numTokens',
+  NumTokensActive = 'numTokensActive',
+  NumTokensFundraising = 'numTokensFundraising',
+  Minters = 'minters'
 }
 
 export type Subscription = {
   __typename?: 'Subscription';
+  registry?: Maybe<Registry>;
+  registries: Array<Registry>;
+  minter?: Maybe<Minter>;
+  minters: Array<Minter>;
   token?: Maybe<Token>;
   tokens: Array<Token>;
+  fee?: Maybe<Fee>;
+  fees: Array<Fee>;
   erc20Token?: Maybe<Erc20Token>;
   erc20Tokens: Array<Erc20Token>;
   whitelistedAccount?: Maybe<WhitelistedAccount>;
@@ -1099,7 +1345,6 @@ export type Subscription = {
   greylistedAccounts: Array<GreylistedAccount>;
   transferRules: Array<TransferRules>;
   features: Array<Features>;
-  roles: Array<Roles>;
   transferRequest?: Maybe<TransferRequest>;
   transferRequests: Array<TransferRequest>;
   transfer?: Maybe<Transfer>;
@@ -1119,6 +1364,38 @@ export type Subscription = {
 };
 
 
+export type SubscriptionRegistryArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionRegistriesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Registry_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Registry_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionMinterArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionMintersArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Minter_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Minter_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
 export type SubscriptionTokenArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
@@ -1131,6 +1408,22 @@ export type SubscriptionTokensArgs = {
   orderBy?: Maybe<Token_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Token_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionFeeArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionFeesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Fee_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<Fee_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -1199,16 +1492,6 @@ export type SubscriptionFeaturesArgs = {
   orderBy?: Maybe<Features_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Features_Filter>;
-  block?: Maybe<Block_Height>;
-};
-
-
-export type SubscriptionRolesArgs = {
-  skip?: Maybe<Scalars['Int']>;
-  first?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Roles_OrderBy>;
-  orderDirection?: Maybe<OrderDirection>;
-  where?: Maybe<Roles_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -1351,10 +1634,9 @@ export type Token = {
   supply: Scalars['BigInt'];
   maxSupply: Scalars['BigInt'];
   availableSupply: Scalars['BigInt'];
-  stake: Scalars['BigInt'];
+  fee: Scalars['BigInt'];
   nav?: Maybe<Scalars['Int']>;
-  kyaHash?: Maybe<Scalars['Bytes']>;
-  kyaUrl?: Maybe<Scalars['String']>;
+  kyaUri?: Maybe<Scalars['String']>;
   isFrozen: Scalars['Boolean'];
   isFrozenBy?: Maybe<Scalars['Bytes']>;
   whitelist: Array<WhitelistedAccount>;
@@ -1366,7 +1648,6 @@ export type Token = {
   currentFundraiser?: Maybe<Fundraiser>;
   transferRules?: Maybe<TransferRules>;
   features?: Maybe<Features>;
-  roles?: Maybe<Roles>;
 };
 
 
@@ -1504,14 +1785,14 @@ export type Token_Filter = {
   availableSupply_lte?: Maybe<Scalars['BigInt']>;
   availableSupply_in?: Maybe<Array<Scalars['BigInt']>>;
   availableSupply_not_in?: Maybe<Array<Scalars['BigInt']>>;
-  stake?: Maybe<Scalars['BigInt']>;
-  stake_not?: Maybe<Scalars['BigInt']>;
-  stake_gt?: Maybe<Scalars['BigInt']>;
-  stake_lt?: Maybe<Scalars['BigInt']>;
-  stake_gte?: Maybe<Scalars['BigInt']>;
-  stake_lte?: Maybe<Scalars['BigInt']>;
-  stake_in?: Maybe<Array<Scalars['BigInt']>>;
-  stake_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  fee?: Maybe<Scalars['BigInt']>;
+  fee_not?: Maybe<Scalars['BigInt']>;
+  fee_gt?: Maybe<Scalars['BigInt']>;
+  fee_lt?: Maybe<Scalars['BigInt']>;
+  fee_gte?: Maybe<Scalars['BigInt']>;
+  fee_lte?: Maybe<Scalars['BigInt']>;
+  fee_in?: Maybe<Array<Scalars['BigInt']>>;
+  fee_not_in?: Maybe<Array<Scalars['BigInt']>>;
   nav?: Maybe<Scalars['Int']>;
   nav_not?: Maybe<Scalars['Int']>;
   nav_gt?: Maybe<Scalars['Int']>;
@@ -1520,26 +1801,20 @@ export type Token_Filter = {
   nav_lte?: Maybe<Scalars['Int']>;
   nav_in?: Maybe<Array<Scalars['Int']>>;
   nav_not_in?: Maybe<Array<Scalars['Int']>>;
-  kyaHash?: Maybe<Scalars['Bytes']>;
-  kyaHash_not?: Maybe<Scalars['Bytes']>;
-  kyaHash_in?: Maybe<Array<Scalars['Bytes']>>;
-  kyaHash_not_in?: Maybe<Array<Scalars['Bytes']>>;
-  kyaHash_contains?: Maybe<Scalars['Bytes']>;
-  kyaHash_not_contains?: Maybe<Scalars['Bytes']>;
-  kyaUrl?: Maybe<Scalars['String']>;
-  kyaUrl_not?: Maybe<Scalars['String']>;
-  kyaUrl_gt?: Maybe<Scalars['String']>;
-  kyaUrl_lt?: Maybe<Scalars['String']>;
-  kyaUrl_gte?: Maybe<Scalars['String']>;
-  kyaUrl_lte?: Maybe<Scalars['String']>;
-  kyaUrl_in?: Maybe<Array<Scalars['String']>>;
-  kyaUrl_not_in?: Maybe<Array<Scalars['String']>>;
-  kyaUrl_contains?: Maybe<Scalars['String']>;
-  kyaUrl_not_contains?: Maybe<Scalars['String']>;
-  kyaUrl_starts_with?: Maybe<Scalars['String']>;
-  kyaUrl_not_starts_with?: Maybe<Scalars['String']>;
-  kyaUrl_ends_with?: Maybe<Scalars['String']>;
-  kyaUrl_not_ends_with?: Maybe<Scalars['String']>;
+  kyaUri?: Maybe<Scalars['String']>;
+  kyaUri_not?: Maybe<Scalars['String']>;
+  kyaUri_gt?: Maybe<Scalars['String']>;
+  kyaUri_lt?: Maybe<Scalars['String']>;
+  kyaUri_gte?: Maybe<Scalars['String']>;
+  kyaUri_lte?: Maybe<Scalars['String']>;
+  kyaUri_in?: Maybe<Array<Scalars['String']>>;
+  kyaUri_not_in?: Maybe<Array<Scalars['String']>>;
+  kyaUri_contains?: Maybe<Scalars['String']>;
+  kyaUri_not_contains?: Maybe<Scalars['String']>;
+  kyaUri_starts_with?: Maybe<Scalars['String']>;
+  kyaUri_not_starts_with?: Maybe<Scalars['String']>;
+  kyaUri_ends_with?: Maybe<Scalars['String']>;
+  kyaUri_not_ends_with?: Maybe<Scalars['String']>;
   isFrozen?: Maybe<Scalars['Boolean']>;
   isFrozen_not?: Maybe<Scalars['Boolean']>;
   isFrozen_in?: Maybe<Array<Scalars['Boolean']>>;
@@ -1592,20 +1867,6 @@ export type Token_Filter = {
   features_not_starts_with?: Maybe<Scalars['String']>;
   features_ends_with?: Maybe<Scalars['String']>;
   features_not_ends_with?: Maybe<Scalars['String']>;
-  roles?: Maybe<Scalars['String']>;
-  roles_not?: Maybe<Scalars['String']>;
-  roles_gt?: Maybe<Scalars['String']>;
-  roles_lt?: Maybe<Scalars['String']>;
-  roles_gte?: Maybe<Scalars['String']>;
-  roles_lte?: Maybe<Scalars['String']>;
-  roles_in?: Maybe<Array<Scalars['String']>>;
-  roles_not_in?: Maybe<Array<Scalars['String']>>;
-  roles_contains?: Maybe<Scalars['String']>;
-  roles_not_contains?: Maybe<Scalars['String']>;
-  roles_starts_with?: Maybe<Scalars['String']>;
-  roles_not_starts_with?: Maybe<Scalars['String']>;
-  roles_ends_with?: Maybe<Scalars['String']>;
-  roles_not_ends_with?: Maybe<Scalars['String']>;
 };
 
 export enum Token_OrderBy {
@@ -1618,10 +1879,9 @@ export enum Token_OrderBy {
   Supply = 'supply',
   MaxSupply = 'maxSupply',
   AvailableSupply = 'availableSupply',
-  Stake = 'stake',
+  Fee = 'fee',
   Nav = 'nav',
-  KyaHash = 'kyaHash',
-  KyaUrl = 'kyaUrl',
+  KyaUri = 'kyaUri',
   IsFrozen = 'isFrozen',
   IsFrozenBy = 'isFrozenBy',
   Whitelist = 'whitelist',
@@ -1632,8 +1892,7 @@ export enum Token_OrderBy {
   Fundraisers = 'fundraisers',
   CurrentFundraiser = 'currentFundraiser',
   TransferRules = 'transferRules',
-  Features = 'features',
-  Roles = 'roles'
+  Features = 'features'
 }
 
 export type TokenHolder = {
@@ -1826,7 +2085,9 @@ export type TransferRequest = {
   token: Token;
   requestId: Scalars['Int'];
   from: TokenHolder;
+  fromAddress: Scalars['Bytes'];
   to: TokenHolder;
+  toAddress: Scalars['Bytes'];
   value: Scalars['BigInt'];
   status: TransferRequestStatus;
   createdAt: Scalars['Int'];
@@ -1878,6 +2139,12 @@ export type TransferRequest_Filter = {
   from_not_starts_with?: Maybe<Scalars['String']>;
   from_ends_with?: Maybe<Scalars['String']>;
   from_not_ends_with?: Maybe<Scalars['String']>;
+  fromAddress?: Maybe<Scalars['Bytes']>;
+  fromAddress_not?: Maybe<Scalars['Bytes']>;
+  fromAddress_in?: Maybe<Array<Scalars['Bytes']>>;
+  fromAddress_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  fromAddress_contains?: Maybe<Scalars['Bytes']>;
+  fromAddress_not_contains?: Maybe<Scalars['Bytes']>;
   to?: Maybe<Scalars['String']>;
   to_not?: Maybe<Scalars['String']>;
   to_gt?: Maybe<Scalars['String']>;
@@ -1892,6 +2159,12 @@ export type TransferRequest_Filter = {
   to_not_starts_with?: Maybe<Scalars['String']>;
   to_ends_with?: Maybe<Scalars['String']>;
   to_not_ends_with?: Maybe<Scalars['String']>;
+  toAddress?: Maybe<Scalars['Bytes']>;
+  toAddress_not?: Maybe<Scalars['Bytes']>;
+  toAddress_in?: Maybe<Array<Scalars['Bytes']>>;
+  toAddress_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  toAddress_contains?: Maybe<Scalars['Bytes']>;
+  toAddress_not_contains?: Maybe<Scalars['Bytes']>;
   value?: Maybe<Scalars['BigInt']>;
   value_not?: Maybe<Scalars['BigInt']>;
   value_gt?: Maybe<Scalars['BigInt']>;
@@ -1925,7 +2198,9 @@ export enum TransferRequest_OrderBy {
   Token = 'token',
   RequestId = 'requestId',
   From = 'from',
+  FromAddress = 'fromAddress',
   To = 'to',
+  ToAddress = 'toAddress',
   Value = 'value',
   Status = 'status',
   CreatedAt = 'createdAt',
@@ -2242,7 +2517,7 @@ export type TokenAssetQuery = (
   { __typename?: 'Query' }
   & { token?: Maybe<(
     { __typename?: 'Token' }
-    & Pick<Token, 'id' | 'kyaHash' | 'kyaUrl'>
+    & TokenAssetFragment
   )> }
 );
 
@@ -2300,7 +2575,7 @@ export type TokenSupplyQuery = (
 
 export type TokenInfoFragment = (
   { __typename?: 'Token' }
-  & Pick<Token, 'id' | 'name' | 'symbol' | 'address' | 'availableSupply' | 'stake' | 'decimals' | 'supply' | 'maxSupply'>
+  & Pick<Token, 'id' | 'name' | 'symbol' | 'address' | 'availableSupply' | 'fee' | 'decimals' | 'supply' | 'maxSupply'>
   & { features?: Maybe<(
     { __typename?: 'Features' }
     & Pick<Features, 'forceTransfer' | 'tokenFreeze' | 'accountFreeze' | 'accountBurn'>
@@ -2309,7 +2584,7 @@ export type TokenInfoFragment = (
 
 export type TokenAssetFragment = (
   { __typename?: 'Token' }
-  & Pick<Token, 'kyaHash' | 'kyaUrl' | 'nav'>
+  & Pick<Token, 'kyaUri' | 'nav'>
 );
 
 export type TokenContractsFragment = (
@@ -2320,9 +2595,6 @@ export type TokenContractsFragment = (
   )>, features?: Maybe<(
     { __typename?: 'Features' }
     & Pick<Features, 'address'>
-  )>, roles?: Maybe<(
-    { __typename?: 'Roles' }
-    & Pick<Roles, 'address'>
   )>, currentFundraiser?: Maybe<(
     { __typename?: 'Fundraiser' }
     & Pick<Fundraiser, 'address' | 'status'>
@@ -2545,7 +2817,7 @@ export const TokenInfoFragmentDoc = gql`
   symbol
   address
   availableSupply
-  stake
+  fee
   decimals
   supply
   maxSupply
@@ -2601,8 +2873,7 @@ export const FundraiserWithContributorsFragmentDoc = gql`
 ${FundraiserContributorsFragmentDoc}`;
 export const TokenAssetFragmentDoc = gql`
     fragment TokenAsset on Token {
-  kyaHash
-  kyaUrl
+  kyaUri
   nav
 }
     `;
@@ -2612,9 +2883,6 @@ export const TokenContractsFragmentDoc = gql`
     address
   }
   features {
-    address
-  }
-  roles {
     address
   }
   currentFundraiser {
@@ -2960,12 +3228,10 @@ export type InvestQueryResult = Apollo.QueryResult<InvestQuery, InvestQueryVaria
 export const TokenAssetDocument = gql`
     query TokenAsset($id: ID!) {
   token(id: $id) {
-    id
-    kyaHash
-    kyaUrl
+    ...TokenAsset
   }
 }
-    `;
+    ${TokenAssetFragmentDoc}`;
 
 /**
  * __useTokenAssetQuery__

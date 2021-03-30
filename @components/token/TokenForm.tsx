@@ -3,9 +3,9 @@ import { Form, Input, InputNumber, Button, Checkbox, Space, Radio } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Store } from 'rc-field-form/lib/interface';
 
-import { LocalToken, TransferRules } from '@lib';
+import { LocalToken } from '@lib';
 import { tokenFormRules as rules } from './tokenFormRules';
-import { Help, HelpLabel, SingleFileUpload, AssetFormStub, TokenMetaStub } from '..';
+import { Help, HelpLabel, AssetFormStub, TokenMetaStub } from '..';
 import { devDefaultToken, isDev } from '@app';
 
 interface TokenFormProps {
@@ -77,19 +77,13 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
         </Space>
       </div>
 
-      <Form.Item name="transferRestrictionsType" rules={rules.transferRestrictionsType}>
-        <Radio.Group>
-          <div>
-            <Radio value={TransferRules.None}>No transfer restrictions</Radio>
-          </div>
-          <div>
-            <Radio value={TransferRules.WhitelistOrGreylist}>Whitelist or Greylist</Radio>
-          </div>
-        </Radio.Group>
-      </Form.Item>
-
       <h3>Token features</h3>
       <Form.Item>
+        <Form.Item name="allowTransferRules" valuePropName="checked" className="no-margin">
+          <Checkbox>
+            <HelpLabel name="allowTransferRules" />
+          </Checkbox>
+        </Form.Item>
         <Form.Item name="allowAccountFreeze" valuePropName="checked" className="no-margin">
           <Checkbox>
             <HelpLabel name="allowAccountFreeze" />

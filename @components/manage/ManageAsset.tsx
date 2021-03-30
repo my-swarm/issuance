@@ -1,14 +1,12 @@
 import React, { ReactElement, useMemo } from 'react';
-import { useContract, useDispatch, useKya } from '@app';
+import { useDispatch, useKya } from '@app';
 import { Button, Form } from 'antd';
 import { AssetFormStub, Loading, TokenMetaStub } from '..';
 import { kyaToToken, LocalTokenKya, storeKya, tokenToKya } from '@lib';
 
 export function ManageAsset(): ReactElement {
-  // const [{ onlineToken }] = useAppState();
   const { kya, nav } = useKya();
   const { dispatchTransaction } = useDispatch();
-  const { src20 } = useContract();
 
   const formData = useMemo(() => {
     if (kya) {
@@ -21,22 +19,12 @@ export function ManageAsset(): ReactElement {
   if (!kya) return <Loading />;
 
   const handleSubmit = async (values: LocalTokenKya) => {
-    const { kyaHash, kyaUrl } = await storeKya(tokenToKya(values));
+    const { kyaUri } = await storeKya(tokenToKya(values));
     dispatchTransaction({
-      contract: 'assetRegistry',
+      contract: 'src20',
       method: 'updateKya',
       description: 'Updating onchain link to your KYA',
-      arguments: [src20.address, kyaHash, kyaUrl],
-      onSuccess: () => {
-        if (values.assetNetValue !== nav) {
-          dispatchTransaction({
-            contract: 'assetRegistry',
-            method: 'updateNav',
-            description: 'Updating your Net Asset Value',
-            arguments: [src20.address, values.assetNetValue],
-          });
-        }
-      },
+      arguments: [kyaUri],
     });
   };
 

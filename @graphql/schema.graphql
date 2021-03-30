@@ -345,6 +345,7 @@ type Features {
   tokenFreeze: Boolean!
   accountFreeze: Boolean!
   accountBurn: Boolean!
+  transferRules: Boolean!
 }
 
 input Features_filter {
@@ -392,6 +393,10 @@ input Features_filter {
   accountBurn_not: Boolean
   accountBurn_in: [Boolean!]
   accountBurn_not_in: [Boolean!]
+  transferRules: Boolean
+  transferRules_not: Boolean
+  transferRules_in: [Boolean!]
+  transferRules_not_in: [Boolean!]
 }
 
 enum Features_orderBy {
@@ -402,6 +407,72 @@ enum Features_orderBy {
   tokenFreeze
   accountFreeze
   accountBurn
+  transferRules
+}
+
+type Fee {
+  id: ID!
+  token: Token
+  total: BigInt!
+  treasury: BigInt!
+  rewardPool: BigInt!
+}
+
+input Fee_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  token: String
+  token_not: String
+  token_gt: String
+  token_lt: String
+  token_gte: String
+  token_lte: String
+  token_in: [String!]
+  token_not_in: [String!]
+  token_contains: String
+  token_not_contains: String
+  token_starts_with: String
+  token_not_starts_with: String
+  token_ends_with: String
+  token_not_ends_with: String
+  total: BigInt
+  total_not: BigInt
+  total_gt: BigInt
+  total_lt: BigInt
+  total_gte: BigInt
+  total_lte: BigInt
+  total_in: [BigInt!]
+  total_not_in: [BigInt!]
+  treasury: BigInt
+  treasury_not: BigInt
+  treasury_gt: BigInt
+  treasury_lt: BigInt
+  treasury_gte: BigInt
+  treasury_lte: BigInt
+  treasury_in: [BigInt!]
+  treasury_not_in: [BigInt!]
+  rewardPool: BigInt
+  rewardPool_not: BigInt
+  rewardPool_gt: BigInt
+  rewardPool_lt: BigInt
+  rewardPool_gte: BigInt
+  rewardPool_lte: BigInt
+  rewardPool_in: [BigInt!]
+  rewardPool_not_in: [BigInt!]
+}
+
+enum Fee_orderBy {
+  id
+  token
+  total
+  treasury
+  rewardPool
 }
 
 type Fundraiser {
@@ -738,12 +809,143 @@ enum GreylistedAccount_orderBy {
   token
 }
 
+type Minter {
+  id: ID!
+  address: Bytes!
+  createdAt: BigInt!
+  registry: Registry!
+  feeTotal: BigInt!
+  feeTreasury: BigInt!
+  feeRewardPool: BigInt!
+}
+
+input Minter_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  address: Bytes
+  address_not: Bytes
+  address_in: [Bytes!]
+  address_not_in: [Bytes!]
+  address_contains: Bytes
+  address_not_contains: Bytes
+  createdAt: BigInt
+  createdAt_not: BigInt
+  createdAt_gt: BigInt
+  createdAt_lt: BigInt
+  createdAt_gte: BigInt
+  createdAt_lte: BigInt
+  createdAt_in: [BigInt!]
+  createdAt_not_in: [BigInt!]
+  registry: String
+  registry_not: String
+  registry_gt: String
+  registry_lt: String
+  registry_gte: String
+  registry_lte: String
+  registry_in: [String!]
+  registry_not_in: [String!]
+  registry_contains: String
+  registry_not_contains: String
+  registry_starts_with: String
+  registry_not_starts_with: String
+  registry_ends_with: String
+  registry_not_ends_with: String
+  feeTotal: BigInt
+  feeTotal_not: BigInt
+  feeTotal_gt: BigInt
+  feeTotal_lt: BigInt
+  feeTotal_gte: BigInt
+  feeTotal_lte: BigInt
+  feeTotal_in: [BigInt!]
+  feeTotal_not_in: [BigInt!]
+  feeTreasury: BigInt
+  feeTreasury_not: BigInt
+  feeTreasury_gt: BigInt
+  feeTreasury_lt: BigInt
+  feeTreasury_gte: BigInt
+  feeTreasury_lte: BigInt
+  feeTreasury_in: [BigInt!]
+  feeTreasury_not_in: [BigInt!]
+  feeRewardPool: BigInt
+  feeRewardPool_not: BigInt
+  feeRewardPool_gt: BigInt
+  feeRewardPool_lt: BigInt
+  feeRewardPool_gte: BigInt
+  feeRewardPool_lte: BigInt
+  feeRewardPool_in: [BigInt!]
+  feeRewardPool_not_in: [BigInt!]
+}
+
+enum Minter_orderBy {
+  id
+  address
+  createdAt
+  registry
+  feeTotal
+  feeTreasury
+  feeRewardPool
+}
+
 enum OrderDirection {
   asc
   desc
 }
 
 type Query {
+  registry(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): Registry
+  registries(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Registry_orderBy
+    orderDirection: OrderDirection
+    where: Registry_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [Registry!]!
+  minter(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): Minter
+  minters(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Minter_orderBy
+    orderDirection: OrderDirection
+    where: Minter_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [Minter!]!
   token(
     id: ID!
 
@@ -768,6 +970,30 @@ type Query {
     """
     block: Block_height
   ): [Token!]!
+  fee(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): Fee
+  fees(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Fee_orderBy
+    orderDirection: OrderDirection
+    where: Fee_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [Fee!]!
   erc20Token(
     id: ID!
 
@@ -868,20 +1094,6 @@ type Query {
     """
     block: Block_height
   ): [Features!]!
-  roles(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: Roles_orderBy
-    orderDirection: OrderDirection
-    where: Roles_filter
-
-    """
-    The block at which the query should be executed. Can either be an `{ number:
-    Int }` containing the block number or a `{ hash: Bytes }` value containing a
-    block hash. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-  ): [Roles!]!
   transferRequest(
     id: ID!
 
@@ -1076,13 +1288,18 @@ type Query {
   ): [Contribution!]!
 }
 
-type Roles {
+type Registry {
   id: ID!
-  address: Bytes
-  token: Token!
+  address: Bytes!
+  treasury: Bytes!
+  rewardPool: Bytes!
+  numTokens: Int!
+  numTokensActive: Int!
+  numTokensFundraising: Int!
+  minters(skip: Int = 0, first: Int = 100, orderBy: Minter_orderBy, orderDirection: OrderDirection, where: Minter_filter): [Minter!]!
 }
 
-input Roles_filter {
+input Registry_filter {
   id: ID
   id_not: ID
   id_gt: ID
@@ -1097,29 +1314,104 @@ input Roles_filter {
   address_not_in: [Bytes!]
   address_contains: Bytes
   address_not_contains: Bytes
-  token: String
-  token_not: String
-  token_gt: String
-  token_lt: String
-  token_gte: String
-  token_lte: String
-  token_in: [String!]
-  token_not_in: [String!]
-  token_contains: String
-  token_not_contains: String
-  token_starts_with: String
-  token_not_starts_with: String
-  token_ends_with: String
-  token_not_ends_with: String
+  treasury: Bytes
+  treasury_not: Bytes
+  treasury_in: [Bytes!]
+  treasury_not_in: [Bytes!]
+  treasury_contains: Bytes
+  treasury_not_contains: Bytes
+  rewardPool: Bytes
+  rewardPool_not: Bytes
+  rewardPool_in: [Bytes!]
+  rewardPool_not_in: [Bytes!]
+  rewardPool_contains: Bytes
+  rewardPool_not_contains: Bytes
+  numTokens: Int
+  numTokens_not: Int
+  numTokens_gt: Int
+  numTokens_lt: Int
+  numTokens_gte: Int
+  numTokens_lte: Int
+  numTokens_in: [Int!]
+  numTokens_not_in: [Int!]
+  numTokensActive: Int
+  numTokensActive_not: Int
+  numTokensActive_gt: Int
+  numTokensActive_lt: Int
+  numTokensActive_gte: Int
+  numTokensActive_lte: Int
+  numTokensActive_in: [Int!]
+  numTokensActive_not_in: [Int!]
+  numTokensFundraising: Int
+  numTokensFundraising_not: Int
+  numTokensFundraising_gt: Int
+  numTokensFundraising_lt: Int
+  numTokensFundraising_gte: Int
+  numTokensFundraising_lte: Int
+  numTokensFundraising_in: [Int!]
+  numTokensFundraising_not_in: [Int!]
 }
 
-enum Roles_orderBy {
+enum Registry_orderBy {
   id
   address
-  token
+  treasury
+  rewardPool
+  numTokens
+  numTokensActive
+  numTokensFundraising
+  minters
 }
 
 type Subscription {
+  registry(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): Registry
+  registries(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Registry_orderBy
+    orderDirection: OrderDirection
+    where: Registry_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [Registry!]!
+  minter(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): Minter
+  minters(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Minter_orderBy
+    orderDirection: OrderDirection
+    where: Minter_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [Minter!]!
   token(
     id: ID!
 
@@ -1144,6 +1436,30 @@ type Subscription {
     """
     block: Block_height
   ): [Token!]!
+  fee(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): Fee
+  fees(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Fee_orderBy
+    orderDirection: OrderDirection
+    where: Fee_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [Fee!]!
   erc20Token(
     id: ID!
 
@@ -1244,20 +1560,6 @@ type Subscription {
     """
     block: Block_height
   ): [Features!]!
-  roles(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: Roles_orderBy
-    orderDirection: OrderDirection
-    where: Roles_filter
-
-    """
-    The block at which the query should be executed. Can either be an `{ number:
-    Int }` containing the block number or a `{ hash: Bytes }` value containing a
-    block hash. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-  ): [Roles!]!
   transferRequest(
     id: ID!
 
@@ -1462,10 +1764,9 @@ type Token {
   supply: BigInt!
   maxSupply: BigInt!
   availableSupply: BigInt!
-  stake: BigInt!
+  fee: BigInt!
   nav: Int
-  kyaHash: Bytes
-  kyaUrl: String
+  kyaUri: String
   isFrozen: Boolean!
   isFrozenBy: Bytes
   whitelist(skip: Int = 0, first: Int = 100, orderBy: WhitelistedAccount_orderBy, orderDirection: OrderDirection, where: WhitelistedAccount_filter): [WhitelistedAccount!]!
@@ -1477,7 +1778,6 @@ type Token {
   currentFundraiser: Fundraiser
   transferRules: TransferRules
   features: Features
-  roles: Roles
 }
 
 input Token_filter {
@@ -1561,14 +1861,14 @@ input Token_filter {
   availableSupply_lte: BigInt
   availableSupply_in: [BigInt!]
   availableSupply_not_in: [BigInt!]
-  stake: BigInt
-  stake_not: BigInt
-  stake_gt: BigInt
-  stake_lt: BigInt
-  stake_gte: BigInt
-  stake_lte: BigInt
-  stake_in: [BigInt!]
-  stake_not_in: [BigInt!]
+  fee: BigInt
+  fee_not: BigInt
+  fee_gt: BigInt
+  fee_lt: BigInt
+  fee_gte: BigInt
+  fee_lte: BigInt
+  fee_in: [BigInt!]
+  fee_not_in: [BigInt!]
   nav: Int
   nav_not: Int
   nav_gt: Int
@@ -1577,26 +1877,20 @@ input Token_filter {
   nav_lte: Int
   nav_in: [Int!]
   nav_not_in: [Int!]
-  kyaHash: Bytes
-  kyaHash_not: Bytes
-  kyaHash_in: [Bytes!]
-  kyaHash_not_in: [Bytes!]
-  kyaHash_contains: Bytes
-  kyaHash_not_contains: Bytes
-  kyaUrl: String
-  kyaUrl_not: String
-  kyaUrl_gt: String
-  kyaUrl_lt: String
-  kyaUrl_gte: String
-  kyaUrl_lte: String
-  kyaUrl_in: [String!]
-  kyaUrl_not_in: [String!]
-  kyaUrl_contains: String
-  kyaUrl_not_contains: String
-  kyaUrl_starts_with: String
-  kyaUrl_not_starts_with: String
-  kyaUrl_ends_with: String
-  kyaUrl_not_ends_with: String
+  kyaUri: String
+  kyaUri_not: String
+  kyaUri_gt: String
+  kyaUri_lt: String
+  kyaUri_gte: String
+  kyaUri_lte: String
+  kyaUri_in: [String!]
+  kyaUri_not_in: [String!]
+  kyaUri_contains: String
+  kyaUri_not_contains: String
+  kyaUri_starts_with: String
+  kyaUri_not_starts_with: String
+  kyaUri_ends_with: String
+  kyaUri_not_ends_with: String
   isFrozen: Boolean
   isFrozen_not: Boolean
   isFrozen_in: [Boolean!]
@@ -1649,20 +1943,6 @@ input Token_filter {
   features_not_starts_with: String
   features_ends_with: String
   features_not_ends_with: String
-  roles: String
-  roles_not: String
-  roles_gt: String
-  roles_lt: String
-  roles_gte: String
-  roles_lte: String
-  roles_in: [String!]
-  roles_not_in: [String!]
-  roles_contains: String
-  roles_not_contains: String
-  roles_starts_with: String
-  roles_not_starts_with: String
-  roles_ends_with: String
-  roles_not_ends_with: String
 }
 
 enum Token_orderBy {
@@ -1675,10 +1955,9 @@ enum Token_orderBy {
   supply
   maxSupply
   availableSupply
-  stake
+  fee
   nav
-  kyaHash
-  kyaUrl
+  kyaUri
   isFrozen
   isFrozenBy
   whitelist
@@ -1690,7 +1969,6 @@ enum Token_orderBy {
   currentFundraiser
   transferRules
   features
-  roles
 }
 
 type TokenHolder {
@@ -1880,7 +2158,9 @@ type TransferRequest {
   token: Token!
   requestId: Int!
   from: TokenHolder!
+  fromAddress: Bytes!
   to: TokenHolder!
+  toAddress: Bytes!
   value: BigInt!
   status: TransferRequestStatus!
   createdAt: Int!
@@ -1932,6 +2212,12 @@ input TransferRequest_filter {
   from_not_starts_with: String
   from_ends_with: String
   from_not_ends_with: String
+  fromAddress: Bytes
+  fromAddress_not: Bytes
+  fromAddress_in: [Bytes!]
+  fromAddress_not_in: [Bytes!]
+  fromAddress_contains: Bytes
+  fromAddress_not_contains: Bytes
   to: String
   to_not: String
   to_gt: String
@@ -1946,6 +2232,12 @@ input TransferRequest_filter {
   to_not_starts_with: String
   to_ends_with: String
   to_not_ends_with: String
+  toAddress: Bytes
+  toAddress_not: Bytes
+  toAddress_in: [Bytes!]
+  toAddress_not_in: [Bytes!]
+  toAddress_contains: Bytes
+  toAddress_not_contains: Bytes
   value: BigInt
   value_not: BigInt
   value_gt: BigInt
@@ -1979,7 +2271,9 @@ enum TransferRequest_orderBy {
   token
   requestId
   from
+  fromAddress
   to
+  toAddress
   value
   status
   createdAt

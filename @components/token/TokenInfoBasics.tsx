@@ -1,6 +1,6 @@
-import React, { ReactElement, useMemo } from 'react';
+import React, { ReactElement } from 'react';
 import { Descriptions } from 'antd';
-import { formatNumber, transferRules, tokenFeatures, formatUnits } from '@lib';
+import { formatNumber, formatUnits, tokenFeatures } from '@lib';
 import { useAppState, useKya } from '@app';
 import { ImagePreview, Loading } from '../utility';
 
@@ -21,9 +21,6 @@ export function TokenInfoBasics(): ReactElement {
       <>
         <Descriptions.Item label="Max Token supply">
           {localToken.totalSupply ? `${formatNumber(localToken.totalSupply)} ${token.symbol}` : 'unlimited'}
-        </Descriptions.Item>
-        <Descriptions.Item label="Transfer restrictions">
-          {transferRules[localToken.transferRestrictionsType]}
         </Descriptions.Item>
         <Descriptions.Item label="Features">{features.join(', ')}</Descriptions.Item>
       </>

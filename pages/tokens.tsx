@@ -4,7 +4,6 @@ import { Button, Drawer, Table } from 'antd';
 import { useAppState, useDispatch, useEthers, useGraphql } from '@app';
 import {
   BaseError,
-  DeployerState,
   LocalToken,
   OnlineToken,
   processNewToken,
@@ -43,13 +42,13 @@ function getTokenList(localTokens: LocalToken[], onlineTokens: OnlineToken[], ne
 
   const result: TokenRecord[] = onlineTokens.map((token) => ({
     ...(({ id, name, symbol, address }) => ({ id, name, symbol, address }))(token),
-    isMinted: BigNumber.from(token.stake).gt(0),
+    isMinted: BigNumber.from(token.supply).gt(0),
     isFundraising: token.currentFundraiser !== null,
     onlineToken: token,
   }));
 
   for (const token of localTokens) {
-    const { state, addresses } = token.networks[networkId] || { state: DeployerState.None, address: undefined };
+    const { state, addresses } = token.networks[networkId] || { state: TokenState.Created, address: undefined };
     if (state <= TokenState.Deploying) {
       result.push({
         ...(({ id, name, symbol }) => ({ id, name, symbol }))(token),

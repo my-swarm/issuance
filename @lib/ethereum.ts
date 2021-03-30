@@ -12,13 +12,6 @@ export enum EthereumNetwork {
   Local = 31337, // buidler node
 }
 
-export enum Src20FeaturesBitmask {
-  allowForceTransfer = 1,
-  allowContractFreeze = 2,
-  allowBurn = 4,
-  allowAccountFreeze = 8,
-}
-
 export interface EthereumToken {
   name: string;
   symbol: string;

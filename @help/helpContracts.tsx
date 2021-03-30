@@ -23,22 +23,15 @@ export const contractsFeatures = {
   ),
 };
 
-export const contractsRoles = {
+export const contractsTransferRules = {
   title: 'Roles Contract',
   shortTitle: 'Roles',
   content: (
     <p>
-      This contract defines the owner of the token contract and all assigned roles. Manages the addresses that can
-      perform restricted actions for a specific SRC20 token as defined by the contract owner. SRC20 tokens can have four
-      types of roles: Owner, Authority, Manager and Delegate.
+      Manages whitelist and greylist for your token. Whitelist restricts all transfers to a given set of accounts.
+      Greylisted accounts need explicit transfer confirmations by token issuer.
     </p>
   ),
-};
-
-export const contractsTransferRules = {
-  title: 'Transfer Rules Contract',
-  shortTitle: 'Transfer Rules',
-  content: <p>Manages whitelists and greylists for holders of a specific SRC20 token</p>,
 };
 
 export const contractsFundraiser = {

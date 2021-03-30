@@ -45,7 +45,7 @@ export function kyaToToken(kya: Kya, nav: number): LocalTokenKya {
   };
 }
 
-export async function storeKya(kya: Kya): Promise<{ kyaHash: string; kyaUrl: string }> {
+export async function storeKya(kya: Kya): Promise<{ kyaHash: string; kyaUri: string }> {
   const { cid, hash } = await api.putKya(kya);
-  return { kyaUrl: `ipfs:${cid}`, kyaHash: `0x${hash}` };
+  return { kyaUri: `ipfs:${cid}`, kyaHash: `0x${hash}` };
 }

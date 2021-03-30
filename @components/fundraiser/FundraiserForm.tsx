@@ -182,6 +182,29 @@ export function FundraiserForm({
         </Col>
       </Row>
 
+      <h3>
+        Contributor Restrictions <Help name="minMaxInvestment" />
+      </h3>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item name="maxContributors" label="Maximum number of contributors">
+            <InputNumber min={0} step={1} className="w-full" disabled={disabled} />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item name="minInvestmentAmount" label="Minimum investment">
+            <InputNumber min={0} step={1} className="w-full" disabled={disabled} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item name="maxInvestmentAmount" label="Maximum investment">
+            <InputNumber min={0} step={1} className="w-full" disabled={disabled} />
+          </Form.Item>
+        </Col>
+      </Row>
+
       <Form.Item>
         <Space>
           <Button

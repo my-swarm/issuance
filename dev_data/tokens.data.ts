@@ -1,7 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { EthereumNetwork, LocalToken, TokenState, TransferRules, DeployerStateFinished, DeployerState } from '@lib';
-import addressesLocal from './addresses/local.json';
-import addressesKovan from './addresses/kovan.json';
+import { EthereumNetwork, LocalToken, TokenState } from '@lib';
 
 function createFile(name) {
   return {
@@ -28,7 +26,7 @@ const tokenDefaults: Partial<LocalToken> = {
   decimals: 18,
   description:
     'Testing token description. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nulla metus, tempus non mauris vitae, faucibus congue magna. Vestibulum non cursus dui, eget euismod turpis. Sed id tristique odio, vel pulvinar nunc. Nam facilisis vitae odio eu pharetra. Ut tempor faucibus odio. Mauris eu faucibus quam. Duis odio mauris, commodo in sodales id, auctor vel orci. Nulla mollis ultrices diam, sed consequat magna tempor sit amet. Maecenas malesuada felis eros, vitae venenatis purus porta a. Suspendisse gravida fringilla lorem, at vehicula turpis porttitor at. Nullam sed efficitur magna.',
-  transferRestrictionsType: TransferRules.WhitelistOrGreylist,
+  allowTransferRules: true,
   allowAccountFreeze: true,
   allowContractFreeze: true,
   allowForceTransfer: true,
@@ -52,108 +50,11 @@ export const tokens = [
     networks: {
       [EthereumNetwork.Kovan]: {
         state: TokenState.Created,
-        deployerState: DeployerState.None,
         addresses: {},
       },
       [EthereumNetwork.Local]: {
         state: TokenState.Created,
-        deployerState: DeployerState.None,
         addresses: {},
-      },
-    },
-  },
-  {
-    id: uuid(),
-    ...tokenDefaults,
-    transferRestrictionsType: TransferRules.None,
-    name: 'Testing Token: Unminted',
-    symbol: 'TT1',
-    networks: {
-      [EthereumNetwork.Kovan]: {
-        state: TokenState.Deployed,
-        deployerState: DeployerState.Roles,
-        addresses: addressesKovan.token1,
-      },
-      [EthereumNetwork.Local]: {
-        state: TokenState.Deployed,
-        deployerState: DeployerState.Roles,
-        addresses: addressesLocal.token1,
-      },
-    },
-  },
-  {
-    id: uuid(),
-    ...tokenDefaults,
-    name: 'Testing Token: Minted with Whitelist',
-    symbol: 'TT2',
-    deployerState: DeployerStateFinished,
-    networks: {
-      [EthereumNetwork.Kovan]: {
-        state: TokenState.Deployed,
-        deployerState: DeployerStateFinished,
-        addresses: addressesKovan.token2,
-      },
-      [EthereumNetwork.Local]: {
-        state: TokenState.Deployed,
-        deployerState: DeployerStateFinished,
-        addresses: addressesLocal.token2,
-      },
-    },
-  },
-  {
-    id: uuid(),
-    ...tokenDefaults,
-    name: 'Testing Token: Minted with Greylist',
-    symbol: 'TT3',
-    deployerState: DeployerStateFinished,
-    networks: {
-      [EthereumNetwork.Kovan]: {
-        state: TokenState.Deployed,
-        deployerState: DeployerStateFinished,
-        addresses: addressesKovan.token3,
-      },
-      [EthereumNetwork.Local]: {
-        state: TokenState.Deployed,
-        deployerState: DeployerStateFinished,
-        addresses: addressesLocal.token3,
-      },
-    },
-  },
-  {
-    id: uuid(),
-    ...tokenDefaults,
-    name: 'Testing Token: Fundraising',
-    symbol: 'TT4',
-    deployerState: DeployerStateFinished,
-    networks: {
-      [EthereumNetwork.Kovan]: {
-        state: TokenState.Fundraising,
-        deployerState: DeployerStateFinished,
-        addresses: addressesKovan.token4,
-      },
-      [EthereumNetwork.Local]: {
-        state: TokenState.Fundraising,
-        deployerState: DeployerStateFinished,
-        addresses: addressesLocal.token4,
-      },
-    },
-  },
-  {
-    id: uuid(),
-    ...tokenDefaults,
-    name: 'Testing Token: Fundraised',
-    symbol: 'TT5',
-    deployerState: DeployerStateFinished,
-    networks: {
-      [EthereumNetwork.Kovan]: {
-        state: TokenState.Fundraising,
-        deployerState: DeployerStateFinished,
-        addresses: addressesKovan.token5,
-      },
-      [EthereumNetwork.Local]: {
-        state: TokenState.Minted,
-        deployerState: DeployerStateFinished,
-        addresses: addressesLocal.token5,
       },
     },
   },

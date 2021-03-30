@@ -1,17 +1,11 @@
 import { EthereumAddress, EthereumNetwork, Uuid } from './ethereum';
 
-import { DeployerState, AppFile, AppImage } from '.';
+import { AppFile, AppImage } from '.';
 import { TokenFragment } from '@graphql';
-
-export enum TransferRules {
-  None,
-  WhitelistOrGreylist,
-}
 
 export interface LocalTokenAddresses {
   features?: EthereumAddress;
   transferRules?: EthereumAddress;
-  roles?: EthereumAddress;
   src20?: EthereumAddress;
   fundraiser?: EthereumAddress;
   contributorRestrictions?: EthereumAddress;
@@ -20,7 +14,6 @@ export interface LocalTokenAddresses {
 
 export interface LocalTokenNetworkData {
   state?: TokenState;
-  deployerState?: DeployerState;
   addresses?: LocalTokenAddresses;
 }
 
@@ -36,6 +29,9 @@ export interface LocalFundraiser {
   endDate: string;
   softCap: number;
   hardCap: number;
+  maxContributors: number;
+  minInvestmentAmount: number;
+  maxInvestmentAmount: number;
   networks: Record<EthereumNetwork, LocalTokenNetworkData>;
 }
 
@@ -59,8 +55,8 @@ export interface LocalToken extends LocalTokenKya {
   decimals: number;
   totalSupply?: number;
   allowUnlimitedSupply?: boolean;
-  transferRestrictionsType: TransferRules;
 
+  allowTransferRules: boolean;
   allowAccountFreeze: boolean;
   allowContractFreeze: boolean;
   allowForceTransfer: boolean;
@@ -116,11 +112,6 @@ export const tokenStates: { [key: number]: string } = {
   [TokenState.Minted]: 'Minted',
 };
 
-export const transferRules: { [key: number]: string } = {
-  [TransferRules.None]: 'None',
-  [TransferRules.WhitelistOrGreylist]: 'Whitelist or Greylist',
-};
-
 export const tokenFeatures = {
   allowAccountFreeze: 'Allow Account Freeze',
   allowContractFreeze: 'Allow Contract Freeze',
@@ -129,6 +120,6 @@ export const tokenFeatures = {
   allowMint: 'Allow Mint',
 };
 
-export function processNewToken(token: LocalToken) {
+export function processNewToken(token: LocalToken): LocalToken {
   return { ...token, assetLegalDocuments: token.assetLegalDocuments || [] };
 }

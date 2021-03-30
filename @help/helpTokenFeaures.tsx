@@ -1,5 +1,15 @@
 import React from 'react';
 
+export const allowTransferRules = {
+  title: 'Transfer Rules',
+  content: (
+    <div>
+      Allows token issuer to manage allowed token holders via whitelists and greylists. Whitelist restricts all
+      transfers to a given set of accounts. Greylisted accounts need explicit transfer confirmations by token issuer.
+    </div>
+  ),
+};
+
 export const allowAccountFreeze = {
   title: 'Account Freeze',
   content: (

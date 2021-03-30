@@ -12,23 +12,35 @@ export function TransactionModal(): ReactElement {
   const [error, setError] = useState<string>();
   const [retry, setRetry] = useState<boolean>(false);
 
+  function processError(e) {
+    console.error(e);
+    setTransactionState(TransactionState.Error);
+    if (e.code === 4001) {
+      setError('Please confirm metamask signature popup');
+    } else {
+      setError(e.reason || e.message || 'Unknown error');
+    }
+  }
+
   useEffect(() => {
     if ((signer && transaction) || retry) {
       const proxy = new ContractProxy(signer, onlineToken);
       proxy.onProgress(handleTransactionProgress);
       setRetry(false);
-      const contract: string | [string, string] = transaction.address
-        ? [transaction.contract, transaction.address]
-        : transaction.contract;
-      proxy.call(contract, transaction.method, transaction.arguments, {}, transaction.overrides || {}).catch((e) => {
-        console.error(e);
-        setTransactionState(TransactionState.Error);
-        if (e.code === 4001) {
-          setError('Please confirm metamask signature popup');
-        } else {
-          setError(e.reason || e.message || 'Unknown error');
-        }
-      });
+
+      const { address, contract: contractName, method, arguments: args, overrides } = transaction;
+
+      const contract: string | [string, string] = address ? [contractName, address] : contractName;
+
+      if (method === 'deploy') {
+        proxy.deploy(contractName, args).catch((e) => {
+          processError(e);
+        });
+      } else {
+        proxy.call(contract, method, args, {}, overrides || {}).catch((e) => {
+          processError(e);
+        });
+      }
     }
   }, [signer, transaction, retry]);
 

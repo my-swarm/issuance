@@ -1,5 +1,5 @@
-export const navToStakeBase = [
-  { to: 500000, absolute: 2500 },
+export const navToFeeBase = [
+  { to: 500000, absolute: 1 },
   { to: 1000000, relative: 0.005 },
   { to: 15000000, relative: 0.004 },
   { to: 50000000, relative: 0.0025 },

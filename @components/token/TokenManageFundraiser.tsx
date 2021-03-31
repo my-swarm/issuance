@@ -44,7 +44,7 @@ export function TokenManageFundraiser(): ReactElement {
           </Collapse.Panel>
         )}
 
-        <Collapse.Panel header="Stake &amp; Mint" key="status" extra={<Help name="manageFundraiserStatus" />}>
+        <Collapse.Panel header="Mint Tokens" key="status" extra={<Help name="manageFundraiserStatus" />}>
           <ManageFundraiserState fundraiser={fundraiser} />
         </Collapse.Panel>
 

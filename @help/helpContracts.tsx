@@ -24,8 +24,8 @@ export const contractsFeatures = {
 };
 
 export const contractsTransferRules = {
-  title: 'Roles Contract',
-  shortTitle: 'Roles',
+  title: 'Transfer Rules Contract',
+  shortTitle: 'Transfer Rules',
   content: (
     <p>
       Manages whitelist and greylist for your token. Whitelist restricts all transfers to a given set of accounts.

@@ -59,7 +59,7 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     );
     actions.push(
       <Tooltip title="Stake and Mint">
-        <Button key="stake" onClick={() => onAction(TokenAction.StakeAndMint)} icon={<DollarCircleOutlined />}>
+        <Button key="stake" onClick={() => onAction(TokenAction.Mint)} icon={<DollarCircleOutlined />}>
           Mint
         </Button>
       </Tooltip>,

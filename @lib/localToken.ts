@@ -83,7 +83,7 @@ export enum TokenAction {
   Edit,
   Info,
   Deploy,
-  StakeAndMint,
+  Mint,
   StartFundraise,
   ManageFundraise,
   ManageToken,

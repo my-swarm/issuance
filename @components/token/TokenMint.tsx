@@ -1,29 +1,27 @@
 import React, { ReactElement, useState } from 'react';
 import { Alert, Button, Divider } from 'antd';
 
-import { useAppState, useContract, useDispatch, useGraphql, useStakeInfo } from '@app';
+import { useAppState, useContract, useDispatch, useGraphql, useFeeInfo } from '@app';
 import { parseUnits } from '@lib';
-import { StakeTable, StakingForm, StakingFormData, TokenInfoStaking } from '..';
+import { FeeTable, StakingForm, StakingFormData, TokenInfoFee } from '..';
 
-interface TokenStakeAndMintProps {
+interface Props {
   onCancel: () => void;
 }
 
-export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactElement {
+export function TokenMint({ onCancel }: Props): ReactElement {
   const [{ onlineToken: token }] = useAppState();
   const { swm } = useContract();
   const { checkAllowance, dispatchTransaction } = useDispatch();
   const { reset } = useGraphql();
   const [isStaked, setIsStaked] = useState<boolean>(false);
-  const { stake, reloadSwmBalance } = useStakeInfo();
+  const { fee, reloadSwmBalance } = useFeeInfo();
 
-  const handleStakeAndMint = async (values: StakingFormData) => {
-    console.log('handleStakeANdMint', values, stake);
-
-    checkAllowance('registry', swm.address, stake, () => {
+  const handleMint = async (values: StakingFormData) => {
+    checkAllowance('minter', swm.address, fee, () => {
       dispatchTransaction({
-        method: 'minter.stakeAndMint',
-        arguments: [token.address, parseUnits(values.supply, token.decimals)],
+        method: 'src20.mint',
+        arguments: [parseUnits(values.supply, token.decimals)],
         description: 'Minting Your Token...',
         onSuccess: () => {
           reset();
@@ -36,7 +34,7 @@ export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactEl
 
   return (
     <div>
-      <TokenInfoStaking />
+      <TokenInfoFee />
 
       {isStaked ? (
         <>
@@ -48,7 +46,7 @@ export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactEl
           </p>
         </>
       ) : (
-        <StakingForm value={token.nav} onSubmit={handleStakeAndMint} />
+        <StakingForm value={token.nav} onSubmit={handleMint} />
       )}
 
       <Divider />
@@ -56,8 +54,8 @@ export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactEl
       <h3>How does this work</h3>
       <ul>
         <li>
-          When you click the <strong>Stake &amp; Mint</strong> button, we first check (and increase if necessary) your
-          SWM spending allowance. You have to sign a transaction for that.
+          When you click the <strong>Mint Tokens</strong> button, we first check (and increase if necessary) your SWM
+          spending allowance. You have to sign a transaction for that.
         </li>
         <li>
           After that, the <strong>Mint</strong> function is run and the computed SWM amount is transfered from your
@@ -66,8 +64,11 @@ export function TokenStakeAndMint({ onCancel }: TokenStakeAndMintProps): ReactEl
       </ul>
 
       <h3>How is the stake amount computed</h3>
-      <p>It&apos;s derived from your asset value using the table below</p>
-      <StakeTable />
+      <p>
+        It&apos;s derived from your asset value using the table below. Fee is paid in SWM with the USD to SWM returned
+        by the SwmPriceOracle contract.
+      </p>
+      <FeeTable />
     </div>
   );
 }

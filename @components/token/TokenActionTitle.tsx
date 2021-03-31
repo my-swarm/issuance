@@ -11,7 +11,7 @@ const tokenActionTitle = {
   [TokenAction.Edit]: 'Edit',
   [TokenAction.Delete]: 'Delete',
   [TokenAction.Deploy]: 'Deploy',
-  [TokenAction.StakeAndMint]: 'Stake and mint',
+  [TokenAction.Mint]: 'Stake and mint',
   [TokenAction.StartFundraise]: 'Start fundraiser for',
   [TokenAction.ManageToken]: 'Manage',
   [TokenAction.ManageFundraise]: 'Manage fundraiser for',

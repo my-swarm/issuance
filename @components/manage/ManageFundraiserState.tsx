@@ -1,12 +1,12 @@
 import React, { ReactElement, useMemo } from 'react';
 import { Button, Tag, Alert, Divider } from 'antd';
-import { useContractAddress, useDispatch, useGraphql, useStakeInfo } from '@app';
+import { useContractAddress, useDispatch, useGraphql, useFeeInfo } from '@app';
 import { FundraiserStatus, FundraiserWithContributorsFragment } from '@graphql';
 import { BigNumber } from '@ethersproject/bignumber';
 import { formatUnits, parseUnits, SWM_TOKEN_DECIMALS, getUnitsAsNumber } from '@lib';
 import { CheckOutlined, WarningOutlined } from '@lib/icons';
-import { TokenInfoStaking } from '../token';
-import { StakeTable } from '../misc';
+import { TokenInfoFee } from '../token';
+import { FeeTable } from '../misc';
 
 interface ManageFundraiserStateProps {
   fundraiser: FundraiserWithContributorsFragment;
@@ -20,7 +20,7 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
   const value = useMemo(() => {
     return getUnitsAsNumber(fundraiser.amountQualified, baseCurrency.decimals);
   }, [fundraiser]);
-  const { lowSwmBalance, stake } = useStakeInfo(value);
+  const { lowSwmBalance, fee } = useFeeInfo(value);
 
   const handleCancel = () => {
     dispatchTransaction({
@@ -32,15 +32,15 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
     });
   };
 
-  const handleStakeAndMint = async () => {
+  const handleMint = async () => {
     checkAllowance(
       ['fundraiser', fundraiser.address],
       fundraiser.token.address,
       null, // unlimited
       () => {
-        checkAllowance('registry', swmAddress, stake, () => {
+        checkAllowance('registry', swmAddress, fee, () => {
           dispatchTransaction({
-            method: 'fundraiser.stakeAndMint',
+            method: 'fundraiser.mint',
             description: 'Staking and minting...',
             onSuccess: () => {
               reset();
@@ -59,7 +59,7 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
   const raisedEnoughSoft = amountQualified.gte(softCap);
   const raisedEnoughHard = amountQualified.gte(hardCap);
   const afterEndDate = fundraiser.endDate < Date.now() / 1000;
-  const allowStakeAndMint = statusRunning && (raisedEnoughHard || (raisedEnoughSoft && afterEndDate));
+  const allowMint = statusRunning && (raisedEnoughHard || (raisedEnoughSoft && afterEndDate));
 
   const raisedSoft = (
     <>
@@ -100,10 +100,10 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
         <p>Fundraiser is finished and your tokens have already been minted</p>
       ) : (
         <>
-          {allowStakeAndMint ? (
+          {allowMint ? (
             <>
               <Alert type="success" message="Your token is ready to be minted" className="mb-3" showIcon />
-              <TokenInfoStaking fundraiser={fundraiser} />
+              <TokenInfoFee fundraiser={fundraiser} />
             </>
           ) : (
             <>
@@ -153,20 +153,15 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
             <Alert type="error" message="Not enough SWM balance to mint your token!" showIcon className="mb-3" />
           )}
           <p>
-            <Button
-              disabled={!allowStakeAndMint || lowSwmBalance !== false}
-              size="large"
-              type="primary"
-              onClick={handleStakeAndMint}
-            >
-              Stake &amp; Mint
+            <Button disabled={!allowMint || lowSwmBalance !== false} size="large" type="primary" onClick={handleMint}>
+              Mint Tokens
             </Button>
           </p>
 
-          {allowStakeAndMint && (
+          {allowMint && (
             <>
               <Divider />
-              <StakeTable />
+              <FeeTable />
             </>
           )}
         </>

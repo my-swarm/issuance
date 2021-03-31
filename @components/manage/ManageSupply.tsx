@@ -125,9 +125,9 @@ export function ManageSupply(): ReactElement {
         {renderStat('Supply', 'supply', token.supply)}
         {renderStat('Max Supply', 'maxSupply', token.maxSupply)}
         {renderStat('Available Supply', 'availableSupply', token.availableSupply)}
-        {renderStat('Fee paid', 'currentStake', token.fee, SWM_TOKEN_DECIMALS, 'SWM')}
+        {renderStat('Fee paid', 'currentFee', token.fee, SWM_TOKEN_DECIMALS, 'SWM')}
         {renderStat('SWM Balance', 'swmBalance', swmBalance.raw as BigNumber, SWM_TOKEN_DECIMALS, 'SWM')}
-        {renderStat('SWM Allowance', 'swmAllowance', swmAllowance.raw as BigNumber, SWM_TOKEN_DECIMALS, 'SWM')}
+        {renderStat('Current NAV', 'supplyNav', token.nav, 0, 'USD')}
       </Row>
 
       <Divider />

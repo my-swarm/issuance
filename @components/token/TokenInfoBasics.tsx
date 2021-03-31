@@ -36,13 +36,13 @@ export function TokenInfoBasics(): ReactElement {
     return (
       <>
         <Descriptions.Item label="Current supply">
-          {formatNumber(onlineToken.supply)} {token.symbol}
+          {formatNumber(formatUnits(onlineToken.supply, onlineToken.decimals))} {token.symbol}
         </Descriptions.Item>
         <Descriptions.Item label="Maximum supply">
           {formatNumber(formatUnits(onlineToken.maxSupply, token.decimals))} {token.symbol}
         </Descriptions.Item>
         <Descriptions.Item label="Available supply">
-          {formatNumber(onlineToken.availableSupply)} {token.symbol}
+          {formatNumber(formatUnits(onlineToken.availableSupply, token.decimals))} {token.symbol}
         </Descriptions.Item>
         <Descriptions.Item label="Features">{features.join(', ')}</Descriptions.Item>
       </>

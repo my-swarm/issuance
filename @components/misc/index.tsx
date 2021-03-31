@@ -1,1 +1,1 @@
-export * from './StakeTable';
+export * from './FeeTable';

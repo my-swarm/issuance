@@ -7,7 +7,7 @@ export * from './stringUtils';
 export * from './numberUtils';
 export * from './errors';
 export * from './ContractProxy';
-export * from './stake';
+export * from './fee';
 export * from './accountList';
 export * from './contracts';
 export * from './transaction';

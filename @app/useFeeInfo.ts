@@ -8,22 +8,22 @@ import { useAppState } from './StateContext';
 interface Return {
   swmBalance: ContractValue;
   reloadSwmBalance: () => void;
-  stake: BigNumber;
+  fee: BigNumber;
   swmPrice: string;
   lowSwmBalance: boolean | undefined;
 }
 
-export function useStakeInfo(value?: number): Return {
+export function useFeeInfo(value?: number): Return {
   const { address } = useEthers();
   const [{ onlineToken: token }] = useAppState();
   const [swmBalance, reloadSwmBalance] = useSwmBalance();
-  const [stake, setStake] = useState<BigNumber>();
+  const [fee, setFee] = useState<BigNumber>();
   const [swmPrice, setSwmPrice] = useState<string>();
   const { minter, swmPriceOracle, swm } = useContract();
 
   useEffect(() => {
     if (minter && swmPriceOracle && swm) {
-      minter.calcStake(value || token.nav).then((val) => setStake(val));
+      minter.calcFee(value || token.nav).then((val) => setFee(val));
       swmPriceOracle.getPrice().then(({ numerator, denominator }) => {
         setSwmPrice(formatNumber(numerator.toNumber() / denominator.toNumber(), 4));
       });
@@ -31,17 +31,17 @@ export function useStakeInfo(value?: number): Return {
   }, [token, minter, swmPriceOracle, swm, address]);
 
   const lowSwmBalance = useMemo(() => {
-    if (swmBalance.raw && stake) {
-      return BigNumber.from(swmBalance.raw).lt(stake);
+    if (swmBalance.raw && fee) {
+      return BigNumber.from(swmBalance.raw).lt(fee);
     } else {
       return undefined;
     }
-  }, [swmBalance, stake]);
+  }, [swmBalance, fee]);
 
   return {
     swmBalance,
     reloadSwmBalance,
-    stake,
+    fee,
     swmPrice,
     lowSwmBalance,
   };

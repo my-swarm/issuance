@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Form, Input, Button } from 'antd';
-import { useStakeInfo, useAppState } from '@app';
+import { useFeeInfo, useAppState } from '@app';
 import { formatUnits } from '@lib';
 import { Box } from '../utility';
 
@@ -16,7 +16,7 @@ interface Props {
 export function StakingForm({ value, onSubmit }: Props): ReactElement {
   const [{ onlineToken: token }] = useAppState();
   const [form] = Form.useForm();
-  const { lowSwmBalance } = useStakeInfo(value);
+  const { lowSwmBalance } = useFeeInfo(value);
 
   const maxSupply = parseFloat(formatUnits(token.maxSupply, token.decimals));
   const normalizeSupply = (x) => {
@@ -40,7 +40,7 @@ export function StakingForm({ value, onSubmit }: Props): ReactElement {
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
           <Button htmlType="submit" type="primary" size="large" disabled={lowSwmBalance}>
-            Stake &amp; Mint
+            Mint Tokens
           </Button>
         </Form.Item>
       </Form>

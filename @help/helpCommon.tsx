@@ -26,15 +26,12 @@ export const availableSupply = {
   content: <p>The amount of tokens in the token issuer&apos;s wallet. These tokens can be distributed to investors.</p>,
 };
 
-export const currentStake = {
-  title: 'Current SWM Stake',
+export const currentFee = {
+  title: 'SWM Fee paid',
   content: (
     <>
-      <p>Current number of SWM tokens staked against the minted supply.</p>
-      <p>
-        When supply is increased or decreased after initial stake &amp; mint, stake is increased or decreased to
-        maintain the same supply:stake ratio.
-      </p>
+      <p>Total SWM fee paid for minting.</p>
+      <p>Additional fee is paid when minting more tokens after NAV increase.</p>
     </>
   ),
 };
@@ -49,12 +46,7 @@ export const swmBalance = {
   ),
 };
 
-export const swmAllowance = {
-  title: 'SWM spending allowance',
-  content: (
-    <p>
-      The amount of SWM tokens you have approved the minting contract to spend on your behalf. If it&amp;s zero or less
-      than needed for supply increase, you&amp;ll be asked to approve more.
-    </p>
-  ),
+export const supplyNav = {
+  title: 'SWM tokens balance',
+  content: <p>Your current Net Asset Value. On NAV increase, additional fee is paid.</p>,
 };

@@ -24,7 +24,7 @@ import {
   TokenInfo,
   TokenManage,
   TokenManageFundraiser,
-  TokenStakeAndMint,
+  TokenMint,
   TokenStartFundraiser,
 } from '@components';
 import { renderAddress, tableColumns } from '@components/manage/listUtils';
@@ -189,7 +189,7 @@ export default function Tokens(): ReactElement {
     if (action === TokenAction.StartFundraise) return <TokenStartFundraiser onClose={handleClearAction} />;
     if (action === TokenAction.ManageToken) return <TokenManage />;
     if (action === TokenAction.ManageFundraise) return <TokenManageFundraiser />;
-    if (action === TokenAction.StakeAndMint) return <TokenStakeAndMint onCancel={handleClearAction} />;
+    if (action === TokenAction.Mint) return <TokenMint onCancel={handleClearAction} />;
     if (action === TokenAction.Info) return <TokenInfo />;
   }
 

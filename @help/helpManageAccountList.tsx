@@ -6,7 +6,7 @@ export const batchAdd = {
     <div>
       <p>
         Add one account (Ethereum address) per line. Additional information can be entered in a CSV format with three
-        columns: <code>address, name, note</code>.
+        columns: <code>address,name,note</code>.
       </p>
       <h4>Example:</h4>
       <div className="code-sample">

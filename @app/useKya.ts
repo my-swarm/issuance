@@ -15,7 +15,7 @@ export function useKya(token?: OnlineToken): { kya: Kya; nav: number } {
       setNav(t.nav);
     } else if (localToken) {
       setKya(tokenToKya(localToken));
-      setNav(localToken.assetNetValue);
+      setNav(localToken.nav);
     }
   }, [onlineToken, localToken]);
 

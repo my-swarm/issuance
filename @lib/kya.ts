@@ -34,11 +34,11 @@ export function tokenToKya(token: LocalTokenKya): Kya {
 
 export function kyaToToken(kya: Kya, nav: number): LocalTokenKya {
   return {
+    nav,
     image: kya.token.image,
     description: kya.token.description,
     assetName: kya.asset.name,
     assetDescription: kya.asset.description,
-    assetNetValue: nav,
     assetNavDocument: kya.asset.navDocument,
     assetImage: kya.asset.image,
     assetLegalDocuments: kya.asset.legalDocuments || [],

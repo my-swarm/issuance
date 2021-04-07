@@ -74,7 +74,7 @@ export const devDefaultToken: LocalToken = {
   assetName: 'Luxury Mediterranean Condo',
   assetDescription: 'Love my condo',
   networks: undefined,
-  assetNetValue: 50,
+  nav: 50,
   assetNavDocument: undefined,
   assetImage: undefined,
   assetLegalDocuments: [],

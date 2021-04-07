@@ -36,7 +36,7 @@ const tokenDefaults: Partial<LocalToken> = {
   assetName: 'Some valuable asset',
   assetNavDocument: createFile('NAV supporting document.txt'),
   assetLegalDocuments: [createFile('First legal document.txt'), createFile('Second legal document.txt')],
-  assetNetValue: 500,
+  nav: 500,
   assetImage: createImage('Asset image.jpg'),
   assetDescription: `It's an asset all right`,
 };

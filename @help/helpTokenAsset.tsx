@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const assetNetValue = {
+export const nav = {
   title: 'Net Asset Value',
   content: (
     <div>

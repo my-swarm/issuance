@@ -9,7 +9,7 @@ export function AssetFormStub(): ReactElement {
         <Input />
       </Form.Item>
 
-      <Form.Item name="assetNetValue" label={<HelpLabel name="assetNetValue" />}>
+      <Form.Item name="nav" label={<HelpLabel name="nav" />}>
         <InputNumber min={1} />
       </Form.Item>
 

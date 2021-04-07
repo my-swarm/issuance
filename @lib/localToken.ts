@@ -41,7 +41,7 @@ export interface LocalTokenKya {
 
   assetName: string;
   assetDescription: string;
-  assetNetValue: number;
+  nav: number;
   assetNavDocument: AppFile;
   assetImage: AppImage;
   assetLegalDocuments: AppFile[];

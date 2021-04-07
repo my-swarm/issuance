@@ -37,7 +37,7 @@ export const tokenFormRules = {
       message: 'Give your asset a name',
     },
   ],
-  assetNetValue: [
+  nav: [
     {
       required: true,
       message: `Enter your asset's net value`,

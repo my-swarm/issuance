@@ -16,7 +16,7 @@ export function TokenDeploy({ onReview, onCancel }: TokenDeployProps): ReactElem
   const { registry, minter } = useContract();
 
   const handleDeploy = async () => {
-    const { name, symbol, decimals, allowUnlimitedSupply, totalSupply, assetNetValue } = token;
+    const { name, symbol, decimals, allowUnlimitedSupply, totalSupply, nav } = token;
     const kya = tokenToKya(token);
     const { kyaUri } = await storeKya(kya);
 
@@ -30,7 +30,7 @@ export function TokenDeploy({ onReview, onCancel }: TokenDeployProps): ReactElem
         symbol,
         parseUnits(supply, decimals),
         kyaUri,
-        assetNetValue || 0,
+        nav || 0,
         getFeaturesAsContractValue(token),
         registry.address,
         minter.address,

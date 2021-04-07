@@ -20,8 +20,8 @@ export function MainMenu(): ReactElement {
           <a>Dashboard</a>
         </Link>
       </Menu.Item>{' '}
-      <Menu.Item key="/invest" icon={<DollarCircleOutlined />}>
-        <Link href="/invest">
+      <Menu.Item key="/contribute" icon={<DollarCircleOutlined />}>
+        <Link href="/contribute">
           <a>Contribute</a>
         </Link>
       </Menu.Item>

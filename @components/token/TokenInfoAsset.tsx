@@ -9,7 +9,6 @@ export function TokenInfoAsset(): ReactElement {
   if (!kya) return <Loading />;
 
   const { asset } = kya;
-  console.log({ kya });
 
   return (
     <Descriptions

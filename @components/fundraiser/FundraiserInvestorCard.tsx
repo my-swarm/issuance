@@ -31,7 +31,6 @@ export function FundraiserInvestorCard({
   const { token, baseCurrency } = fundraiser;
   const { address } = useEthers();
 
-  console.log({ token });
   // todo: as OnlineToken is a quick hack. Should restructure the fragments
   const { kya } = useKya(token as OnlineToken);
 

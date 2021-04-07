@@ -5,7 +5,6 @@ import { InvestFundraisers } from '../@components/invest/InvestFundraisers';
 export default function InvestPage(): ReactElement {
   const [filter, setFilter] = useState<InvestFilterFields>({ search: '' });
 
-  console.log({ filter });
   return (
     <DefaultLayout title="Contribute" headExtra={<InvestFilter onSearch={(values) => setFilter(values)} />}>
       <InvestFundraisers search={filter.search} />

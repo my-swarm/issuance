@@ -15,7 +15,6 @@ export function SwmPriceChart({ data }: SwmPriceChartProps): ReactElement {
   const changePercent = firstPrice
     ? (priceDirection === 'up' ? 1 - firstPrice / lastPrice : lastPrice / firstPrice - 1) * 100
     : 0;
-  console.log({ data, firstPrice, lastPrice, priceDirection, changePercent });
 
   return (
     <>

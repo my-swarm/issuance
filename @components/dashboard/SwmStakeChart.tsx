@@ -21,7 +21,6 @@ export function SwmStakeChart({ total, issuerStake }: SwmStakeChartProps): React
   const [treasuryBalance] = useSwmBalance(knownAccounts.swarmTreasury);
   const [mnRewardsBalance] = useSwmBalance(knownAccounts.swarmMnRewards);
   const { swmStake, swmRewards, swmLockedUni } = useSwmStake();
-  console.log({ total, swmStake, issuerStake });
   if (!total || !swmStake || !issuerStake) return <Loading />;
 
   const circulating = total - swmStake - issuerStake;

@@ -4,7 +4,6 @@ import { BigNumber } from '@ethersproject/bignumber';
 
 export const MANAGE_TABLE_PER_PAGE = 10;
 
-export const MASTERNODE_STAKE = 50000;
 export const SWM_STAKE_OLD_REGISTRY = 281842;
 
 export const knownAccounts = {

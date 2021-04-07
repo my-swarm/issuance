@@ -1,3 +1,5 @@
 {
-  "swmToken": "0x3505f494c3f0fed0b594e01fa41dd3967645ca39"
+  "swmToken": "0x3505f494c3f0fed0b594e01fa41dd3967645ca39",
+  "SwmStakeMasterChef": "0xD38abbAeC03a9FF287eFc9a5F0d0580E07335D1D",
+  "UniswapV2Pair": "0xe0b1433e0174b47e8879ee387f1069a0dbf94137"
 }

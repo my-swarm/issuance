@@ -16,6 +16,8 @@ export const contractsMeta: { [key: string]: ContractMeta } = {
   USDC: { shortName: 'usdc', isBase: true },
   SwmToken: { shortName: 'swm', isBase: true },
   Disperse: { shortName: 'disperse', isBase: true },
+  SwmStakeMasterChef: { shortName: 'stake', isBase: true },
+  UniswapV2Pair: { shortName: 'uniPair', isBase: true },
 
   SRC20: { shortName: 'src20', isBase: false },
   Features: { shortName: 'features', isBase: false },

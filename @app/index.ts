@@ -11,3 +11,4 @@ export * from './useGraphql';
 export * from './useAccountNotes';
 export * from './useKya';
 export * from './useFeeInfo';
+export * from './useSwmStake';

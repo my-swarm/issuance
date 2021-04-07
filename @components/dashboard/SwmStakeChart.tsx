@@ -1,13 +1,11 @@
 import React, { ReactElement } from 'react';
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { Row, Col, Tag, Tooltip } from 'antd';
 import { Loading, VSpace } from '../utility';
 import { formatNumber } from '@lib';
-import { colors, knownAccounts, useSwmBalance } from '@app';
+import { colors, knownAccounts, useSwmBalance, useSwmStake } from '@app';
 
 interface SwmStakeChartProps {
   total: number;
-  mnStake: number;
   issuerStake: number;
 }
 
@@ -19,26 +17,28 @@ interface Metric {
 
 type Metrics = Record<string, Metric>;
 
-export function SwmStakeChart({ total, mnStake, issuerStake }: SwmStakeChartProps): ReactElement {
+export function SwmStakeChart({ total, issuerStake }: SwmStakeChartProps): ReactElement {
   const [treasuryBalance] = useSwmBalance(knownAccounts.swarmTreasury);
   const [mnRewardsBalance] = useSwmBalance(knownAccounts.swarmMnRewards);
-  if (!total || !mnStake || !issuerStake) return <Loading />;
+  const { swmStake, swmRewards, swmLockedUni } = useSwmStake();
+  console.log({ total, swmStake, issuerStake });
+  if (!total || !swmStake || !issuerStake) return <Loading />;
 
-  const circulating = total - mnStake - issuerStake;
+  const circulating = total - swmStake - issuerStake;
   const metrics: Metrics = {
     treasuryBalance: {
       label: 'Swarm Network Treasury',
       amount: treasuryBalance.number,
       color: colors.orange,
     },
-    mnRewardsBalance: {
-      label: 'Swarm MN Rewards',
-      amount: mnRewardsBalance.number,
+    stakeRewardsTotal: {
+      label: 'SWM Rewards pool',
+      amount: mnRewardsBalance.number + swmRewards,
       color: colors.yellow,
     },
-    mnStake: {
-      label: 'Staked by Masternodes',
-      amount: mnStake,
+    swmStake: {
+      label: 'SWM Staked for rewards',
+      amount: swmStake + swmLockedUni,
       color: colors.blue,
     },
     issuerStake: {

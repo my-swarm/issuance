@@ -1,22 +1,13 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import {
-  BuySwmModal,
-  DefaultLayout,
-  InvestFundraisers,
-  MasternodesChart,
-  SwmPriceChart,
-  SwmStakeChart,
-} from '@components';
+import { BuySwmModal, DefaultLayout, InvestFundraisers, SwmPriceChart, SwmStakeChart } from '@components';
 import { Button, Card, Col, Divider, Row, Space } from 'antd';
-import { MasternodesData, PriceData, RawMasternodeStats } from '@lib';
-import { MASTERNODE_STAKE, SWM_STAKE_OLD_REGISTRY, useContract } from '@app';
+import { PriceData } from '@lib';
+import { SWM_STAKE_OLD_REGISTRY, useContract } from '@app';
 
 const cgUrlStats = 'https://api.coingecko.com/api/v3/coins/swarm';
 const cgUrlDaily =
   'https://api.coingecko.com/api/v3/coins/swarm/market_chart?vs_currency=usd&days=14&localization=false&interval=daily';
-const mnUrlStats = 'https://api.masternode.swarm.fund/api/v1/nodes/statistic';
-const mnUrlDaily = 'https://api.masternode.swarm.fund/api/v1/nodes/states-overview';
 
 interface IndexProps {
   title?: string;
@@ -26,9 +17,6 @@ export default function Index({ title }: IndexProps): ReactElement {
   const colLayout = { xs: 24, lg: 12, xxl: 6 };
   const [buyingSwm, setBuyingSwm] = useState<boolean>(false);
   const [priceData, setPriceData] = useState<PriceData>();
-  const [mnData, setMnData] = useState<MasternodesData>();
-  const [mnRoi, setMnRoi] = useState<number>();
-  const [numMnNodes, setNumMnNodes] = useState<number>();
   const [swmCircSupply, setSwmCircSupply] = useState<number>();
   const { swm } = useContract();
 
@@ -60,30 +48,6 @@ export default function Index({ title }: IndexProps): ReactElement {
     });
   }, [cgUrlDaily]);
 
-  useEffect(() => {
-    mnRequest(mnUrlDaily, (data) => {
-      const latest = Object.values(data.result)[0] as RawMasternodeStats;
-      setNumMnNodes(latest.ACTIVE + latest.WARMUP);
-      setMnData(
-        Object.entries(data.result).map(([date, nodeStats]: [string, RawMasternodeStats]) => {
-          return {
-            date: date,
-            active: nodeStats.ACTIVE,
-            warmup: nodeStats.WARMUP,
-          };
-        }),
-      );
-    });
-  }, [mnUrlDaily]);
-
-  useEffect(() => {
-    mnRequest(mnUrlStats, (data) => {
-      setMnRoi(Math.floor(data.result.annualROI * 100) / 100);
-    });
-  }, [mnUrlStats]);
-
-  const mnStake = MASTERNODE_STAKE * numMnNodes || undefined;
-
   return (
     <DefaultLayout title="Swarm Dashboard">
       <Row gutter={[24, 24]} className="dashboard">
@@ -100,7 +64,7 @@ export default function Index({ title }: IndexProps): ReactElement {
               </a>
             }
           >
-            <SwmStakeChart total={swmCircSupply} mnStake={mnStake} issuerStake={SWM_STAKE_OLD_REGISTRY} />
+            <SwmStakeChart total={swmCircSupply} issuerStake={SWM_STAKE_OLD_REGISTRY} />
           </Card>
         </Col>
         <Col {...colLayout}>
@@ -117,14 +81,18 @@ export default function Index({ title }: IndexProps): ReactElement {
         </Col>
         <Col {...colLayout}>
           <Card
-            title="Masternodes"
+            title="Liquidity"
             extra={
-              <a href="https://masternodes.swarmnetwork.org" target="_blank" rel="noopener noreferrer">
+              <a
+                href="https://info.uniswap.org/pair/0xe0b1433E0174b47E8879EE387f1069a0dBf94137"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 more
               </a>
             }
           >
-            <MasternodesChart data={mnData} numNodes={numMnNodes} roi={mnRoi} />
+            content tbd
           </Card>
         </Col>
         <Col {...colLayout}>

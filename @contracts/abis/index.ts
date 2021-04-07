@@ -12,6 +12,8 @@ import FundraiserManager from './FundraiserManager.json';
 import USDC from './USDC.json';
 import Disperse from './Disperse.json';
 import ERC20 from './ERC20.json';
+import SwmStakeMasterChef from './SwmStakeMasterChef.json';
+import UniswapV2Pair from './UniswapV2Pair.json';
 
 export const abis = {
   TransferRules,
@@ -28,4 +30,6 @@ export const abis = {
   USDC,
   Disperse,
   ERC20,
+  SwmStakeMasterChef,
+  UniswapV2Pair,
 };

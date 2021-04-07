@@ -29,7 +29,7 @@ export function TokenStartFundraiser({ onClose }: TokenManageProps): ReactElemen
     setIsDeploying(true);
     dispatchTransaction({
       method: 'fundraiser.deploy',
-      arguments: [
+      args: [
         values.label,
         onlineToken.address,
         parseUnits(values.tokensToMint, onlineToken.decimals),

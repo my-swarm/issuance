@@ -24,7 +24,7 @@ export function ManageAsset(): ReactElement {
       contract: 'src20',
       method: 'updateKya',
       description: 'Updating onchain link to your KYA',
-      arguments: [kyaUri],
+      args: [kyaUri],
     });
   };
 

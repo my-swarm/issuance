@@ -46,7 +46,7 @@ export function ManageDividends(): ReactElement {
     if (data.type === 'eth') {
       dispatchTransaction({
         method: 'disperse.disperseEther',
-        arguments: [recipients, values],
+        args: [recipients, values],
         description: 'Distributing Eth',
         overrides: {
           value: sumUnits,
@@ -56,12 +56,12 @@ export function ManageDividends(): ReactElement {
       dispatchTransaction({
         address: data.tokenAddress,
         method: 'erc20.approve',
-        arguments: [disperseAddress, parseUnits(data.amount, decimals)],
+        args: [disperseAddress, parseUnits(data.amount, decimals)],
         description: 'Approving spending of the token',
         onSuccess: () => {
           dispatchTransaction({
             method: 'disperse.disperseToken',
-            arguments: [data.tokenAddress, recipients, values],
+            args: [data.tokenAddress, recipients, values],
             description: 'Distributing Token',
           });
         },

@@ -21,7 +21,7 @@ export function TokenMint({ onCancel }: Props): ReactElement {
     checkAllowance('minter', swm.address, fee, () => {
       dispatchTransaction({
         method: 'src20.mint',
-        arguments: [parseUnits(values.supply, token.decimals)],
+        args: [parseUnits(values.supply, token.decimals)],
         description: 'Minting Your Token...',
         onSuccess: () => {
           reset();

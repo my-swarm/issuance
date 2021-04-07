@@ -49,7 +49,7 @@ export function AccountsAddModal({ list, onClose }: AccountsAddModalProps): Reac
       const addresses = Object.keys(data);
       dispatchTransaction({
         method: listToContractMethod(list, 'add'),
-        arguments: [addresses],
+        args: [addresses],
         description: `Adding ${addresses.length} addresses to your ${listTitle(list)}`,
         onSuccess: () => handleAddToLocalState(data),
       });

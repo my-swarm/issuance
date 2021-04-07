@@ -34,14 +34,13 @@ export function SpendingApprovalModal(): ReactElement {
 
   const handleAllow = (unlimited: boolean) => {
     const realAmount = unlimited ? unlimitedAllowance : amount;
-    const transaction = {
+    dispatchTransaction({
       method: 'erc20.approve',
       address: tokenContract.address,
-      arguments: [spenderAddress, realAmount],
+      args: [spenderAddress, realAmount],
       description: 'Approving spending',
       onSuccess,
-    };
-    dispatchTransaction(transaction);
+    });
     handleClose();
   };
 

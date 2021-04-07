@@ -44,7 +44,7 @@ export function ManageTransferRequests(): ReactElement {
   const handleApprove = (record: TableRecord) => {
     dispatchTransaction({
       method: 'transferRules.approveTransfer',
-      arguments: [record.requestId],
+      args: [record.requestId],
       description: `Approving transfer from ${record.from} to ${record.to}`,
       onSuccess: reset,
     });
@@ -53,7 +53,7 @@ export function ManageTransferRequests(): ReactElement {
   const handleDeny = (record: TableRecord) => {
     dispatchTransaction({
       method: 'transferRules.denyTransfer',
-      arguments: [record.requestId],
+      args: [record.requestId],
       description: `Approving transfer from ${record.from} to ${record.to}`,
       onSuccess: reset,
     });

@@ -19,7 +19,7 @@ export interface Transaction {
   hash?: string;
   contract?: string;
   method: string;
-  arguments?: any[];
+  args?: any[];
   overrides?: CallOverrides;
   description?: string;
   onSuccess?: () => void;

@@ -33,7 +33,7 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
 
     dispatchTransaction({
       method: `transferRules.${removeMethod}`,
-      arguments: [addressList],
+      args: [addressList],
       description: `Removing ${addressList.length} addresses from your ${type}`,
       onSuccess: reset,
     });

@@ -46,12 +46,12 @@ export function ManageSupply(): ReactElement {
 
     dispatchTransaction({
       method: 'swm.approve',
-      arguments: [registry.address, computeStake.sub(swmAllowance.raw)],
+      args: [registry.address, computeStake.sub(swmAllowance.raw)],
       description: 'Approving SWM spending. Confirm transaction to be albe to stake your SWM',
       onSuccess: () => {
         dispatchTransaction({
           method: 'registry.increaseSupply',
-          arguments: [src20.address, address, additionalSupply],
+          args: [src20.address, address, additionalSupply],
           description: 'Increasing token supply and staking your SWM tokens',
           onSuccess: () => {
             reset();
@@ -68,7 +68,7 @@ export function ManageSupply(): ReactElement {
 
     dispatchTransaction({
       method: 'registry.decreaseSupply',
-      arguments: [src20.address, address, supply],
+      args: [src20.address, address, supply],
       description: 'Decreasing token supply and returning SWM tokens',
       onSuccess: () => {
         reset();

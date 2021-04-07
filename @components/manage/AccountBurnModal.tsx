@@ -19,7 +19,7 @@ export function AccountBurnModal({ token, address, currentBalance, onClose }: Ac
   const handleBurn = async (): Promise<void> => {
     dispatchTransaction({
       method: 'src20.burnAccount',
-      arguments: [address, parseUnits(amount, token.decimals)],
+      args: [address, parseUnits(amount, token.decimals)],
       description: `Burning ${amount} ${token.symbol} from account ${address}`,
       onSuccess: handleCancel,
     });

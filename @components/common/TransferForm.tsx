@@ -41,7 +41,7 @@ export function TransferForm({
     dispatchTransaction({
       method: `src20.${method}`,
       address: token.address,
-      arguments: args,
+      args: args,
       description,
       onSuccess: () => {
         form.resetFields();

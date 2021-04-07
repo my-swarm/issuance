@@ -95,8 +95,8 @@ export function TransferHistory({ token, transfers, direction = false }: Transfe
     .filter((tx) => tx.contract === 'src20' && tx.method === 'transfer' && sameAddress(tx.address, token.address))
     .map((tx) => ({
       from: tx.address,
-      to: tx.arguments[0],
-      value: parseFloat(formatUnits(tx.arguments[1], token.decimals)),
+      to: tx.args[0],
+      value: parseFloat(formatUnits(tx.args[1], token.decimals)),
       createdAt: Math.round(Date.now() / 1000),
       isPending: true,
     }));

@@ -28,7 +28,7 @@ export function TransactionModal(): ReactElement {
       proxy.onProgress(handleTransactionProgress);
       setRetry(false);
 
-      const { address, contract: contractName, method, arguments: args, overrides } = transaction;
+      const { address, contract: contractName, method, args, overrides } = transaction;
 
       const contract: string | [string, string] = address ? [contractName, address] : contractName;
 

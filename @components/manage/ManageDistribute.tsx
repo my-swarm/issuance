@@ -48,7 +48,7 @@ export function ManageDistribute(): ReactElement {
     const batchNum = numBatches - batchesLeft;
     dispatchTransaction({
       method: 'src20.bulkTransfer',
-      arguments: [addressesBatch, amountsBatch],
+      args: [addressesBatch, amountsBatch],
       description: `Distributing ${totalAmount} ${token.symbol} to ${addresses.length} accounts${
         oneBatch ? `` : ` (batch ${batchNum} of ${numBatches}, ${distributeBatchSize} per batch)`
       }`,

@@ -25,7 +25,7 @@ export function TokenDeploy({ onReview, onCancel }: TokenDeployProps): ReactElem
 
     dispatchTransaction({
       method: 'src20.deploy',
-      arguments: [
+      args: [
         name,
         symbol,
         parseUnits(supply, decimals),

@@ -41,8 +41,8 @@ export function useDispatch(): UseDispatchResult {
       throw new Error('Contract name not provided');
     }
 
-    if (!transaction.arguments) {
-      transaction.arguments = [];
+    if (!transaction.args) {
+      transaction.args = [];
     }
 
     dispatch({

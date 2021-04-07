@@ -42,7 +42,7 @@ export function ManageAffiliates({ affiliates }: ManageAffiliatesProps): ReactEl
   const handleFormSubmit = (values: AffiliateFragment) => {
     dispatchTransaction({
       method: 'affiliateManager.addOrUpdate',
-      arguments: [values.address, values.referral, parseUnits(values.percentage, 4)],
+      args: [values.address, values.referral, parseUnits(values.percentage, 4)],
       description: affiliate ? 'Updating affiliate' : 'Adding affiliate',
       onSuccess: () => {
         reset();
@@ -55,7 +55,7 @@ export function ManageAffiliates({ affiliates }: ManageAffiliatesProps): ReactEl
   const handleRemove = (address) => {
     dispatchTransaction({
       method: 'affiliateManager.remove',
-      arguments: [address],
+      args: [address],
       description: 'Removing affiliate...',
       onSuccess: reset,
     });

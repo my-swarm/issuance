@@ -34,7 +34,7 @@ export function ManageContributors({ fundraiser }: ManageContributorsProps): Rea
   const handleConfirm = (address) => {
     dispatchTransaction({
       method: 'contributorRestrictions.whitelistAccount',
-      arguments: [address],
+      args: [address],
       description: 'Confirming contributor...',
       onSuccess: reset,
     });
@@ -43,7 +43,7 @@ export function ManageContributors({ fundraiser }: ManageContributorsProps): Rea
   const handleRemove = (address) => {
     dispatchTransaction({
       method: 'contributorRestrictions.unWhitelistAccount',
-      arguments: [address],
+      args: [address],
       description: 'Removing contributor...',
       onSuccess: reset,
     });

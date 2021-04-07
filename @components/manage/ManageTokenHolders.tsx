@@ -36,7 +36,7 @@ export function ManageTokenHolders(): ReactElement {
   const handleFreeze = (account: string) => {
     dispatchTransaction({
       method: 'features.freezeAccount',
-      arguments: [account],
+      args: [account],
       description: `Freezing account ${account}`,
       onSuccess: reset,
     });
@@ -45,7 +45,7 @@ export function ManageTokenHolders(): ReactElement {
   const handleUnfreeze = (account: string) => {
     dispatchTransaction({
       method: 'features.unfreezeAccount',
-      arguments: [account],
+      args: [account],
       description: `Unfreezing account ${account}`,
       onSuccess: reset,
     });

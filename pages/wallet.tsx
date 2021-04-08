@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import { Button, Checkbox, Drawer, Space, Table } from 'antd';
+import { Button, Drawer, Space, Table } from 'antd';
 import { DollarCircleOutlined } from '@lib/icons';
 
 import { DefaultLayout, Loading, RequireEthers, WalletDetail } from '@components';
@@ -27,21 +27,12 @@ function mergeTransfers(t1: TransferFragment[], t2: TransferFragment[]): Transfe
   return [...t1, ...t2].sort((a, b) => b.createdAt - a.createdAt);
 }
 
-interface Filter {
-  nonzeroBalance: boolean;
-}
-
-const defaultFilter: Filter = {
-  nonzeroBalance: false,
-};
-
 export default function WalletPage(): ReactElement {
   const [action, setAction] = useState<WalletAction>();
   const [record, setRecord] = useState<WalletRecord>();
   const [ethBalance, setEthBalance] = useState<BigNumber>();
   const [swmBalance, setSwmBalance] = useState<BigNumber>();
   const [usdcBalance, setUsdcBalance] = useState<BigNumber>();
-  const [filter, setFilter] = useState<Filter>(defaultFilter);
   const { usdc, swm } = useContract();
   const { connected, address, signer } = useEthers();
   const { reset } = useGraphql();
@@ -72,59 +63,37 @@ export default function WalletPage(): ReactElement {
     setAction(undefined);
   };
 
-  const handleUpdateFilter = (prop: string, value: boolean) => {
-    setFilter({ ...filter, [prop]: value });
-  };
+  let wallet: Wallet = (data?.tokenHolders || []).map((tokenHolder) => {
+    const { transfersFrom, transfersTo } = tokenHolder.token;
+    return {
+      token: tokenHolder.token,
+      holder: tokenHolder as TokenHolderFragment,
+      transfers: mergeTransfers(transfersFrom, transfersTo),
+      special: false,
+    };
+  });
 
-  let wallet: Wallet;
-  if (filter.nonzeroBalance) {
-    wallet = (data?.tokenHolders || []).map((tokenHolder) => {
-      const { transfersFrom, transfersTo } = tokenHolder.token;
-      return {
-        token: tokenHolder.token,
-        holder: tokenHolder as TokenHolderFragment,
-        transfers: mergeTransfers(transfersFrom, transfersTo),
-        special: false,
-      };
-    });
-  } else {
-    wallet = (data?.tokens || []).map((token) => {
-      const { transfersFrom, transfersTo } = token;
-      const { holders } = token;
-      const holder = holders[0];
-      return {
-        token,
-        holder: holder as TokenHolderFragment,
-        transfers: mergeTransfers(transfersFrom, transfersTo),
-        special: false,
-      };
-    });
-  }
-
-  if (!filter.nonzeroBalance || ethBalance.gt(0)) {
-    wallet.unshift({
-      token: { name: 'Swarm Token', symbol: 'SWM', decimals: 18 } as TokenInfoFragment,
-      holder: { balance: swmBalance } as TokenHolderFragment,
-      special: true,
-      image: '/images/swarm-symbol.svg',
-    });
-  }
-  if (!filter.nonzeroBalance || usdcBalance.gt(0)) {
-    wallet.unshift({
-      token: { name: 'Stable Coin', symbol: 'USDC', decimals: 6 } as TokenInfoFragment,
-      holder: { balance: usdcBalance } as TokenHolderFragment,
-      special: true,
-      image: '/images/usdc.svg',
-    });
-  }
-  if (!filter.nonzeroBalance || swmBalance.gt(0)) {
-    wallet.unshift({
-      token: { name: 'Ethereum', symbol: 'ETH', decimals: 18 } as TokenInfoFragment,
+  wallet = [
+    {
+      token: { symbol: 'ETH', name: 'Ethereum', decimals: 18 } as TokenInfoFragment,
       holder: { balance: ethBalance } as TokenHolderFragment,
       special: true,
       image: '/images/ethereum.svg',
-    });
-  }
+    },
+    {
+      token: { symbol: 'USDC', name: 'Stable Coin', decimals: 6 } as TokenInfoFragment,
+      holder: { balance: usdcBalance } as TokenHolderFragment,
+      special: true,
+      image: '/images/usdc.svg',
+    },
+    {
+      token: { symbol: 'SWM', name: 'Swarm Token', decimals: 18 } as TokenInfoFragment,
+      holder: { balance: swmBalance } as TokenHolderFragment,
+      special: true,
+      image: '/images/swarm-symbol.svg',
+    },
+    ...wallet,
+  ];
 
   const columns = [
     {
@@ -202,16 +171,6 @@ export default function WalletPage(): ReactElement {
 
   return (
     <DefaultLayout title="Wallet">
-      {connected && (
-        <p>
-          <Checkbox
-            checked={filter.nonzeroBalance}
-            onChange={(val) => handleUpdateFilter('nonzeroBalance', val.target.checked)}
-          >
-            Show non-zero balances only
-          </Checkbox>
-        </p>
-      )}
       <Table dataSource={wallet} columns={columns} className="wallet-table" rowClassName={rowClassName} />
       <RequireEthers message="The balances will only show when you connect to Ethereum" />
       <Drawer

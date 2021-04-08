@@ -2694,26 +2694,7 @@ export type WalletQueryVariables = Exact<{
 
 export type WalletQuery = (
   { __typename?: 'Query' }
-  & { tokens: Array<(
-    { __typename?: 'Token' }
-    & { holders: Array<(
-      { __typename?: 'TokenHolder' }
-      & TokenHolderFragment
-    )>, transfersFrom: Array<(
-      { __typename?: 'Transfer' }
-      & TransferFragment
-    )>, transfersTo: Array<(
-      { __typename?: 'Transfer' }
-      & TransferFragment
-    )>, whitelist: Array<(
-      { __typename?: 'WhitelistedAccount' }
-      & Pick<WhitelistedAccount, 'address'>
-    )>, greylist: Array<(
-      { __typename?: 'GreylistedAccount' }
-      & Pick<GreylistedAccount, 'address'>
-    )> }
-    & TokenInfoFragment
-  )>, tokenHolders: Array<(
+  & { tokenHolders: Array<(
     { __typename?: 'TokenHolder' }
     & { token: (
       { __typename?: 'Token' }
@@ -3516,24 +3497,6 @@ export type TransfersLazyQueryHookResult = ReturnType<typeof useTransfersLazyQue
 export type TransfersQueryResult = Apollo.QueryResult<TransfersQuery, TransfersQueryVariables>;
 export const WalletDocument = gql`
     query Wallet($address: Bytes) {
-  tokens(where: {supply_not: 0}) {
-    ...TokenInfo
-    holders(where: {address: $address}) {
-      ...TokenHolder
-    }
-    transfersFrom: transfers(where: {fromAddress: $address}) {
-      ...Transfer
-    }
-    transfersTo: transfers(where: {toAddress: $address}) {
-      ...Transfer
-    }
-    whitelist(where: {address: $address}) {
-      address
-    }
-    greylist(where: {address: $address}) {
-      address
-    }
-  }
   tokenHolders(where: {address: $address}) {
     ...TokenHolder
     token {
@@ -3553,8 +3516,8 @@ export const WalletDocument = gql`
     }
   }
 }
-    ${TokenInfoFragmentDoc}
-${TokenHolderFragmentDoc}
+    ${TokenHolderFragmentDoc}
+${TokenInfoFragmentDoc}
 ${TransferFragmentDoc}`;
 
 /**

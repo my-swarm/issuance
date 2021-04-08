@@ -1,0 +1,10 @@
+query WalletDetail($address: Bytes!, $token: ID!) {
+  token(id: $token) {
+    transferRequestsFrom: transferRequests(where: { fromAddress: $address, status_not: Approved }) {
+      ...TransferRequest
+    }
+    transferRequestsTo: transferRequests(where: { toAddress: $address, status_not: Approved }) {
+      ...TransferRequest
+    }
+  }
+}

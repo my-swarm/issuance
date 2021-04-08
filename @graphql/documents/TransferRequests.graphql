@@ -2,12 +2,8 @@ fragment TransferRequest on TransferRequest {
   id
   requestId
   status
-  from {
-    address
-  }
-  to {
-    address
-  }
+  fromAddress
+  toAddress
   createdAt
   updatedAt
   value

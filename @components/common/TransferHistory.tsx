@@ -4,7 +4,7 @@ import { LeftCircleTwoTone, LoadingOutlined, RightCircleTwoTone, SearchOutlined 
 import { TokenInfoFragment, TransferFragment } from '@graphql';
 import { renderAddress, tableColumns } from '../manage/listUtils';
 import { formatDatetime, sameAddress, strcmp, formatUnits } from '@lib';
-import { FilterDropdown, PaginatedTable } from '@components';
+import { FilterDropdown, PaginatedTable, TransferDirection } from '@components';
 import { useAppState, useEthers } from '@app';
 import { Tooltip } from 'antd';
 
@@ -32,18 +32,9 @@ export function TransferHistory({ token, transfers, direction = false }: Transfe
         {
           title: '',
           key: 'dir',
-          render: (val, row) =>
-            row.isPending ? (
-              <LoadingOutlined title="Pending transaction" />
-            ) : row.toAddress === address ? (
-              <Tooltip title="Incoming transfer">
-                <RightCircleTwoTone twoToneColor="green" />
-              </Tooltip>
-            ) : (
-              <Tooltip title="Outgoing transfer">
-                <LeftCircleTwoTone twoToneColor="red" />
-              </Tooltip>
-            ),
+          render: (val, row) => (
+            <TransferDirection myAddress={address} toAddress={row.toAddress} pending={row.isPending} />
+          ),
         },
       ]
     : [];

@@ -2645,14 +2645,7 @@ export type TokensQuery = (
 
 export type TransferRequestFragment = (
   { __typename?: 'TransferRequest' }
-  & Pick<TransferRequest, 'id' | 'requestId' | 'status' | 'createdAt' | 'updatedAt' | 'value'>
-  & { from: (
-    { __typename?: 'TokenHolder' }
-    & Pick<TokenHolder, 'address'>
-  ), to: (
-    { __typename?: 'TokenHolder' }
-    & Pick<TokenHolder, 'address'>
-  ) }
+  & Pick<TransferRequest, 'id' | 'requestId' | 'status' | 'fromAddress' | 'toAddress' | 'createdAt' | 'updatedAt' | 'value'>
 );
 
 export type TransferRequestsQueryVariables = Exact<{
@@ -2740,6 +2733,26 @@ export type WalletQuery = (
       & TokenInfoFragment
     ) }
     & TokenHolderFragment
+  )> }
+);
+
+export type WalletDetailQueryVariables = Exact<{
+  address: Scalars['Bytes'];
+  token: Scalars['ID'];
+}>;
+
+
+export type WalletDetailQuery = (
+  { __typename?: 'Query' }
+  & { token?: Maybe<(
+    { __typename?: 'Token' }
+    & { transferRequestsFrom: Array<(
+      { __typename?: 'TransferRequest' }
+      & TransferRequestFragment
+    )>, transferRequestsTo: Array<(
+      { __typename?: 'TransferRequest' }
+      & TransferRequestFragment
+    )> }
   )> }
 );
 
@@ -2938,12 +2951,8 @@ export const TransferRequestFragmentDoc = gql`
   id
   requestId
   status
-  from {
-    address
-  }
-  to {
-    address
-  }
+  fromAddress
+  toAddress
   createdAt
   updatedAt
   value
@@ -3573,6 +3582,49 @@ export function useWalletLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Wal
 export type WalletQueryHookResult = ReturnType<typeof useWalletQuery>;
 export type WalletLazyQueryHookResult = ReturnType<typeof useWalletLazyQuery>;
 export type WalletQueryResult = Apollo.QueryResult<WalletQuery, WalletQueryVariables>;
+export const WalletDetailDocument = gql`
+    query WalletDetail($address: Bytes!, $token: ID!) {
+  token(id: $token) {
+    transferRequestsFrom: transferRequests(
+      where: {fromAddress: $address, status_not: Approved}
+    ) {
+      ...TransferRequest
+    }
+    transferRequestsTo: transferRequests(
+      where: {toAddress: $address, status_not: Approved}
+    ) {
+      ...TransferRequest
+    }
+  }
+}
+    ${TransferRequestFragmentDoc}`;
+
+/**
+ * __useWalletDetailQuery__
+ *
+ * To run a query within a React component, call `useWalletDetailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWalletDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWalletDetailQuery({
+ *   variables: {
+ *      address: // value for 'address'
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useWalletDetailQuery(baseOptions: Apollo.QueryHookOptions<WalletDetailQuery, WalletDetailQueryVariables>) {
+        return Apollo.useQuery<WalletDetailQuery, WalletDetailQueryVariables>(WalletDetailDocument, baseOptions);
+      }
+export function useWalletDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WalletDetailQuery, WalletDetailQueryVariables>) {
+          return Apollo.useLazyQuery<WalletDetailQuery, WalletDetailQueryVariables>(WalletDetailDocument, baseOptions);
+        }
+export type WalletDetailQueryHookResult = ReturnType<typeof useWalletDetailQuery>;
+export type WalletDetailLazyQueryHookResult = ReturnType<typeof useWalletDetailLazyQuery>;
+export type WalletDetailQueryResult = Apollo.QueryResult<WalletDetailQuery, WalletDetailQueryVariables>;
 export const WhitelistGreylistDocument = gql`
     query WhitelistGreylist($token: String!) {
   whitelistedAccounts(where: {token: $token}) {

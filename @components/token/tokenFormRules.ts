@@ -18,7 +18,7 @@ export const tokenFormRules = {
   decimals: [
     {
       required: true,
-      message: 'Enter your token decimals. 18 is the sweet spot value',
+      message: "Enter your token's decimals.",
     },
   ],
   image: [],

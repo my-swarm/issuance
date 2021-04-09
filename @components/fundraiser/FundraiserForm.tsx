@@ -1,10 +1,10 @@
 import React, { ReactElement, useState } from 'react';
 import dayjs from 'dayjs';
-import { Form, DatePicker, Input, InputNumber, Button, Space, Select, Row, Col, Checkbox } from 'antd';
+import { Form, DatePicker, Input, InputNumber, Button, Space, Select, Row, Col, Checkbox, Divider } from 'antd';
 
 import { LocalFundraiser, BASE_CURRENCIES } from '@lib';
 import { devDefaultFundraiser, isDev, useEthers } from '@app';
-import { Help, HelpLabel } from '..';
+import { Fieldset, Help, HelpLabel } from '..';
 
 interface FundraiserFormProps {
   tokenName: string;
@@ -90,120 +90,132 @@ export function FundraiserForm({
         </Checkbox>
       </Form.Item>
 
-      <h3>
-        Token price/supply <Help name="supplyOrPrice" />
-      </h3>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            name="tokensToMint"
-            label="Token supply to mint"
-            rules={[{ required: supplyAndPriceEmpty, message: 'Enter token supply or price' }]}
-          >
-            <InputNumber
-              min={1}
-              step={1000}
-              className="w-full"
-              disabled={disabled}
-              onChange={() => handleUpdatedSupplyOrPrice('tokenPrice')}
-            />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            name="tokenPrice"
-            label="Token price (USD)"
-            rules={[{ required: supplyAndPriceEmpty, message: 'Enter token supply or price' }]}
-          >
-            <InputNumber
-              min={0}
-              step={0.1}
-              className="w-full"
-              disabled={disabled}
-              onChange={() => handleUpdatedSupplyOrPrice('tokensToMint')}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
+      <Fieldset
+        legend={
+          <>
+            Token price/supply <Help name="supplyOrPrice" />
+          </>
+        }
+      >
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              name="tokensToMint"
+              label="Token supply to mint"
+              rules={[{ required: supplyAndPriceEmpty, message: 'Enter token supply or price' }]}
+            >
+              <InputNumber
+                min={1}
+                step={1000}
+                className="w-full"
+                disabled={disabled}
+                onChange={() => handleUpdatedSupplyOrPrice('tokenPrice')}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="tokenPrice"
+              label="Token price (USD)"
+              rules={[{ required: supplyAndPriceEmpty, message: 'Enter token supply or price' }]}
+            >
+              <InputNumber
+                min={0}
+                step={0.1}
+                className="w-full"
+                disabled={disabled}
+                onChange={() => handleUpdatedSupplyOrPrice('tokensToMint')}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+      </Fieldset>
 
-      <h3>Dates</h3>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            name="startDate"
-            label={
-              <Space size="large">
-                <span>Start date</span>
-                <Checkbox checked={startNow} onChange={handleToggleStartNow}>
-                  Start now
-                </Checkbox>
-              </Space>
-            }
-            rules={[{ required: !startNow, message: 'Start date is required' }]}
-          >
-            <DatePicker className="w-full" disabled={disabled || startNow} />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            name="endDate"
-            label="End date"
-            rules={[
-              { required: true, message: 'End date is required' },
-              ({ getFieldValue }) => ({
-                validator(rule, value) {
-                  if (value && startNow && value <= new Date()) {
-                    return Promise.reject('Has to end in the future');
-                  } else if (value && !startNow && value <= getFieldValue('startDate')) {
-                    return Promise.reject('Has to end after start date');
-                  } else {
-                    return Promise.resolve();
-                  }
-                },
-              }),
-            ]}
-          >
-            <DatePicker className="w-full" disabled={disabled} />
-          </Form.Item>
-        </Col>
-      </Row>
+      <Fieldset legend="Dates">
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              name="startDate"
+              label={
+                <Space size="large">
+                  <span>Start date</span>
+                  <Checkbox checked={startNow} onChange={handleToggleStartNow}>
+                    Start now
+                  </Checkbox>
+                </Space>
+              }
+              rules={[{ required: !startNow, message: 'Start date is required' }]}
+            >
+              <DatePicker className="w-full" disabled={disabled || startNow} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="endDate"
+              label="End date"
+              rules={[
+                { required: true, message: 'End date is required' },
+                ({ getFieldValue }) => ({
+                  validator(rule, value) {
+                    if (value && startNow && value <= new Date()) {
+                      return Promise.reject('Has to end in the future');
+                    } else if (value && !startNow && value <= getFieldValue('startDate')) {
+                      return Promise.reject('Has to end after start date');
+                    } else {
+                      return Promise.resolve();
+                    }
+                  },
+                }),
+              ]}
+            >
+              <DatePicker className="w-full" disabled={disabled} />
+            </Form.Item>
+          </Col>
+        </Row>
+      </Fieldset>
 
-      <h3>Caps</h3>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item name="softCap" label="Soft Cap" rules={[{ required: true, message: 'Soft Cap is required' }]}>
-            <InputNumber min={1} step={1000} className="w-full" disabled={disabled} />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item name="hardCap" label="Hard Cap" rules={[{ required: true, message: 'Hard Cap is required' }]}>
-            <InputNumber min={1} step={1000} className="w-full" disabled={disabled} />
-          </Form.Item>
-        </Col>
-      </Row>
+      <Fieldset legend="Caps">
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item name="softCap" label="Soft Cap" rules={[{ required: true, message: 'Soft Cap is required' }]}>
+              <InputNumber min={1} step={1000} className="w-full" disabled={disabled} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item name="hardCap" label="Hard Cap" rules={[{ required: true, message: 'Hard Cap is required' }]}>
+              <InputNumber min={1} step={1000} className="w-full" disabled={disabled} />
+            </Form.Item>
+          </Col>
+        </Row>
+      </Fieldset>
 
-      <h3>
-        Contributor Restrictions <Help name="minMaxInvestment" />
-      </h3>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item name="maxContributors" label="Maximum number of contributors">
-            <InputNumber min={0} step={1} className="w-full" disabled={disabled} />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item name="minInvestmentAmount" label="Minimum investment">
-            <InputNumber min={0} step={1} className="w-full" disabled={disabled} />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item name="maxInvestmentAmount" label="Maximum investment">
-            <InputNumber min={0} step={1} className="w-full" disabled={disabled} />
-          </Form.Item>
-        </Col>
-      </Row>
+      <Fieldset
+        legend={
+          <>
+            Contributor Restrictions <Help name="minMaxInvestment" />
+          </>
+        }
+      >
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item name="maxContributors" label="Maximum number of contributors">
+              <InputNumber min={0} step={1} className="w-full" disabled={disabled} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item name="minInvestmentAmount" label="Minimum investment">
+              <InputNumber min={0} step={1} className="w-full" disabled={disabled} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item name="maxInvestmentAmount" label="Maximum investment">
+              <InputNumber min={0} step={1} className="w-full" disabled={disabled} />
+            </Form.Item>
+          </Col>
+        </Row>
+      </Fieldset>
 
       <Form.Item>
         <Space>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const nav = {
-  title: 'Net Asset Value',
+  title: 'Net Asset Value (USD)',
   content: (
     <div>
       <p>

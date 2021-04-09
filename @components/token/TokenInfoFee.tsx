@@ -25,7 +25,7 @@ export function TokenInfoFee({ fundraiser }: Props) {
   const valueLabel = fundraiser ? 'Amount Raised' : 'Net Asset Value';
 
   return (
-    <Descriptions title="Staking information" layout="vertical" size="small" className="mb-3" bordered column={4}>
+    <Descriptions layout="vertical" size="small" className="mb-3" bordered column={4}>
       <Descriptions.Item label={valueLabel}>{formatNumber(value)} USD</Descriptions.Item>
       <Descriptions.Item label="Current SWM Price">1 SWM = {swmPrice} USD</Descriptions.Item>
       <Descriptions.Item label="SWM fee">

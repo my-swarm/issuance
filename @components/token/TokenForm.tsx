@@ -1,11 +1,11 @@
 import React, { ReactElement, useState } from 'react';
-import { Form, Input, InputNumber, Button, Checkbox, Space, Radio } from 'antd';
+import { Form, Input, InputNumber, Button, Checkbox, Space, Row, Col } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Store } from 'rc-field-form/lib/interface';
 
 import { LocalToken } from '@lib';
 import { tokenFormRules as rules } from './tokenFormRules';
-import { Help, HelpLabel, AssetFormStub, TokenMetaStub } from '..';
+import { HelpLabel, AssetFormStub, TokenMetaStub, Fieldset } from '..';
 import { devDefaultToken, isDev } from '@app';
 
 interface TokenFormProps {
@@ -14,7 +14,7 @@ interface TokenFormProps {
   formData?: LocalToken;
 }
 
-const defaultToken = isDev ? devDefaultToken : undefined;
+const defaultToken = isDev ? devDefaultToken : ({ decimals: 18 } as LocalToken);
 
 export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: TokenFormProps): ReactElement {
   const [allowUnlimitedSupply, setallowUnlimitedSupply] = useState<boolean>(formData?.allowUnlimitedSupply || false);
@@ -35,80 +35,82 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
 
   return (
     <Form form={form} onFinish={handleSubmit} onReset={handleCancel} layout="vertical" initialValues={formData}>
-      <h3>Token basics</h3>
-      <Form.Item name="name" label="Token name" rules={rules.name}>
-        <Input placeholder="Your token name" />
-      </Form.Item>
-      <Form.Item name="symbol" label="Symbol" rules={rules.symbol} normalize={(x) => x.toUpperCase()}>
-        <Input placeholder="XXX" />
-      </Form.Item>
-      <Form.Item name="decimals" label="Decimals" rules={rules.decimals}>
-        <InputNumber min={0} max={36} placeholder="18" />
-      </Form.Item>
-      <TokenMetaStub />
-
-      <h3>Token supply</h3>
-      <p>
-        Set the maximum possible number of tokens that can ever be minted. The actual initial supply is decided when you
-        mint your tokens later.
-      </p>
-      <Space size="large">
-        <Form.Item
-          name="totalSupply"
-          rules={[
-            {
-              required: !allowUnlimitedSupply,
-              message: 'Enter maximum supply or check unlimited',
-            },
-          ]}
-        >
-          <InputNumber disabled={allowUnlimitedSupply} />
+      <Fieldset legend="Token basics">
+        <Form.Item name="name" label="Token name" rules={rules.name}>
+          <Input placeholder="Your token name" />
         </Form.Item>
-        <Form.Item name="allowUnlimitedSupply" valuePropName="checked">
-          <Checkbox onChange={handleToggleallowUnlimitedSupply}>Unlimited total supply</Checkbox>
-        </Form.Item>
-      </Space>
+        <Row gutter={16}>
+          <Col lg={12}>
+            <Form.Item name="symbol" label="Symbol" rules={rules.symbol} normalize={(x) => x.toUpperCase()}>
+              <Input placeholder="XXX" />
+            </Form.Item>
+          </Col>
+          <Col lg={12}>
+            <Form.Item name="decimals" label="Decimals (keep 18 if not sure)" rules={rules.decimals}>
+              <InputNumber min={0} max={36} placeholder="18" style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <TokenMetaStub />
+      </Fieldset>
 
-      <h3>Tranfer restrictions</h3>
-      <div style={{ marginBottom: '1rem' }}>
-        <Space>
-          Select if you want to be able to restrict token transfers.
-          <Help name="transferRestrictions" />
+      <Fieldset legend="Token supply">
+        <p>
+          Set the maximum possible number of tokens that can ever be minted. The actual initial supply is decided when
+          you mint your tokens later.
+        </p>
+        <Space size="large">
+          <Form.Item
+            name="totalSupply"
+            rules={[
+              {
+                required: !allowUnlimitedSupply,
+                message: 'Enter maximum supply or check unlimited',
+              },
+            ]}
+          >
+            <InputNumber disabled={allowUnlimitedSupply} />
+          </Form.Item>
+          <Form.Item name="allowUnlimitedSupply" valuePropName="checked">
+            <Checkbox onChange={handleToggleallowUnlimitedSupply}>Unlimited total supply</Checkbox>
+          </Form.Item>
         </Space>
-      </div>
+      </Fieldset>
 
-      <h3>Token features</h3>
-      <Form.Item>
-        <Form.Item name="allowTransferRules" valuePropName="checked" className="no-margin">
-          <Checkbox>
-            <HelpLabel name="allowTransferRules" />
-          </Checkbox>
+      <Fieldset legend="Token features">
+        <Form.Item>
+          <Form.Item name="allowTransferRules" valuePropName="checked" className="no-margin">
+            <Checkbox>
+              <HelpLabel name="allowTransferRules" />
+            </Checkbox>
+          </Form.Item>
+          <Form.Item name="allowAccountFreeze" valuePropName="checked" className="no-margin">
+            <Checkbox>
+              <HelpLabel name="allowAccountFreeze" />
+            </Checkbox>
+          </Form.Item>
+          <Form.Item name="allowContractFreeze" valuePropName="checked" className="no-margin">
+            <Checkbox>
+              <HelpLabel name="allowContractFreeze" />
+            </Checkbox>
+          </Form.Item>
+          <Form.Item name="allowForceTransfer" valuePropName="checked" className="no-margin">
+            <Checkbox>
+              <HelpLabel name="allowForceTransfer" />
+            </Checkbox>
+          </Form.Item>
+          <Form.Item name="allowBurn" valuePropName="checked" className="no-margin">
+            <Checkbox>
+              <HelpLabel name="allowBurn" />
+            </Checkbox>
+          </Form.Item>
         </Form.Item>
-        <Form.Item name="allowAccountFreeze" valuePropName="checked" className="no-margin">
-          <Checkbox>
-            <HelpLabel name="allowAccountFreeze" />
-          </Checkbox>
-        </Form.Item>
-        <Form.Item name="allowContractFreeze" valuePropName="checked" className="no-margin">
-          <Checkbox>
-            <HelpLabel name="allowContractFreeze" />
-          </Checkbox>
-        </Form.Item>
-        <Form.Item name="allowForceTransfer" valuePropName="checked" className="no-margin">
-          <Checkbox>
-            <HelpLabel name="allowForceTransfer" />
-          </Checkbox>
-        </Form.Item>
-        <Form.Item name="allowBurn" valuePropName="checked" className="no-margin">
-          <Checkbox>
-            <HelpLabel name="allowBurn" />
-          </Checkbox>
-        </Form.Item>
-      </Form.Item>
+      </Fieldset>
 
-      <h3>Asset details</h3>
-      <p>Define your asset, it&apos;s value and other information in detail.</p>
-      <AssetFormStub />
+      <Fieldset legend="Asset details">
+        <p>Define your asset, it&apos;s value and other information in detail.</p>
+        <AssetFormStub />
+      </Fieldset>
 
       <Form.Item>
         <Space>

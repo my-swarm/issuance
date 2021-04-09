@@ -20,3 +20,4 @@ export * from './WrapWhen';
 export * from './PoweredBySwarm';
 export * from './SideBox';
 export * from './TransferDirection';
+export * from './Fieldset';

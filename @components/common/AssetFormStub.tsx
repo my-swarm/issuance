@@ -1,15 +1,16 @@
 import React, { ReactElement } from 'react';
 import { Form, Input, InputNumber } from 'antd';
 import { HelpLabel, MultipleFilesUpload, SingleFileUpload } from '..';
+import { tokenFormRules as rules } from '../token/tokenFormRules';
 
 export function AssetFormStub(): ReactElement {
   return (
     <>
-      <Form.Item name="assetName" label="Asset Name">
+      <Form.Item name="assetName" label="Asset Name" rules={rules.assetName}>
         <Input />
       </Form.Item>
 
-      <Form.Item name="nav" label={<HelpLabel name="nav" />}>
+      <Form.Item name="nav" label={<HelpLabel name="nav" />} rules={rules.nav}>
         <InputNumber min={1} />
       </Form.Item>
 

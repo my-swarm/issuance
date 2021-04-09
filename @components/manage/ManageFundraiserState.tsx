@@ -38,10 +38,11 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
       fundraiser.token.address,
       null, // unlimited
       () => {
-        checkAllowance('registry', swmAddress, fee, () => {
+        checkAllowance('minter', swmAddress, fee, () => {
           dispatchTransaction({
-            method: 'fundraiser.mint',
-            description: 'Staking and minting...',
+            method: 'fundraiser.concludeFundraise',
+            args: [true],
+            description: 'Finishing fundraiser and minting tokens...',
             onSuccess: () => {
               reset();
             },

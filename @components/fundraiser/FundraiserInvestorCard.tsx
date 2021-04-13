@@ -1,11 +1,12 @@
 import React, { ReactElement } from 'react';
-import { Card, Col, Typography, Row, Modal } from 'antd';
-import { FundraiserWithTokenFragment } from '@graphql';
+import { Card, Col, Modal, Row, Typography } from 'antd';
+import { FundraiserStatus, FundraiserWithTokenFragment } from '@graphql';
 import { FundraiserCountdown } from './FundraiserCountdown';
-import { Address, CardAction, FundraiserStatusChart, ImagePreview, PoweredBySwarm } from '..';
+import { CardAction, FundraiserStatusChart, ImagePreview, PoweredBySwarm } from '..';
 import { useEthers, useKya } from '@app';
 import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined, LoadingOutlined } from '@lib/icons';
 import { OnlineToken } from '@lib';
+import { BigNumber } from '@ethersproject/bignumber';
 
 const { Text } = Typography;
 
@@ -53,12 +54,17 @@ export function FundraiserInvestorCard({
     }
   };
 
+  const allowContribute =
+    fundraiser.status === FundraiserStatus.Running &&
+    BigNumber.from(fundraiser.amountQualified).lt(BigNumber.from(fundraiser.hardCap));
   const extra = embed ? <PoweredBySwarm /> : null;
   const actions = [
     <CardAction onClick={handleTokenDetails} icon={<AppstoreOutlined />} title="Token details" key={1} />,
     <CardAction onClick={handleFundraiserDetails} icon={<LineChartOutlined />} title="Fundraiser details" key={2} />,
-    <CardAction onClick={handleContribute} icon={<DollarCircleOutlined />} title="Contribute" key={3} />,
   ];
+  if (allowContribute) {
+    actions.push(<CardAction onClick={handleContribute} icon={<DollarCircleOutlined />} title="Contribute" key={3} />);
+  }
 
   return (
     <Card

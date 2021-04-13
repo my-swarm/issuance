@@ -24,6 +24,8 @@ export type Affiliate = {
   id: Scalars['ID'];
   address: Scalars['Bytes'];
   referral: Scalars['String'];
+  amount: Scalars['BigInt'];
+  amountClaimed: Scalars['BigInt'];
   percentage: Scalars['BigInt'];
   affiliateManager: AffiliateManager;
   fundraiser: Fundraiser;
@@ -58,6 +60,22 @@ export type Affiliate_Filter = {
   referral_not_starts_with?: Maybe<Scalars['String']>;
   referral_ends_with?: Maybe<Scalars['String']>;
   referral_not_ends_with?: Maybe<Scalars['String']>;
+  amount?: Maybe<Scalars['BigInt']>;
+  amount_not?: Maybe<Scalars['BigInt']>;
+  amount_gt?: Maybe<Scalars['BigInt']>;
+  amount_lt?: Maybe<Scalars['BigInt']>;
+  amount_gte?: Maybe<Scalars['BigInt']>;
+  amount_lte?: Maybe<Scalars['BigInt']>;
+  amount_in?: Maybe<Array<Scalars['BigInt']>>;
+  amount_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  amountClaimed?: Maybe<Scalars['BigInt']>;
+  amountClaimed_not?: Maybe<Scalars['BigInt']>;
+  amountClaimed_gt?: Maybe<Scalars['BigInt']>;
+  amountClaimed_lt?: Maybe<Scalars['BigInt']>;
+  amountClaimed_gte?: Maybe<Scalars['BigInt']>;
+  amountClaimed_lte?: Maybe<Scalars['BigInt']>;
+  amountClaimed_in?: Maybe<Array<Scalars['BigInt']>>;
+  amountClaimed_not_in?: Maybe<Array<Scalars['BigInt']>>;
   percentage?: Maybe<Scalars['BigInt']>;
   percentage_not?: Maybe<Scalars['BigInt']>;
   percentage_gt?: Maybe<Scalars['BigInt']>;
@@ -100,6 +118,8 @@ export enum Affiliate_OrderBy {
   Id = 'id',
   Address = 'address',
   Referral = 'referral',
+  Amount = 'amount',
+  AmountClaimed = 'amountClaimed',
   Percentage = 'percentage',
   AffiliateManager = 'affiliateManager',
   Fundraiser = 'fundraiser'
@@ -2357,6 +2377,13 @@ export type ContributionsQuery = (
       { __typename?: 'Fundraiser' }
       & FundraiserWithTokenFragment
     ) }
+  )>, affiliates: Array<(
+    { __typename?: 'Affiliate' }
+    & Pick<Affiliate, 'amount' | 'amountClaimed'>
+    & { fundraiser: (
+      { __typename?: 'Fundraiser' }
+      & Pick<Fundraiser, 'id'>
+    ) }
   )> }
 );
 
@@ -3035,6 +3062,13 @@ export const ContributionsDocument = gql`
     status
     fundraiser {
       ...FundraiserWithToken
+    }
+  }
+  affiliates(where: {address: $address}) {
+    amount
+    amountClaimed
+    fundraiser {
+      id
     }
   }
 }

@@ -8,6 +8,8 @@ type Affiliate {
   id: ID!
   address: Bytes!
   referral: String!
+  amount: BigInt!
+  amountClaimed: BigInt!
   percentage: BigInt!
   affiliateManager: AffiliateManager!
   fundraiser: Fundraiser!
@@ -42,6 +44,22 @@ input Affiliate_filter {
   referral_not_starts_with: String
   referral_ends_with: String
   referral_not_ends_with: String
+  amount: BigInt
+  amount_not: BigInt
+  amount_gt: BigInt
+  amount_lt: BigInt
+  amount_gte: BigInt
+  amount_lte: BigInt
+  amount_in: [BigInt!]
+  amount_not_in: [BigInt!]
+  amountClaimed: BigInt
+  amountClaimed_not: BigInt
+  amountClaimed_gt: BigInt
+  amountClaimed_lt: BigInt
+  amountClaimed_gte: BigInt
+  amountClaimed_lte: BigInt
+  amountClaimed_in: [BigInt!]
+  amountClaimed_not_in: [BigInt!]
   percentage: BigInt
   percentage_not: BigInt
   percentage_gt: BigInt
@@ -84,6 +102,8 @@ enum Affiliate_orderBy {
   id
   address
   referral
+  amount
+  amountClaimed
   percentage
   affiliateManager
   fundraiser

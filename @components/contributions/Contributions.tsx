@@ -18,6 +18,8 @@ interface Record {
   contributedStr: string;
   tokens: BigNumber;
   tokensStr: string;
+  referrals: BigNumber;
+  referralsStr: string;
 }
 
 export function Contributions() {
@@ -34,6 +36,7 @@ export function Contributions() {
 
   if (loading) return <Loading />;
   const contributions = data?.contributors || [];
+  const affiliates = data?.affiliates || [];
 
   const handleClaim = (address: string) => {
     console.log('claiming', address);
@@ -74,6 +77,11 @@ export function Contributions() {
           );
         }
       },
+    },
+    {
+      title: 'Referrals',
+      key: 'referralsStr',
+      align: 'right' as AlignType,
     },
     {
       title: 'Action',
@@ -120,6 +128,10 @@ export function Contributions() {
     const { baseCurrency, token } = fundraiser;
     const contributed = contributor.amount;
     const tokens = getClaimableAmount(fundraiser, contributed).sub(contributor.amountClaimed);
+    const referral = affiliates.find((aff) => aff.fundraiser.id === fundraiser.id);
+    const referrals = referral
+      ? BigNumber.from(referral.amount).sub(BigNumber.from(referral.amountClaimed))
+      : BigNumber.from(0);
     return {
       label: (
         <Space>
@@ -132,8 +144,12 @@ export function Contributions() {
       status: fundraiser.status,
       contributed,
       tokens,
-      contributedStr: formatNumber(formatUnits(BigNumber.from(contributed), baseCurrency.decimals), 4),
-      tokensStr: formatNumber(formatUnits(BigNumber.from(tokens), token.decimals), 4),
+      referrals,
+      contributedStr:
+        formatNumber(formatUnits(BigNumber.from(contributed), baseCurrency.decimals), 4) + ' ' + baseCurrency.symbol,
+      tokensStr: formatNumber(formatUnits(BigNumber.from(tokens), token.decimals), 4) + ' ' + token.symbol,
+      referralsStr:
+        formatNumber(formatUnits(BigNumber.from(referrals), baseCurrency.decimals), 4) + ' ' + baseCurrency.symbol,
     };
   });
 

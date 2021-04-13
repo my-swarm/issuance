@@ -14,10 +14,17 @@ fragment ContributedFundraiser on Fundraiser {
 query Contributions($address: Bytes) {
   contributors(where: { address: $address }) {
     amount
-    amountClaimed,
+    amountClaimed
     status
     fundraiser {
       ...FundraiserWithToken
+    }
+  }
+  affiliates(where: { address: $address }) {
+    amount
+    amountClaimed
+    fundraiser {
+      id
     }
   }
 }

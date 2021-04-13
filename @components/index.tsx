@@ -8,6 +8,7 @@ export * from './misc';
 export * from './table';
 export * from './manage';
 export * from './wallet';
+export * from './contributions';
 export * from './common';
 export * from './dashboard';
 export * from './invest';

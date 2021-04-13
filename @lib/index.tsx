@@ -6,6 +6,7 @@ export * from './dateUtils';
 export * from './stringUtils';
 export * from './numberUtils';
 export * from './errors';
+export * from './fundraiser';
 export * from './ContractProxy';
 export * from './fee';
 export * from './accountList';

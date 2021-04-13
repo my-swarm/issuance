@@ -6,3 +6,4 @@ export * from './FundraiserStatusChart';
 export * from './FundraiserInfoCommon';
 export * from './FundraiserInfoBaseCurrency';
 export * from './FundraiserCountdown';
+export * from './FundraiserStatusTag';

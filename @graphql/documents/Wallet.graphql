@@ -4,12 +4,6 @@ query Wallet($address: Bytes) {
     ...TokenHolder
     token {
       ...TokenInfo
-      transfersFrom: transfers(where: { fromAddress: $address }) {
-        ...Transfer
-      }
-      transfersTo: transfers(where: { toAddress: $address }) {
-        ...Transfer
-      }
       whitelist(where: { address: $address }) {
         address
       },

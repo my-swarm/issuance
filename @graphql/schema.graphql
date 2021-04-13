@@ -208,6 +208,7 @@ type Contributor {
   status: ContributorStatus!
   address: Bytes!
   amount: BigInt!
+  amountClaimed: BigInt!
   contributions(skip: Int = 0, first: Int = 100, orderBy: Contribution_orderBy, orderDirection: OrderDirection, where: Contribution_filter): [Contribution!]
 }
 
@@ -250,6 +251,14 @@ input Contributor_filter {
   amount_lte: BigInt
   amount_in: [BigInt!]
   amount_not_in: [BigInt!]
+  amountClaimed: BigInt
+  amountClaimed_not: BigInt
+  amountClaimed_gt: BigInt
+  amountClaimed_lt: BigInt
+  amountClaimed_gte: BigInt
+  amountClaimed_lte: BigInt
+  amountClaimed_in: [BigInt!]
+  amountClaimed_not_in: [BigInt!]
 }
 
 enum Contributor_orderBy {
@@ -258,6 +267,7 @@ enum Contributor_orderBy {
   status
   address
   amount
+  amountClaimed
   contributions
 }
 
@@ -1766,6 +1776,7 @@ type Token {
   availableSupply: BigInt!
   fee: BigInt!
   nav: Int
+  navFeePaid: Int
   kyaUri: String
   isFrozen: Boolean!
   isFrozenBy: Bytes
@@ -1877,6 +1888,14 @@ input Token_filter {
   nav_lte: Int
   nav_in: [Int!]
   nav_not_in: [Int!]
+  navFeePaid: Int
+  navFeePaid_not: Int
+  navFeePaid_gt: Int
+  navFeePaid_lt: Int
+  navFeePaid_gte: Int
+  navFeePaid_lte: Int
+  navFeePaid_in: [Int!]
+  navFeePaid_not_in: [Int!]
   kyaUri: String
   kyaUri_not: String
   kyaUri_gt: String
@@ -1957,6 +1976,7 @@ enum Token_orderBy {
   availableSupply
   fee
   nav
+  navFeePaid
   kyaUri
   isFrozen
   isFrozenBy

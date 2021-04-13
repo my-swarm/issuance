@@ -1,5 +1,25 @@
 query WalletDetail($address: Bytes!, $token: ID!) {
   token(id: $token) {
+    holders(where: {address: $address}) {
+      ...TokenHolder
+    }
+    fundraisers {
+      ...Fundraiser
+      contributors(where: {address: $address}) {
+        ...Contributor
+      }
+    }
+    currentFundraiser {
+      contributors(where: {address: $address}) {
+        ...Contributor
+      }
+    }
+    transfersFrom: transfers(where: { fromAddress: $address }) {
+      ...Transfer
+    }
+    transfersTo: transfers(where: { toAddress: $address }) {
+      ...Transfer
+    }
     transferRequestsFrom: transferRequests(where: { fromAddress: $address, status_not: Approved }) {
       ...TransferRequest
     }

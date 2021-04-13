@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from './Icon';
+import { CoinIcon } from './CoinIcon';
 
 interface Props {
   token: {
@@ -13,7 +13,7 @@ export function TokenTitle({ token }: Props) {
 
   return (
     <span>
-      <Icon name={symbol.toLowerCase()} /> <span>{symbol}</span>
+      <CoinIcon name={symbol} /> <span>{symbol}</span>
     </span>
   );
 }

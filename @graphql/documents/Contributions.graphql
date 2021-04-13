@@ -1,0 +1,23 @@
+fragment ContributedFundraiser on Fundraiser {
+  token {
+    ...TokenInfo
+  }
+  status
+  supply
+  tokenPrice
+  amountQualified
+  baseCurrency {
+    decimals
+  }
+}
+
+query Contributions($address: Bytes) {
+  contributors(where: { address: $address }) {
+    amount
+    amountClaimed,
+    status
+    fundraiser {
+      ...FundraiserWithToken
+    }
+  }
+}

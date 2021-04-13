@@ -12,3 +12,4 @@ export * from './useAccountNotes';
 export * from './useKya';
 export * from './useFeeInfo';
 export * from './useSwmStake';
+export * from './useDetailAction';

@@ -7,7 +7,7 @@ export * from './FilePreview';
 export * from './ImagePreview';
 export * from './TransactionModal';
 export * from './SpendingApprovalModal';
-export * from './Icon';
+export * from './CoinIcon';
 export * from './Loading';
 export * from './AmountsTable';
 export * from './Countdown';

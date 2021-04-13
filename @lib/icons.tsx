@@ -23,6 +23,7 @@ export { default as LineChartOutlined } from '@ant-design/icons/lib/icons/LineCh
 export { default as LoadingOutlined } from '@ant-design/icons/lib/icons/LoadingOutlined';
 export { default as MailOutlined } from '@ant-design/icons/lib/icons/MailOutlined';
 export { default as QuestionCircleTwoTone } from '@ant-design/icons/lib/icons/QuestionCircleTwoTone';
+export { default as QuestionCircleOutlined } from '@ant-design/icons/lib/icons/QuestionCircleOutlined';
 export { default as ReloadOutlined } from '@ant-design/icons/lib/icons/ReloadOutlined';
 export { default as RightCircleTwoTone } from '@ant-design/icons/lib/icons/RightCircleTwoTone';
 export { default as RocketOutlined } from '@ant-design/icons/lib/icons/RocketOutlined';

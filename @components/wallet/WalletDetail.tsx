@@ -1,24 +1,44 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement, useEffect, useMemo } from 'react';
 import {
-  TokenHolderFragment,
   TokenInfoFragment,
   TransferFragment,
+  TransferRequestFragment,
   TransferRequestStatus,
   useWalletDetailLazyQuery,
 } from '@graphql';
-import { TransferForm, TransferHistory, TransferRequests } from '../common';
+import { Alert, Divider } from 'antd';
 import { useEthers } from '@app';
+import { TransferForm, TransferHistory, TransferRequests } from '../common';
+import { Loading } from '../utility';
 
 interface WalletDetailProps {
   token: TokenInfoFragment;
-  transfers: TransferFragment[];
-  holder: TokenHolderFragment;
   onReset: () => void;
 }
 
-export function WalletDetail({ token, transfers, holder, onReset }: WalletDetailProps): ReactElement {
+type TransferOrRequest = TransferFragment | TransferRequestFragment;
+
+function mergeRecords<T extends TransferOrRequest>(t1: T[], t2: T[]): T[] {
+  return [...t1, ...t2].sort((a, b) => b.createdAt - a.createdAt);
+}
+
+export function WalletDetail({ token, onReset }: WalletDetailProps): ReactElement {
   const [loadQuery, { data, loading }] = useWalletDetailLazyQuery();
   const { address } = useEthers();
+
+  const transfers = useMemo<TransferFragment[]>(() => {
+    if (!data?.token) return [];
+    const { transfersFrom, transfersTo } = data.token;
+    return mergeRecords(transfersFrom, transfersTo);
+  }, [data]);
+
+  const transferRequests = useMemo<TransferRequestFragment[]>(() => {
+    if (!data?.token) return [];
+    const { transferRequestsFrom, transferRequestsTo } = data.token;
+    return mergeRecords(transferRequestsFrom, transferRequestsTo);
+  }, [data]);
+
+  const holder = data?.token?.holders?.[0] || undefined;
 
   useEffect(() => {
     if (!address) return;
@@ -29,15 +49,18 @@ export function WalletDetail({ token, transfers, holder, onReset }: WalletDetail
     onReset();
   };
 
-  const transferRequests = [
-    ...(data?.token?.transferRequestsFrom || []),
-    ...(data?.token?.transferRequestsTo || []),
-  ].sort((a, b) => b.createdAt - a.createdAt);
+  if (loading) return <Loading />;
 
   return (
     <div>
       <h2>Transfer</h2>
-      <TransferForm token={token} onSuccess={handleTransfered} currentBalance={holder.balance} />
+      {holder ? (
+        <TransferForm token={token} onSuccess={handleTransfered} currentBalance={holder.balance} />
+      ) : (
+        <Alert type="warning" message="You don't own this token" />
+      )}
+
+      <Divider />
 
       {transferRequests.length > 0 && (
         <>

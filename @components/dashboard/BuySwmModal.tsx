@@ -37,7 +37,7 @@ export function BuySwmModal({ onClose }: BuySwmModalProps): ReactElement {
   const ethAddon = (
     <div className="addon">
       <span className="icon">
-        <img src="/images/ethereum.svg" alt="ETH symbol" />
+        <img src="/images/coins/ETH.svg" alt="ETH symbol" />
       </span>
       <strong>ETH</strong>
     </div>

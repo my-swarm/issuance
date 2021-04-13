@@ -224,6 +224,7 @@ export type Contributor = {
   status: ContributorStatus;
   address: Scalars['Bytes'];
   amount: Scalars['BigInt'];
+  amountClaimed: Scalars['BigInt'];
   contributions?: Maybe<Array<Contribution>>;
 };
 
@@ -275,6 +276,14 @@ export type Contributor_Filter = {
   amount_lte?: Maybe<Scalars['BigInt']>;
   amount_in?: Maybe<Array<Scalars['BigInt']>>;
   amount_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  amountClaimed?: Maybe<Scalars['BigInt']>;
+  amountClaimed_not?: Maybe<Scalars['BigInt']>;
+  amountClaimed_gt?: Maybe<Scalars['BigInt']>;
+  amountClaimed_lt?: Maybe<Scalars['BigInt']>;
+  amountClaimed_gte?: Maybe<Scalars['BigInt']>;
+  amountClaimed_lte?: Maybe<Scalars['BigInt']>;
+  amountClaimed_in?: Maybe<Array<Scalars['BigInt']>>;
+  amountClaimed_not_in?: Maybe<Array<Scalars['BigInt']>>;
 };
 
 export enum Contributor_OrderBy {
@@ -283,6 +292,7 @@ export enum Contributor_OrderBy {
   Status = 'status',
   Address = 'address',
   Amount = 'amount',
+  AmountClaimed = 'amountClaimed',
   Contributions = 'contributions'
 }
 
@@ -1636,6 +1646,7 @@ export type Token = {
   availableSupply: Scalars['BigInt'];
   fee: Scalars['BigInt'];
   nav?: Maybe<Scalars['Int']>;
+  navFeePaid?: Maybe<Scalars['Int']>;
   kyaUri?: Maybe<Scalars['String']>;
   isFrozen: Scalars['Boolean'];
   isFrozenBy?: Maybe<Scalars['Bytes']>;
@@ -1801,6 +1812,14 @@ export type Token_Filter = {
   nav_lte?: Maybe<Scalars['Int']>;
   nav_in?: Maybe<Array<Scalars['Int']>>;
   nav_not_in?: Maybe<Array<Scalars['Int']>>;
+  navFeePaid?: Maybe<Scalars['Int']>;
+  navFeePaid_not?: Maybe<Scalars['Int']>;
+  navFeePaid_gt?: Maybe<Scalars['Int']>;
+  navFeePaid_lt?: Maybe<Scalars['Int']>;
+  navFeePaid_gte?: Maybe<Scalars['Int']>;
+  navFeePaid_lte?: Maybe<Scalars['Int']>;
+  navFeePaid_in?: Maybe<Array<Scalars['Int']>>;
+  navFeePaid_not_in?: Maybe<Array<Scalars['Int']>>;
   kyaUri?: Maybe<Scalars['String']>;
   kyaUri_not?: Maybe<Scalars['String']>;
   kyaUri_gt?: Maybe<Scalars['String']>;
@@ -1881,6 +1900,7 @@ export enum Token_OrderBy {
   AvailableSupply = 'availableSupply',
   Fee = 'fee',
   Nav = 'nav',
+  NavFeePaid = 'navFeePaid',
   KyaUri = 'kyaUri',
   IsFrozen = 'isFrozen',
   IsFrozenBy = 'isFrozenBy',
@@ -2311,6 +2331,35 @@ export enum WhitelistedAccount_OrderBy {
   Token = 'token'
 }
 
+export type ContributedFundraiserFragment = (
+  { __typename?: 'Fundraiser' }
+  & Pick<Fundraiser, 'status' | 'supply' | 'tokenPrice' | 'amountQualified'>
+  & { token: (
+    { __typename?: 'Token' }
+    & TokenInfoFragment
+  ), baseCurrency: (
+    { __typename?: 'Erc20Token' }
+    & Pick<Erc20Token, 'decimals'>
+  ) }
+);
+
+export type ContributionsQueryVariables = Exact<{
+  address?: Maybe<Scalars['Bytes']>;
+}>;
+
+
+export type ContributionsQuery = (
+  { __typename?: 'Query' }
+  & { contributors: Array<(
+    { __typename?: 'Contributor' }
+    & Pick<Contributor, 'amount' | 'amountClaimed' | 'status'>
+    & { fundraiser: (
+      { __typename?: 'Fundraiser' }
+      & FundraiserWithTokenFragment
+    ) }
+  )> }
+);
+
 export type DistrubuteQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -2698,13 +2747,7 @@ export type WalletQuery = (
     { __typename?: 'TokenHolder' }
     & { token: (
       { __typename?: 'Token' }
-      & { transfersFrom: Array<(
-        { __typename?: 'Transfer' }
-        & TransferFragment
-      )>, transfersTo: Array<(
-        { __typename?: 'Transfer' }
-        & TransferFragment
-      )>, whitelist: Array<(
+      & { whitelist: Array<(
         { __typename?: 'WhitelistedAccount' }
         & Pick<WhitelistedAccount, 'address'>
       )>, greylist: Array<(
@@ -2727,7 +2770,29 @@ export type WalletDetailQuery = (
   { __typename?: 'Query' }
   & { token?: Maybe<(
     { __typename?: 'Token' }
-    & { transferRequestsFrom: Array<(
+    & { holders: Array<(
+      { __typename?: 'TokenHolder' }
+      & TokenHolderFragment
+    )>, fundraisers: Array<(
+      { __typename?: 'Fundraiser' }
+      & { contributors?: Maybe<Array<(
+        { __typename?: 'Contributor' }
+        & ContributorFragment
+      )>> }
+      & FundraiserFragment
+    )>, currentFundraiser?: Maybe<(
+      { __typename?: 'Fundraiser' }
+      & { contributors?: Maybe<Array<(
+        { __typename?: 'Contributor' }
+        & ContributorFragment
+      )>> }
+    )>, transfersFrom: Array<(
+      { __typename?: 'Transfer' }
+      & TransferFragment
+    )>, transfersTo: Array<(
+      { __typename?: 'Transfer' }
+      & TransferFragment
+    )>, transferRequestsFrom: Array<(
       { __typename?: 'TransferRequest' }
       & TransferRequestFragment
     )>, transferRequestsTo: Array<(
@@ -2753,6 +2818,39 @@ export type WhitelistGreylistQuery = (
   )> }
 );
 
+export const TokenInfoFragmentDoc = gql`
+    fragment TokenInfo on Token {
+  id
+  name
+  symbol
+  address
+  availableSupply
+  fee
+  decimals
+  supply
+  maxSupply
+  features {
+    forceTransfer
+    tokenFreeze
+    accountFreeze
+    accountBurn
+  }
+}
+    `;
+export const ContributedFundraiserFragmentDoc = gql`
+    fragment ContributedFundraiser on Fundraiser {
+  token {
+    ...TokenInfo
+  }
+  status
+  supply
+  tokenPrice
+  amountQualified
+  baseCurrency {
+    decimals
+  }
+}
+    ${TokenInfoFragmentDoc}`;
 export const AffiliateFragmentDoc = gql`
     fragment Affiliate on Affiliate {
   id
@@ -2801,25 +2899,6 @@ export const FundraiserBaseCurrencyFragmentDoc = gql`
     name
     symbol
     decimals
-  }
-}
-    `;
-export const TokenInfoFragmentDoc = gql`
-    fragment TokenInfo on Token {
-  id
-  name
-  symbol
-  address
-  availableSupply
-  fee
-  decimals
-  supply
-  maxSupply
-  features {
-    forceTransfer
-    tokenFreeze
-    accountFreeze
-    accountBurn
   }
 }
     `;
@@ -2948,6 +3027,44 @@ export const TransferFragmentDoc = gql`
   value
 }
     `;
+export const ContributionsDocument = gql`
+    query Contributions($address: Bytes) {
+  contributors(where: {address: $address}) {
+    amount
+    amountClaimed
+    status
+    fundraiser {
+      ...FundraiserWithToken
+    }
+  }
+}
+    ${FundraiserWithTokenFragmentDoc}`;
+
+/**
+ * __useContributionsQuery__
+ *
+ * To run a query within a React component, call `useContributionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useContributionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useContributionsQuery({
+ *   variables: {
+ *      address: // value for 'address'
+ *   },
+ * });
+ */
+export function useContributionsQuery(baseOptions?: Apollo.QueryHookOptions<ContributionsQuery, ContributionsQueryVariables>) {
+        return Apollo.useQuery<ContributionsQuery, ContributionsQueryVariables>(ContributionsDocument, baseOptions);
+      }
+export function useContributionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ContributionsQuery, ContributionsQueryVariables>) {
+          return Apollo.useLazyQuery<ContributionsQuery, ContributionsQueryVariables>(ContributionsDocument, baseOptions);
+        }
+export type ContributionsQueryHookResult = ReturnType<typeof useContributionsQuery>;
+export type ContributionsLazyQueryHookResult = ReturnType<typeof useContributionsLazyQuery>;
+export type ContributionsQueryResult = Apollo.QueryResult<ContributionsQuery, ContributionsQueryVariables>;
 export const DistrubuteDocument = gql`
     query Distrubute($id: ID!) {
   token(id: $id) {
@@ -3501,12 +3618,6 @@ export const WalletDocument = gql`
     ...TokenHolder
     token {
       ...TokenInfo
-      transfersFrom: transfers(where: {fromAddress: $address}) {
-        ...Transfer
-      }
-      transfersTo: transfers(where: {toAddress: $address}) {
-        ...Transfer
-      }
       whitelist(where: {address: $address}) {
         address
       }
@@ -3517,8 +3628,7 @@ export const WalletDocument = gql`
   }
 }
     ${TokenHolderFragmentDoc}
-${TokenInfoFragmentDoc}
-${TransferFragmentDoc}`;
+${TokenInfoFragmentDoc}`;
 
 /**
  * __useWalletQuery__
@@ -3548,6 +3658,26 @@ export type WalletQueryResult = Apollo.QueryResult<WalletQuery, WalletQueryVaria
 export const WalletDetailDocument = gql`
     query WalletDetail($address: Bytes!, $token: ID!) {
   token(id: $token) {
+    holders(where: {address: $address}) {
+      ...TokenHolder
+    }
+    fundraisers {
+      ...Fundraiser
+      contributors(where: {address: $address}) {
+        ...Contributor
+      }
+    }
+    currentFundraiser {
+      contributors(where: {address: $address}) {
+        ...Contributor
+      }
+    }
+    transfersFrom: transfers(where: {fromAddress: $address}) {
+      ...Transfer
+    }
+    transfersTo: transfers(where: {toAddress: $address}) {
+      ...Transfer
+    }
     transferRequestsFrom: transferRequests(
       where: {fromAddress: $address, status_not: Approved}
     ) {
@@ -3560,7 +3690,11 @@ export const WalletDetailDocument = gql`
     }
   }
 }
-    ${TransferRequestFragmentDoc}`;
+    ${TokenHolderFragmentDoc}
+${FundraiserFragmentDoc}
+${ContributorFragmentDoc}
+${TransferFragmentDoc}
+${TransferRequestFragmentDoc}`;
 
 /**
  * __useWalletDetailQuery__

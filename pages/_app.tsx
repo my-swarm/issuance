@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
   const router = useRouter();
   const [apolloClient, setApolloClient] = useState<ApolloClient<NormalizedCacheObject>>();
-  const [devAccountId, setDevAccountId] = useState<number>(2);
+  const [devAccountId, setDevAccountId] = useState<number>(1);
 
   useEffect(() => {
     window.onerror = function (msg, url, line, col, error) {

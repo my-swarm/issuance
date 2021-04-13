@@ -2,25 +2,29 @@ import React, { ReactElement, useState } from 'react';
 import { DownOutlined, SearchOutlined } from '@lib/icons';
 import { Button, Checkbox, Dropdown, Menu, Table } from 'antd';
 
-import { AffiliateFragment } from '@graphql';
+import { AffiliateFragment, Erc20Fragment } from '@graphql';
 import { useAccountNotes, useAppState, useDispatch, useGraphql } from '@app';
 import { Address, AffiliateEditModal, EditableCell, FilterDropdown } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
 import { formatUnits, parseUnits, strcmp } from '@lib';
+import { BigNumber } from '@ethersproject/bignumber';
 
 interface TableRecord {
   address: string;
   referral: string;
   percentage: number;
+  amount: string;
+  amountClaimed: string;
   name: string;
   note: string;
 }
 
 interface ManageAffiliatesProps {
   affiliates: AffiliateFragment[];
+  baseCurrency: Erc20Fragment;
 }
 
-export function ManageAffiliates({ affiliates }: ManageAffiliatesProps): ReactElement {
+export function ManageAffiliates({ affiliates, baseCurrency }: ManageAffiliatesProps): ReactElement {
   const { reset } = useGraphql();
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [affiliate, setAffiliate] = useState<AffiliateFragment>();
@@ -99,6 +103,12 @@ export function ManageAffiliates({ affiliates }: ManageAffiliatesProps): ReactEl
       key: 'percentage',
       align: 'right',
       sorter: (a, b) => a.percentage - b.percentage,
+    },
+    {
+      title: 'Amount',
+      key: 'amount',
+      align: 'right',
+      render: (amount) => formatUnits(BigNumber.from(amount), baseCurrency.decimals),
     },
     {
       title: 'Name',

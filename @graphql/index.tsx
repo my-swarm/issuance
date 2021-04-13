@@ -2407,6 +2407,11 @@ export type DistrubuteQuery = (
   )> }
 );
 
+export type Erc20Fragment = (
+  { __typename?: 'Erc20Token' }
+  & Pick<Erc20Token, 'address' | 'name' | 'symbol' | 'decimals'>
+);
+
 export type ContributorFragment = (
   { __typename?: 'Contributor' }
   & Pick<Contributor, 'address' | 'status' | 'amount'>
@@ -2418,7 +2423,7 @@ export type ContributorFragment = (
 
 export type AffiliateFragment = (
   { __typename?: 'Affiliate' }
-  & Pick<Affiliate, 'id' | 'address' | 'referral' | 'percentage'>
+  & Pick<Affiliate, 'id' | 'address' | 'referral' | 'percentage' | 'amount' | 'amountClaimed'>
 );
 
 export type FundraiserContributorsFragment = (
@@ -2458,7 +2463,7 @@ export type FundraiserBaseCurrencyFragment = (
   { __typename?: 'Fundraiser' }
   & { baseCurrency: (
     { __typename?: 'Erc20Token' }
-    & Pick<Erc20Token, 'address' | 'name' | 'symbol' | 'decimals'>
+    & Erc20Fragment
   ) }
 );
 
@@ -2884,6 +2889,8 @@ export const AffiliateFragmentDoc = gql`
   address
   referral
   percentage
+  amount
+  amountClaimed
 }
     `;
 export const FundraiserAffiliatesFragmentDoc = gql`
@@ -2919,16 +2926,21 @@ export const FundraiserInfoFragmentDoc = gql`
   minter
 }
     `;
+export const Erc20FragmentDoc = gql`
+    fragment Erc20 on Erc20Token {
+  address
+  name
+  symbol
+  decimals
+}
+    `;
 export const FundraiserBaseCurrencyFragmentDoc = gql`
     fragment FundraiserBaseCurrency on Fundraiser {
   baseCurrency {
-    address
-    name
-    symbol
-    decimals
+    ...Erc20
   }
 }
-    `;
+    ${Erc20FragmentDoc}`;
 export const FundraiserTokenFragmentDoc = gql`
     fragment FundraiserToken on Fundraiser {
   token {

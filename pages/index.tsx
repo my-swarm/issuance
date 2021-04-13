@@ -1,7 +1,14 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { BuySwmModal, DefaultLayout, InvestFundraisers, SwmPriceChart, SwmStakeChart } from '@components';
-import { Button, Card, Col, Divider, Row, Space } from 'antd';
+import {
+  BuySwmModal,
+  DefaultLayout,
+  InvestFundraisers,
+  SwmPriceChart,
+  SwmStakeChart,
+  UniswapWidget,
+} from '@components';
+import { Card, Col, Divider, Row, Space } from 'antd';
 import { PriceData } from '@lib';
 import { SWM_STAKE_OLD_REGISTRY, useContract } from '@app';
 
@@ -9,16 +16,11 @@ const cgUrlStats = 'https://api.coingecko.com/api/v3/coins/swarm';
 const cgUrlDaily =
   'https://api.coingecko.com/api/v3/coins/swarm/market_chart?vs_currency=usd&days=14&localization=false&interval=daily';
 
-interface IndexProps {
-  title?: string;
-}
-
-export default function Index({ title }: IndexProps): ReactElement {
-  const colLayout = { xs: 24, lg: 12, xxl: 6 };
+export default function Index(): ReactElement {
+  const colLayout = { xs: 24, lg: 12 };
   const [buyingSwm, setBuyingSwm] = useState<boolean>(false);
   const [priceData, setPriceData] = useState<PriceData>();
   const [swmCircSupply, setSwmCircSupply] = useState<number>();
-  const { swm } = useContract();
 
   const cgRequest = (url: string, callback: (data: any) => void) => {
     fetch(url)
@@ -28,12 +30,6 @@ export default function Index({ title }: IndexProps): ReactElement {
         console.error('CoinGecko error');
         console.error(err.message);
       });
-  };
-
-  const mnRequest = (url: string, callback: (data: any) => void) => {
-    fetch(url)
-      .then((response) => response.json())
-      .then(callback);
   };
 
   useEffect(() => {
@@ -50,10 +46,11 @@ export default function Index({ title }: IndexProps): ReactElement {
 
   return (
     <DefaultLayout title="Swarm Dashboard">
-      <Row gutter={[24, 24]} className="dashboard">
+      <Row gutter={24} className="dashboard">
         <Col {...colLayout}>
           <Card
             title="SWARM token"
+            style={{ marginBottom: '24px' }}
             extra={
               <a
                 href="https://etherscan.io/token/0x3505f494c3f0fed0b594e01fa41dd3967645ca39"
@@ -66,8 +63,6 @@ export default function Index({ title }: IndexProps): ReactElement {
           >
             <SwmStakeChart total={swmCircSupply} issuerStake={SWM_STAKE_OLD_REGISTRY} />
           </Card>
-        </Col>
-        <Col {...colLayout}>
           <Card
             title="SWM price (2 weeks)"
             extra={
@@ -80,51 +75,7 @@ export default function Index({ title }: IndexProps): ReactElement {
           </Card>
         </Col>
         <Col {...colLayout}>
-          <Card
-            title="Liquidity"
-            extra={
-              <a
-                href="https://info.uniswap.org/pair/0xe0b1433E0174b47E8879EE387f1069a0dBf94137"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                more
-              </a>
-            }
-          >
-            content tbd
-          </Card>
-        </Col>
-        <Col {...colLayout}>
-          <Card title="Buy SWM">
-            <Space direction="vertical" style={{ width: '100%' }}>
-              <Button
-                className="button-with-image"
-                icon={<img src="/images/balancer.svg" alt="Balancer icon" />}
-                size="large"
-                block
-                href={`https://balancer.exchange/#/swap?assetIn=ETH&assetOut=${swm?.address}`}
-                target="_blank"
-              >
-                Balancer
-              </Button>
-              <Button
-                className="button-with-image"
-                icon={<img src="/images/uniswap.svg" alt="Uniswap icon" />}
-                size="large"
-                block
-                href={`https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=${swm?.address}`}
-                target="_blank"
-              >
-                Uniswap
-              </Button>
-            </Space>
-
-            <Divider />
-            <Button size="large" type="primary" block onClick={() => setBuyingSwm(true)}>
-              Quick buy now
-            </Button>
-          </Card>
+          <UniswapWidget />
         </Col>
       </Row>
       <Divider />

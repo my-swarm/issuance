@@ -93,6 +93,9 @@ export const devDefaultFundraiser: LocalFundraiser = {
   hardCap: 1000000,
   startNow: true,
   networks: undefined,
+  maxContributors: 0,
+  minInvestmentAmount: 0,
+  maxInvestmentAmount: 0,
 };
 
 export const devEthereumAccounts = [

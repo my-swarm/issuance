@@ -1,78 +1,61 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useState, useEffect } from 'react';
 import { useAppState, useContract, useDispatch, useEthers, useGraphql, useSwmAllowance, useSwmBalance } from '@app';
 import { Button, Checkbox, Col, Divider, Form, InputNumber, Row, Statistic, Space } from 'antd';
-import { formatInt, parseUnits, formatUnits, SWM_TOKEN_DECIMALS } from '@lib';
+import { formatInt, parseUnits, formatUnits, SWM_TOKEN_DECIMALS, getUnitsAsNumber } from '@lib';
 import { useTokenQuery } from '@graphql';
 import { Help, Loading } from '@components';
 import { BigNumber, BigNumberish } from 'ethers';
 
 export function ManageSupply(): ReactElement {
   const { reset } = useGraphql();
-  const { address } = useEthers();
   const [{ onlineToken }] = useAppState();
   const [showExactValues, setShowExactValues] = useState<boolean>(false);
-  const [swmAllowance, reloadSwmAllowance] = useSwmAllowance();
   const [swmBalance, reloadSwmBalance] = useSwmBalance();
 
-  const [stakeRequired, setStakeRequired] = useState<number>();
-  const [stakeReturned, setStakeReturned] = useState<number>();
-  const { src20, registry } = useContract();
+  const [fee, setFee] = useState<BigNumber>(BigNumber.from(0));
+  const { src20, minter, swm } = useContract();
   const [increaseForm] = Form.useForm();
   const [decreaseForm] = Form.useForm();
-  const { dispatchTransaction } = useDispatch();
+  const { dispatchTransaction, checkAllowance } = useDispatch();
+
+  useEffect(() => {
+    if (!minter || !src20) return;
+    minter.getAdditionalFee(src20.address).then(setFee);
+  }, [minter, src20]);
 
   const { loading, data } = useTokenQuery({
     variables: { id: onlineToken.id },
   });
+
   if (loading) return <Loading />;
   const { token } = data;
 
-  const handleSupplyChange = (newSupply: number | string | undefined, returned = false) => {
-    const method = returned ? setStakeReturned : setStakeRequired;
-
-    if (!newSupply) {
-      method(0);
-      return;
-    }
-
-    registry
-      .computeStake(src20.address, parseUnits(newSupply.toString(), token.decimals))
-      .then((x) => method(parseFloat(formatUnits(x, SWM_TOKEN_DECIMALS))));
-  };
-
-  const handleIncreaseSupply = async () => {
+  const handleMint = async () => {
     const additionalSupply = parseUnits(increaseForm.getFieldValue('supply_add'), token.decimals);
-    const computeStake = await registry.computeStake(src20.address, additionalSupply);
+    const fee = await minter.getAdditionalFee(src20.address);
 
-    dispatchTransaction({
-      method: 'swm.approve',
-      args: [registry.address, computeStake.sub(swmAllowance.raw)],
-      description: 'Approving SWM spending. Confirm transaction to be albe to stake your SWM',
-      onSuccess: () => {
-        dispatchTransaction({
-          method: 'registry.increaseSupply',
-          args: [src20.address, address, additionalSupply],
-          description: 'Increasing token supply and staking your SWM tokens',
-          onSuccess: () => {
-            reset();
-            reloadSwmAllowance();
-            reloadSwmBalance();
-          },
-        });
-      },
+    checkAllowance('minter', swm.address, fee, () => {
+      dispatchTransaction({
+        method: 'src20.mint',
+        args: [additionalSupply],
+        description: 'Minting token supply',
+        onSuccess: () => {
+          reset();
+          reloadSwmBalance();
+        },
+      });
     });
   };
 
-  const handleDecreaseSupply = async () => {
+  const handleBurn = async () => {
     const supply = parseUnits(decreaseForm.getFieldValue('supply_sub'), token.decimals);
 
     dispatchTransaction({
-      method: 'registry.decreaseSupply',
-      args: [src20.address, address, supply],
-      description: 'Decreasing token supply and returning SWM tokens',
+      method: 'minter.burn',
+      args: [supply],
+      description: 'Burning token supply',
       onSuccess: () => {
         reset();
-        reloadSwmAllowance();
         reloadSwmBalance();
       },
     });
@@ -133,14 +116,14 @@ export function ManageSupply(): ReactElement {
       <Divider />
 
       <h3 className="mt-3">
-        Increase supply <Help name="increaseSupply" />
+        Mint (increase supply) <Help name="increaseSupply" />
       </h3>
-      <Form form={increaseForm} onFinish={handleIncreaseSupply} layout="inline" className="mb-3">
+      <Form form={increaseForm} onFinish={handleMint} layout="inline" className="mb-3">
         <Form.Item name="supply_add" label="Increase by">
-          <InputNumber min={0} onChange={(x) => handleSupplyChange(x, false)} formatter={formatInt} parser={parseInt} />
+          <InputNumber min={0} formatter={formatInt} parser={parseInt} />
         </Form.Item>
-        <Form.Item label="Stake required">
-          <InputNumber disabled value={stakeRequired} />
+        <Form.Item label="Additonal Fee (SWM)">
+          <InputNumber disabled value={getUnitsAsNumber(fee, SWM_TOKEN_DECIMALS)} />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
@@ -150,14 +133,11 @@ export function ManageSupply(): ReactElement {
       </Form>
 
       <h3>
-        Decrease supply <Help name="decreaseSupply" />
+        Burn (decrease supply) <Help name="decreaseSupply" />
       </h3>
-      <Form form={decreaseForm} onFinish={handleDecreaseSupply} layout="inline">
+      <Form form={decreaseForm} onFinish={handleBurn} layout="inline">
         <Form.Item name="supply_sub" label="Decrease by">
-          <InputNumber min={0} onChange={(x) => handleSupplyChange(x, true)} formatter={formatInt} parser={parseInt} />
-        </Form.Item>
-        <Form.Item label="Stake returned">
-          <InputNumber disabled value={stakeReturned} />
+          <InputNumber min={0} formatter={formatInt} parser={parseInt} />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">

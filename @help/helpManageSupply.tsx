@@ -20,7 +20,7 @@ export const manageSupply = {
 };
 
 export const increaseSupply = {
-  title: 'Increase token supply',
+  title: 'Mint token (increase supply)',
   content: (
     <>
       <p>
@@ -29,26 +29,21 @@ export const increaseSupply = {
         representation depending on the token decimals, but most of the cases, it&apos;s very high)
       </p>
       <p>
-        Every time you increase the supply, you need to stake additional SWM. The stake amount is computed to keep the
-        same ratio of supply:stake.
-      </p>
-      <p>
-        Example: If you intially minted 10,000 tokens and staked 5,000 SWM, additinal minting of 2,000 tokens will
-        require 1,000 SWM stake (keeping the ratio of 2:1)
+        If your token&apos;s NAV was increaset prior additional mint, SWM fee is recalculated and the difference has to
+        be paid. It will be subtracted automatically during the mint.
       </p>
     </>
   ),
 };
 
 export const decreaseSupply = {
-  title: 'Decrease token supply',
+  title: 'Burn token (decrease supply)',
   content: (
     <>
       <p>
         As long as you have a non-zero available supply, you can decrease token supply and a proportion of your SWM
         stake will be returned to you.
       </p>
-      <p>The SWM amount returned keeps the initial stake &amp; mint ratio, same as when increasing the supply.</p>
     </>
   ),
 };

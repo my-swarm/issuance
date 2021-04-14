@@ -1,5 +1,5 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
-import { parseUnits as _parseUnits, formatUnits as _formatUnits } from '@ethersproject/units'
+import { parseUnits as _parseUnits, formatUnits as _formatUnits } from '@ethersproject/units';
 
 export function parseUnits(amount: string | number, decimals: number): BigNumber {
   if (!amount) return BigNumber.from(0);
@@ -27,7 +27,7 @@ export function formatNumber(n: number | string, decimals = 0): string {
 }
 
 export function formatInt(n) {
-  return n;
+  return n || 0;
 }
 
 export function parseInt(n) {

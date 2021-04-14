@@ -1,12 +1,11 @@
 import React, { ReactElement, useState } from 'react';
-import { LeftCircleTwoTone, LoadingOutlined, RightCircleTwoTone, SearchOutlined } from '@lib/icons';
+import { SearchOutlined } from '@lib/icons';
 
 import { TokenInfoFragment, TransferFragment } from '@graphql';
 import { renderAddress, tableColumns } from '../manage/listUtils';
-import { formatDatetime, sameAddress, strcmp, formatUnits } from '@lib';
+import { formatDatetime, formatUnits, sameAddress, strcmp } from '@lib';
 import { FilterDropdown, PaginatedTable, TransferDirection } from '@components';
 import { useAppState, useEthers } from '@app';
-import { Tooltip } from 'antd';
 
 interface TableRecord {
   from: string;

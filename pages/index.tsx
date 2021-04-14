@@ -10,7 +10,7 @@ import {
 } from '@components';
 import { Card, Col, Divider, Row, Space } from 'antd';
 import { PriceData } from '@lib';
-import { SWM_STAKE_OLD_REGISTRY, useContract } from '@app';
+import { SWM_STAKE_OLD_REGISTRY } from '@app';
 
 const cgUrlStats = 'https://api.coingecko.com/api/v3/coins/swarm';
 const cgUrlDaily =

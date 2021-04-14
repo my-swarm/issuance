@@ -1,10 +1,10 @@
 import React, { ReactElement, useMemo, useState } from 'react';
-import { Col, Drawer, Row } from 'antd';
+import { Drawer } from 'antd';
 import {
   FundraiserInvestorAction,
   FundraiserInvestorCard,
-  InvestFundraiserDetails,
   InvestContribute,
+  InvestFundraiserDetails,
   Loading,
   TokenInfo,
 } from '@components';

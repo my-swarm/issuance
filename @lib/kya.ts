@@ -1,4 +1,4 @@
-import { AppFile, LocalToken, api, LocalTokenKya } from '.';
+import { api, AppFile, LocalTokenKya } from '.';
 
 export type KyaFile = AppFile;
 

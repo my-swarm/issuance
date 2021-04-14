@@ -1,4 +1,4 @@
-import { LocalToken, LocalFundraiser } from '..';
+import { LocalFundraiser, LocalToken } from '..';
 
 export interface ColdState {
   tokens: LocalToken[];

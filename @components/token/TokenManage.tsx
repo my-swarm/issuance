@@ -3,16 +3,16 @@ import { Collapse } from 'antd';
 import { AddressZero } from '@ethersproject/constants';
 import { useAppState } from '@app';
 import {
+  Help,
   ManageAccountList,
+  ManageAsset,
+  ManageDistribute,
+  ManageDividends,
   ManageSupply,
   ManageTokenHolders,
   ManageTokenStatus,
   ManageTransferHistory,
   ManageTransferRequests,
-  ManageDividends,
-  ManageAsset,
-  ManageDistribute,
-  Help,
 } from '..';
 
 export function TokenManage(): ReactElement {

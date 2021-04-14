@@ -1,10 +1,10 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
-import { ApolloProvider, ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, ApolloProvider, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import '../styles/index.less';
-import { EthersProvider, StateProvider, reducer } from '@app';
+import { EthersProvider, reducer, StateProvider } from '@app';
 import { MetamaskNotReadyError } from '@lib';
-import { DevAccountSwitcher, SidebarDataSync } from '@components';
+import { DevAccountSwitcher } from '@components';
 import { useRouter } from 'next/router';
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {

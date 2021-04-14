@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { useAppState, useContractAddress, useDispatch, useGraphql } from '@app';
+import { useAppState, useDispatch, useGraphql } from '@app';
 import { Alert, Button } from 'antd';
 import { useTokenStatusQuery } from '@graphql';
 import { Loading } from '@components';

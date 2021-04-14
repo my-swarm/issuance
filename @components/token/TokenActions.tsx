@@ -1,15 +1,14 @@
 import React, { ReactElement } from 'react';
-import { TokenState, TokenAction, TokenRecord } from '@lib';
+import { TokenAction, TokenRecord, TokenState } from '@lib';
 import { Button, Popconfirm, Tooltip } from 'antd';
 import {
-  InfoCircleOutlined,
   DeleteOutlined,
-  RocketOutlined,
-  FundOutlined,
   DollarCircleOutlined,
-  LineChartOutlined,
-  SlidersOutlined,
   FormOutlined,
+  InfoCircleOutlined,
+  LineChartOutlined,
+  RocketOutlined,
+  SlidersOutlined,
 } from '@lib/icons';
 import { useEthers } from '@app';
 

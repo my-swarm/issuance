@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
-import { Form, Input, InputNumber } from 'antd';
-import { HelpLabel, MultipleFilesUpload, SingleFileUpload } from '..';
+import { Form, Input } from 'antd';
+import { SingleFileUpload } from '..';
 import { tokenFormRules as rules } from '../token/tokenFormRules';
 
 export function TokenMetaStub(): ReactElement {

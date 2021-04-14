@@ -1,8 +1,8 @@
 import React, { ReactElement, useState } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';
-import { Descriptions, Alert, Button, Form, Input, Modal, Radio, Space, Table } from 'antd';
+import { Alert, Button, Descriptions, Form, Input, Modal, Radio, Space } from 'antd';
 
-import { useAppState, useContractAddress, useDispatch, useEthers, useGraphql } from '@app';
+import { useAppState, useDispatch, useEthers, useGraphql } from '@app';
 import { ContributorStatus, useDistrubuteQuery } from '@graphql';
 import { formatUnits, parseAddressesInput, parseUnits } from '@lib';
 import { AmountsTable, Help, Loading, VSpace } from '..';

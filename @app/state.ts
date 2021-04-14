@@ -1,4 +1,4 @@
-import { LocalToken, ColdState, Transaction, SpendingApproval } from '@lib';
+import { ColdState, LocalToken, SpendingApproval, Transaction } from '@lib';
 import { ReactElement } from 'react';
 import { TokenFragment } from '@graphql';
 

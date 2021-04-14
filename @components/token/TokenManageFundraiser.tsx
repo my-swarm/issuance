@@ -1,16 +1,16 @@
 import React, { ReactElement } from 'react';
-import { Collapse, Space } from 'antd';
+import { Collapse } from 'antd';
 import { useContractAddress } from '@app';
 import { useFundraiserWithContributorsQuery } from '@graphql';
 import {
-  Loading,
-  ManageContributors,
-  ManageAffiliates,
-  ManageFundraiserState,
-  ManageAsset,
-  ManageFundraiserEmbed,
   FundraiserInfo,
   Help,
+  Loading,
+  ManageAffiliates,
+  ManageAsset,
+  ManageContributors,
+  ManageFundraiserEmbed,
+  ManageFundraiserState,
 } from '..';
 
 export function TokenManageFundraiser(): ReactElement {

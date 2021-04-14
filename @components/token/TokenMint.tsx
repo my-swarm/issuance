@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import { Alert, Button, Divider } from 'antd';
 
-import { useAppState, useContract, useDispatch, useGraphql, useFeeInfo } from '@app';
+import { useAppState, useContract, useDispatch, useFeeInfo, useGraphql } from '@app';
 import { parseUnits } from '@lib';
 import { FeeTable, StakingForm, StakingFormData, TokenInfoFee } from '..';
 

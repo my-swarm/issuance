@@ -1,6 +1,6 @@
 import React from 'react';
 import { CardAction, DefaultLayout } from '@components';
-import { Card, Col, Divider, Row, Space, Tag } from 'antd';
+import { Card, Col, Divider, Row } from 'antd';
 import { AppstoreOutlined, DollarCircleOutlined, LineChartOutlined, WalletOutlined } from '@lib/icons';
 
 interface AboutProps {

@@ -1,7 +1,7 @@
-import React, { ReactElement, useState, useEffect } from 'react';
-import { useAppState, useContract, useDispatch, useEthers, useGraphql, useSwmAllowance, useSwmBalance } from '@app';
-import { Button, Checkbox, Col, Divider, Form, InputNumber, Row, Statistic, Space } from 'antd';
-import { formatInt, parseUnits, formatUnits, SWM_TOKEN_DECIMALS, getUnitsAsNumber } from '@lib';
+import React, { ReactElement, useEffect, useState } from 'react';
+import { useAppState, useContract, useDispatch, useGraphql, useSwmBalance } from '@app';
+import { Button, Checkbox, Col, Divider, Form, InputNumber, Row, Space, Statistic } from 'antd';
+import { formatInt, formatUnits, getUnitsAsNumber, parseUnits, SWM_TOKEN_DECIMALS } from '@lib';
 import { useTokenQuery } from '@graphql';
 import { Help, Loading } from '@components';
 import { BigNumber, BigNumberish } from 'ethers';

@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Drawer } from 'antd';
 
 import {
-  FundraiserInvestorCard,
-  Loading,
-  getFundraiserActionTitle,
   FundraiserInvestorAction,
-  TokenInfo,
-  InvestFundraiserDetails,
+  FundraiserInvestorCard,
+  getFundraiserActionTitle,
   InvestContribute,
+  InvestFundraiserDetails,
+  Loading,
   MetamaskConnect,
-  TransactionModal,
   SpendingApprovalModal,
+  TokenInfo,
+  TransactionModal,
 } from '@components';
 import { useFundraiserWidgetLazyQuery } from '@graphql';
 import { useRouter } from 'next/router';

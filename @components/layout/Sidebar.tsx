@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Logo, MainMenu, SidebarMetamask, SidebarDataSync } from '@components';
+import { Logo, MainMenu, SidebarDataSync, SidebarMetamask } from '@components';
 import { Divider } from 'antd';
 
 interface Props {

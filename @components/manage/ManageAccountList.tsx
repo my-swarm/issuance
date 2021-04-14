@@ -4,7 +4,7 @@ import { Button, Checkbox, Col, Popconfirm, Row, Table } from 'antd';
 import { SearchOutlined } from '@lib/icons';
 
 import { Account, AccountList, RawAccountList } from '@lib';
-import { useAppState, useDispatch, useEthers, useGraphql, useAccountNotes } from '@app';
+import { useAccountNotes, useAppState, useDispatch, useGraphql } from '@app';
 import { useWhitelistGreylistQuery } from '@graphql';
 import { AccountsAddModal, Address, EditableCell, FilterDropdown, Loading } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';

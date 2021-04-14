@@ -1,11 +1,11 @@
 import React, { ReactElement, useState } from 'react';
-import { Form, Input, InputNumber, Button, Checkbox, Space, Row, Col } from 'antd';
+import { Button, Checkbox, Col, Form, Input, InputNumber, Row, Space } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Store } from 'rc-field-form/lib/interface';
 
 import { LocalToken } from '@lib';
 import { tokenFormRules as rules } from './tokenFormRules';
-import { HelpLabel, AssetFormStub, TokenMetaStub, Fieldset } from '..';
+import { AssetFormStub, Fieldset, HelpLabel, TokenMetaStub } from '..';
 import { devDefaultToken, isDev } from '@app';
 
 interface TokenFormProps {

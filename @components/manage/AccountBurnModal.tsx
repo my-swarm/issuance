@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
-import { Col, Input, InputNumber, Modal, Row, Space } from 'antd';
-import { useAppState, useDispatch } from '@app';
+import { Col, InputNumber, Modal, Row, Space } from 'antd';
+import { useDispatch } from '@app';
 import { parseUnits } from '@lib';
 import { Address } from '..';
 import { TokenInfoFragment } from '@graphql';

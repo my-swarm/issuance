@@ -2,7 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { Input, Modal } from 'antd';
 import { useDispatch } from '@app';
 import { Help } from '@components';
-import { parseAddressesInput, AccountMeta, AccountsMeta, AccountListType } from '@lib';
+import { AccountListType, AccountMeta, AccountsMeta, parseAddressesInput } from '@lib';
 
 interface AccountsAddModalProps {
   list: AccountListType;

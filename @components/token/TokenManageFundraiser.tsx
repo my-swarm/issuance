@@ -40,7 +40,7 @@ export function TokenManageFundraiser(): ReactElement {
 
         {fundraiser.affiliateManager && (
           <Collapse.Panel header="Affiliates" key="affiliates" extra={<Help name="manageAffiliates" />}>
-            <ManageAffiliates affiliates={fundraiser.affiliates} baseCurrency={fundraiser.baseCurrency} />
+            <ManageAffiliates fundraiser={fundraiser} />
           </Collapse.Panel>
         )}
 

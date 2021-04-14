@@ -2480,6 +2480,12 @@ export type FundraiserWithContributorsFragment = (
   & FundraiserContributorsFragment
 );
 
+export type FundraiserWithAffiliatesFragment = (
+  { __typename?: 'Fundraiser' }
+  & FundraiserFragment
+  & FundraiserAffiliatesFragment
+);
+
 export type FundraisersQueryVariables = Exact<{
   owner: Scalars['Bytes'];
 }>;
@@ -2883,23 +2889,6 @@ export const ContributedFundraiserFragmentDoc = gql`
   }
 }
     ${TokenInfoFragmentDoc}`;
-export const AffiliateFragmentDoc = gql`
-    fragment Affiliate on Affiliate {
-  id
-  address
-  referral
-  percentage
-  amount
-  amountClaimed
-}
-    `;
-export const FundraiserAffiliatesFragmentDoc = gql`
-    fragment FundraiserAffiliates on Fundraiser {
-  affiliates {
-    ...Affiliate
-  }
-}
-    ${AffiliateFragmentDoc}`;
 export const FundraiserInfoFragmentDoc = gql`
     fragment FundraiserInfo on Fundraiser {
   id
@@ -2983,6 +2972,30 @@ export const FundraiserWithContributorsFragmentDoc = gql`
 }
     ${FundraiserFragmentDoc}
 ${FundraiserContributorsFragmentDoc}`;
+export const AffiliateFragmentDoc = gql`
+    fragment Affiliate on Affiliate {
+  id
+  address
+  referral
+  percentage
+  amount
+  amountClaimed
+}
+    `;
+export const FundraiserAffiliatesFragmentDoc = gql`
+    fragment FundraiserAffiliates on Fundraiser {
+  affiliates {
+    ...Affiliate
+  }
+}
+    ${AffiliateFragmentDoc}`;
+export const FundraiserWithAffiliatesFragmentDoc = gql`
+    fragment FundraiserWithAffiliates on Fundraiser {
+  ...Fundraiser
+  ...FundraiserAffiliates
+}
+    ${FundraiserFragmentDoc}
+${FundraiserAffiliatesFragmentDoc}`;
 export const TokenAssetFragmentDoc = gql`
     fragment TokenAsset on Token {
   kyaUri

@@ -2,7 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { CheckCircleTwoTone, DeleteTwoTone, DownOutlined, ExclamationCircleTwoTone, SearchOutlined } from '@lib/icons';
 import { Checkbox, Dropdown, Menu, Select, Space, Table, Tooltip } from 'antd';
 
-import { ContributorFragment, ContributorStatus, FundraiserWithContributorsFragment } from '@graphql';
+import { ContributorFragment, ContributorStatus, FundraiserStatus, FundraiserWithContributorsFragment } from '@graphql';
 import { useAccountNotes, useAppState, useDispatch, useGraphql } from '@app';
 import { Address, EditableCell, FilterDropdown } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
@@ -30,6 +30,7 @@ export function ManageContributors({ fundraiser }: ManageContributorsProps): Rea
   const { dispatchTransaction, setAccountProp } = useDispatch();
   const { baseCurrency, contributors } = fundraiser;
   const statusFilterOptions = ['all', 'live', 'qualified', 'pending', 'deleted'];
+  const isReadonly = fundraiser.status !== FundraiserStatus.Running;
 
   const handleConfirm = (address) => {
     dispatchTransaction({
@@ -67,6 +68,7 @@ export function ManageContributors({ fundraiser }: ManageContributorsProps): Rea
   };
 
   const renderAction = (text, record: ContributorFragment) => {
+    if (isReadonly) return null;
     const enableConfirm = record.status === ContributorStatus.Pending;
     const enableRemove = record.status === ContributorStatus.Pending || record.status === ContributorStatus.Qualified;
     if (enableConfirm || enableRemove) {
@@ -146,15 +148,18 @@ export function ManageContributors({ fundraiser }: ManageContributorsProps): Rea
         <EditableCell value={value} onChange={(value) => setAccountProp(row.address, 'note', value)} />
       ),
     },
-    {
+  ]);
+
+  if (!isReadonly) {
+    columns.push({
       title: 'Do',
       key: 'action',
       render: renderAction,
       filterDropdown: <FilterDropdown onChange={(t) => setSearchText(t)} />,
       filterIcon: <SearchOutlined />,
       // onFilterDropdownVisibleChange: (visible) => visible && setTimeout(() => searchInput.current.select(), 100),
-    },
-  ]);
+    });
+  }
 
   const tableData: TableRecord[] = contributors
     .map((contributor) => {

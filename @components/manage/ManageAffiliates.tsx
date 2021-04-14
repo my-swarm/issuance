@@ -2,7 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { DownOutlined, SearchOutlined } from '@lib/icons';
 import { Button, Checkbox, Dropdown, Menu, Table } from 'antd';
 
-import { AffiliateFragment, Erc20Fragment } from '@graphql';
+import { AffiliateFragment, FundraiserStatus, FundraiserWithAffiliatesFragment } from '@graphql';
 import { useAccountNotes, useAppState, useDispatch, useGraphql } from '@app';
 import { Address, AffiliateEditModal, EditableCell, FilterDropdown } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
@@ -20,11 +20,10 @@ interface TableRecord {
 }
 
 interface ManageAffiliatesProps {
-  affiliates: AffiliateFragment[];
-  baseCurrency: Erc20Fragment;
+  fundraiser: FundraiserWithAffiliatesFragment;
 }
 
-export function ManageAffiliates({ affiliates, baseCurrency }: ManageAffiliatesProps): ReactElement {
+export function ManageAffiliates({ fundraiser }: ManageAffiliatesProps): ReactElement {
   const { reset } = useGraphql();
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [affiliate, setAffiliate] = useState<AffiliateFragment>();
@@ -33,6 +32,8 @@ export function ManageAffiliates({ affiliates, baseCurrency }: ManageAffiliatesP
   const [{ onlineToken }] = useAppState();
   const accountNotes = useAccountNotes(onlineToken.address);
   const { dispatchTransaction, setAccountProp } = useDispatch();
+  const { affiliates, baseCurrency } = fundraiser;
+  const isReadonly = fundraiser.status !== FundraiserStatus.Running;
 
   const handleEdit = (address?: string) => {
     if (address) {
@@ -66,6 +67,7 @@ export function ManageAffiliates({ affiliates, baseCurrency }: ManageAffiliatesP
   };
 
   const renderAction = (text, record: TableRecord) => {
+    if (isReadonly) return null;
     const menu = (
       <Menu>
         <Menu.Item onClick={() => handleEdit(record.address)}>Edit</Menu.Item>
@@ -126,15 +128,18 @@ export function ManageAffiliates({ affiliates, baseCurrency }: ManageAffiliatesP
         <EditableCell value={value} onChange={(value) => setAccountProp(row.address, 'note', value)} />
       ),
     },
-    {
+  ]);
+
+  if (!isReadonly) {
+    columns.push({
       title: 'Do',
       key: 'action',
       render: renderAction,
       filterDropdown: <FilterDropdown onChange={(t) => setSearchText(t)} />,
       filterIcon: <SearchOutlined />,
       // onFilterDropdownVisibleChange: (visible) => visible && setTimeout(() => searchInput.current.select(), 100),
-    },
-  ]);
+    });
+  }
 
   const tableData: TableRecord[] = affiliates
     .map((affiliate) => {

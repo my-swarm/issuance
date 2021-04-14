@@ -192,7 +192,7 @@ export function FundraiserForm({
       <Fieldset
         legend={
           <>
-            Contributor Restrictions <Help name="minMaxInvestment" />
+            Contributor Restrictions <Help name="contributorRestrictions" />
           </>
         }
       >
@@ -205,12 +205,12 @@ export function FundraiserForm({
         </Row>
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item name="minInvestmentAmount" label="Minimum investment">
+            <Form.Item name="minInvestmentAmount" label="Minimum investment (USD)">
               <InputNumber min={0} step={1} className="w-full" disabled={disabled} />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name="maxInvestmentAmount" label="Maximum investment">
+            <Form.Item name="maxInvestmentAmount" label="Maximum investment (USD)">
               <InputNumber min={0} step={1} className="w-full" disabled={disabled} />
             </Form.Item>
           </Col>

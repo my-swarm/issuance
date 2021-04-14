@@ -6,7 +6,7 @@ export const contractsSrc20 = {
   content: (
     <p>
       SRC20 token framework of the Swarm protocol. It gives token issuers the tools to perform regulatory compliant
-      security token issuances.
+      security token issuance.
     </p>
   ),
 };

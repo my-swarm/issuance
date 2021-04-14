@@ -14,7 +14,7 @@ export const manageAsset = {
         <li>Various documents related to the asset</li>
       </ul>
       <p>
-        You had a chance to enter these information when creating your token, but you can change it later at any time.
+        You had a chance to enter these information when creating your token, but you can change it here at any time.
       </p>
       <p>The data itself is stored on IPFS and referenced onchain (meaning it&apos;s publicly readable).</p>
     </div>

@@ -59,7 +59,7 @@ export const allowMint = {
   content: (
     <div>
       <p>
-        Allows the token issuer to mint (create) additinal tokens, increasing the total supply. Minting will require an
+        Allows the token issuer to mint (create) additional tokens, increasing the total supply. Minting will require an
         additional stake of SWM.
       </p>
     </div>

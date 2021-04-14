@@ -4,7 +4,7 @@ export const manageContributors = {
   title: 'Fundraiser Contributors',
   content: (
     <div>
-      <p>Gives you the list of all contributitors with the possibility of</p>
+      <p>Gives you the list of all contributtors with the possibility of</p>
       <ul>
         <li>accepting or denying pending contributors,</li>
         <li>removing already accepted contributors,</li>

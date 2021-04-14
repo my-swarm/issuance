@@ -32,7 +32,7 @@ export function MainMenu(): ReactElement {
       </Menu.Item>
       <Menu.Item key="/tokens" icon={<AppstoreOutlined />}>
         <Link href="/tokens">
-          <a>Issue Tokens</a>
+          <a>Manage Tokens</a>
         </Link>
       </Menu.Item>
       <Menu.Item key="about" icon={<InfoCircleOutlined />}>

@@ -194,7 +194,7 @@ export default function Tokens(): ReactElement {
   }
 
   return (
-    <DefaultLayout title="My Tokens" headExtra={renderHeadExtra()} headTableAligned={true}>
+    <DefaultLayout title="Issue and Manage Tokens" headExtra={renderHeadExtra()} headTableAligned={true}>
       <Table columns={columns} dataSource={dataSource} rowKey="id" />
       <Drawer
         title={<TokenActionTitle action={action} />}

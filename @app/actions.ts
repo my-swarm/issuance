@@ -2,8 +2,7 @@ import {
   EthereumNetwork,
   AccountsMeta,
   LocalToken,
-  LocalTokenNetworkData,
-  TokenState,
+  LocalTokenState,
   Transaction,
   SpendingApproval,
   LocalFundraiser,
@@ -21,6 +20,7 @@ interface resetDataAction {
 interface AddTokenAction {
   type: 'addToken';
   token: LocalToken;
+  networkId: EthereumNetwork;
 }
 
 interface SaveFundraiserAction {
@@ -38,20 +38,6 @@ interface UpdateTokenAction {
   type: 'updateToken';
   token: Partial<LocalToken>;
   id: Uuid;
-}
-
-interface UpdateTokenNetworkAction {
-  type: 'updateTokenNetwork';
-  id: Uuid;
-  networkId: EthereumNetwork;
-  networkData: LocalTokenNetworkData;
-}
-
-interface UpdateFundraiserNetworkAction {
-  type: 'updateFundraiserNetwork';
-  tokenAddress: string;
-  networkId: EthereumNetwork;
-  networkData: LocalTokenNetworkData;
 }
 
 interface StartSavingAction {
@@ -75,7 +61,7 @@ interface SetTokenStateAction {
   type: 'setTokenState';
   id: Uuid;
   networkId: EthereumNetwork;
-  state: TokenState;
+  state: LocalTokenState;
 }
 
 interface SetTokenAction {
@@ -114,14 +100,6 @@ interface BatchSetAccountPropAction {
   networkId: EthereumNetwork;
   items: AccountsMeta;
 }
-/*
-interface DeleteFromTokenAccountListAction {
-  type: 'deleteFromTokenAccountList';
-  networkId: EthereumNetwork;
-  list: TokenAccountListType;
-  items: AccountList;
-}
-*/
 
 interface AddPendingTransactionAction {
   type: 'addPendingTransaction';
@@ -139,8 +117,6 @@ export type Action =
   | SaveFundraiserAction
   | DeleteTokenAction
   | UpdateTokenAction
-  | UpdateTokenNetworkAction
-  | UpdateFundraiserNetworkAction
   | StartSavingAction
   | EndSavingAction
   | ShowErrorAction

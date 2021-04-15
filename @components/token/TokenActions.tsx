@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { TokenAction, TokenRecord, TokenState } from '@lib';
+import { TokenAction, TokenRecord, LocalTokenState } from '@lib';
 import { Button, Popconfirm, Tooltip } from 'antd';
 import {
   DeleteOutlined,
@@ -27,30 +27,24 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
 
   const { localState } = token;
 
-  if (localState === TokenState.Created) {
+  if (localState === LocalTokenState.Created) {
     actions.push(
       <Tooltip title="Edit undeployed token">
         <Button key="edit" onClick={() => onAction(TokenAction.Edit)} icon={<FormOutlined />} />
       </Tooltip>,
     );
   }
-  if (localState === TokenState.Created || localState === TokenState.Deploying) {
+  if (localState === LocalTokenState.Created) {
     actions.push(
-      <Tooltip title={localState === TokenState.Deploying ? 'Resume token deployment' : 'Deploy your token'}>
+      <Tooltip title="Deploy your token">
         <Button key="deploy" onClick={() => onAction(TokenAction.Deploy)} icon={<RocketOutlined />}>
-          {localState === TokenState.Deploying ? 'Resume' : 'Deploy'}
+          Deploy
         </Button>
       </Tooltip>,
     );
   }
 
-  if (localState === TokenState.DeployingFundraiser) {
-    actions.push(
-      <Button key="startFundraise" onClick={() => onAction(TokenAction.StartFundraise)} icon={<RocketOutlined />}>
-        Resume
-      </Button>,
-    );
-  } else if (token.address && !token.isFundraising && !token.isMinted) {
+  if (token.address && !token.isFundraising && !token.isMinted) {
     actions.push(
       <Button key="fundraiser" onClick={() => onAction(TokenAction.StartFundraise)} icon={<RocketOutlined />}>
         Fundraise

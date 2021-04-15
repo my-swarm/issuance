@@ -6,8 +6,7 @@ import { Address, HelpLabel } from '@components/utility';
 import { LocalTokenAddresses } from '@lib';
 
 export function TokenInfoDeployed(): ReactElement {
-  const { networkId } = useEthers();
-  const [{ onlineToken, localToken }] = useAppState();
+  const [{ onlineToken }] = useAppState();
 
   function getAddress(type) {
     let address: string;
@@ -33,11 +32,10 @@ export function TokenInfoDeployed(): ReactElement {
       if (address === AddressZero) {
         address = undefined;
       }
+      return address;
     } else {
-      const addresses = localToken.networks[networkId]?.addresses || ({} as LocalTokenAddresses);
-      address = (addresses && addresses[type]) || undefined;
+      return undefined;
     }
-    return address;
   }
 
   function printAddress(type) {

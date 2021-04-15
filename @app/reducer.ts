@@ -2,7 +2,7 @@ import { Reducer } from 'react';
 import { v4 as uuid } from 'uuid';
 import _ from 'lodash';
 
-import { LocalToken, Uuid } from '@lib';
+import { EthereumNetwork, LocalToken, LocalTokenState, Uuid } from '@lib';
 import { Action, AppState } from '.';
 
 export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
@@ -36,7 +36,11 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
         isSynced: true,
       };
     case 'addToken': {
-      const token = { ...action.token, id: uuid(), networks: {} };
+      const token: LocalToken = {
+        ...action.token,
+        id: uuid(),
+        networkState: { [action.networkId as EthereumNetwork]: LocalTokenState.Created },
+      };
       return unsynced({
         tokens: [...state.tokens, token],
       });
@@ -52,7 +56,7 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
         throw new Error('Token ID not provided');
       }
       // we don't wanna overwrite some properties, like networks - network related stuff is set with different action
-      const { id, networks, ...tokenUpdate } = action.token;
+      const { id, networkState, ...tokenUpdate } = action.token;
       const updatedToken = {
         ...findToken(id),
         ...tokenUpdate,
@@ -63,44 +67,15 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       });
     }
 
-    case 'updateTokenNetwork': {
-      const { id, networkId, networkData } = action;
-      const updatedToken = findToken(id);
-      const oldNetworkData = updatedToken.networks[networkId] || {};
-      updatedToken.networks[networkId] = { ...oldNetworkData, ...networkData };
-      return unsynced({
-        tokens: withUpdatedToken(updatedToken),
-      });
-    }
-
-    case 'updateFundraiserNetwork': {
-      const { tokenAddress, networkId, networkData } = action;
-      return unsynced({
-        fundraisers: {
-          ...state.fundraisers,
-          [tokenAddress]: { ...state.fundraisers[tokenAddress], networkId, networkData },
-        },
-      });
-    }
-
     case 'setTokenState': {
       const { id, networkId, state: tokenState } = action;
       const updatedToken = findToken(id);
-      updatedToken.networks[networkId].state = tokenState;
+      updatedToken.networkState[networkId] = tokenState;
       return unsynced({
         tokens: withUpdatedToken(updatedToken),
       });
     }
-    /*
-    case 'deleteFromTokenAccountList': {
-      const { id, list, items } = action;
-      const updatedToken = findToken(id);
-      updatedToken[list] = subtractAccountLists(updatedToken[list] || [], items);
-      return unsynced({
-        tokens: withUpdatedToken(updatedToken),
-      });
-    }
-*/
+
     case 'deleteToken':
       return unsynced({
         tokens: state.tokens.filter((token) => token.id !== action.id),

@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useMemo, useState } from 'react';
 import { Button, Drawer, Table } from 'antd';
 
 import { useAppState, useDispatch, useEthers, useGraphql } from '@app';
@@ -9,8 +9,8 @@ import {
   processNewToken,
   TokenAction,
   TokenRecord,
-  TokenState,
-  tokenStates,
+  LocalTokenState,
+  localTokenStates,
 } from '@lib';
 import { useTokensLazyQuery } from '@graphql';
 import {
@@ -48,8 +48,11 @@ function getTokenList(localTokens: LocalToken[], onlineTokens: OnlineToken[], ne
   }));
 
   for (const token of localTokens) {
-    const { state, addresses } = token.networks[networkId] || { state: TokenState.Created, address: undefined };
-    if (state <= TokenState.Deploying) {
+    const { state, addresses } = token.networkState[networkId] || {
+      state: LocalTokenState.Created,
+      address: undefined,
+    };
+    if (state !== LocalTokenState.Deployed) {
       result.push({
         ...(({ id, name, symbol }) => ({ id, name, symbol }))(token),
         address: null,
@@ -66,6 +69,8 @@ function getTokenList(localTokens: LocalToken[], onlineTokens: OnlineToken[], ne
     }
   }
 
+  console.log({ localTokens });
+
   return result;
 }
 
@@ -74,33 +79,26 @@ export default function Tokens(): ReactElement {
   const { setToken } = useDispatch();
   const [action, setAction] = useState<TokenAction>();
   const [{ tokens, localToken }, dispatch] = useAppState();
-  const [loadQuery, query] = useTokensLazyQuery();
+  const [loadQuery, { data, loading }] = useTokensLazyQuery();
+  const { reset } = useGraphql();
+
   useEffect(() => {
     if (address) loadQuery({ variables: { owner: address } });
-  }, [address]);
-  const { reset } = useGraphql();
-  const { data, loading } = query;
+  }, [address, loadQuery]);
+
+  const tokenList = useMemo(() => {
+    return getTokenList(tokens, data?.tokens || [], networkId);
+  }, [data?.tokens, networkId, tokens]);
+
   if (loading) return <Loading />;
 
-  // reloads current token if tokens update ????
-  /*
-  useEffect(() => {
-    if (localToken) {
-      setToken(
-        tokens.find((t) => t.id === localToken.id),
-        undefined,
-      );
-    }
-  }, [tokens]);
-*/
-
-  function renderTokenState(localState: TokenState, token: TokenRecord): string {
+  function renderTokenState(localState: LocalTokenState, token: TokenRecord): string {
     if (!connected) return 'Not connected';
     const result = [];
     if (token.address) result.push('Deployed');
     if (token.isFundraising) result.push('Fundraiser');
     if (token.isMinted) result.push('Minted');
-    if (result.length === 0) result.push(tokenStates[localState] || 'Unknown state');
+    if (result.length === 0) result.push(localTokenStates[localState] || 'Created');
     return result.join(', ');
   }
 
@@ -129,8 +127,6 @@ export default function Tokens(): ReactElement {
     },
   ]);
 
-  const dataSource = getTokenList(tokens, data?.tokens || [], networkId);
-
   const handleAction = (action: TokenAction, tokenRecord: TokenRecord) => {
     if (action === TokenAction.Delete) {
       handleDelete(tokenRecord);
@@ -155,7 +151,7 @@ export default function Tokens(): ReactElement {
   const handleSubmit = (newToken: LocalToken) => {
     switch (action) {
       case TokenAction.Create:
-        dispatch({ type: 'addToken', token: processNewToken(newToken) });
+        dispatch({ type: 'addToken', token: processNewToken(newToken), networkId });
         break;
       case TokenAction.Edit:
         dispatch({ type: 'updateToken', token: { id: localToken.id, ...newToken } });
@@ -195,7 +191,7 @@ export default function Tokens(): ReactElement {
 
   return (
     <DefaultLayout title="Issue and Manage Tokens" headExtra={renderHeadExtra()} headTableAligned={true}>
-      <Table columns={columns} dataSource={dataSource} rowKey="id" />
+      <Table columns={columns} dataSource={tokenList} rowKey="id" />
       <Drawer
         title={<TokenActionTitle action={action} />}
         visible={action !== undefined}

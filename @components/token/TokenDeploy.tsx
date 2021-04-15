@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
 import { Button, Space } from 'antd';
 
-import { useAppState, useContract, useDispatch } from '@app';
-import { TokenInfoBasics } from '..';
-import { getFeaturesAsContractValue, parseUnits, storeKya, tokenToKya } from '@lib';
+import { useAppState, useContract, useDispatch, useEthers } from '@app';
+import { TokenInfoAsset, TokenInfoBasics } from '..';
+import { getFeaturesAsContractValue, LocalTokenState, parseUnits, storeKya, tokenToKya } from '@lib';
 
 interface TokenDeployProps {
   onReview: () => void;
@@ -11,9 +11,26 @@ interface TokenDeployProps {
 }
 
 export function TokenDeploy({ onReview, onCancel }: TokenDeployProps): ReactElement {
-  const [{ localToken: token }] = useAppState();
+  const [{ localToken: token }, dispatch] = useAppState();
   const { dispatchTransaction } = useDispatch();
   const { registry, minter } = useContract();
+  const { networkId } = useEthers();
+
+  const handleDeployed = () => {
+    console.log({
+      type: 'setTokenState',
+      id: token.id,
+      networkId,
+      state: LocalTokenState.Deployed,
+    });
+    dispatch({
+      type: 'setTokenState',
+      id: token.id,
+      networkId,
+      state: LocalTokenState.Deployed,
+    });
+    onCancel();
+  };
 
   const handleDeploy = async () => {
     const { name, symbol, decimals, allowUnlimitedSupply, totalSupply, nav } = token;
@@ -36,13 +53,14 @@ export function TokenDeploy({ onReview, onCancel }: TokenDeployProps): ReactElem
         minter.address,
       ],
       description: 'Deploying your token',
-      onSuccess: onCancel,
+      onSuccess: handleDeployed,
     });
   };
 
   return (
     <>
       <TokenInfoBasics />
+      <TokenInfoAsset />
 
       <Space>
         <Button onClick={onReview} size="large">

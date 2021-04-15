@@ -12,11 +12,6 @@ export interface LocalTokenAddresses {
   affiliateManager?: EthereumAddress;
 }
 
-export interface LocalTokenNetworkData {
-  state?: TokenState;
-  addresses?: LocalTokenAddresses;
-}
-
 export interface LocalFundraiser {
   tokenAddress: string;
   label: string;
@@ -32,7 +27,6 @@ export interface LocalFundraiser {
   maxContributors: number;
   minInvestmentAmount: number;
   maxInvestmentAmount: number;
-  networks: Record<EthereumNetwork, LocalTokenNetworkData>;
 }
 
 export interface LocalTokenKya {
@@ -63,19 +57,14 @@ export interface LocalToken extends LocalTokenKya {
   allowBurn: boolean;
   allowMint: boolean;
 
-  networks: Record<EthereumNetwork, LocalTokenNetworkData>;
+  networkState: Partial<Record<EthereumNetwork, LocalTokenState>>;
 }
 
 export type OnlineToken = TokenFragment;
 
-export enum TokenState {
-  Created, // local only
-  Deploying, // local only
+export enum LocalTokenState {
+  Created,
   Deployed,
-  DeployingFundraiser, // local only
-  Fundraising,
-  // FundraisingFinished = 5,
-  Minted,
 }
 
 export enum TokenAction {
@@ -98,18 +87,13 @@ export type TokenRecord = {
   isMinted: boolean;
   isFundraising: boolean;
   localToken?: LocalToken;
-  localState?: TokenState;
+  localState?: LocalTokenState;
   onlineToken?: TokenFragment;
 };
 
-export const tokenStates: { [key: number]: string } = {
-  [TokenState.Created]: 'Undeployed',
-  [TokenState.Fundraising]: 'Fundraising',
-  [TokenState.Deploying]: 'Deployment in progress',
-  [TokenState.Deployed]: 'Deployed',
-  [TokenState.DeployingFundraiser]: 'Fundraiser deployment in progress',
-  [TokenState.Fundraising]: 'Fundraiser in progress',
-  [TokenState.Minted]: 'Minted',
+export const localTokenStates: { [key: number]: string } = {
+  [LocalTokenState.Created]: 'Undeployed',
+  [LocalTokenState.Deployed]: 'Deployed',
 };
 
 export const tokenFeatures = {

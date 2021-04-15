@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { EthereumNetwork, LocalToken, TokenState } from '@lib';
+import { EthereumNetwork, LocalToken, LocalTokenState } from '@lib';
 
 function createFile(name) {
   return {
@@ -49,11 +49,11 @@ export const tokens = [
     symbol: 'UDT',
     networks: {
       [EthereumNetwork.Kovan]: {
-        state: TokenState.Created,
+        state: LocalTokenState.Created,
         addresses: {},
       },
       [EthereumNetwork.Local]: {
-        state: TokenState.Created,
+        state: LocalTokenState.Created,
         addresses: {},
       },
     },

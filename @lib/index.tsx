@@ -15,7 +15,6 @@ export * from './transaction';
 export * from './account';
 export * from './localToken';
 export * from './swarm';
-export * from './wallet';
 export * from './help';
 export * from './kya';
 export * from './Api';

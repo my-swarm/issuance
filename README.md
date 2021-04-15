@@ -1,44 +1,15 @@
-# Next with Antd
+# Swarm Issuance App
 
-A simple example for showing how to initialize your frontend project with next.js and antd.
+Frontend app for SRC20 tokens issuance. Allows token issuers to create tokens, deploy on Ethereum and manage during their whole life cycle, including rising funds. Investors, on the other hand, can list the fundraisers, contribute and manage their SRC20 tokens in a wallet.
 
-![screenshot](screenshot.png)
+Built by the Swarm Community and for the Swarm Community with Next.js / React / ethers.js / ant.design. 
 
-- [Including plain css files in Next.js project](https://github.com/zeit/next.js/tree/master/examples/with-global-stylesheet)
-- [Ant.design layout example](https://ant.design/components/layout/)
+Works as an reference interface for [Swarm Contract Suite](https://https://github.com/my-swarm/contracts), uses [TheGraph](https://thegraph.com/) [Subgraph](https://https://github.com/my-swarm/subgraph) to query blockchain data.
 
-## Bundle Sizes
+## Contribute
 
-### Development: npm run dev -> 2680KB
+We are happy to accept pull requests from the community. If you're interested, get in touch on our [telegram channel](https://t.me/swarmfund).
 
-Name | Status | Type | Initiator | Size | Time
--- | -- | -- | -- | -- | --
-localhost | 200OK | document | Other | 474 KB / 474 KB | 920 ms902 ms
-index.js?ts=1553059908721/_next/static/development/pages | 200OK | script | (index)Parser | 1.7 MB / 1.7 MB | 253 ms13 ms
-_app.tsx?ts=1553059908721/_next/static/development/pages | 200OK | script | (index)Parser | 348 KB / 347 KB | 16 ms12 ms
-webpack.js?ts=1553059908721/_next/static/runtime | 200OK | script | (index)Parser | 34.1 KB / 33.8 KB | 13 ms13 ms
-main.js?ts=1553059908721/_next/static/runtime | 200OK | script | (index)Parser | 880 KB/ 879 KB | 45 ms14 ms
+## Local development
 
-
-
-### After build: npm run build && npm start -> 1310KB
-
-Name | Status | Type | Initiator | Size | Time
--- | -- | -- | -- | -- | --
-localhost | 200OK | document | Other | 470 KB / 470 KB | 177 ms174 ms
-index.js/_next/static/o_DHRDq7ZCnL_FwLl6DHG/pages | 200OK | script | (index)Parser | 1.1 MB / 1.1 MB | 37 ms13 ms
-_app.tsx/_next/static/o_DHRDq7ZCnL_FwLl6DHG/pages | 200OK | script | (index)Parser | 2.9 KB/ 2.6 KB | 13 ms13 ms
-webpack-f0c6edbea5b547edc23f.js/_next/static/runtime | 200OK | script | (index)Parser | 1.7 KB / 1.5 KB | 16 ms15 ms
-commons.649e134287af54e585ca.js/_next/static/chunks | 200OK | script | (index)Parser | 190 KB / 190 KB | 23 ms15 ms
-main-7e3858c4094762b6abe9.js/_next/static/runtime | 200OK | script | (index)Parser | 15.9 KB / 15.6 KB | 21 ms15 ms
-
-
-
-### Production (gzipped) -> 386KB
-
-* 470K -> 57K index.html
-* 2.6K -> 1.1K _app.tsx
-* 190K -> 61K commons.649e134287af54e585ca.js
-* 1.1M -> 261K index.js
-* 16K -> 5.3K main-7e3858c4094762b6abe9.js
-* 1.5K -> 769B webpack-f0c6edbea5b547edc23f.js
+To be done... 

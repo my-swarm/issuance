@@ -50,7 +50,6 @@ export function FundraiserInfoCommon({ fundraiser, column = 1 }: FundraiserInfoC
         <Descriptions.Item label="Amount pending">
           {formatUnits(fundraiser.amountPending, baseCurrency.decimals)} USD
         </Descriptions.Item>
-        <Descriptions.Item label="Qualified contributors">{fundraiser.numContributors}</Descriptions.Item>
       </Descriptions>
     </>
   );

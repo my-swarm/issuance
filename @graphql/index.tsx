@@ -2444,7 +2444,7 @@ export type FundraiserAffiliatesFragment = (
 
 export type FundraiserInfoFragment = (
   { __typename?: 'Fundraiser' }
-  & Pick<Fundraiser, 'id' | 'label' | 'owner' | 'address' | 'startDate' | 'endDate' | 'softCap' | 'hardCap' | 'supply' | 'tokenPrice' | 'contributionsLocked' | 'amountQualified' | 'amountPending' | 'amountRefunded' | 'amountWithdrawn' | 'status' | 'numContributors' | 'contributorRestrictions' | 'minter'>
+  & Pick<Fundraiser, 'id' | 'label' | 'owner' | 'address' | 'startDate' | 'endDate' | 'softCap' | 'hardCap' | 'supply' | 'tokenPrice' | 'contributionsLocked' | 'amountQualified' | 'amountPending' | 'amountRefunded' | 'amountWithdrawn' | 'status' | 'contributorRestrictions' | 'minter'>
   & { affiliateManager?: Maybe<(
     { __typename?: 'AffiliateManager' }
     & Pick<AffiliateManager, 'address'>
@@ -2907,7 +2907,6 @@ export const FundraiserInfoFragmentDoc = gql`
   amountRefunded
   amountWithdrawn
   status
-  numContributors
   affiliateManager {
     address
   }

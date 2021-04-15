@@ -55,7 +55,6 @@ fragment FundraiserInfo on Fundraiser {
   amountRefunded
   amountWithdrawn
   status
-  numContributors
 
   affiliateManager {
     address

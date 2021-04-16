@@ -4,6 +4,7 @@ import {
   BuySwmModal,
   DefaultLayout,
   InvestFundraisers,
+  RequireEthers,
   SwmPriceChart,
   SwmStakeChart,
   UniswapWidget,
@@ -48,21 +49,23 @@ export default function Index(): ReactElement {
     <DefaultLayout title="Swarm Dashboard">
       <Row gutter={24} className="dashboard">
         <Col {...colLayout}>
-          <Card
-            title="SWARM token"
-            style={{ marginBottom: '24px' }}
-            extra={
-              <a
-                href="https://etherscan.io/token/0x3505f494c3f0fed0b594e01fa41dd3967645ca39"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                more
-              </a>
-            }
-          >
-            <SwmStakeChart total={swmCircSupply} issuerStake={SWM_STAKE_OLD_REGISTRY} />
-          </Card>
+          <RequireEthers showMessage={false}>
+            <Card
+              title="SWARM token"
+              style={{ marginBottom: '24px' }}
+              extra={
+                <a
+                  href="https://etherscan.io/token/0x3505f494c3f0fed0b594e01fa41dd3967645ca39"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  more
+                </a>
+              }
+            >
+              <SwmStakeChart total={swmCircSupply} issuerStake={SWM_STAKE_OLD_REGISTRY} />
+            </Card>
+          </RequireEthers>
           <Card
             title="SWM price (2 weeks)"
             extra={

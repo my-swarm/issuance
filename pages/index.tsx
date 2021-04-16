@@ -12,6 +12,7 @@ import {
 import { Card, Col, Divider, Row, Space } from 'antd';
 import { PriceData } from '@lib';
 import { SWM_STAKE_OLD_REGISTRY } from '@app';
+import { NetworkNote } from '../@components/dashboard/NetworkNote';
 
 const cgUrlStats = 'https://api.coingecko.com/api/v3/coins/swarm';
 const cgUrlDaily =
@@ -47,6 +48,7 @@ export default function Index(): ReactElement {
 
   return (
     <DefaultLayout title="Swarm Dashboard">
+      <NetworkNote />
       <Row gutter={24} className="dashboard">
         <Col {...colLayout}>
           <RequireEthers showMessage={false}>

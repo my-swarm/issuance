@@ -1,15 +1,10 @@
 import React from 'react';
 import { Tooltip } from 'antd';
-import { getNetwork } from '@ethersproject/networks';
 import { ExclamationCircleOutlined } from '@lib/icons';
 
-import { EthereumNetwork } from '@lib';
+import { EthereumNetwork, getNetworkName } from '@lib';
 import { EthersStatus, useEthers } from '@app';
 import { Address, SideBox } from '@components';
-
-function getNetworkName(from: string): string {
-  return from === 'homestead' ? 'mainnet' : from;
-}
 
 export function SidebarMetamask() {
   const { status, connect, address, networkId } = useEthers();
@@ -41,7 +36,7 @@ export function SidebarMetamask() {
                 <ExclamationCircleOutlined twoToneColor="red" />
               </Tooltip>
             )}{' '}
-            <strong>{getNetworkName(getNetwork(networkId).name)}</strong>
+            <strong>{getNetworkName(networkId)}</strong>
           </div>
         </div>
       );

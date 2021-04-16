@@ -1,3 +1,5 @@
+import { getNetwork } from '@ethersproject/networks';
+
 export type Uuid = string;
 export type EthereumAddress = string;
 import localAddresses from '@contracts/addresses/local.json';
@@ -39,3 +41,8 @@ export const etherscanDomains = {
   [EthereumNetwork.Rinkeby]: 'rinkeby.etherscan.io',
   [EthereumNetwork.Goerli]: 'goerli.etherscan.io',
 };
+
+export function getNetworkName(networkId: number): string {
+  const name = getNetwork(networkId).name;
+  return name === 'homestead' ? 'mainnet' : name;
+}

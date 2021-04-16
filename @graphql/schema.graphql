@@ -529,7 +529,6 @@ type Fundraiser {
   amountRefunded: BigInt!
   amountWithdrawn: BigInt!
   status: FundraiserStatus!
-  numContributors: Int!
   contributors(skip: Int = 0, first: Int = 100, orderBy: Contributor_orderBy, orderDirection: OrderDirection, where: Contributor_filter): [Contributor!]
   affiliates(skip: Int = 0, first: Int = 100, orderBy: Affiliate_orderBy, orderDirection: OrderDirection, where: Affiliate_filter): [Affiliate!]
   search: String
@@ -724,14 +723,6 @@ input Fundraiser_filter {
   amountWithdrawn_not_in: [BigInt!]
   status: FundraiserStatus
   status_not: FundraiserStatus
-  numContributors: Int
-  numContributors_not: Int
-  numContributors_gt: Int
-  numContributors_lt: Int
-  numContributors_gte: Int
-  numContributors_lte: Int
-  numContributors_in: [Int!]
-  numContributors_not_in: [Int!]
   search: String
   search_not: String
   search_gt: String
@@ -772,7 +763,6 @@ enum Fundraiser_orderBy {
   amountRefunded
   amountWithdrawn
   status
-  numContributors
   contributors
   affiliates
   search

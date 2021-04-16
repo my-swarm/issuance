@@ -47,7 +47,7 @@ export function EthersProvider({ children, devAccountId }: EthersProviderProps):
       const m = new Metamask(window['ethereum']);
       setMetamask(m);
     } else {
-      throw new Error('Could not figure out how to setup ethereum provider');
+      return null;
     }
   }, [devAccountId]);
 

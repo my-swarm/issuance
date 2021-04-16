@@ -558,7 +558,6 @@ export type Fundraiser = {
   amountRefunded: Scalars['BigInt'];
   amountWithdrawn: Scalars['BigInt'];
   status: FundraiserStatus;
-  numContributors: Scalars['Int'];
   contributors?: Maybe<Array<Contributor>>;
   affiliates?: Maybe<Array<Affiliate>>;
   search?: Maybe<Scalars['String']>;
@@ -771,14 +770,6 @@ export type Fundraiser_Filter = {
   amountWithdrawn_not_in?: Maybe<Array<Scalars['BigInt']>>;
   status?: Maybe<FundraiserStatus>;
   status_not?: Maybe<FundraiserStatus>;
-  numContributors?: Maybe<Scalars['Int']>;
-  numContributors_not?: Maybe<Scalars['Int']>;
-  numContributors_gt?: Maybe<Scalars['Int']>;
-  numContributors_lt?: Maybe<Scalars['Int']>;
-  numContributors_gte?: Maybe<Scalars['Int']>;
-  numContributors_lte?: Maybe<Scalars['Int']>;
-  numContributors_in?: Maybe<Array<Scalars['Int']>>;
-  numContributors_not_in?: Maybe<Array<Scalars['Int']>>;
   search?: Maybe<Scalars['String']>;
   search_not?: Maybe<Scalars['String']>;
   search_gt?: Maybe<Scalars['String']>;
@@ -819,7 +810,6 @@ export enum Fundraiser_OrderBy {
   AmountRefunded = 'amountRefunded',
   AmountWithdrawn = 'amountWithdrawn',
   Status = 'status',
-  NumContributors = 'numContributors',
   Contributors = 'contributors',
   Affiliates = 'affiliates',
   Search = 'search'

@@ -13,6 +13,7 @@ interface Props {
 export function RequireEthers({
   showMessage = true,
   message = defaultMessage,
+  children,
 }: PropsWithChildren<Props>): ReactElement {
   const { connected } = useEthers();
 
@@ -28,6 +29,6 @@ export function RequireEthers({
       return null;
     }
   } else {
-    return <>children</>;
+    return <>{children}</>;
   }
 }

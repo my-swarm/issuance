@@ -8,7 +8,7 @@ export const SWM_STAKE_OLD_REGISTRY = 281842;
 
 export const knownAccounts = {
   swarmTreasury: '0x689a20daa8b813a73f86717b572e8fa3a42398d6',
-  swarmMnRewards: '0x11db72f40e88899af7d3270a6206287003dda5fb',
+  swarmMnRewards: '0xa450791357cAD888C429386bB1C2Fd27f6C1001b',
 };
 
 export const devSwmBalances = {

@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Logo, MainMenu, SidebarDataSync, SidebarMetamask } from '@components';
+import { Logo, MainMenu, SidebarDataSync, SidebarDisclaimer, SidebarMetamask } from '@components';
 import { Divider } from 'antd';
 
 interface Props {
@@ -14,6 +14,8 @@ export function Sidebar({ fullUi = false }: Props): ReactElement {
       <Divider />
       <SidebarMetamask />
       <SidebarDataSync />
+      <Divider />
+      <SidebarDisclaimer />
     </>
   );
 }

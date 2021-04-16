@@ -7,6 +7,10 @@ import { EthereumNetwork } from '@lib';
 import { EthersStatus, useEthers } from '@app';
 import { Address, SideBox } from '@components';
 
+function getNetworkName(from: string): string {
+  return from === 'homestead' ? 'mainnet' : from;
+}
+
 export function SidebarMetamask() {
   const { status, connect, address, networkId } = useEthers();
 
@@ -37,7 +41,7 @@ export function SidebarMetamask() {
                 <ExclamationCircleOutlined twoToneColor="red" />
               </Tooltip>
             )}{' '}
-            <strong>{getNetwork(networkId).name}</strong>
+            <strong>{getNetworkName(getNetwork(networkId).name)}</strong>
           </div>
         </div>
       );

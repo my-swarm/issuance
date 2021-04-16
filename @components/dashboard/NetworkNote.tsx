@@ -15,9 +15,7 @@ export function NetworkNote(): ReactElement {
   } else if (hostname === 'app.myswarm.l') {
     siteNetwork = 'local';
   }
-  const connectedNetwork = useMemo(() => getNetworkName(networkId), [networkId]);
-
-  console.log({ siteNetwork, connectedNetwork });
+  const connectedNetwork = useMemo(() => (networkId ? getNetworkName(networkId) : undefined), [networkId]);
 
   if (connectedNetwork && connectedNetwork !== siteNetwork) {
     return (

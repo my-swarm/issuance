@@ -17,10 +17,10 @@ export function useSwmStake(): ReturnType {
   const { stake, uniPair } = useContract();
 
   useEffect(() => {
-    if (networkId === EthereumNetwork.Local) {
-      setSwmStake(12140000);
-      setSwmRewards(120000);
-      setSwmLockedUni(1940000);
+    if (networkId !== EthereumNetwork.Main) {
+      setSwmStake(11971231);
+      setSwmRewards(117000);
+      setSwmLockedUni(2290308);
     } else if (connected && stake && uniPair) {
       stake.poolInfo(0).then((info) => {
         setSwmStake(getUnitsAsNumber(info.totalStaked, SWM_TOKEN_DECIMALS));

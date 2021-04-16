@@ -22,11 +22,17 @@ export function useSwmStake(): ReturnType {
       setSwmRewards(120000);
       setSwmLockedUni(1940000);
     } else if (connected && stake && uniPair) {
-      stake.poolInfo(1).then((info) => setSwmStake(getUnitsAsNumber(info.totalStaked, SWM_TOKEN_DECIMALS)));
-      stake.totalRewards().then((rewards) => setSwmRewards(getUnitsAsNumber(rewards, SWM_TOKEN_DECIMALS)));
-      uniPair.getReserves().then(([reserveSwm]) => setSwmLockedUni(getUnitsAsNumber(reserveSwm, SWM_TOKEN_DECIMALS)));
+      stake.poolInfo(0).then((info) => {
+        setSwmStake(getUnitsAsNumber(info.totalStaked, SWM_TOKEN_DECIMALS));
+      });
+      stake.totalRewards().then((rewards) => {
+        setSwmRewards(getUnitsAsNumber(rewards, SWM_TOKEN_DECIMALS));
+      });
+      uniPair.getReserves().then(([reserveSwm]) => {
+        setSwmLockedUni(getUnitsAsNumber(reserveSwm, SWM_TOKEN_DECIMALS));
+      });
     }
-  }, [networkId, stake, uniPair]);
+  }, [connected, networkId, stake, uniPair]);
 
   return { swmStake, swmRewards, swmLockedUni };
 }

@@ -74,9 +74,7 @@ export default function Index(): ReactElement {
             <SwmPriceChart data={priceData} />
           </Card>
         </Col>
-        <Col {...colLayout}>
-          <UniswapWidget />
-        </Col>
+        <Col {...colLayout}>{<UniswapWidget />}</Col>
       </Row>
       <Divider />
       <h2>

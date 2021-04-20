@@ -48,11 +48,8 @@ function getTokenList(localTokens: LocalToken[], onlineTokens: OnlineToken[], ne
   }));
 
   for (const token of localTokens) {
-    const { state, addresses } = token.networkState[networkId] || {
-      state: LocalTokenState.Created,
-      address: undefined,
-    };
-    if (state !== LocalTokenState.Deployed) {
+    const state = token.networkState[networkId] || LocalTokenState.Created;
+    if (state === LocalTokenState.Created) {
       result.push({
         ...(({ id, name, symbol }) => ({ id, name, symbol }))(token),
         address: null,
@@ -61,13 +58,10 @@ function getTokenList(localTokens: LocalToken[], onlineTokens: OnlineToken[], ne
         localToken: token,
         localState: state,
       });
-    } else {
-      const record = result.find((t) => t.address === addresses.src20);
-      if (record) {
-        record.localToken = token;
-      }
     }
   }
+
+  console.log({ localTokens });
 
   return result;
 }

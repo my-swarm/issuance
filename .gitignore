@@ -5,3 +5,5 @@ yarn-error.log
 node_modules
 .scrap
 .env.local
+@graphql/schema.graphql
+@graphql/index.tsx

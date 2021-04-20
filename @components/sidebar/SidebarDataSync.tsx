@@ -24,7 +24,7 @@ export function SidebarDataSync(): ReactElement {
     if (isLoaded) {
       save(_.pick(state, ['tokens', 'fundraisers', 'version', 'accountNames', 'accountNotes']));
     }
-  }, [version]);
+  }, [isLoaded, version]);
 
   useEffect(() => {
     if (isWorking) {

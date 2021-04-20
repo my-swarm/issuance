@@ -41,12 +41,10 @@ export const StateProvider = ({ reducer, children }: StateProviderProps): ReactE
   const [appState, dispatch]: StateValue = useReducer(reducer, initialState);
   useEffect(() => {
     storage.load().then((storedState) => {
-      if (storedState) {
-        dispatch({
-          type: 'restoreState',
-          data: storedState,
-        });
-      }
+      dispatch({
+        type: 'restoreState',
+        data: storedState || {},
+      });
     });
   }, []);
 

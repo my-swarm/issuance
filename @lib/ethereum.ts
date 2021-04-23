@@ -28,7 +28,7 @@ export const BASE_CURRENCIES: { [key: string]: EthereumToken } = {
     decimals: 6,
     addresses: {
       [EthereumNetwork.Main]: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-      [EthereumNetwork.Kovan]: '0x2F375e94FC336Cdec2Dc0cCB5277FE59CBf1cAe5',
+      [EthereumNetwork.Kovan]: '0xF2ed3cA62b1D4dd57ad46184634f6b1F8Be85EE3',
       [EthereumNetwork.Local]: localAddresses.USDC,
     },
   },

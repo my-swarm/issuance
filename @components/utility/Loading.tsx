@@ -4,7 +4,7 @@ import { Space } from 'antd';
 import { Box } from './Box';
 
 interface Props {
-  message: string;
+  message?: string;
 }
 
 export function Loading({ message = 'Loading' }: Props): ReactElement {

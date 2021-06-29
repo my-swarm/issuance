@@ -21,3 +21,4 @@ export * from './PoweredBySwarm';
 export * from './SideBox';
 export * from './TransferDirection';
 export * from './Fieldset';
+export * from './SwmHeader';

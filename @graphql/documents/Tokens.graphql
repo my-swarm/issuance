@@ -52,3 +52,9 @@ query Tokens($owner: Bytes!) {
     ...Token
   }
 }
+
+query PublicTokens {
+  tokens {
+    ...Token
+  }
+}

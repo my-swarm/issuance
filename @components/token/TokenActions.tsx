@@ -14,27 +14,34 @@ import { useEthers } from '@app';
 
 interface TokenActionsProps {
   token: TokenRecord;
+  isPublic: boolean;
   onAction: (action: TokenAction) => void;
 }
 
-export function TokenActions({ token, onAction }: TokenActionsProps): React.ReactElement {
+export function TokenActions({ token, isPublic, onAction }: TokenActionsProps): React.ReactElement {
   const actions: ReactElement[] = [];
   const { connected } = useEthers();
 
+  const ActionInfo = (
+    <Tooltip title="Token information">
+      <Button key="info" onClick={() => onAction(TokenAction.Info)} icon={<InfoCircleOutlined />} type="dashed" />
+    </Tooltip>
+  );
+
   if (!connected) {
-    return <div>Not connected</div>;
+    return ActionInfo;
   }
 
   const { localState } = token;
 
-  if (localState === LocalTokenState.Created) {
+  if (!isPublic && localState === LocalTokenState.Created) {
     actions.push(
       <Tooltip title="Edit undeployed token">
         <Button key="edit" onClick={() => onAction(TokenAction.Edit)} icon={<FormOutlined />} />
       </Tooltip>,
     );
   }
-  if (localState === LocalTokenState.Created) {
+  if (!isPublic && localState === LocalTokenState.Created) {
     actions.push(
       <Tooltip title="Deploy your token">
         <Button key="deploy" onClick={() => onAction(TokenAction.Deploy)} icon={<RocketOutlined />}>
@@ -44,7 +51,7 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     );
   }
 
-  if (token.address && !token.isFundraising && !token.isMinted) {
+  if (!isPublic && token.address && !token.isFundraising && !token.isMinted) {
     actions.push(
       <Button key="fundraiser" onClick={() => onAction(TokenAction.StartFundraise)} icon={<RocketOutlined />}>
         Fundraise
@@ -59,7 +66,7 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     );
   }
 
-  if (token.isFundraising) {
+  if (!isPublic && token.isFundraising) {
     actions.push(
       <Tooltip title="Manage your fundraiser">
         <Button
@@ -71,7 +78,7 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     );
   }
 
-  if (token.isMinted) {
+  if (!isPublic && token.isMinted) {
     actions.push(
       <Tooltip title="Manage your token">
         <Button key="manageToken" onClick={() => onAction(TokenAction.ManageToken)} icon={<SlidersOutlined />} />
@@ -79,13 +86,9 @@ export function TokenActions({ token, onAction }: TokenActionsProps): React.Reac
     );
   }
 
-  actions.push(
-    <Tooltip title="Token information">
-      <Button key="info" onClick={() => onAction(TokenAction.Info)} icon={<InfoCircleOutlined />} type="dashed" />
-    </Tooltip>,
-  );
+  actions.push(ActionInfo);
 
-  if (!token.address) {
+  if (!isPublic && !token.address) {
     actions.push(
       <Popconfirm
         key="delete"

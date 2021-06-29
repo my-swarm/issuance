@@ -7,6 +7,7 @@ import {
   DollarCircleOutlined,
   InfoCircleOutlined,
   WalletOutlined,
+  UnorderedListOutlined,
 } from '@lib/icons';
 import { useRouter } from 'next/router';
 
@@ -23,6 +24,11 @@ export function MainMenu(): ReactElement {
       <Menu.Item key="/contribute" icon={<DollarCircleOutlined />}>
         <Link href="/contribute">
           <a>Contribute</a>
+        </Link>
+      </Menu.Item>
+      <Menu.Item key="/registry" icon={<UnorderedListOutlined />}>
+        <Link href="/registry">
+          <a>Token Registry</a>
         </Link>
       </Menu.Item>
       <Menu.Item key="/wallet" icon={<WalletOutlined />}>

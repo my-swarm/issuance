@@ -7,12 +7,14 @@ import {
   RequireEthers,
   SwmPriceChart,
   SwmStakeChart,
+  SwmHeader,
   UniswapWidget,
+  NetworkNote,
+  TokenListPublic,
 } from '@components';
 import { Card, Col, Divider, Row, Space } from 'antd';
 import { PriceData } from '@lib';
 import { SWM_STAKE_OLD_REGISTRY } from '@app';
-import { NetworkNote } from '../@components/dashboard/NetworkNote';
 
 const cgUrlStats = 'https://api.coingecko.com/api/v3/coins/swarm';
 const cgUrlDaily =
@@ -82,13 +84,10 @@ export default function Index(): ReactElement {
         <Col {...colLayout}>{<UniswapWidget />}</Col>
       </Row>
       <Divider />
-      <h2>
-        <Space>
-          <img src="/images/swarm-symbol.svg" alt="Swarm symbol" className="h-4 w-a" />
-          <span>Powered by Swarm</span>
-        </Space>
-      </h2>
+      <SwmHeader>Latest fundraisers</SwmHeader>
       <InvestFundraisers limit={3} />
+      <SwmHeader>Token registry</SwmHeader>
+      <TokenListPublic />
 
       {buyingSwm && <BuySwmModal onClose={() => setBuyingSwm(false)} />}
     </DefaultLayout>

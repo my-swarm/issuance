@@ -66,6 +66,10 @@ export function InvestFundraisers({ limit = 100, offset = 0, search = '' }: Inve
     }
   }
 
+  if (filteredFundraiesers.length === 0) {
+    return <p>Unfortunately there are no active fundraisers at the moment</p>;
+  }
+
   return (
     <>
       <div className="clearfix">

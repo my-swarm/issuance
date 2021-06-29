@@ -36,3 +36,4 @@ export { default as MenuOutlined } from '@ant-design/icons/lib/icons/MenuOutline
 export { default as SlidersOutlined } from '@ant-design/icons/lib/icons/SlidersOutlined';
 export { default as FormOutlined } from '@ant-design/icons/lib/icons/FormOutlined';
 export { default as ZoomInOutlined } from '@ant-design/icons/lib/icons/ZoomInOutlined';
+export { default as UnorderedListOutlined } from '@ant-design/icons/lib/icons/UnorderedListOutlined';

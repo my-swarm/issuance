@@ -12,3 +12,5 @@ export * from './TokenInfoDeployed';
 export * from './TokenInfoFee';
 export * from './TokenStartFundraiser';
 export * from './TokenManageFundraiser';
+export * from './TokenList';
+export * from './TokenListPublic';

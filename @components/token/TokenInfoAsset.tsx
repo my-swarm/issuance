@@ -6,7 +6,7 @@ import { useKya } from '@app';
 
 export function TokenInfoAsset(): ReactElement {
   const { kya, nav } = useKya();
-  if (!kya) return <Loading />;
+  if (!kya) return <Loading message="Loading asset info" />;
 
   const { asset } = kya;
 

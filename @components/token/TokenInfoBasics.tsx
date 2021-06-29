@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Descriptions } from 'antd';
+import { BigNumber } from '@ethersproject/bignumber';
 import { formatNumber, formatUnits, tokenFeatures } from '@lib';
 import { useAppState, useKya } from '@app';
 import { ImagePreview, Loading } from '../utility';
@@ -8,7 +9,7 @@ export function TokenInfoBasics(): ReactElement {
   const [{ onlineToken, localToken }] = useAppState();
   const { kya, nav } = useKya();
 
-  if (!kya) return <Loading />;
+  if (!kya) return <Loading message="Loading token info" />;
 
   const token = onlineToken || localToken;
 
@@ -20,7 +21,7 @@ export function TokenInfoBasics(): ReactElement {
     return (
       <>
         <Descriptions.Item label="Max Token supply">
-          {localToken.totalSupply ? `${formatNumber(localToken.totalSupply)} ${token.symbol}` : 'unlimited'}
+          {localToken.totalSupply ? `${formatNumber(localToken.totalSupply)} ${token.symbol}` : 'Unlimited'}
         </Descriptions.Item>
         <Descriptions.Item label="Features">{features.join(', ')}</Descriptions.Item>
       </>
@@ -39,7 +40,9 @@ export function TokenInfoBasics(): ReactElement {
           {formatNumber(formatUnits(onlineToken.supply, onlineToken.decimals))} {token.symbol}
         </Descriptions.Item>
         <Descriptions.Item label="Maximum supply">
-          {formatNumber(formatUnits(onlineToken.maxSupply, token.decimals))} {token.symbol}
+          {BigNumber.from(onlineToken.maxSupply).eq(0)
+            ? 'Unlimited'
+            : formatNumber(formatUnits(onlineToken.maxSupply, token.decimals)) + ' ' + token.symbol}
         </Descriptions.Item>
         <Descriptions.Item label="Available supply">
           {formatNumber(formatUnits(onlineToken.availableSupply, token.decimals))} {token.symbol}

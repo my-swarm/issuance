@@ -5,6 +5,7 @@ import {
   DefaultLayout,
   InvestFundraisers,
   RequireEthers,
+  RequireCorrectNetwork,
   SwmPriceChart,
   SwmStakeChart,
   SwmHeader,
@@ -51,9 +52,9 @@ export default function Index(): ReactElement {
   return (
     <DefaultLayout title="Swarm Dashboard">
       <NetworkNote />
-      <Row gutter={24} className="dashboard">
-        <Col {...colLayout}>
-          <RequireEthers showMessage={false}>
+      <RequireCorrectNetwork>
+        <Row gutter={24} className="dashboard">
+          <Col {...colLayout}>
             <Card
               title="SWARM token"
               style={{ marginBottom: '24px' }}
@@ -67,22 +68,24 @@ export default function Index(): ReactElement {
                 </a>
               }
             >
-              <SwmStakeChart total={swmCircSupply} issuerStake={SWM_STAKE_OLD_REGISTRY} />
+              <RequireCorrectNetwork>
+                <SwmStakeChart total={swmCircSupply} issuerStake={SWM_STAKE_OLD_REGISTRY} />
+              </RequireCorrectNetwork>
             </Card>
-          </RequireEthers>
-          <Card
-            title="SWM price (2 weeks)"
-            extra={
-              <a href="https://www.coingecko.com/en/coins/swarm-fund" target="_blank" rel="noopener noreferrer">
-                more
-              </a>
-            }
-          >
-            <SwmPriceChart data={priceData} />
-          </Card>
-        </Col>
-        <Col {...colLayout}>{<UniswapWidget />}</Col>
-      </Row>
+            <Card
+              title="SWM price (2 weeks)"
+              extra={
+                <a href="https://www.coingecko.com/en/coins/swarm-fund" target="_blank" rel="noopener noreferrer">
+                  more
+                </a>
+              }
+            >
+              <SwmPriceChart data={priceData} />
+            </Card>
+          </Col>
+          <Col {...colLayout}>{<UniswapWidget />}</Col>
+        </Row>
+      </RequireCorrectNetwork>
       <Divider />
       <SwmHeader>Latest fundraisers</SwmHeader>
       <InvestFundraisers limit={3} />

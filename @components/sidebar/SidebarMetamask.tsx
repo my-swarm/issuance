@@ -2,14 +2,12 @@ import React from 'react';
 import { Tooltip } from 'antd';
 import { ExclamationCircleOutlined } from '@lib/icons';
 
-import { EthereumNetwork, getNetworkName } from '@lib';
+import { getNetworkName, supportedNetworks } from '@lib';
 import { EthersStatus, useEthers } from '@app';
 import { Address, SideBox } from '@components';
 
 export function SidebarMetamask() {
   const { status, connect, address, networkId } = useEthers();
-
-  const supportedNetworks = [EthereumNetwork.Main, EthereumNetwork.Kovan];
 
   let cardTitle, cardBody;
   switch (status) {

@@ -46,3 +46,5 @@ export function getNetworkName(networkId: number): string {
   const name = getNetwork(networkId).name;
   return name === 'homestead' ? 'mainnet' : name;
 }
+
+export const supportedNetworks = [EthereumNetwork.Main, EthereumNetwork.Kovan];

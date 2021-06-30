@@ -39,7 +39,13 @@ export function getContractAddress(
 ): string | undefined {
   contractName = getFullName(contractName);
   const addrs = addresses[networkId];
-  if (!addrs) throw new Error(`Addresses for network '${networkId}' not found`);
+  if (!addrs) {
+    if (process.env.NEXT_PUBLIC_DEV) {
+      return undefined;
+    } else {
+      throw new Error(`Addresses for network '${networkId}' not found`);
+    }
+  }
   const contractMeta = contractsMeta[contractName];
   let address = addrs[contractName];
   if (!address && token && !contractMeta.isBase) {
@@ -51,7 +57,13 @@ export function getContractAddress(
 export function getContractBytecode(contractName: string): string {
   contractName = getFullName(contractName);
   const bytecode = bytecodes[contractName];
-  if (!bytecode) throw new Error(`Bytecode for '${contractName}' not found`);
+  if (!bytecode) {
+    if (process.env.NEXT_PUBLIC_DEV) {
+      return undefined;
+    } else {
+      throw new Error(`Bytecode for '${contractName}' not found`);
+    }
+  }
   return bytecode;
 }
 

@@ -21,7 +21,7 @@ export function Address({
   short = false,
   shorter = false,
 }: AddressProps): ReactElement | null | undefined {
-  const { networkId } = useEthers();
+  let { networkId } = useEthers();
 
   const handleCopyToClipboard = useCallback(() => {
     if (typeof children === 'string') {
@@ -34,7 +34,7 @@ export function Address({
   }
 
   if (link && !networkId) {
-    throw new Error('Need to provide networkId to display as a link');
+    networkId = EthereumNetwork.Main;
   }
 
   let result;

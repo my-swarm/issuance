@@ -3,6 +3,7 @@ export * from './Help';
 export * from './HelpLabel';
 export * from './UploadDraggerContent';
 export * from './RequireEthers';
+export * from './RequireCorrectNetwork';
 export * from './FilePreview';
 export * from './ImagePreview';
 export * from './TransactionModal';

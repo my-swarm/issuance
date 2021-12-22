@@ -1,11 +1,12 @@
 import React, { ReactElement } from 'react';
 import { Descriptions } from 'antd';
 import { BigNumber } from '@ethersproject/bignumber';
-import { formatNumber, formatUnits, tokenFeatures, formatDatetime } from '@lib';
-import { useAppState, useKya } from '@app';
+import { formatNumber, formatUnits, tokenFeatures, formatDatetime, tokenBalance } from '@lib';
+import { useAppState, useEthers, useKya } from '@app';
 import { ImagePreview, Loading } from '../utility';
 
 export function TokenInfoBasics(): ReactElement {
+  const { block } = useEthers();
   const [{ onlineToken, localToken }] = useAppState();
   const { kya } = useKya();
 
@@ -49,7 +50,8 @@ export function TokenInfoBasics(): ReactElement {
             : formatNumber(formatUnits(onlineToken.maxSupply, token.decimals)) + ' ' + token.symbol}
         </Descriptions.Item>
         <Descriptions.Item label="Available supply">
-          {formatNumber(formatUnits(onlineToken.availableSupply, token.decimals))} {token.symbol}
+          {formatNumber(formatUnits(tokenBalance(block, onlineToken, onlineToken.availableSupply), token.decimals))}{' '}
+          {token.symbol}
         </Descriptions.Item>
         <Descriptions.Item label="Features">{features.join(', ')}</Descriptions.Item>
         {onlineToken.features.autoburnTs && (

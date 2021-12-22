@@ -10,6 +10,10 @@ query Wallet($address: Bytes) {
       greylist(where: { address: $address }) {
         address
       },
+      features {
+        autoburn
+        autoburnTs
+      }
     }
   }
 }

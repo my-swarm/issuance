@@ -4,7 +4,7 @@ import { Alert, Button, Descriptions, Form, Input, Modal, Radio, Space } from 'a
 
 import { useAppState, useDispatch, useEthers, useGraphql } from '@app';
 import { ContributorStatus, useDistrubuteQuery } from '@graphql';
-import { formatUnits, parseAddressesInput, parseUnits } from '@lib';
+import { formatUnits, parseAddressesInput, parseUnits, tokenBalance } from '@lib';
 import { AmountsTable, Help, Loading, VSpace } from '..';
 
 type DistributionType = 'fundraiser' | 'custom';
@@ -18,7 +18,7 @@ type FormData = {
 const distributeBatchSize = 5;
 
 export function ManageDistribute(): ReactElement {
-  const { address: myAddress } = useEthers();
+  const { block, address: myAddress } = useEthers();
   const { dispatchTransaction } = useDispatch();
   const [{ onlineToken }] = useAppState();
   const [form] = Form.useForm();
@@ -109,11 +109,13 @@ export function ManageDistribute(): ReactElement {
     addresses: '',
   };
 
+  const realAvailableSupply = tokenBalance(block, token, availableSupply);
+
   return (
     <>
       <Descriptions bordered column={1}>
         <Descriptions.Item label="Available supply">
-          {formatUnits(availableSupply, token.decimals)} {token.symbol}
+          {formatUnits(realAvailableSupply, token.decimals)} {token.symbol}
         </Descriptions.Item>
       </Descriptions>
 
@@ -147,7 +149,7 @@ export function ManageDistribute(): ReactElement {
 
         <Form.Item>
           <Space>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" disabled={realAvailableSupply.eq(0)}>
               Distribute
             </Button>
           </Space>

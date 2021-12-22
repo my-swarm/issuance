@@ -7,3 +7,4 @@ node_modules
 .env.local
 @graphql/schema.graphql
 @graphql/index.tsx
+dev_data/addresses/local.json

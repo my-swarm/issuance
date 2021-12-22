@@ -1,6 +1,9 @@
-import { LocalToken } from './localToken';
+import { LocalToken, OnlineToken } from './localToken';
 import dayjs from 'dayjs';
 import { defaultAbiCoder } from '@ethersproject/abi';
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
+import { Provider } from '@ethersproject/abstract-provider';
+import { Block } from '@ethersproject/providers';
 
 export enum Src20FeaturesBitmask {
   allowForceTransfer = 1,
@@ -26,4 +29,11 @@ export function getFeaturesOptionsAbiEncoded(token: LocalToken): string {
   if (token.allowAutoburn) {
     return defaultAbiCoder.encode(['uint256'], [dayjs(token.autoburnTs).unix()]);
   }
+}
+
+export function tokenBalance(block: Block, token: OnlineToken, value: BigNumberish): BigNumber {
+  if (token.features.autoburn && (!block || block?.timestamp >= token.features.autoburnTs)) {
+    return BigNumber.from(0);
+  }
+  return BigNumber.from(value);
 }

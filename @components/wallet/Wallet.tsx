@@ -4,7 +4,7 @@ import { AlignType } from 'rc-table/es/interface';
 import { BigNumber } from '@ethersproject/bignumber';
 
 import { FundraiserStatus, TokenInfoFragment, useWalletLazyQuery } from '@graphql';
-import { formatNumber, formatUnits, getClaimableAmount } from '@lib';
+import { formatNumber, formatUnits, getClaimableAmount, tokenBalance } from '@lib';
 import { DollarCircleOutlined } from '@lib/icons';
 import { useContract, useDetailAction, useEthers, useGraphql } from '@app';
 import { DefaultLayout, Loading, RequireEthers, WalletDetail } from '..';
@@ -40,7 +40,7 @@ export function Wallet(): ReactElement {
   const [swmBalance, setSwmBalance] = useState<BigNumber>();
   const [usdcBalance, setUsdcBalance] = useState<BigNumber>();
   const { usdc, swm } = useContract();
-  const { connected, address, signer } = useEthers();
+  const { connected, address, signer, block } = useEthers();
   const { reset } = useGraphql();
   const [loadQuery, { data, loading }] = useWalletLazyQuery();
 
@@ -63,7 +63,7 @@ export function Wallet(): ReactElement {
   let wallet: WalletRecord[] = (data?.tokenHolders || []).map((tokenHolder) => {
     return {
       token: tokenHolder.token,
-      balance: tokenHolder.balance,
+      balance: tokenBalance(block, tokenHolder.token, tokenHolder.balance),
       claimable: BigNumber.from(0),
       referrals: BigNumber.from(0),
       special: false,

@@ -1,12 +1,13 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import { useAppState, useContract, useDispatch, useGraphql, useSwmBalance } from '@app';
+import { useAppState, useContract, useDispatch, useEthers, useGraphql, useSwmBalance } from '@app';
 import { Button, Checkbox, Col, Divider, Form, InputNumber, Row, Space, Statistic } from 'antd';
-import { formatInt, formatUnits, getUnitsAsNumber, parseUnits, SWM_TOKEN_DECIMALS } from '@lib';
+import { formatInt, formatUnits, getUnitsAsNumber, parseUnits, SWM_TOKEN_DECIMALS, tokenBalance } from '@lib';
 import { useTokenQuery } from '@graphql';
 import { Help, Loading } from '@components';
 import { BigNumber, BigNumberish } from 'ethers';
 
 export function ManageSupply(): ReactElement {
+  const { block } = useEthers();
   const { reset } = useGraphql();
   const [{ onlineToken }] = useAppState();
   const [showExactValues, setShowExactValues] = useState<boolean>(false);
@@ -107,7 +108,7 @@ export function ManageSupply(): ReactElement {
       <Row gutter={[24, 16]}>
         {renderStat('Supply', 'supply', token.supply)}
         {renderStat('Max Supply', 'maxSupply', token.maxSupply)}
-        {renderStat('Available Supply', 'availableSupply', token.availableSupply)}
+        {renderStat('Available Supply', 'availableSupply', tokenBalance(block, token, token.availableSupply))}
         {renderStat('Fee paid', 'currentFee', token.fee, SWM_TOKEN_DECIMALS, 'SWM')}
         {renderStat('SWM Balance', 'swmBalance', swmBalance.raw as BigNumber, SWM_TOKEN_DECIMALS, 'SWM')}
         {renderStat('Current NAV', 'supplyNav', token.nav, 0, 'USD')}

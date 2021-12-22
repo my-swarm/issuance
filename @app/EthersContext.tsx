@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { getNetwork, Network, Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
+import { getNetwork, Network, Web3Provider, JsonRpcProvider, Block } from '@ethersproject/providers';
 import { Contract } from '@ethersproject/contracts';
 import { Signer } from '@ethersproject/abstract-signer';
 import { Wallet } from '@ethersproject/wallet';
@@ -23,6 +23,7 @@ interface ContextProps {
   connected: boolean;
   disconnect: () => void;
   contract: (name: string) => Contract;
+  block: Block;
 }
 
 export const EthersContext = React.createContext<Partial<ContextProps>>({});
@@ -39,6 +40,7 @@ export function EthersProvider({ children, devAccountId }: EthersProviderProps):
   const [status, setStatus] = useState<EthersStatus>(EthersStatus.DISCONNECTED);
   const [address, setAddress] = useState<string>();
   const [metamask, setMetamask] = useState<Metamask>();
+  const [block, setBlock] = useState<Block>();
 
   useEffect(() => {
     if (isDev && devAccountId !== undefined) {
@@ -68,6 +70,10 @@ export function EthersProvider({ children, devAccountId }: EthersProviderProps):
       connect(true).then();
     }
   }, [metamask, connect]);
+
+  useEffect(() => {
+    if (provider) provider.getBlock('latest').then(setBlock);
+  }, [provider]);
 
   async function resetWeb3Provider(ethereum = undefined) {
     if (!ethereum) {
@@ -124,6 +130,7 @@ export function EthersProvider({ children, devAccountId }: EthersProviderProps):
         networkId,
         network: getNetwork(networkId),
         connect,
+        block,
       }}
     >
       {children}

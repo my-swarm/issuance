@@ -10,6 +10,7 @@ import { Alert, Divider } from 'antd';
 import { useEthers } from '@app';
 import { TransferForm, TransferHistory, TransferRequests } from '../common';
 import { Loading } from '../utility';
+import { tokenBalance } from '@lib';
 
 interface WalletDetailProps {
   token: TokenInfoFragment;
@@ -24,7 +25,7 @@ function mergeRecords<T extends TransferOrRequest>(t1: T[], t2: T[]): T[] {
 
 export function WalletDetail({ token, onReset }: WalletDetailProps): ReactElement {
   const [loadQuery, { data, loading }] = useWalletDetailLazyQuery();
-  const { address } = useEthers();
+  const { address, block } = useEthers();
 
   const transfers = useMemo<TransferFragment[]>(() => {
     if (!data?.token) return [];
@@ -55,7 +56,11 @@ export function WalletDetail({ token, onReset }: WalletDetailProps): ReactElemen
     <div>
       <h2>Transfer</h2>
       {holder ? (
-        <TransferForm token={token} onSuccess={handleTransfered} currentBalance={holder.balance} />
+        <TransferForm
+          token={token}
+          onSuccess={handleTransfered}
+          currentBalance={tokenBalance(block, token, holder.balance)}
+        />
       ) : (
         <Alert type="warning" message="You don't own this token" />
       )}

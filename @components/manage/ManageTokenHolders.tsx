@@ -2,11 +2,11 @@ import React, { ReactElement, useState } from 'react';
 import { Checkbox, Dropdown, Menu, Space, Table, Tooltip } from 'antd';
 import { CheckCircleTwoTone, DownOutlined, ExclamationCircleTwoTone, SearchOutlined } from '@lib/icons';
 
-import { useAppState, useDispatch, useGraphql, useAccountNotes } from '@app';
+import { useAppState, useDispatch, useGraphql, useAccountNotes, useEthers } from '@app';
 import { useTokenHoldersQuery } from '@graphql';
 import { AccountBurnModal, Address, EditableCell, FilterDropdown, Loading, TransferModal } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
-import { formatUnits, formatDatetime, strcmp } from '@lib';
+import { formatUnits, formatDatetime, strcmp, tokenBalance } from '@lib';
 
 interface TableRecord {
   address: string;
@@ -18,6 +18,7 @@ interface TableRecord {
 }
 
 export function ManageTokenHolders(): ReactElement {
+  const { block } = useEthers();
   const { reset } = useGraphql();
   const [{ onlineToken }] = useAppState();
   const { dispatchTransaction, setAccountProp } = useDispatch();
@@ -62,7 +63,7 @@ export function ManageTokenHolders(): ReactElement {
       return {
         ...a,
         key: a.address, // for the table
-        balance: parseFloat(formatUnits(a.balance, token.decimals)),
+        balance: parseFloat(formatUnits(tokenBalance(block, token, a.balance), token.decimals)),
         ...accountNotes[a.address],
       };
     })

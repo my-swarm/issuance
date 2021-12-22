@@ -6,7 +6,7 @@ import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
 
 import { useAppState, useContractAddress, useDispatch, useEthers } from '@app';
 import { useTokenHoldersQuery } from '@graphql';
-import { bnRatio, getContractAbi, parseAddressesInput, parseUnits, sameAddress } from '@lib';
+import { bnRatio, getContractAbi, parseAddressesInput, parseUnits, sameAddress, tokenBalance } from '@lib';
 import { Help, Loading } from '..';
 
 type FormData = {
@@ -20,7 +20,7 @@ type FormData = {
 export function ManageDividends(): ReactElement {
   const [assetType, setAssetType] = useState('eth');
   const [{ onlineToken }] = useAppState();
-  const { address: myAddress, signer } = useEthers();
+  const { address: myAddress, signer, block } = useEthers();
   const { dispatchTransaction } = useDispatch();
   const { disperse: disperseAddress } = useContractAddress();
   const { loading, error, data } = useTokenHoldersQuery({
@@ -74,10 +74,10 @@ export function ManageDividends(): ReactElement {
       (holder) => holder.address !== AddressZero && !sameAddress(holder.address, myAddress),
     );
     let sum = BigNumber.from(0);
-    for (const holder of validHolders) sum = sum.add(BigNumber.from(holder.balance));
+    for (const holder of validHolders) sum = sum.add(tokenBalance(block, token, holder.balance));
     const addresses = validHolders
       .map((holder) => {
-        return `${holder.address},${bnRatio(holder.balance, sum)}`;
+        return `${holder.address},${bnRatio(tokenBalance(block, token, holder.balance), sum)}`;
       })
       .join('\n');
     form.setFieldsValue({ addresses });

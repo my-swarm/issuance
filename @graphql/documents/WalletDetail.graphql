@@ -26,5 +26,9 @@ query WalletDetail($address: Bytes!, $token: ID!) {
     transferRequestsTo: transferRequests(where: { toAddress: $address, status_not: Approved }) {
       ...TransferRequest
     }
+    features {
+      autoburn
+      autoburnTs
+    }
   }
 }

@@ -43,8 +43,10 @@ export const etherscanDomains = {
 };
 
 export function getNetworkName(networkId: number): string {
+  if (networkId === 31337) return 'local';
   const name = getNetwork(networkId).name;
-  return name === 'homestead' ? 'mainnet' : name;
+  if (name === 'homestead') return 'mainnet';
+  return name;
 }
 
 export const supportedNetworks = [EthereumNetwork.Main, EthereumNetwork.Kovan];

@@ -62,8 +62,6 @@ function getTokenList(localTokens: LocalToken[], onlineTokens: OnlineToken[], ne
     }
   }
 
-  console.log({ localTokens });
-
   return result;
 }
 

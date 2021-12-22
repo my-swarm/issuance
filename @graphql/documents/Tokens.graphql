@@ -13,6 +13,8 @@ fragment TokenInfo on Token {
     tokenFreeze
     accountFreeze
     accountBurn
+    autoburn
+    autoburnTs
   }
 }
 

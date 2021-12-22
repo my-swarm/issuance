@@ -3,7 +3,14 @@ import { Button, Space } from 'antd';
 
 import { useAppState, useContract, useDispatch, useEthers } from '@app';
 import { TokenInfoAsset, TokenInfoBasics } from '..';
-import { getFeaturesAsContractValue, LocalTokenState, parseUnits, storeKya, tokenToKya } from '@lib';
+import {
+  getFeaturesAsContractValue,
+  getFeaturesOptionsAbiEncoded,
+  LocalTokenState,
+  parseUnits,
+  storeKya,
+  tokenToKya,
+} from '@lib';
 
 interface TokenDeployProps {
   onReview: () => void;
@@ -17,12 +24,6 @@ export function TokenDeploy({ onReview, onCancel }: TokenDeployProps): ReactElem
   const { networkId } = useEthers();
 
   const handleDeployed = () => {
-    console.log({
-      type: 'setTokenState',
-      id: token.id,
-      networkId,
-      state: LocalTokenState.Deployed,
-    });
     dispatch({
       type: 'setTokenState',
       id: token.id,
@@ -49,6 +50,7 @@ export function TokenDeploy({ onReview, onCancel }: TokenDeployProps): ReactElem
         kyaUri,
         nav || 0,
         getFeaturesAsContractValue(token),
+        getFeaturesOptionsAbiEncoded(token),
         registry.address,
         minter.address,
       ],

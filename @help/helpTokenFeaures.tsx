@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const allowTransferRules = {
-  title: 'Transfer Rules',
+  title: 'Transfer Rules (Whitelist, Greylist)',
   content: (
     <div>
       Allows token issuer to manage allowed token holders via whitelists and greylists. Whitelist restricts all
@@ -44,7 +44,7 @@ export const allowForceTransfer = {
 };
 
 export const allowBurn = {
-  title: 'Burn Tokens',
+  title: 'Burn Tokens from accounts',
   content: (
     <div>
       <p>
@@ -61,6 +61,18 @@ export const allowMint = {
       <p>
         Allows the token issuer to mint (create) additional tokens, increasing the total supply. Minting will require an
         additional stake of SWM.
+      </p>
+    </div>
+  ),
+};
+
+export const allowAutoburn = {
+  title: 'Automatic Token Burn',
+  content: (
+    <div>
+      <p>
+        Burns all tokens at a specified point in time. After the automatic burn, all account balances will show zero and
+        transfers will be completely disabled.
       </p>
     </div>
   ),

@@ -1,13 +1,13 @@
 import React, { ReactElement } from 'react';
 import { Descriptions } from 'antd';
 import { BigNumber } from '@ethersproject/bignumber';
-import { formatNumber, formatUnits, tokenFeatures } from '@lib';
+import { formatNumber, formatUnits, tokenFeatures, formatDatetime } from '@lib';
 import { useAppState, useKya } from '@app';
 import { ImagePreview, Loading } from '../utility';
 
 export function TokenInfoBasics(): ReactElement {
   const [{ onlineToken, localToken }] = useAppState();
-  const { kya, nav } = useKya();
+  const { kya } = useKya();
 
   if (!kya) return <Loading message="Loading token info" />;
 
@@ -24,6 +24,9 @@ export function TokenInfoBasics(): ReactElement {
           {localToken.totalSupply ? `${formatNumber(localToken.totalSupply)} ${token.symbol}` : 'Unlimited'}
         </Descriptions.Item>
         <Descriptions.Item label="Features">{features.join(', ')}</Descriptions.Item>
+        {localToken.autoburnTs && (
+          <Descriptions.Item label="Automatic Burn time">{formatDatetime(localToken.autoburnTs)}</Descriptions.Item>
+        )}
       </>
     );
   }
@@ -34,6 +37,7 @@ export function TokenInfoBasics(): ReactElement {
     if (onlineToken.features.accountBurn) features.push(tokenFeatures.allowBurn);
     if (onlineToken.features.forceTransfer) features.push(tokenFeatures.allowForceTransfer);
     if (onlineToken.features.tokenFreeze) features.push(tokenFeatures.allowContractFreeze);
+    if (onlineToken.features.autoburn) features.push(tokenFeatures.allowAutoburn);
     return (
       <>
         <Descriptions.Item label="Current supply">
@@ -48,6 +52,11 @@ export function TokenInfoBasics(): ReactElement {
           {formatNumber(formatUnits(onlineToken.availableSupply, token.decimals))} {token.symbol}
         </Descriptions.Item>
         <Descriptions.Item label="Features">{features.join(', ')}</Descriptions.Item>
+        {onlineToken.features.autoburnTs && (
+          <Descriptions.Item label="Automatic Burn time">
+            {formatDatetime(onlineToken.features.autoburnTs)}
+          </Descriptions.Item>
+        )}
       </>
     );
   }

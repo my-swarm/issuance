@@ -1,5 +1,5 @@
-import React, { ReactElement, useState } from 'react';
-import { Button, Checkbox, Col, Form, Input, InputNumber, Row, Space } from 'antd';
+import React, { ReactElement, useMemo, useState } from 'react';
+import { Button, Checkbox, Col, DatePicker, Form, Input, InputNumber, Row, Space } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Store } from 'rc-field-form/lib/interface';
 
@@ -7,6 +7,7 @@ import { LocalToken } from '@lib';
 import { tokenFormRules as rules } from './tokenFormRules';
 import { AssetFormStub, Fieldset, HelpLabel, TokenMetaStub } from '..';
 import { devDefaultToken, isDev } from '@app';
+import dayjs from 'dayjs';
 
 interface TokenFormProps {
   onCancel: () => void;
@@ -17,7 +18,8 @@ interface TokenFormProps {
 const defaultToken = isDev ? devDefaultToken : ({ decimals: 18 } as LocalToken);
 
 export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: TokenFormProps): ReactElement {
-  const [allowUnlimitedSupply, setallowUnlimitedSupply] = useState<boolean>(formData?.allowUnlimitedSupply || false);
+  const [allowUnlimitedSupply, setAllowUnlimitedSupply] = useState<boolean>(formData?.allowUnlimitedSupply || false);
+  const [allowAutoburn, setAllowAutoburn] = useState<boolean>(formData?.allowAutoburn || false);
   const [form] = Form.useForm();
 
   const handleCancel = () => {
@@ -29,12 +31,29 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
     onSubmit(token as LocalToken);
   };
 
-  const handleToggleallowUnlimitedSupply = (e: CheckboxChangeEvent) => {
-    setallowUnlimitedSupply(e.target.checked);
+  const handleToggleAllowUnlimitedSupply = (e: CheckboxChangeEvent) => {
+    setAllowUnlimitedSupply(e.target.checked);
   };
 
+  const handleToggleAllowAutoburn = (e: CheckboxChangeEvent) => {
+    setAllowAutoburn(e.target.checked);
+  };
+
+  const formDataProcessed = useMemo(
+    () => ({ ...formData, autoburnTs: formData.autoburnTs ? dayjs(formData.autoburnTs) : undefined }),
+    [formData],
+  );
+
+  console.log({ formData, formDataProcessed });
+
   return (
-    <Form form={form} onFinish={handleSubmit} onReset={handleCancel} layout="vertical" initialValues={formData}>
+    <Form
+      form={form}
+      onFinish={handleSubmit}
+      onReset={handleCancel}
+      layout="vertical"
+      initialValues={formDataProcessed}
+    >
       <Fieldset legend="Token basics">
         <Form.Item name="name" label="Token name" rules={rules.name}>
           <Input placeholder="Your token name" />
@@ -72,40 +91,53 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
             <InputNumber disabled={allowUnlimitedSupply} />
           </Form.Item>
           <Form.Item name="allowUnlimitedSupply" valuePropName="checked">
-            <Checkbox onChange={handleToggleallowUnlimitedSupply}>Unlimited total supply</Checkbox>
+            <Checkbox onChange={handleToggleAllowUnlimitedSupply}>Unlimited total supply</Checkbox>
           </Form.Item>
         </Space>
       </Fieldset>
 
       <Fieldset legend="Token features">
         <Form.Item>
-          <Form.Item name="allowTransferRules" valuePropName="checked" className="no-margin">
+          <Form.Item name="allowTransferRules" className="no-margin" valuePropName="checked">
             <Checkbox>
               <HelpLabel name="allowTransferRules" />
             </Checkbox>
           </Form.Item>
-          <Form.Item name="allowAccountFreeze" valuePropName="checked" className="no-margin">
+          <Form.Item name="allowAccountFreeze" className="no-margin" valuePropName="checked">
             <Checkbox>
               <HelpLabel name="allowAccountFreeze" />
             </Checkbox>
           </Form.Item>
-          <Form.Item name="allowContractFreeze" valuePropName="checked" className="no-margin">
+          <Form.Item name="allowContractFreeze" className="no-margin" valuePropName="checked">
             <Checkbox>
               <HelpLabel name="allowContractFreeze" />
             </Checkbox>
           </Form.Item>
-          <Form.Item name="allowForceTransfer" valuePropName="checked" className="no-margin">
+          <Form.Item name="allowForceTransfer" className="no-margin" valuePropName="checked">
             <Checkbox>
               <HelpLabel name="allowForceTransfer" />
             </Checkbox>
           </Form.Item>
-          <Form.Item name="allowBurn" valuePropName="checked" className="no-margin">
+          <Form.Item name="allowBurn" className="no-margin" valuePropName="checked">
             <Checkbox>
               <HelpLabel name="allowBurn" />
             </Checkbox>
           </Form.Item>
+          <Form.Item name="allowAutoburn" className="no-margin" valuePropName="checked">
+            <Checkbox onChange={handleToggleAllowAutoburn}>
+              <HelpLabel name="allowAutoburn" />
+            </Checkbox>
+          </Form.Item>
         </Form.Item>
       </Fieldset>
+
+      {allowAutoburn && (
+        <Fieldset legend="Automatic Token Burn">
+          <Form.Item name="autoburnTs" label="Automatic burn time">
+            <DatePicker showTime />
+          </Form.Item>
+        </Fieldset>
+      )}
 
       <Fieldset legend="Asset details">
         <p>Define your asset, it&apos;s value and other information in detail.</p>

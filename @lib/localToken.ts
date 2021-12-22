@@ -56,6 +56,9 @@ export interface LocalToken extends LocalTokenKya {
   allowForceTransfer: boolean;
   allowBurn: boolean;
   allowMint: boolean;
+  allowAutoburn: boolean;
+
+  autoburnTs: Date;
 
   networkState: Partial<Record<EthereumNetwork, LocalTokenState>>;
 }
@@ -102,6 +105,7 @@ export const tokenFeatures = {
   allowForceTransfer: 'Allow Force Transfer',
   allowBurn: 'Allow Burn',
   allowMint: 'Allow Mint',
+  allowAutoburn: 'Automatic Token Burn',
 };
 
 export function processNewToken(token: LocalToken): LocalToken {

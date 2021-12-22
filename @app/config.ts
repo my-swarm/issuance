@@ -7,7 +7,8 @@ export const MANAGE_TABLE_PER_PAGE = 10;
 export const SWM_STAKE_OLD_REGISTRY = 281842;
 
 export const knownAccounts = {
-  swarmTreasury: '0x689a20daa8b813a73f86717b572e8fa3a42398d6',
+  swarmTreasuryOld: '0x689a20daa8b813a73f86717b572e8fa3a42398d6',
+  swarmTreasury: '0x33e33760c3e3e452b6c7692fa94654b8fc48065b',
   swarmMnRewards: '0xa450791357cAD888C429386bB1C2Fd27f6C1001b',
 };
 
@@ -99,13 +100,13 @@ export const devDefaultFundraiser: LocalFundraiser = {
 
 export const devEthereumAccounts = [
   {
-    address: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
-    privateKey: '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
+    address: '0xb9a96b5c322e02ab6bc337be1448c4bc5b040fef',
+    privateKey: '0xfceb92abc33d58c70fc0012ef5283a5df08abef64f2e865693b9f55e201eb585',
     title: 'Swarm',
   },
   {
-    address: '0x70997970c51812dc3a010c7d01b50e0d17dc79c8',
-    privateKey: '0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d',
+    address: '0x9af7698ab9edfff376ae519d3fa87fe44b7dd114',
+    privateKey: '0xd33a672f8b35d436300ac26446f995cf76a8da2fe371e92c836b027928893c89',
     title: 'Token issuer',
   },
   /*
@@ -121,8 +122,8 @@ export const devEthereumAccounts = [
   },
   */
   {
-    address: '0x15d34aaf54267db7d7c367839aaf71a00a2c6a65',
-    privateKey: '0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a',
+    address: '0x5fa6cb828574aef0c397e59cad2aaaf04dbe0f98',
+    privateKey: '0xecdfe96f4e966b08a157fad60a86cb20bf0e9436437108276b02894cf2975c8a',
     title: 'Investor 1',
   },
   {
@@ -131,8 +132,8 @@ export const devEthereumAccounts = [
     title: 'Investor 2',
   },
   {
-    address: '0x976ea74026e726554db657fa54763abd0c3a0aa9',
-    privateKey: '0x92db14e403b83dfe3df233f83dfa3a0d7096f21ca9b0d6d6b8d88b2b4ec1564e',
+    address: '0x9c63d1698c0dc928d09ba58251a1d55f5095e408',
+    privateKey: '0x1353523cc469a7440c5470771d2e51f6fafefc593465b409a33f4b5754312fa9',
     title: 'Investor 3',
   },
 ];

@@ -16,6 +16,7 @@ export function NetworkNote(): ReactElement {
     siteNetwork = 'local';
   }
   const connectedNetwork = useMemo(() => (networkId ? getNetworkName(networkId) : undefined), [networkId]);
+  console.log({siteNetwork, connectedNetwork, networkId});
 
   if (connectedNetwork && connectedNetwork !== siteNetwork) {
     return (

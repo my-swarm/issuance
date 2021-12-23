@@ -2,7 +2,7 @@ import React from 'react';
 import { Tooltip } from 'antd';
 import { ExclamationCircleOutlined } from '@lib/icons';
 
-import { getNetworkName, supportedNetworks } from '@lib';
+import { getNetwork, supportedNetworks } from '@lib';
 import { EthersStatus, useEthers } from '@app';
 import { Address, SideBox } from '@components';
 
@@ -34,7 +34,7 @@ export function SidebarMetamask() {
                 <ExclamationCircleOutlined twoToneColor="red" />
               </Tooltip>
             )}{' '}
-            <strong>{getNetworkName(networkId)}</strong>
+            <strong>{getNetwork(networkId)}</strong>
           </div>
         </div>
       );

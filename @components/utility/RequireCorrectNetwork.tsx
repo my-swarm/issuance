@@ -1,36 +1,41 @@
 import React, { PropsWithChildren, ReactElement } from 'react';
 import { useEthers } from '@app';
-import { Card } from 'antd';
-import { supportedNetworks } from '@lib';
+import { Alert } from 'antd';
+import { networkNames } from '@lib';
 import { RequireEthers } from './RequireEthers';
 
-const defaultMessage = 'Please connect to Main Ethereum Network (or Kovan for testing).';
-
 interface Props {
-  message?: string;
   showMessage?: boolean;
 }
 
-export function RequireCorrectNetwork({
-  showMessage = true,
-  message = defaultMessage,
-  children,
-}: PropsWithChildren<Props>): ReactElement {
+export function RequireCorrectNetwork({ children }: PropsWithChildren<Props>): ReactElement {
   const { connected, networkId } = useEthers();
 
-  if (!connected) {
-    return <RequireEthers showMessage={showMessage} />;
+  if (!connected || !networkId) {
+    return <RequireEthers showMessage={true} />;
   }
-  if (supportedNetworks.indexOf(networkId) === -1) {
-    if (showMessage) {
-      return (
-        <Card title="Etherem Mainnet required">
-          <p>{message}</p>
-        </Card>
-      );
-    } else {
-      return null;
-    }
-  }
-  return <>{children}</>;
+  const isAllowed = !!networkNames[networkId];
+  if (isAllowed) return <>{children}</>;
+
+  return (
+    <Alert
+      className="mb-4"
+      type="error"
+      showIcon={true}
+      message="Unsupported Network"
+      description={
+        <>
+          You are connected to Chain ID {networkId} which is not supported by this App.
+          <br />
+          Supported networks:{' '}
+          <strong>
+            {Object.values(networkNames)
+              .filter((x) => x !== 'Local')
+              .join(', ')}
+          </strong>
+          .
+        </>
+      }
+    />
+  );
 }

@@ -109,7 +109,7 @@ export function ManageDistribute(): ReactElement {
     addresses: '',
   };
 
-  const realAvailableSupply = tokenBalance(block, token, availableSupply);
+  const realAvailableSupply = tokenBalance(block, onlineToken, availableSupply);
 
   return (
     <>

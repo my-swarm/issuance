@@ -2,14 +2,37 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
 import { ApolloClient, ApolloProvider, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import '../styles/index.less';
-import { EthersProvider, reducer, StateProvider } from '@app';
-import { MetamaskNotReadyError } from '@lib';
+import { EthersProvider, graphqlEndpoints, reducer, StateProvider, useEthers } from '@app';
+import { EthereumNetwork, MetamaskNotReadyError } from '@lib';
 import { DevAccountSwitcher } from '@components';
 import { useRouter } from 'next/router';
 
-function MyApp({ Component, pageProps }: AppProps): ReactElement {
-  const router = useRouter();
+function InnerShit({ Component, pageProps }: AppProps): ReactElement {
+  const { networkId } = useEthers();
   const [apolloClient, setApolloClient] = useState<ApolloClient<NormalizedCacheObject>>();
+
+  const graphqlEndpoint = graphqlEndpoints[networkId] || graphqlEndpoints[EthereumNetwork.Main];
+
+  // todo: graphql url depends on env/networkId
+  useEffect(() => {
+    const client = new ApolloClient({
+      uri: graphqlEndpoint,
+      cache: new InMemoryCache(),
+    });
+    setApolloClient(client);
+  }, [graphqlEndpoint]);
+
+  if (!apolloClient) return null;
+
+  return (
+    <ApolloProvider client={apolloClient}>
+      <Component {...pageProps} />
+    </ApolloProvider>
+  );
+}
+
+function MyApp(props: AppProps): ReactElement {
+  const router = useRouter();
   const [devAccountId, setDevAccountId] = useState<number>(1);
 
   useEffect(() => {
@@ -24,36 +47,12 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
     };
   }, []);
 
-  // todo: graphql url depends on env/networkId
-  useEffect(() => {
-    const clientConfig = {
-      uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
-      cache: new InMemoryCache(),
-    };
-    const client = new ApolloClient(clientConfig);
-    setApolloClient(client);
-  }, []);
-
-  if (!apolloClient) return null;
-
   const isWidget = router.pathname.match(/^\/widgets\//);
-
-  /*
-  if (isWidget) {
-    return (
-      <ApolloProvider client={apolloClient}>
-        <Component {...pageProps} />
-      </ApolloProvider>
-    );
-  }
-*/
 
   return (
     <StateProvider reducer={reducer}>
       <EthersProvider devAccountId={devAccountId}>
-        <ApolloProvider client={apolloClient}>
-          <Component {...pageProps} />
-        </ApolloProvider>
+        <InnerShit {...props} />
       </EthersProvider>
       {!isWidget && <DevAccountSwitcher value={devAccountId} onChange={setDevAccountId} />}
     </StateProvider>

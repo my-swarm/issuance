@@ -58,7 +58,7 @@ export interface LocalToken extends LocalTokenKya {
   allowMint: boolean;
   allowAutoburn: boolean;
 
-  autoburnTs: Date;
+  autoburnTs?: Date;
 
   networkState: Partial<Record<EthereumNetwork, LocalTokenState>>;
 }

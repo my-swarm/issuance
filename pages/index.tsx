@@ -4,16 +4,14 @@ import {
   BuySwmModal,
   DefaultLayout,
   InvestFundraisers,
-  RequireEthers,
   RequireCorrectNetwork,
+  SwmHeader,
   SwmPriceChart,
   SwmStakeChart,
-  SwmHeader,
-  UniswapWidget,
-  NetworkNote,
   TokenListPublic,
+  UniswapWidget,
 } from '@components';
-import { Card, Col, Divider, Row, Space } from 'antd';
+import { Card, Col, Divider, Row } from 'antd';
 import { PriceData } from '@lib';
 import { SWM_STAKE_OLD_REGISTRY } from '@app';
 
@@ -51,7 +49,6 @@ export default function Index(): ReactElement {
 
   return (
     <DefaultLayout title="Swarm Dashboard">
-      <NetworkNote />
       <RequireCorrectNetwork>
         <Row gutter={24} className="dashboard">
           <Col {...colLayout}>

@@ -1,10 +1,10 @@
 import React, { ReactElement, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { getNetwork, Network, Web3Provider, JsonRpcProvider, Block } from '@ethersproject/providers';
+import { Block, JsonRpcProvider, Web3Provider } from '@ethersproject/providers';
 import { Contract } from '@ethersproject/contracts';
 import { Signer } from '@ethersproject/abstract-signer';
 import { Wallet } from '@ethersproject/wallet';
 import { devEthereumAccounts, devEthereumNode, isDev } from './config';
-import { Metamask, EthereumNetwork } from '@lib';
+import { EthereumNetwork, getNetwork, Metamask } from '@lib';
 
 export enum EthersStatus {
   DISCONNECTED,
@@ -18,7 +18,7 @@ interface ContextProps {
   signer?: Signer;
   address?: string;
   networkId: EthereumNetwork;
-  network: Network;
+  network: string;
   connect: (silent: boolean) => void;
   connected: boolean;
   disconnect: () => void;
@@ -57,7 +57,6 @@ export function EthersProvider({ children, devAccountId }: EthersProviderProps):
     async (silent: boolean): Promise<void> => {
       if (!metamask) return;
       metamask.onStateUpdate((e) => {
-        console.log('metemask state update', e);
         resetWeb3Provider(e);
       });
       await metamask.initAndConnect(silent);

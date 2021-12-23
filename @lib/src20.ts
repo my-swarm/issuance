@@ -2,7 +2,6 @@ import { LocalToken, OnlineToken } from './localToken';
 import dayjs from 'dayjs';
 import { defaultAbiCoder } from '@ethersproject/abi';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
-import { Provider } from '@ethersproject/abstract-provider';
 import { Block } from '@ethersproject/providers';
 
 export enum Src20FeaturesBitmask {
@@ -28,6 +27,8 @@ export function getFeaturesAsContractValue(token: LocalToken): number {
 export function getFeaturesOptionsAbiEncoded(token: LocalToken): string {
   if (token.allowAutoburn) {
     return defaultAbiCoder.encode(['uint256'], [dayjs(token.autoburnTs).unix()]);
+  } else {
+    return '0x00';
   }
 }
 

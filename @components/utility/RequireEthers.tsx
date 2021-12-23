@@ -3,7 +3,7 @@ import { useEthers } from '@app';
 import { Card } from 'antd';
 import { MetamaskConnect } from '@components/auth';
 
-const defaultMessage = 'You need to be connected to Ethereum network to proceed.';
+const defaultMessage = 'You need to be connected to Ethereum network.';
 
 interface Props {
   message?: string;

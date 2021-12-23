@@ -1,4 +1,4 @@
-import { LocalFundraiser, LocalToken } from '@lib';
+import { EthereumNetwork, LocalFundraiser, LocalToken } from '@lib';
 import dayjs from 'dayjs';
 import { BigNumber } from '@ethersproject/bignumber';
 
@@ -10,6 +10,14 @@ export const knownAccounts = {
   swarmTreasuryOld: '0x689a20daa8b813a73f86717b572e8fa3a42398d6',
   swarmTreasury: '0x33e33760c3e3e452b6c7692fa94654b8fc48065b',
   swarmMnRewards: '0xa450791357cAD888C429386bB1C2Fd27f6C1001b',
+};
+
+export const graphqlEndpoints = {
+  [EthereumNetwork.Local]: 'http://localhost:8100/subgraphs/name/my-swarm/issuance',
+  [EthereumNetwork.Main]: 'https://api.thegraph.com/subgraphs/name/my-swarm/issuance',
+  [EthereumNetwork.Kovan]: 'https://api.thegraph.com/subgraphs/name/my-swarm/issuance-kovan',
+  [EthereumNetwork.Mumbai]: 'https://api.thegraph.com/subgraphs/name/my-swarm/issuance-mumbai',
+  // [EthereumNetwork.Polygon]: 'https://api.thegraph.com/subgraphs/name/my-swarm/issuance-kovan',
 };
 
 export const devSwmBalances = {
@@ -72,6 +80,7 @@ export const devDefaultToken: LocalToken = {
   allowForceTransfer: true,
   allowBurn: true,
   allowMint: true,
+  allowAutoburn: false,
   assetName: 'Luxury Mediterranean Condo',
   assetDescription: 'Love my condo',
   networkState: undefined,

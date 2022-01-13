@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Space } from 'antd';
 import { useFeeInfo, useAppState } from '@app';
 import { formatUnits } from '@lib';
 import { Box } from '../utility';
@@ -31,12 +31,18 @@ export function StakingForm({ value, onSubmit }: Props): ReactElement {
           <strong>{maxSupply === 0 ? 'unlimited' : `${maxSupply} ${token.symbol}`}</strong>
         </Form.Item>
         <Form.Item
-          name="supply"
           label="Initial supply"
           normalize={normalizeSupply}
           rules={[{ required: true, message: 'Enter initial supply' }]}
         >
-          <Input />
+          <Space>
+            <Form.Item name="supply">
+              <Input />
+            </Form.Item>
+            <Button onClick={() => form.setFieldsValue({ supply: maxSupply })} type="ghost">
+              Use maximum
+            </Button>
+          </Space>
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 6, span: 14 }}>
           <Button htmlType="submit" type="primary" size="large" disabled={lowSwmBalance}>

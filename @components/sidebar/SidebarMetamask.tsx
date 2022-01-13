@@ -26,7 +26,7 @@ export function SidebarMetamask() {
 
       cardBody = (
         <div className="body">
-          <div className="mb-1">{address ? <Address short>{address}</Address> : 'unknown address'}</div>
+          <div className="mb-1">{address ? <Address shorter>{address}</Address> : 'unknown address'}</div>
           <div>
             network:{' '}
             {supportedNetworks.indexOf(networkId) === -1 && (

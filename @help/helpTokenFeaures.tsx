@@ -72,7 +72,14 @@ export const allowAutoburn = {
     <div>
       <p>
         Burns all tokens at a specified point in time. After the automatic burn, all account balances will show zero and
-        transfers will be completely disabled.
+        transfers won&apos;t work
+      </p>
+      <p>
+        The time is{' '}
+        <a href="https://en.wikipedia.org/wiki/Coordinated_Universal_Time" target="_blank" rel="noreferrer noopener">
+          UTC time
+        </a>
+        , same as the time that&apos;s used in Ethereum.
       </p>
     </div>
   ),

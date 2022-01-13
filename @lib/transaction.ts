@@ -23,6 +23,7 @@ export interface Transaction {
   overrides?: CallOverrides;
   description?: string;
   onSuccess?: () => void;
+  onError?: () => void;
   address?: string;
   createdAt?: Date;
   autoclose?: boolean;

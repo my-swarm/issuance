@@ -21,7 +21,7 @@ export function TokenInfoAsset(): ReactElement {
       labelStyle={{ width: '30%' }}
     >
       <Descriptions.Item label="Asset name">{asset.name}</Descriptions.Item>
-      <Descriptions.Item label="Asset Net Value">{formatNumber(nav)}</Descriptions.Item>
+      <Descriptions.Item label="Asset Net Value">{formatNumber(nav)} USD</Descriptions.Item>
       <Descriptions.Item label="NAV Supporting document">
         <FilePreview file={asset.navDocument} />
       </Descriptions.Item>

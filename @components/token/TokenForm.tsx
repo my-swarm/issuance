@@ -8,6 +8,7 @@ import { tokenFormRules as rules } from './tokenFormRules';
 import { AssetFormStub, Fieldset, HelpLabel, TokenMetaStub } from '..';
 import { devDefaultToken, isDev } from '@app';
 import dayjs from 'dayjs';
+import { range } from 'lodash';
 
 interface TokenFormProps {
   onCancel: () => void;
@@ -17,10 +18,21 @@ interface TokenFormProps {
 
 const defaultToken = isDev ? devDefaultToken : ({ decimals: 18 } as LocalToken);
 
+const disabledTime = (date) => {
+  const now = dayjs();
+  return date.isSame(now, 'day')
+    ? {
+        disabledHours: () => range(0, parseInt(now.format('HH'))),
+        disabledMinutes: () => (date.format('HH') === now.format('HH') ? range(0, parseInt(now.format('mm'))) : []),
+      }
+    : {};
+};
+
 export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: TokenFormProps): ReactElement {
   const [allowUnlimitedSupply, setAllowUnlimitedSupply] = useState<boolean>(formData?.allowUnlimitedSupply || false);
   const [allowAutoburn, setAllowAutoburn] = useState<boolean>(formData?.allowAutoburn || false);
   const [form] = Form.useForm();
+  const isNew = !formData?.id;
 
   const handleCancel = () => {
     form.resetFields();
@@ -43,8 +55,6 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
     () => ({ ...formData, autoburnTs: formData.autoburnTs ? dayjs(formData.autoburnTs) : undefined }),
     [formData],
   );
-
-  console.log({ formData, formDataProcessed });
 
   return (
     <Form
@@ -133,9 +143,15 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
 
       {allowAutoburn && (
         <Fieldset legend="Automatic Token Burn">
-          <Form.Item name="autoburnTs" label="Automatic burn time">
-            <DatePicker showTime />
+          <Form.Item name="autoburnTs" label="Automatic burn date and time (UTC)">
+            <DatePicker
+              format="YYYY-MM-DD HH:mm"
+              showTime={{ format: 'HH:mm' }}
+              disabledDate={(date) => date.isBefore(dayjs(), 'day')}
+              disabledTime={disabledTime}
+            />
           </Form.Item>
+          <p className="note">Note: The time you enter</p>
         </Fieldset>
       )}
 
@@ -147,11 +163,15 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
       <Form.Item>
         <Space>
           <Button type="primary" htmlType="submit">
-            {formData ? 'Save Token' : 'Create Token'}
+            {isNew ? 'Create Token' : 'Save Token Changes'}
           </Button>
           <Button htmlType="reset">Cancel</Button>
         </Space>
       </Form.Item>
+      <p className="note">
+        Note: Submitting this form <strong>does not deploy the token</strong>, only saves it on your computer to deploy
+        later.
+      </p>
     </Form>
   );
 }

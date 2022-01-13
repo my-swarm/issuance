@@ -53,4 +53,4 @@ export function getNetwork(networkId: number): string {
   return networkNames[networkId] || 'Unrecognized';
 }
 
-export const supportedNetworks = [EthereumNetwork.Main, EthereumNetwork.Kovan];
+export const supportedNetworks = [EthereumNetwork.Main, EthereumNetwork.Kovan, EthereumNetwork.Mumbai];

@@ -26,7 +26,9 @@ export function TokenInfoBasics(): ReactElement {
         </Descriptions.Item>
         <Descriptions.Item label="Features">{features.join(', ')}</Descriptions.Item>
         {localToken.autoburnTs && (
-          <Descriptions.Item label="Automatic Burn time">{formatDatetime(localToken.autoburnTs)}</Descriptions.Item>
+          <Descriptions.Item label="Automatic Burn time (UTC)">
+            {formatDatetime(localToken.autoburnTs)}
+          </Descriptions.Item>
         )}
       </>
     );
@@ -55,7 +57,7 @@ export function TokenInfoBasics(): ReactElement {
         </Descriptions.Item>
         <Descriptions.Item label="Features">{features.join(', ')}</Descriptions.Item>
         {onlineToken.features.autoburnTs && (
-          <Descriptions.Item label="Automatic Burn time">
+          <Descriptions.Item label="Automatic Burn time (UTC)">
             {formatDatetime(onlineToken.features.autoburnTs)}
           </Descriptions.Item>
         )}

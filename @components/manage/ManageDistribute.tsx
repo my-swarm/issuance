@@ -81,8 +81,8 @@ export function ManageDistribute(): ReactElement {
 
     const niceAmount = formatUnits(amount, token.decimals);
     Modal.confirm({
-      title: `Please confirm the distribution of ${niceAmount} ${token.symbol} to ${amounts.length} qualified investors`,
-      width: 400,
+      title: `Please confirm the distribution of ${niceAmount} ${token.symbol} to ${amounts.length} accounts`,
+      width: 640,
       content: (
         <>
           {pendingContributors.length > 0 && (

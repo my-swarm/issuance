@@ -20,6 +20,7 @@ export function TransactionModal(): ReactElement {
     } else {
       setError(e.reason || e.message || 'Unknown error');
     }
+    if (transaction.onError) transaction.onError();
   }
 
   useEffect(() => {

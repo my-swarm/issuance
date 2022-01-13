@@ -1,11 +1,11 @@
 import React, { ReactElement, useMemo, useState } from 'react';
-import { Button, Checkbox, Col, DatePicker, Form, Input, InputNumber, Row, Space } from 'antd';
+import { Button, Checkbox, Col, Form, Input, InputNumber, Row, Space } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Store } from 'rc-field-form/lib/interface';
 
 import { LocalToken } from '@lib';
 import { tokenFormRules as rules } from './tokenFormRules';
-import { AssetFormStub, Fieldset, HelpLabel, TokenMetaStub } from '..';
+import { AssetFormStub, Fieldset, HelpLabel, TokenMetaStub, DatePicker } from '..';
 import { devDefaultToken, isDev } from '@app';
 import dayjs from 'dayjs';
 import { range } from 'lodash';
@@ -20,7 +20,7 @@ const defaultToken = isDev ? devDefaultToken : ({ decimals: 18 } as LocalToken);
 
 const disabledTime = (date) => {
   const now = dayjs();
-  return date.isSame(now, 'day')
+  return date && date.isSame(now, 'day')
     ? {
         disabledHours: () => range(0, parseInt(now.format('HH'))),
         disabledMinutes: () => (date.format('HH') === now.format('HH') ? range(0, parseInt(now.format('mm'))) : []),

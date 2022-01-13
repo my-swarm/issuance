@@ -21,7 +21,18 @@ app.get('/', (req, res) => res.send('Backend for MySwarm App. Not of much use pu
 
 app.post('/api/kya/put', (req, res) => {
   console.log('put');
-  storage.put(req.body).then(({ cid, hash }) => res.send({ cid, hash }));
+  storage
+    .put(req.body)
+    .then(({ cid, hash }) => res.send({ cid, hash }))
+    .catch((e) => {
+      let error;
+      if (e.message.match(/ECONNREFUSED/)) {
+        error = 'Could not connect to IPFS gateway';
+      } else {
+        error = e.message;
+      }
+      res.status(500).send({ error });
+    });
 });
 
 app.post('/api/kya/get', (req, res) => {

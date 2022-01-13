@@ -5,6 +5,10 @@ export interface PutKyaResponse {
   hash: string;
 }
 
+interface RequestOptions {
+  timeout: number;
+}
+
 export class Api {
   private readonly baseUrl;
 
@@ -13,8 +17,7 @@ export class Api {
   }
 
   async putKya(kya: Kya): Promise<PutKyaResponse> {
-    const response = await this.apiRequest<PutKyaResponse>(`kya/put`, kya);
-    return response;
+    return await this.apiRequest<PutKyaResponse>(`kya/put`, kya, { timeout: 5000 });
   }
 
   async getKya(cid: string): Promise<Kya> {
@@ -25,15 +28,25 @@ export class Api {
     return this.apiRequest<Kya>(`kya/get`, { cid });
   }
 
-  private async apiRequest<T>(path: string, body: any): Promise<T> {
+  private async apiRequest<T>(path: string, body: any, options: Partial<RequestOptions> = {}): Promise<T> {
+    const timeout = options.timeout ?? 10000;
+    const controller = new AbortController();
+    const to = setTimeout(controller.abort, timeout);
     const response = await fetch(`${this.baseUrl}/${path}`, {
       method: 'POST',
       body: JSON.stringify(body),
       headers: {
         'Content-Type': 'application/json',
       },
+      signal: controller.signal,
     });
-    return ((await response.json()) as unknown) as T;
+    clearTimeout(to);
+    const responseData = ((await response.json()) as unknown) as T & { error: string };
+    if (response.status >= 400) {
+      console.log('status >= 400', responseData.error);
+      throw new Error(responseData.error || 'Unknown backend error');
+    }
+    return responseData;
   }
 }
 

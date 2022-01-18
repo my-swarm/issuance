@@ -9,6 +9,10 @@ interface ReturnType {
   swmLockedUni: number;
 }
 
+const noop = () => {
+  // nothing happens and we don't care :)
+};
+
 export function useSwmStake(): ReturnType {
   const [swmStake, setSwmStake] = useState<number>();
   const [swmRewards, setSwmRewards] = useState<number>();
@@ -22,15 +26,24 @@ export function useSwmStake(): ReturnType {
       setSwmRewards(117000);
       setSwmLockedUni(2290308);
     } else if (connected && stake && uniPair) {
-      stake.poolInfo(0).then((info) => {
-        setSwmStake(getUnitsAsNumber(info.totalStaked, SWM_TOKEN_DECIMALS));
-      });
-      stake.totalRewards().then((rewards) => {
-        setSwmRewards(getUnitsAsNumber(rewards, SWM_TOKEN_DECIMALS));
-      });
-      uniPair.getReserves().then(([reserveSwm]) => {
-        setSwmLockedUni(getUnitsAsNumber(reserveSwm, SWM_TOKEN_DECIMALS));
-      });
+      stake
+        .poolInfo(0)
+        .then((info) => {
+          setSwmStake(getUnitsAsNumber(info.totalStaked, SWM_TOKEN_DECIMALS));
+        })
+        .catch(noop);
+      stake
+        .totalRewards()
+        .then((rewards) => {
+          setSwmRewards(getUnitsAsNumber(rewards, SWM_TOKEN_DECIMALS));
+        })
+        .catch(noop);
+      uniPair
+        .getReserves()
+        .then(([reserveSwm]) => {
+          setSwmLockedUni(getUnitsAsNumber(reserveSwm, SWM_TOKEN_DECIMALS));
+        })
+        .catch(noop);
     }
   }, [connected, networkId, stake, uniPair]);
 

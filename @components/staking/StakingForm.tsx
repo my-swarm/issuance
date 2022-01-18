@@ -39,9 +39,11 @@ export function StakingForm({ value, onSubmit }: Props): ReactElement {
             <Form.Item name="supply">
               <Input />
             </Form.Item>
-            <Button onClick={() => form.setFieldsValue({ supply: maxSupply })} type="ghost">
-              Use maximum
-            </Button>
+            {maxSupply !== 0 && (
+              <Button onClick={() => form.setFieldsValue({ supply: maxSupply })} type="ghost">
+                Use maximum
+              </Button>
+            )}
           </Space>
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 6, span: 14 }}>

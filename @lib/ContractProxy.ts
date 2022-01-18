@@ -40,7 +40,7 @@ export class ContractProxy {
     events: { [index: string]: (event: Event) => void } = {},
     overrides: CallOverrides = {},
   ): Promise<Transaction> {
-    console.log('ContractProxy.call', { contractName, method, args, events, overrides });
+    // console.log('ContractProxy.call', { contractName, method, args, events, overrides });
     this.handleStateChange(TransactionState.None);
     let contract;
     if (typeof contractName === 'string') {

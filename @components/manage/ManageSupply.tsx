@@ -98,7 +98,6 @@ export function ManageSupply(): ReactElement {
     );
   }
 
-  console.log({ token });
   const availableSupply = tokenBalance(block, token, token.availableSupply);
   const canMint = bn(token.maxSupply).eq(0) || bn(token.maxSupply).gt(bn(token.supply));
   const canBurn = availableSupply.gt(0);

@@ -6,7 +6,7 @@ import { useAppState, useDispatch, useGraphql, useAccountNotes, useEthers } from
 import { useTokenHoldersQuery } from '@graphql';
 import { AccountBurnModal, Address, EditableCell, FilterDropdown, Loading, TransferModal } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
-import { formatUnits, formatDatetime, strcmp, tokenBalance } from '@lib';
+import { formatUnits, formatDatetime, strcmp, tokenBalance, tokenAutoburned } from '@lib';
 
 interface TableRecord {
   address: string;
@@ -83,11 +83,12 @@ export function ManageTokenHolders(): ReactElement {
   };
 
   const renderAction = (value: any, record: TableRecord) => {
+    const isAutoburned = tokenAutoburned(block, token);
     const enableFreeze = features.accountFreeze && !record.isFrozen;
     const enableUnfreeze = features.accountFreeze && record.isFrozen;
     const enableBurn = features.accountBurn && record.balance > 0;
     const enableTransfer = features.forceTransfer && record.balance > 0;
-    if (enableFreeze || enableUnfreeze || enableBurn || enableTransfer) {
+    if (!isAutoburned && (enableFreeze || enableUnfreeze || enableBurn || enableTransfer)) {
       const menu = (
         <Menu>
           {enableTransfer && <Menu.Item onClick={() => setTransferingFrom(record.address)}>Transfer tokens</Menu.Item>}

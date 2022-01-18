@@ -32,8 +32,12 @@ export function getFeaturesOptionsAbiEncoded(token: LocalToken): string {
   }
 }
 
+export function tokenAutoburned(block: Block, token: OnlineToken): boolean {
+  return token.features.autoburn && (!block || block?.timestamp >= token.features.autoburnTs);
+}
+
 export function tokenBalance(block: Block, token: OnlineToken, value: BigNumberish): BigNumber {
-  if (token.features.autoburn && (!block || block?.timestamp >= token.features.autoburnTs)) {
+  if (tokenAutoburned(block, token)) {
     return BigNumber.from(0);
   }
   return BigNumber.from(value);

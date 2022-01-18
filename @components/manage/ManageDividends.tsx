@@ -75,11 +75,11 @@ export function ManageDividends(): ReactElement {
     );
     let sum = BigNumber.from(0);
     for (const holder of validHolders) sum = sum.add(tokenBalance(block, token, holder.balance));
-    const addresses = validHolders
-      .map((holder) => {
-        return `${holder.address},${bnRatio(tokenBalance(block, token, holder.balance), sum)}`;
-      })
-      .join('\n');
+    const addresses = sum.eq(0)
+      ? ''
+      : validHolders
+          .map((holder) => `${holder.address},${bnRatio(tokenBalance(block, token, holder.balance), sum)}`)
+          .join('\n');
     form.setFieldsValue({ addresses });
   };
 

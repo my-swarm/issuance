@@ -1,56 +1,47 @@
 import React from 'react';
-import { Tooltip } from 'antd';
-import { ExclamationCircleOutlined } from '@lib/icons';
-
-import { getNetwork, supportedNetworks } from '@lib';
 import { EthersStatus, useEthers } from '@app';
-import { Address, SideBox } from '@components';
+import { Address, NetworkSwitcher, SideBox } from '@components';
+import { Button, Alert } from 'antd';
 
 export function SidebarMetamask() {
   const { status, connect, address, networkId } = useEthers();
 
-  let cardTitle, cardBody;
   switch (status) {
     case EthersStatus.DISCONNECTED:
-      cardTitle = 'Disconnected';
-      cardBody = (
-        <div className="body">
-          <a onClick={() => connect(false)} className="link">
-            connect
-          </a>
-        </div>
-      );
-      break;
-    case EthersStatus.CONNECTED:
-      cardTitle = 'Connected';
-
-      cardBody = (
-        <div className="body">
-          <div className="mb-1">{address ? <Address shorter>{address}</Address> : 'unknown address'}</div>
+      return (
+        <div className="c-sidebar-status">
+          <Alert type="error" message="Disconnected" showIcon className="mb-2" />
           <div>
-            network:{' '}
-            {supportedNetworks.indexOf(networkId) === -1 && (
-              <Tooltip title={`Unsupported network. Please use Kovan for testing`}>
-                <ExclamationCircleOutlined twoToneColor="red" />
-              </Tooltip>
-            )}{' '}
-            <strong>{getNetwork(networkId)}</strong>
+            <Button
+              onClick={() => connect(false)}
+              block
+              icon={
+                <img
+                  src="/images/metamask-fox.svg"
+                  alt="Metamask icon"
+                  style={{ height: '16px', width: 'auto', marginRight: '8px' }}
+                />
+              }
+            >
+              Connect
+            </Button>
           </div>
         </div>
       );
-      break;
+    case EthersStatus.CONNECTED:
+      return (
+        <div className="c-sidebar-status">
+          <Alert type="success" message="Connected" showIcon className="mb-2" />
+          <NetworkSwitcher />
+          <div className="mt-2 text-center">{address ? <Address shorter>{address}</Address> : 'unknown address'}</div>
+        </div>
+      );
     case EthersStatus.FAILED:
-      cardTitle = 'Failed';
-      cardBody = 'Failed to connect. Make sure you have Metamask installed';
-      break;
+      return (
+        <div className="c-sidebar-status">
+          <div>Failed</div>
+          <div>Failed to connect. Make sure you have Metamask installed</div>
+        </div>
+      );
   }
-
-  return (
-    <SideBox margin={4}>
-      <h3 className="title">
-        <img src="/images/metamask-fox.svg" alt="Metamask icon" className="image-1" /> {cardTitle}
-      </h3>
-      <div>{cardBody}</div>
-    </SideBox>
-  );
 }

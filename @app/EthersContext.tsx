@@ -24,6 +24,7 @@ interface ContextProps {
   disconnect: () => void;
   contract: (name: string) => Contract;
   block: Block;
+  changeNetwork: (networkId: number) => void;
 }
 
 export const EthersContext = React.createContext<Partial<ContextProps>>({});
@@ -118,6 +119,11 @@ export function EthersProvider({ children, devAccountId }: EthersProviderProps):
     setStatus(EthersStatus.CONNECTED);
   }
 
+  async function changeNetwork(networkId: number) {
+    if (!metamask) return;
+    metamask.changeNetwork(networkId);
+  }
+
   return (
     <EthersContext.Provider
       value={{
@@ -130,6 +136,7 @@ export function EthersProvider({ children, devAccountId }: EthersProviderProps):
         network: getNetwork(networkId),
         connect,
         block,
+        changeNetwork,
       }}
     >
       {children}

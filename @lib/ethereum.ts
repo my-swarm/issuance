@@ -43,14 +43,14 @@ export const etherscanDomains = {
 
 export const networkNames = {
   [EthereumNetwork.Local]: 'Local',
-  [EthereumNetwork.Main]: 'Mainnet',
-  [EthereumNetwork.Kovan]: 'Kovan',
-  [EthereumNetwork.Mumbai]: 'Mumbai',
+  [EthereumNetwork.Main]: 'Ethereum',
   [EthereumNetwork.Polygon]: 'Polygon',
+  [EthereumNetwork.Kovan]: 'Kovan testnet',
+  [EthereumNetwork.Mumbai]: 'Mumbai testnet',
 };
 
 export function getNetwork(networkId: number): string {
-  return networkNames[networkId] || 'Unrecognized';
+  return networkNames[networkId] || 'Unsupported chain';
 }
 
 export const supportedNetworks = [EthereumNetwork.Main, EthereumNetwork.Kovan, EthereumNetwork.Mumbai];

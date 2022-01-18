@@ -4,7 +4,7 @@ import { Alert, Button, Descriptions, Form, Input, Modal, Radio, Space } from 'a
 
 import { useAppState, useDispatch, useEthers, useGraphql } from '@app';
 import { ContributorStatus, useDistrubuteQuery } from '@graphql';
-import { formatUnits, parseAddressesInput, parseUnits, tokenBalance } from '@lib';
+import { bn, formatUnits, parseAddressesInput, parseUnits, tokenBalance } from '@lib';
 import { AmountsTable, Help, Loading, VSpace } from '..';
 
 type DistributionType = 'fundraiser' | 'custom';
@@ -77,6 +77,23 @@ export function ManageDistribute(): ReactElement {
       addresses = Object.keys(parsedInput);
       amounts = Object.values(parsedInput);
       amount = amounts.reduce((a, b) => a.add(b), BigNumber.from(0));
+    }
+
+    if (amount.gt(bn(token.availableSupply))) {
+      Modal.error({
+        title: 'Cannot distribute more than available supply',
+        content: (
+          <>
+            <p>
+              Available Supply: <strong>{formatUnits(token.availableSupply, token.decimals)}</strong>
+              <br />
+              Amount to distribute: <strong>{formatUnits(amount, token.decimals)}</strong>
+            </p>
+            <p>Please check your list of receivers.</p>
+          </>
+        ),
+      });
+      return;
     }
 
     const niceAmount = formatUnits(amount, token.decimals);

@@ -26,21 +26,21 @@ export function formatNumber(n: number | string, decimals = 0): string {
   return new Intl.NumberFormat('en-US', { maximumFractionDigits: decimals }).format(n);
 }
 
-export function formatInt(n) {
-  return n || 0;
+export function formatInt(n: number): string {
+  return n ? n.toString() : '0';
 }
 
-export function parseInt(n) {
-  return n;
-}
-
-export function bnCompare(a: BigNumber, b: BigNumber) {
+export function bnCompare(a: BigNumber, b: BigNumber): number {
   if (a.gt(b)) return -1;
   if (b.gt(a)) return 1;
   return 0;
 }
 
-export function bnRatio(a: BigNumberish, b: BigNumberish, precision = 8) {
+export function bnRatio(a: BigNumberish, b: BigNumberish, precision = 8): number {
   const multiplier = BigNumber.from(10).pow(precision);
   return BigNumber.from(a).mul(multiplier).div(BigNumber.from(b)).toNumber() / 10 ** precision;
+}
+
+export function bn(a: BigNumberish): BigNumber {
+  return BigNumber.from(a);
 }

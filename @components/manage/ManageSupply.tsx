@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useAppState, useContract, useDispatch, useEthers, useGraphql, useSwmBalance } from '@app';
 import { Button, Checkbox, Col, Divider, Form, InputNumber, Row, Space, Statistic } from 'antd';
-import { formatInt, formatUnits, getUnitsAsNumber, parseUnits, SWM_TOKEN_DECIMALS, tokenBalance } from '@lib';
+import { bn, formatInt, formatUnits, getUnitsAsNumber, parseUnits, SWM_TOKEN_DECIMALS, tokenBalance } from '@lib';
 import { useTokenQuery } from '@graphql';
 import { Help, Loading } from '@components';
 import { BigNumber, BigNumberish } from 'ethers';
@@ -98,6 +98,11 @@ export function ManageSupply(): ReactElement {
     );
   }
 
+  console.log({ token });
+  const availableSupply = tokenBalance(block, token, token.availableSupply);
+  const canMint = bn(token.maxSupply).eq(0) || bn(token.maxSupply).gt(bn(token.supply));
+  const canBurn = availableSupply.gt(0);
+
   return (
     <>
       <p>
@@ -108,7 +113,7 @@ export function ManageSupply(): ReactElement {
       <Row gutter={[24, 16]}>
         {renderStat('Supply', 'supply', token.supply)}
         {renderStat('Max Supply', 'maxSupply', token.maxSupply)}
-        {renderStat('Available Supply', 'availableSupply', tokenBalance(block, token, token.availableSupply))}
+        {renderStat('Available Supply', 'availableSupply', availableSupply)}
         {renderStat('Fee paid', 'currentFee', token.fee, SWM_TOKEN_DECIMALS, 'SWM')}
         {renderStat('SWM Balance', 'swmBalance', swmBalance.raw as BigNumber, SWM_TOKEN_DECIMALS, 'SWM')}
         {renderStat('Current NAV', 'supplyNav', token.nav, 0, 'USD')}
@@ -121,13 +126,13 @@ export function ManageSupply(): ReactElement {
       </h3>
       <Form form={increaseForm} onFinish={handleMint} layout="inline" className="mb-3">
         <Form.Item name="supply_add" label="Increase by">
-          <InputNumber min={0} formatter={formatInt} parser={parseInt} />
+          <InputNumber min={0} formatter={formatInt} parser={parseInt} disabled={!canMint} />
         </Form.Item>
         <Form.Item label="Additonal Fee (SWM)">
           <InputNumber disabled value={getUnitsAsNumber(fee, SWM_TOKEN_DECIMALS)} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" disabled={!canMint}>
             Increase
           </Button>
         </Form.Item>
@@ -138,10 +143,10 @@ export function ManageSupply(): ReactElement {
       </h3>
       <Form form={decreaseForm} onFinish={handleBurn} layout="inline">
         <Form.Item name="supply_sub" label="Decrease by">
-          <InputNumber min={0} formatter={formatInt} parser={parseInt} />
+          <InputNumber min={0} formatter={formatInt} parser={parseInt} disabled={!canBurn} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" disabled={!canBurn}>
             Decrease
           </Button>
         </Form.Item>

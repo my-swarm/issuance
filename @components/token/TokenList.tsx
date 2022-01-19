@@ -28,9 +28,10 @@ interface Props {
   isPublic?: boolean;
   outsideAction?: TokenAction;
   onClearAction?: () => void;
+  refetch: () => void;
 }
 
-export function TokenList({ tokens, isPublic = false, outsideAction, onClearAction }: Props): ReactElement {
+export function TokenList({ tokens, isPublic = false, outsideAction, onClearAction, refetch }: Props): ReactElement {
   const { connected, networkId } = useEthers();
   const [{ localToken }, dispatch] = useAppState();
   const { setToken } = useDispatch();
@@ -122,11 +123,17 @@ export function TokenList({ tokens, isPublic = false, outsideAction, onClearActi
     if (action === TokenAction.Create || action === TokenAction.Edit)
       return <TokenForm onSubmit={handleSubmit} onCancel={handleClearAction} formData={localToken} />;
     if (action === TokenAction.Deploy)
-      return <TokenDeploy onCancel={handleClearAction} onReview={() => handleSwitchActionAnimated(TokenAction.Edit)} />;
+      return (
+        <TokenDeploy
+          onCancel={handleClearAction}
+          onReview={() => handleSwitchActionAnimated(TokenAction.Edit)}
+          refetch={refetch}
+        />
+      );
     if (action === TokenAction.StartFundraise) return <TokenStartFundraiser onClose={handleClearAction} />;
     if (action === TokenAction.ManageToken) return <TokenManage />;
     if (action === TokenAction.ManageFundraise) return <TokenManageFundraiser />;
-    if (action === TokenAction.Mint) return <TokenMint onCancel={handleClearAction} />;
+    if (action === TokenAction.Mint) return <TokenMint onCancel={handleClearAction} refetch={refetch} />;
     if (action === TokenAction.Info) return <TokenInfo />;
   }
 

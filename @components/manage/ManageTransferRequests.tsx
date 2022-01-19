@@ -1,14 +1,13 @@
 import React, { ReactElement } from 'react';
 
-import { useAppState, useDispatch, useGraphql } from '@app';
-import { TransferRequestStatus, useTransferRequestsQuery } from '@graphql';
+import { useAppState, useDispatch } from '@app';
+import { useTransferRequestsQuery } from '@graphql';
 import { Loading, TransferRequestRecord, TransferRequests } from '@components';
 
 export function ManageTransferRequests(): ReactElement {
-  const { reset } = useGraphql();
   const [{ onlineToken }] = useAppState();
   const { dispatchTransaction } = useDispatch();
-  const { loading, data } = useTransferRequestsQuery({
+  const { loading, refetch, data } = useTransferRequestsQuery({
     variables: { token: onlineToken.id },
   });
   if (loading || !data) return <Loading />;
@@ -20,7 +19,7 @@ export function ManageTransferRequests(): ReactElement {
       method: 'transferRules.approveTransfer',
       args: [record.requestId],
       description: `Approving transfer from ${record.from} to ${record.to}`,
-      onSuccess: reset,
+      syncCallbacks: [refetch],
     });
   };
 
@@ -29,7 +28,7 @@ export function ManageTransferRequests(): ReactElement {
       method: 'transferRules.denyTransfer',
       args: [record.requestId],
       description: `Denying transfer from ${record.from} to ${record.to}`,
-      onSuccess: reset,
+      syncCallbacks: [refetch],
     });
   };
 

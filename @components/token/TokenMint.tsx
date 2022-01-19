@@ -1,19 +1,19 @@
 import React, { ReactElement, useState } from 'react';
 import { Alert, Button, Divider } from 'antd';
 
-import { useAppState, useContract, useDispatch, useFeeInfo, useGraphql } from '@app';
+import { useAppState, useContract, useDispatch, useFeeInfo } from '@app';
 import { parseUnits } from '@lib';
 import { FeeTable, StakingForm, StakingFormData, TokenInfoFee } from '..';
 
 interface Props {
   onCancel: () => void;
+  refetch: () => void;
 }
 
-export function TokenMint({ onCancel }: Props): ReactElement {
+export function TokenMint({ onCancel, refetch }: Props): ReactElement {
   const [{ onlineToken: token }] = useAppState();
   const { swm } = useContract();
   const { checkAllowance, dispatchTransaction } = useDispatch();
-  const { reset } = useGraphql();
   const [isStaked, setIsStaked] = useState<boolean>(false);
   const { fee, reloadSwmBalance } = useFeeInfo();
 
@@ -24,10 +24,10 @@ export function TokenMint({ onCancel }: Props): ReactElement {
         args: [parseUnits(values.supply, token.decimals)],
         description: 'Minting Your Token...',
         onSuccess: () => {
-          reset();
           reloadSwmBalance();
           setIsStaked(true);
         },
+        syncCallbacks: [refetch],
       });
     });
   };

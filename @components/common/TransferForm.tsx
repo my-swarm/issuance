@@ -11,7 +11,8 @@ interface TransferFormProps {
   type?: 'normal' | 'forced';
   from?: string;
   currentBalance: BigNumberish;
-  onSuccess: () => void;
+  onSuccess?: () => void;
+  refetch: () => void;
 }
 
 export function TransferForm({
@@ -20,6 +21,7 @@ export function TransferForm({
   from,
   currentBalance,
   onSuccess,
+  refetch,
 }: TransferFormProps): ReactElement {
   const { dispatchTransaction } = useDispatch();
   const { address } = useEthers();
@@ -30,7 +32,7 @@ export function TransferForm({
     currentBalance = parseFloat(formatUnits(BigNumber.from(currentBalance), token.decimals));
 
   const handleTransfer = async (values) => {
-    const method = type === 'normal' ? 'transfer' : 'transferForced';
+    const method = type === 'normal' ? 'transfer' : 'forceTransfer';
     const { to, amount } = values;
     const amountBn = parseUnits(amount, token.decimals);
     const args = method === 'transfer' ? [to, amountBn] : [from, to, amountBn];
@@ -45,8 +47,9 @@ export function TransferForm({
       description,
       onSuccess: () => {
         form.resetFields();
-        onSuccess();
+        if (onSuccess) onSuccess();
       },
+      syncCallbacks: [refetch],
     });
   };
 

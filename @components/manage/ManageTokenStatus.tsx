@@ -1,15 +1,14 @@
 import React, { ReactElement } from 'react';
-import { useAppState, useDispatch, useGraphql } from '@app';
+import { useAppState, useDispatch } from '@app';
 import { Alert, Button } from 'antd';
 import { useTokenStatusQuery } from '@graphql';
 import { Loading } from '@components';
 
 export function ManageTokenStatus(): ReactElement {
-  const { reset } = useGraphql();
   const [{ onlineToken }] = useAppState();
   const { dispatchTransaction } = useDispatch();
 
-  const { loading, error, data } = useTokenStatusQuery({
+  const { loading, refetch, data } = useTokenStatusQuery({
     variables: { id: onlineToken.id },
   });
   if (loading) return <Loading />;
@@ -19,7 +18,7 @@ export function ManageTokenStatus(): ReactElement {
     dispatchTransaction({
       method: 'features.pause',
       description: 'Freezing token',
-      onSuccess: reset,
+      syncCallbacks: [refetch],
     });
   };
 
@@ -27,7 +26,7 @@ export function ManageTokenStatus(): ReactElement {
     dispatchTransaction({
       method: 'features.unpause',
       description: 'Unfreezing token',
-      onSuccess: reset,
+      syncCallbacks: [refetch],
     });
   };
 

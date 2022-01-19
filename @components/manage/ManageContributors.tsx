@@ -3,7 +3,7 @@ import { CheckCircleTwoTone, DeleteTwoTone, DownOutlined, ExclamationCircleTwoTo
 import { Checkbox, Dropdown, Menu, Select, Space, Table, Tooltip } from 'antd';
 
 import { ContributorFragment, ContributorStatus, FundraiserStatus, FundraiserWithContributorsFragment } from '@graphql';
-import { useAccountNotes, useAppState, useDispatch, useGraphql } from '@app';
+import { useAccountNotes, useAppState, useDispatch } from '@app';
 import { Address, EditableCell, FilterDropdown } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
 import { formatUnits, strcmp } from '@lib';
@@ -16,12 +16,12 @@ interface TableRecord {
   note: string;
 }
 
-interface ManageContributorsProps {
+interface Props {
   fundraiser: FundraiserWithContributorsFragment;
+  refetch: () => void;
 }
 
-export function ManageContributors({ fundraiser }: ManageContributorsProps): ReactElement {
-  const { reset } = useGraphql();
+export function ManageContributors({ fundraiser, refetch }: Props): ReactElement {
   const [paginate, setPaginate] = useState<boolean>(true);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchText, setSearchText] = useState<string>('');
@@ -37,7 +37,7 @@ export function ManageContributors({ fundraiser }: ManageContributorsProps): Rea
       method: 'contributorRestrictions.whitelistAccount',
       args: [address],
       description: 'Confirming contributor...',
-      onSuccess: reset,
+      syncCallbacks: [refetch],
     });
   };
 
@@ -46,7 +46,7 @@ export function ManageContributors({ fundraiser }: ManageContributorsProps): Rea
       method: 'contributorRestrictions.unWhitelistAccount',
       args: [address],
       description: 'Removing contributor...',
-      onSuccess: reset,
+      syncCallbacks: [refetch],
     });
   };
 

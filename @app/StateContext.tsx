@@ -34,6 +34,8 @@ export const StateProvider = ({ reducer, children }: StateProviderProps): ReactE
     accountNames: {},
     accountNotes: {},
     pendingTransactions: [],
+    subgraphSyncing: false,
+    syncCallbacks: [],
   };
 
   const storage = useStorage();

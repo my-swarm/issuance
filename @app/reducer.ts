@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { EthereumNetwork, LocalToken, LocalTokenState, Uuid } from '@lib';
 import { Action, AppState } from '.';
 
-export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
+export const reducer: Reducer<any, any> = (state: AppState, action: Action): AppState => {
   function findToken(id: Uuid) {
     const token = state.tokens.find((t) => t.id === id);
     if (!token) {
@@ -198,6 +198,22 @@ export const reducer: Reducer<any, any> = (state: AppState, action: Action) => {
       } else {
         return state;
       }
+    }
+
+    case 'startSubgraphSync': {
+      return {
+        ...state,
+        syncCallbacks: action.callbacks,
+        subgraphSyncing: true,
+      };
+    }
+
+    case 'endSubgraphSync': {
+      return {
+        ...state,
+        subgraphSyncing: false,
+        syncCallbacks: [],
+      };
     }
   }
 };

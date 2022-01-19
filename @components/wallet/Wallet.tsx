@@ -6,7 +6,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { FundraiserStatus, TokenInfoFragment, useWalletLazyQuery } from '@graphql';
 import { formatNumber, formatUnits, getClaimableAmount, tokenBalance } from '@lib';
 import { DollarCircleOutlined } from '@lib/icons';
-import { useContract, useDetailAction, useEthers, useGraphql } from '@app';
+import { useContract, useDetailAction, useEthers } from '@app';
 import { DefaultLayout, Loading, RequireEthers, WalletDetail } from '..';
 import { tableColumns } from '../manage/listUtils';
 
@@ -20,6 +20,7 @@ export type WalletRecord = {
   balance: BigNumber;
   claimable: BigNumber;
   referrals: BigNumber;
+  address: string;
   special: boolean;
 };
 
@@ -31,6 +32,7 @@ function createSpecialRecord(symbol, name, decimals, balance): WalletRecord {
     referrals: BigNumber.from(0),
     special: true,
     image: `/images/coins/${symbol}.svg`,
+    address: symbol,
   };
 }
 
@@ -41,8 +43,7 @@ export function Wallet(): ReactElement {
   const [usdcBalance, setUsdcBalance] = useState<BigNumber>();
   const { usdc, swm } = useContract();
   const { connected, address, signer, block } = useEthers();
-  const { reset } = useGraphql();
-  const [loadQuery, { data, loading }] = useWalletLazyQuery();
+  const [loadQuery, { data, loading, refetch }] = useWalletLazyQuery();
 
   useEffect(() => {
     if (address) {
@@ -67,6 +68,7 @@ export function Wallet(): ReactElement {
       claimable: BigNumber.from(0),
       referrals: BigNumber.from(0),
       special: false,
+      address: tokenHolder.token.address,
     };
   });
   /*
@@ -161,7 +163,7 @@ export function Wallet(): ReactElement {
     const { token } = record;
     switch (action) {
       case WalletAction.Detail:
-        return <WalletDetail token={token} onReset={() => reset()} />;
+        return <WalletDetail token={token} refetch={refetch} />;
     }
   }
 
@@ -173,6 +175,7 @@ export function Wallet(): ReactElement {
     <>
       <Table
         dataSource={wallet}
+        rowKey="address"
         columns={columns}
         className="wallet-table"
         rowClassName={rowClassName}

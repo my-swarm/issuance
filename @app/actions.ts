@@ -111,6 +111,19 @@ interface RemovePendingTransactionAction {
   transaction: Transaction;
 }
 
+interface StartSubgraphSyncAction {
+  type: 'startSubgraphSync';
+  callbacks: (() => void)[];
+}
+
+interface EndSubgraphSyncAction {
+  type: 'endSubgraphSync';
+}
+
+// interface AddSubgraphSyncCallbackAction {
+//   type: 'addSubgraphSyncCallback';
+// }
+
 export type Action =
   | resetDataAction
   | AddTokenAction
@@ -130,4 +143,6 @@ export type Action =
   | SetAccountPropAction
   | BatchSetAccountPropAction
   | AddPendingTransactionAction
-  | RemovePendingTransactionAction;
+  | RemovePendingTransactionAction
+  | StartSubgraphSyncAction
+  | EndSubgraphSyncAction;

@@ -1,6 +1,6 @@
 import React, { ReactElement, useMemo } from 'react';
 import { Button, Tag, Alert, Divider } from 'antd';
-import { useContractAddress, useDispatch, useGraphql, useFeeInfo } from '@app';
+import { useContractAddress, useDispatch, useFeeInfo } from '@app';
 import { FundraiserStatus, FundraiserWithContributorsFragment } from '@graphql';
 import { BigNumber } from '@ethersproject/bignumber';
 import { formatUnits, parseUnits, SWM_TOKEN_DECIMALS, getUnitsAsNumber } from '@lib';
@@ -10,12 +10,12 @@ import { FeeTable } from '../misc';
 
 interface ManageFundraiserStateProps {
   fundraiser: FundraiserWithContributorsFragment;
+  refetch: () => void;
 }
 
-export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps): ReactElement {
+export function ManageFundraiserState({ fundraiser, refetch }: ManageFundraiserStateProps): ReactElement {
   const { dispatchTransaction, checkAllowance } = useDispatch();
   const { swm: swmAddress } = useContractAddress();
-  const { reset } = useGraphql();
   const baseCurrency = fundraiser.baseCurrency;
   const value = useMemo(() => {
     return getUnitsAsNumber(fundraiser.amountQualified, baseCurrency.decimals);
@@ -43,9 +43,7 @@ export function ManageFundraiserState({ fundraiser }: ManageFundraiserStateProps
             method: 'fundraiser.concludeFundraise',
             args: [true],
             description: 'Finishing fundraiser and minting tokens...',
-            onSuccess: () => {
-              reset();
-            },
+            syncCallbacks: [refetch],
           });
         });
       },

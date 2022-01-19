@@ -12,9 +12,9 @@ import { TransferForm, TransferHistory, TransferRequests } from '../common';
 import { Loading } from '../utility';
 import { tokenBalance } from '@lib';
 
-interface WalletDetailProps {
+interface Props {
   token: TokenInfoFragment;
-  onReset: () => void;
+  refetch: () => void;
 }
 
 type TransferOrRequest = TransferFragment | TransferRequestFragment;
@@ -23,8 +23,8 @@ function mergeRecords<T extends TransferOrRequest>(t1: T[], t2: T[]): T[] {
   return [...t1, ...t2].sort((a, b) => b.createdAt - a.createdAt);
 }
 
-export function WalletDetail({ token, onReset }: WalletDetailProps): ReactElement {
-  const [loadQuery, { data, loading }] = useWalletDetailLazyQuery();
+export function WalletDetail({ token, refetch }: Props): ReactElement {
+  const [loadQuery, { data, loading, refetch: refetchDetail }] = useWalletDetailLazyQuery();
   const { address, block } = useEthers();
 
   const transfers = useMemo<TransferFragment[]>(() => {
@@ -46,8 +46,9 @@ export function WalletDetail({ token, onReset }: WalletDetailProps): ReactElemen
     loadQuery({ variables: { address, token: token.address } });
   }, [address]);
 
-  const handleTransfered = () => {
-    onReset();
+  const handleRefetch = () => {
+    refetch();
+    refetchDetail();
   };
 
   if (loading) return <Loading />;
@@ -58,7 +59,7 @@ export function WalletDetail({ token, onReset }: WalletDetailProps): ReactElemen
       {holder ? (
         <TransferForm
           token={token}
-          onSuccess={handleTransfered}
+          refetch={handleRefetch}
           currentBalance={tokenBalance(block, token, holder.balance)}
         />
       ) : (

@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { Button, Descriptions, Form, Input, Modal, Typography } from 'antd';
 import { useFundraiserLazyQuery } from '@graphql';
 import { Address, Box, Help, Loading, TokenTitle, VSpace } from '@components';
-import { useDispatch, useErc20Balance, useEthers, useGraphql } from '@app';
+import { useDispatch, useErc20Balance, useEthers } from '@app';
 import { formatUnits, getUnitsAsNumber, parseUnits } from '@lib';
 import { BigNumber } from '@ethersproject/bignumber';
 
@@ -14,10 +14,9 @@ interface InvestContributeProps {
 
 export function InvestContribute({ id }: InvestContributeProps): ReactElement {
   const { address } = useEthers();
-  const [loadQuery, { data, loading }] = useFundraiserLazyQuery();
+  const [loadQuery, { data, loading, refetch }] = useFundraiserLazyQuery();
   const { checkAllowance, dispatchTransaction } = useDispatch();
   const [amount, setAmount] = useState<number>(0);
-  const { reset } = useGraphql();
   const [balance, reloadBalance] = useErc20Balance(data?.fundraiser?.baseCurrency?.address);
   const [form] = Form.useForm();
 
@@ -61,10 +60,10 @@ export function InvestContribute({ id }: InvestContributeProps): ReactElement {
               </div>
             ),
           });
-          reset();
           form.resetFields();
           reloadBalance();
         },
+        syncCallbacks: [refetch],
       });
     });
   };

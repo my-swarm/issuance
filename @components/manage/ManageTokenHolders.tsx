@@ -2,7 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { Checkbox, Dropdown, Menu, Space, Table, Tooltip } from 'antd';
 import { CheckCircleTwoTone, DownOutlined, ExclamationCircleTwoTone, SearchOutlined } from '@lib/icons';
 
-import { useAppState, useDispatch, useGraphql, useAccountNotes, useEthers } from '@app';
+import { useAppState, useDispatch, useAccountNotes, useEthers } from '@app';
 import { useTokenHoldersQuery } from '@graphql';
 import { AccountBurnModal, Address, EditableCell, FilterDropdown, Loading, TransferModal } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
@@ -19,7 +19,6 @@ interface TableRecord {
 
 export function ManageTokenHolders(): ReactElement {
   const { block } = useEthers();
-  const { reset } = useGraphql();
   const [{ onlineToken }] = useAppState();
   const { dispatchTransaction, setAccountProp } = useDispatch();
   const accountNotes = useAccountNotes(onlineToken.address);
@@ -27,7 +26,7 @@ export function ManageTokenHolders(): ReactElement {
   const [paginate, setPaginate] = useState<boolean>(true);
   const [transferingFrom, setTransferingFrom] = useState<string>();
   const [burningAccount, setBurningAccount] = useState<string>();
-  const { loading, error, data } = useTokenHoldersQuery({
+  const { loading, refetch, data } = useTokenHoldersQuery({
     variables: { token: onlineToken.id },
   });
   if (loading) return <Loading />;
@@ -39,7 +38,7 @@ export function ManageTokenHolders(): ReactElement {
       method: 'features.freezeAccount',
       args: [account],
       description: `Freezing account ${account}`,
-      onSuccess: reset,
+      syncCallbacks: [refetch],
     });
   };
 
@@ -48,14 +47,13 @@ export function ManageTokenHolders(): ReactElement {
       method: 'features.unfreezeAccount',
       args: [account],
       description: `Unfreezing account ${account}`,
-      onSuccess: reset,
+      syncCallbacks: [refetch],
     });
   };
 
   const handleCloseModal = () => {
     setBurningAccount(undefined);
     setTransferingFrom(undefined);
-    reset();
   };
 
   const tableData: TableRecord[] = holders
@@ -190,6 +188,7 @@ export function ManageTokenHolders(): ReactElement {
           address={burningAccount}
           currentBalance={tableData.find((x) => x.address === burningAccount).balance}
           onClose={handleCloseModal}
+          refetch={refetch}
         />
       )}
       {transferingFrom !== undefined && (
@@ -198,6 +197,7 @@ export function ManageTokenHolders(): ReactElement {
           from={transferingFrom}
           currentBalance={tableData.find((x) => x.address === transferingFrom).balance}
           onClose={handleCloseModal}
+          refetch={refetch}
         />
       )}
     </>

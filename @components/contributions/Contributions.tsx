@@ -11,6 +11,7 @@ import { tableColumns } from '../manage/listUtils';
 type FundraiserAction = 'fundraiser' | 'contribute';
 
 interface Record {
+  id: string;
   label: string | ReactElement;
   address: string;
   status: FundraiserStatus;
@@ -133,6 +134,7 @@ export function Contributions() {
       ? BigNumber.from(referral.amount).sub(BigNumber.from(referral.amountClaimed))
       : BigNumber.from(0);
     return {
+      id: fundraiser.id,
       label: (
         <Space>
           <strong>{token.symbol}</strong>
@@ -155,7 +157,7 @@ export function Contributions() {
 
   return (
     <>
-      <Table dataSource={datasource} columns={columns} pagination={false} />
+      <Table dataSource={datasource} columns={columns} pagination={false} rowKey="id" />
       <Drawer
         title={getActionTitle()}
         visible={action !== undefined}

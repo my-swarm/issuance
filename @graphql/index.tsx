@@ -2646,6 +2646,20 @@ export type InvestQuery = (
   )> }
 );
 
+export type MetaQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MetaQuery = (
+  { __typename?: 'Query' }
+  & { _meta?: Maybe<(
+    { __typename?: '_Meta_' }
+    & { block: (
+      { __typename?: '_Block_' }
+      & Pick<_Block_, 'number'>
+    ) }
+  )> }
+);
+
 export type TokenAssetQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -3460,6 +3474,40 @@ export function useInvestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Inv
 export type InvestQueryHookResult = ReturnType<typeof useInvestQuery>;
 export type InvestLazyQueryHookResult = ReturnType<typeof useInvestLazyQuery>;
 export type InvestQueryResult = Apollo.QueryResult<InvestQuery, InvestQueryVariables>;
+export const MetaDocument = gql`
+    query Meta {
+  _meta {
+    block {
+      number
+    }
+  }
+}
+    `;
+
+/**
+ * __useMetaQuery__
+ *
+ * To run a query within a React component, call `useMetaQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMetaQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMetaQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMetaQuery(baseOptions?: Apollo.QueryHookOptions<MetaQuery, MetaQueryVariables>) {
+        return Apollo.useQuery<MetaQuery, MetaQueryVariables>(MetaDocument, baseOptions);
+      }
+export function useMetaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MetaQuery, MetaQueryVariables>) {
+          return Apollo.useLazyQuery<MetaQuery, MetaQueryVariables>(MetaDocument, baseOptions);
+        }
+export type MetaQueryHookResult = ReturnType<typeof useMetaQuery>;
+export type MetaLazyQueryHookResult = ReturnType<typeof useMetaLazyQuery>;
+export type MetaQueryResult = Apollo.QueryResult<MetaQuery, MetaQueryVariables>;
 export const TokenAssetDocument = gql`
     query TokenAsset($id: ID!) {
   token(id: $id) {

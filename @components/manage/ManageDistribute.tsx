@@ -2,7 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';
 import { Alert, Button, Descriptions, Form, Input, Modal, Radio, Space } from 'antd';
 
-import { useAppState, useDispatch, useEthers, useGraphql } from '@app';
+import { useAppState, useDispatch, useEthers } from '@app';
 import { ContributorStatus, useDistrubuteQuery } from '@graphql';
 import { bn, formatUnits, parseAddressesInput, parseUnits, tokenBalance } from '@lib';
 import { AmountsTable, Help, Loading, VSpace } from '..';
@@ -22,8 +22,7 @@ export function ManageDistribute(): ReactElement {
   const { dispatchTransaction } = useDispatch();
   const [{ onlineToken }] = useAppState();
   const [form] = Form.useForm();
-  const { reset } = useGraphql();
-  const { loading, error, data } = useDistrubuteQuery({ variables: { id: onlineToken.id } });
+  const { loading, data, refetch } = useDistrubuteQuery({ variables: { id: onlineToken.id } });
   const [distributionType, setDistributionType] = useState<DistributionType>(
     data?.token?.currentFundraiser?.contributors ? 'fundraiser' : 'custom',
   );
@@ -53,13 +52,13 @@ export function ManageDistribute(): ReactElement {
         oneBatch ? `` : ` (batch ${batchNum} of ${numBatches}, ${distributeBatchSize} per batch)`
       }`,
       onSuccess: () => {
-        reset();
         if (amountsLeft.length > 0) {
           distributeBatch(amountsLeft, addressesLeft, totalCount, totalAmount);
         } else {
           form.resetFields();
         }
       },
+      syncCallbacks: amountsLeft.length === 0 ? [refetch] : [],
     });
   }
 

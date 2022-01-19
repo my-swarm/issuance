@@ -2,9 +2,9 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
 import { ApolloClient, ApolloProvider, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import '../styles/index.less';
-import { EthersProvider, graphqlEndpoints, reducer, StateProvider, useEthers } from '@app';
+import { EthersProvider, graphqlEndpoints, reducer, StateProvider, useAppState, useEthers } from '@app';
 import { EthereumNetwork, MetamaskNotReadyError } from '@lib';
-import { DevAccountSwitcher } from '@components';
+import { DevAccountSwitcher, SubgraphSyncing } from '@components';
 import { useRouter } from 'next/router';
 
 function InnerShit({ Component, pageProps }: AppProps): ReactElement {
@@ -27,6 +27,7 @@ function InnerShit({ Component, pageProps }: AppProps): ReactElement {
   return (
     <ApolloProvider client={apolloClient}>
       <Component {...pageProps} />
+      {/*<SubgraphSyncing />*/}
     </ApolloProvider>
   );
 }

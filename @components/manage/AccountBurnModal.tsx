@@ -10,9 +10,16 @@ interface AccountBurnModalProps {
   address: string;
   currentBalance: number;
   onClose: () => void;
+  refetch: () => void;
 }
 
-export function AccountBurnModal({ token, address, currentBalance, onClose }: AccountBurnModalProps): ReactElement {
+export function AccountBurnModal({
+  token,
+  address,
+  currentBalance,
+  onClose,
+  refetch,
+}: AccountBurnModalProps): ReactElement {
   const [amount, setAmount] = useState<number>(0);
   const { dispatchTransaction } = useDispatch();
 
@@ -22,6 +29,7 @@ export function AccountBurnModal({ token, address, currentBalance, onClose }: Ac
       args: [address, parseUnits(amount, token.decimals)],
       description: `Burning ${amount} ${token.symbol} from account ${address}`,
       onSuccess: handleCancel,
+      syncCallbacks: [refetch],
     });
   };
 

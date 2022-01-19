@@ -14,12 +14,13 @@ import {
 } from '@lib';
 import { LoadingOutlined } from '../../@lib/icons';
 
-interface TokenDeployProps {
+interface Props {
   onReview: () => void;
   onCancel: () => void;
+  refetch: () => void;
 }
 
-export function TokenDeploy({ onReview, onCancel }: TokenDeployProps): ReactElement {
+export function TokenDeploy({ onReview, onCancel, refetch }: Props): ReactElement {
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
   const [{ localToken: token }, dispatch] = useAppState();
   const { dispatchTransaction } = useDispatch();
@@ -77,6 +78,7 @@ export function TokenDeploy({ onReview, onCancel }: TokenDeployProps): ReactElem
       description: 'Deploying your token',
       onSuccess: handleDeployed,
       onError: () => setIsDeploying(false),
+      syncCallbacks: [refetch],
     });
   };
 

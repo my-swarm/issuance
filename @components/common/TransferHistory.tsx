@@ -81,11 +81,13 @@ export function TransferHistory({ token, transfers, direction = false }: Transfe
     })
     .filter((a) => `${a.from} ${a.to}`.toLowerCase().includes(searchText.toLowerCase()));
 
+  let key = 0;
   const pendingTransfers: TableRecord[] = pendingTransactions
     .filter((tx) => tx.contract === 'src20' && tx.method === 'transfer' && sameAddress(tx.address, token.address))
     .map((tx) => ({
       from: tx.address,
       to: tx.args[0],
+      key: key++,
       value: parseFloat(formatUnits(tx.args[1], token.decimals)),
       createdAt: Math.round(Date.now() / 1000),
       isPending: true,

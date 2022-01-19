@@ -15,7 +15,7 @@ import {
 
 export function TokenManageFundraiser(): ReactElement {
   const { fundraiser: fundraiserAddress } = useContractAddress();
-  const { loading, error, data } = useFundraiserWithContributorsQuery({ variables: { id: fundraiserAddress } });
+  const { loading, refetch, data } = useFundraiserWithContributorsQuery({ variables: { id: fundraiserAddress } });
   if (loading || !data) return <Loading />;
 
   const fundraiser = data.fundraiser;
@@ -31,7 +31,7 @@ export function TokenManageFundraiser(): ReactElement {
         </Collapse.Panel>
 
         <Collapse.Panel header="Contributors" key="contributors" extra={<Help name="manageContributors" />}>
-          <ManageContributors fundraiser={fundraiser} />
+          <ManageContributors fundraiser={fundraiser} refetch={refetch} />
         </Collapse.Panel>
 
         <Collapse.Panel header="Edit token's KYA" key="asset" extra={<Help name="manageAsset" />}>
@@ -40,12 +40,12 @@ export function TokenManageFundraiser(): ReactElement {
 
         {fundraiser.affiliateManager && (
           <Collapse.Panel header="Affiliates" key="affiliates" extra={<Help name="manageAffiliates" />}>
-            <ManageAffiliates fundraiser={fundraiser} />
+            <ManageAffiliates fundraiser={fundraiser} refetch={refetch} />
           </Collapse.Panel>
         )}
 
         <Collapse.Panel header="Mint Tokens" key="status" extra={<Help name="manageFundraiserStatus" />}>
-          <ManageFundraiserState fundraiser={fundraiser} />
+          <ManageFundraiserState fundraiser={fundraiser} refetch={refetch} />
         </Collapse.Panel>
 
         <Collapse.Panel header="Embed widget" key="embed" extra={<Help name="manageFundraiserEmbed" />}>

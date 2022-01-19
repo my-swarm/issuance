@@ -24,6 +24,7 @@ export interface Transaction {
   description?: string;
   onSuccess?: () => void;
   onError?: () => void;
+  syncCallbacks?: (() => void)[];
   address?: string;
   createdAt?: Date;
   autoclose?: boolean;

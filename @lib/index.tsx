@@ -20,3 +20,4 @@ export * from './kya';
 export * from './Api';
 export * from './price';
 export * from './src20';
+export * from './crypto';

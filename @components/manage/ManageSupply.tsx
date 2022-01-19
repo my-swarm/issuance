@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import { useAppState, useContract, useDispatch, useEthers, useGraphql, useSwmBalance } from '@app';
+import { useAppState, useContract, useDispatch, useEthers, useSwmBalance } from '@app';
 import { Button, Checkbox, Col, Divider, Form, InputNumber, Row, Space, Statistic } from 'antd';
 import { bn, formatInt, formatUnits, getUnitsAsNumber, parseUnits, SWM_TOKEN_DECIMALS, tokenBalance } from '@lib';
 import { useTokenQuery } from '@graphql';
@@ -8,7 +8,6 @@ import { BigNumber, BigNumberish } from 'ethers';
 
 export function ManageSupply(): ReactElement {
   const { block } = useEthers();
-  const { reset } = useGraphql();
   const [{ onlineToken }] = useAppState();
   const [showExactValues, setShowExactValues] = useState<boolean>(false);
   const [swmBalance, reloadSwmBalance] = useSwmBalance();
@@ -24,7 +23,7 @@ export function ManageSupply(): ReactElement {
     minter.getAdditionalFee(src20.address).then(setFee);
   }, [minter, src20]);
 
-  const { loading, data } = useTokenQuery({
+  const { loading, data, refetch } = useTokenQuery({
     variables: { id: onlineToken.id },
   });
 
@@ -40,10 +39,8 @@ export function ManageSupply(): ReactElement {
         method: 'src20.mint',
         args: [additionalSupply],
         description: 'Minting token supply',
-        onSuccess: () => {
-          reset();
-          reloadSwmBalance();
-        },
+        onSuccess: reloadSwmBalance,
+        syncCallbacks: [refetch],
       });
     });
   };
@@ -52,13 +49,11 @@ export function ManageSupply(): ReactElement {
     const supply = parseUnits(decreaseForm.getFieldValue('supply_sub'), token.decimals);
 
     dispatchTransaction({
-      method: 'minter.burn',
+      method: 'src20.burn',
       args: [supply],
       description: 'Burning token supply',
-      onSuccess: () => {
-        reset();
-        reloadSwmBalance();
-      },
+      onSuccess: reloadSwmBalance,
+      syncCallbacks: [refetch],
     });
   };
 

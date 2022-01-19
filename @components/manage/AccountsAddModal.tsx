@@ -4,9 +4,10 @@ import { useDispatch } from '@app';
 import { Help } from '@components';
 import { AccountListType, AccountMeta, AccountsMeta, parseAddressesInput } from '@lib';
 
-interface AccountsAddModalProps {
+interface Props {
   list: AccountListType;
   onClose: () => void;
+  refetch: () => void;
 }
 
 function listToContractMethod(list: AccountListType, operation: 'add' | 'remove'): string {
@@ -39,7 +40,7 @@ function listTitle(list: AccountListType): string {
   }
 }
 
-export function AccountsAddModal({ list, onClose }: AccountsAddModalProps): ReactElement {
+export function AccountsAddModal({ list, onClose, refetch }: Props): ReactElement {
   const [input, setInput] = useState<string>('');
   const { dispatchTransaction, dispatchError, batchSetAccountProp } = useDispatch();
 
@@ -52,6 +53,7 @@ export function AccountsAddModal({ list, onClose }: AccountsAddModalProps): Reac
         args: [addresses],
         description: `Adding ${addresses.length} addresses to your ${listTitle(list)}`,
         onSuccess: () => handleAddToLocalState(data),
+        syncCallbacks: [refetch],
       });
     } catch (e) {
       dispatchError(e.message, e.description);

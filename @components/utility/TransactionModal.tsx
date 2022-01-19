@@ -4,6 +4,7 @@ import { LoadingOutlined } from '@lib/icons';
 import { useAppState, useEthers } from '@app';
 import { ContractProxy, TransactionState, transactionStatesMeta } from '@lib';
 import { Transaction } from '@ethersproject/transactions';
+import { SubgraphSyncing } from './SubgraphSyncing';
 
 export function TransactionModal(): ReactElement {
   const { signer } = useEthers();
@@ -52,6 +53,9 @@ export function TransactionModal(): ReactElement {
       dispatch({ type: 'addPendingTransaction', transaction });
     } else if (state === TransactionState.Confirmed) {
       dispatch({ type: 'removePendingTransaction', transaction });
+      if (transaction.syncCallbacks) {
+        dispatch({ type: 'startSubgraphSync', callbacks: transaction.syncCallbacks });
+      }
       if (transaction.onSuccess) transaction.onSuccess();
       if (transaction.autoclose) handleClose();
     }
@@ -107,7 +111,7 @@ export function TransactionModal(): ReactElement {
       )}
       {transactionState === TransactionState.Confirmed && (
         <>
-          <p>Please note that it might take some times for the changes to show in the UI.</p>
+          <SubgraphSyncing />
           <div>
             <Button onClick={handleClose}>Close</Button>
           </div>

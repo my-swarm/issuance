@@ -9,12 +9,20 @@ interface TransferModalProps {
   currentBalance: number;
   onClose: () => void;
   token: TokenInfoFragment;
+  refetch: () => void;
 }
 
-export function TransferModal({ from, currentBalance, token, onClose }: TransferModalProps): ReactElement {
+export function TransferModal({ from, currentBalance, token, onClose, refetch }: TransferModalProps): ReactElement {
   return (
     <Modal visible={true} title="Transfer tokens" maskClosable={false} onCancel={onClose}>
-      <TransferForm type="forced" from={from} currentBalance={currentBalance} onSuccess={onClose} token={token} />
+      <TransferForm
+        type="forced"
+        from={from}
+        currentBalance={currentBalance}
+        onSuccess={onClose}
+        token={token}
+        refetch={refetch}
+      />
     </Modal>
   );
 }

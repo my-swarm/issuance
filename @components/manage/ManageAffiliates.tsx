@@ -3,7 +3,7 @@ import { DownOutlined, SearchOutlined } from '@lib/icons';
 import { Button, Checkbox, Dropdown, Menu, Table } from 'antd';
 
 import { AffiliateFragment, FundraiserStatus, FundraiserWithAffiliatesFragment } from '@graphql';
-import { useAccountNotes, useAppState, useDispatch, useGraphql } from '@app';
+import { useAccountNotes, useAppState, useDispatch } from '@app';
 import { Address, AffiliateEditModal, EditableCell, FilterDropdown } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
 import { formatUnits, parseUnits, strcmp } from '@lib';
@@ -21,10 +21,10 @@ interface TableRecord {
 
 interface ManageAffiliatesProps {
   fundraiser: FundraiserWithAffiliatesFragment;
+  refetch: () => void;
 }
 
-export function ManageAffiliates({ fundraiser }: ManageAffiliatesProps): ReactElement {
-  const { reset } = useGraphql();
+export function ManageAffiliates({ fundraiser, refetch }: ManageAffiliatesProps): ReactElement {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [affiliate, setAffiliate] = useState<AffiliateFragment>();
   const [paginate, setPaginate] = useState<boolean>(true);
@@ -50,10 +50,10 @@ export function ManageAffiliates({ fundraiser }: ManageAffiliatesProps): ReactEl
       args: [values.address, values.referral, parseUnits(values.percentage, 4)],
       description: affiliate ? 'Updating affiliate' : 'Adding affiliate',
       onSuccess: () => {
-        reset();
         setAffiliate(undefined);
         setIsEditing(false);
       },
+      syncCallbacks: [refetch],
     });
   };
 
@@ -62,7 +62,7 @@ export function ManageAffiliates({ fundraiser }: ManageAffiliatesProps): ReactEl
       method: 'affiliateManager.remove',
       args: [address],
       description: 'Removing affiliate...',
-      onSuccess: reset,
+      syncCallbacks: [refetch],
     });
   };
 

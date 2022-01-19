@@ -4,7 +4,7 @@ import { Button, Checkbox, Col, Popconfirm, Row, Table } from 'antd';
 import { SearchOutlined } from '@lib/icons';
 
 import { Account, AccountList, RawAccountList } from '@lib';
-import { useAccountNotes, useAppState, useDispatch, useGraphql } from '@app';
+import { useAccountNotes, useAppState, useDispatch } from '@app';
 import { useWhitelistGreylistQuery } from '@graphql';
 import { AccountsAddModal, Address, EditableCell, FilterDropdown, Loading } from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
@@ -14,7 +14,6 @@ interface ManageAccountListProps {
 }
 
 export function ManageAccountList({ type }: ManageAccountListProps): ReactElement {
-  const { reset } = useGraphql();
   const [{ onlineToken }] = useAppState();
   const accountNotes = useAccountNotes(onlineToken.address);
   const [searchText, setSearchText] = useState<string>('');
@@ -22,7 +21,7 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
   const [paginate, setPaginate] = useState<boolean>(true);
   const [batchAdding, setBatchAdding] = useState<boolean>(false);
   const { dispatchTransaction, setAccountProp } = useDispatch();
-  const { loading, error, data } = useWhitelistGreylistQuery({
+  const { loading, refetch, data } = useWhitelistGreylistQuery({
     variables: { token: onlineToken.id },
   });
   if (loading) return <Loading />;
@@ -35,13 +34,8 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
       method: `transferRules.${removeMethod}`,
       args: [addressList],
       description: `Removing ${addressList.length} addresses from your ${type}`,
-      onSuccess: reset,
+      syncCallbacks: [refetch],
     });
-  };
-
-  const handleAddModalClosed = () => {
-    setBatchAdding(false);
-    reset();
   };
 
   const removeMethod = type === 'whitelist' ? 'bulkUnWhitelistAccount' : 'bulkUnGreyListAccount';
@@ -129,7 +123,7 @@ export function ManageAccountList({ type }: ManageAccountListProps): ReactElemen
         <Button onClick={() => setBatchAdding(true)}>Batch add accounts</Button>
       </div>
 
-      {batchAdding && <AccountsAddModal list={type} onClose={handleAddModalClosed} />}
+      {batchAdding && <AccountsAddModal list={type} onClose={() => setBatchAdding(false)} refetch={refetch} />}
     </>
   );
 }

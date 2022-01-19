@@ -2,6 +2,7 @@ import { EthereumAddress, EthereumNetwork, Uuid } from './ethereum';
 
 import { AppFile, AppImage } from '.';
 import { TokenFragment } from '@graphql';
+import { BigNumber } from '@ethersproject/bignumber';
 
 export interface LocalTokenAddresses {
   features?: EthereumAddress;
@@ -110,4 +111,42 @@ export const tokenFeatures = {
 
 export function processNewToken(token: LocalToken): LocalToken {
   return { ...token, assetLegalDocuments: token.assetLegalDocuments || [] };
+}
+
+/**
+ * Merges local underploed tokens with deployedTokens.
+ *
+ * @param localTokens
+ * @param onlineTokens
+ * @param networkId
+ */
+export function mergeLocalOnlineTokens(
+  localTokens: LocalToken[],
+  onlineTokens: OnlineToken[],
+  networkId,
+): TokenRecord[] {
+  if (!networkId) return [];
+
+  const result: TokenRecord[] = onlineTokens.map((token) => ({
+    ...(({ id, name, symbol, address }) => ({ id, name, symbol, address }))(token),
+    isMinted: BigNumber.from(token.supply).gt(0),
+    isFundraising: token.currentFundraiser !== null,
+    onlineToken: token,
+  }));
+
+  for (const token of localTokens) {
+    const state = token.networkState[networkId] || LocalTokenState.Created;
+    if (state === LocalTokenState.Created) {
+      result.push({
+        ...(({ id, name, symbol }) => ({ id, name, symbol }))(token),
+        address: null,
+        isMinted: false,
+        isFundraising: false,
+        localToken: token,
+        localState: state,
+      });
+    }
+  }
+
+  return result;
 }

@@ -17,7 +17,7 @@ export const graphqlEndpoints = {
   [EthereumNetwork.Main]: 'https://api.thegraph.com/subgraphs/name/my-swarm/issuance',
   [EthereumNetwork.Kovan]: 'https://api.thegraph.com/subgraphs/name/my-swarm/issuance-kovan',
   [EthereumNetwork.Mumbai]: 'https://api.thegraph.com/subgraphs/name/my-swarm/issuance-mumbai',
-  // [EthereumNetwork.Polygon]: 'https://api.thegraph.com/subgraphs/name/my-swarm/issuance-kovan',
+  [EthereumNetwork.Polygon]: 'https://api.thegraph.com/subgraphs/name/my-swarm/issuance-polygon',
 };
 
 export const devSwmBalances = {

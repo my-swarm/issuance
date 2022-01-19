@@ -2,6 +2,7 @@ import local from './local.json';
 import kovan from './kovan.json';
 import mainnet from './mainnet.json';
 import mumbai from './mumbai.json';
+import polygon from './polygon.json';
 
 export const addresses = {
   local,
@@ -12,4 +13,6 @@ export const addresses = {
   1: mainnet,
   mumbai,
   80001: mumbai,
+  polygon,
+  137: polygon,
 };

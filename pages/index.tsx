@@ -13,7 +13,7 @@ import {
 } from '@components';
 import { Card, Col, Divider, Row } from 'antd';
 import { PriceData } from '@lib';
-import { SWM_STAKE_OLD_REGISTRY } from '@app';
+import { SWM_STAKE_OLD_REGISTRY, useEthers } from '@app';
 
 const cgUrlStats = 'https://api.coingecko.com/api/v3/coins/swarm';
 const cgUrlDaily =
@@ -24,6 +24,7 @@ export default function Index(): ReactElement {
   const [buyingSwm, setBuyingSwm] = useState<boolean>(false);
   const [priceData, setPriceData] = useState<PriceData>();
   const [swmCircSupply, setSwmCircSupply] = useState<number>();
+  const { networkId } = useEthers();
 
   const cgRequest = (url: string, callback: (data: any) => void) => {
     fetch(url)
@@ -52,23 +53,25 @@ export default function Index(): ReactElement {
       <RequireCorrectNetwork>
         <Row gutter={24} className="dashboard">
           <Col {...colLayout}>
-            <Card
-              title="SWARM token"
-              style={{ marginBottom: '24px' }}
-              extra={
-                <a
-                  href="https://etherscan.io/token/0x3505f494c3f0fed0b594e01fa41dd3967645ca39"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  more
-                </a>
-              }
-            >
-              <RequireCorrectNetwork>
-                <SwmStakeChart total={swmCircSupply} issuerStake={SWM_STAKE_OLD_REGISTRY} />
-              </RequireCorrectNetwork>
-            </Card>
+            {networkId === 1 && (
+              <Card
+                title="SWARM token"
+                style={{ marginBottom: '24px' }}
+                extra={
+                  <a
+                    href="https://etherscan.io/token/0x3505f494c3f0fed0b594e01fa41dd3967645ca39"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    more
+                  </a>
+                }
+              >
+                <RequireCorrectNetwork>
+                  <SwmStakeChart total={swmCircSupply} issuerStake={SWM_STAKE_OLD_REGISTRY} />
+                </RequireCorrectNetwork>
+              </Card>
+            )}
             <Card
               title="SWM price (2 weeks)"
               extra={

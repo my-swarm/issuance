@@ -28,7 +28,7 @@ interface Props {
   isPublic?: boolean;
   outsideAction?: TokenAction;
   onClearAction?: () => void;
-  refetch: () => void;
+  refetch?: () => void;
 }
 
 export function TokenList({ tokens, isPublic = false, outsideAction, onClearAction, refetch }: Props): ReactElement {

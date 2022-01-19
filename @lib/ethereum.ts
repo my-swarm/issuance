@@ -53,4 +53,14 @@ export function getNetwork(networkId: number): string {
   return networkNames[networkId] || 'Unsupported chain';
 }
 
-export const supportedNetworks = [EthereumNetwork.Main, EthereumNetwork.Kovan, EthereumNetwork.Mumbai];
+export const supportedNetworks = [
+  EthereumNetwork.Main,
+  EthereumNetwork.Polygon,
+  EthereumNetwork.Kovan,
+  EthereumNetwork.Mumbai,
+];
+
+export const exchanges = {
+  [EthereumNetwork.Main]: 'https://app.uniswap.org/#/swap?theme=dark&',
+  [EthereumNetwork.Polygon]: 'https://quickswap.exchange/#/swap?',
+};

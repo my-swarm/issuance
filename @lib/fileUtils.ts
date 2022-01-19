@@ -21,7 +21,7 @@ export async function convertFileToUpload(file: AppFile): Promise<UploadFile> {
     size,
     thumbUrl,
     type,
-    originFileObj: await convertdataUriToBlob(content),
+    originFileObj: (await convertdataUriToBlob(content)) as any,
   };
 }
 

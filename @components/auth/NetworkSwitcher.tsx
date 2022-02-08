@@ -2,20 +2,22 @@ import React, { ReactElement } from 'react';
 import { Button, Dropdown, Menu, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { getNetwork, networkNames, supportedNetworks } from '@lib';
-import { useEthers } from '@app';
+import { useEthers, isDev } from '@app';
 
 export function NetworkSwitcher(): ReactElement {
   const { networkId, changeNetwork } = useEthers();
 
   const menu = (
     <Menu>
-      {Object.entries(networkNames).map(([chainId, chainName]) => (
-        <Menu.Item key={chainId}>
-          <Button type="link" onClick={() => changeNetwork(parseInt(chainId))}>
-            {chainName}
-          </Button>
-        </Menu.Item>
-      ))}
+      {Object.entries(networkNames)
+        .filter(([chainId]) => isDev || chainId !== '31337')
+        .map(([chainId, chainName]) => (
+          <Menu.Item key={chainId}>
+            <Button type="link" onClick={() => changeNetwork(parseInt(chainId))}>
+              {chainName}
+            </Button>
+          </Menu.Item>
+        ))}
     </Menu>
   );
 

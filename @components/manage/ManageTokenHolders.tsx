@@ -43,6 +43,7 @@ export function ManageTokenHolders(): ReactElement {
   if (loading) return <Loading />;
   const { token } = data;
   const { features, holders } = token;
+  const isAutoburned = tokenAutoburned(block, token);
 
   const handleFreeze = (account: string) => {
     dispatchTransaction({
@@ -73,7 +74,7 @@ export function ManageTokenHolders(): ReactElement {
       return {
         ...a,
         key: a.address, // for the table
-        balance: parseFloat(formatUnits(tokenBalance(block, token, a.balance), token.decimals)),
+        balance: parseFloat(formatUnits(a.balance, token.decimals)),
         ...accountNotes[a.address],
       };
     })
@@ -93,7 +94,6 @@ export function ManageTokenHolders(): ReactElement {
   };
 
   const renderAction = (value: any, record: TableRecord) => {
-    const isAutoburned = tokenAutoburned(block, token);
     const enableFreeze = features.accountFreeze && !record.isFrozen;
     const enableUnfreeze = features.accountFreeze && record.isFrozen;
     const enableBurn = features.accountBurn && record.balance > 0;
@@ -142,6 +142,17 @@ export function ManageTokenHolders(): ReactElement {
       key: 'balance',
       align: 'right',
       sorter: (a, b) => a.balance - b.balance,
+      render: (balance) =>
+        isAutoburned ? (
+          <>
+            0{' '}
+            <Tooltip title="Autoburned">
+              <span style={{ opacity: 0.33 }}>({balance})</span>
+            </Tooltip>
+          </>
+        ) : (
+          balance
+        ),
     },
     {
       title: 'Name',

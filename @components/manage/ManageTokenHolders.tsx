@@ -1,12 +1,22 @@
 import React, { ReactElement, useState } from 'react';
-import { Checkbox, Dropdown, Menu, Space, Table, Tooltip } from 'antd';
+import { Button, Checkbox, Divider, Dropdown, Menu, Space, Table, Tooltip } from 'antd';
 import { CheckCircleTwoTone, DownOutlined, ExclamationCircleTwoTone, SearchOutlined } from '@lib/icons';
 
 import { useAppState, useDispatch, useAccountNotes, useEthers } from '@app';
 import { useTokenHoldersQuery } from '@graphql';
-import { AccountBurnModal, Address, EditableCell, FilterDropdown, Loading, TransferModal } from '@components';
+import {
+  AccountBurnModal,
+  AccountsAddModal,
+  AccountsBurnModal,
+  Address,
+  EditableCell,
+  FilterDropdown,
+  Loading,
+  TransferModal,
+} from '@components';
 import { createPagination, renderAddress, tableColumns } from './listUtils';
 import { formatUnits, formatDatetime, strcmp, tokenBalance, tokenAutoburned } from '@lib';
+import { AddressZero } from '@ethersproject/constants';
 
 interface TableRecord {
   address: string;
@@ -26,6 +36,7 @@ export function ManageTokenHolders(): ReactElement {
   const [paginate, setPaginate] = useState<boolean>(true);
   const [transferingFrom, setTransferingFrom] = useState<string>();
   const [burningAccount, setBurningAccount] = useState<string>();
+  const [massBurning, setMassBurning] = useState<boolean>(false);
   const { loading, refetch, data } = useTokenHoldersQuery({
     variables: { token: onlineToken.id },
   });
@@ -57,6 +68,7 @@ export function ManageTokenHolders(): ReactElement {
   };
 
   const tableData: TableRecord[] = holders
+    .filter((holder) => holder.address !== AddressZero)
     .map((a) => {
       return {
         ...a,
@@ -182,6 +194,11 @@ export function ManageTokenHolders(): ReactElement {
         />
       </div>
 
+      <Divider />
+      <div>
+        <Button onClick={() => setMassBurning(true)}>Mass burn accounts</Button>
+      </div>
+
       {burningAccount !== undefined && (
         <AccountBurnModal
           token={token}
@@ -191,6 +208,7 @@ export function ManageTokenHolders(): ReactElement {
           refetch={refetch}
         />
       )}
+      {massBurning && <AccountsBurnModal onClose={() => setMassBurning(false)} refetch={refetch} />}
       {transferingFrom !== undefined && (
         <TransferModal
           token={token}

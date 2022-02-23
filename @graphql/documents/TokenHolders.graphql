@@ -9,7 +9,7 @@ fragment TokenHolder on TokenHolder {
 query TokenHolders($token: ID!) {
   token(id: $token) {
     ...TokenInfo
-    holders {
+    holders(first: 1000) {
       ...TokenHolder
     },
   }

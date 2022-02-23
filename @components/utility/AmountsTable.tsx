@@ -6,7 +6,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 
 interface AmountsTableProps {
   addresses: string[];
-  amounts: BigNumber[];
+  amounts: number[] | BigNumber[];
   token: Pick<LocalToken, 'decimals' | 'symbol'>;
 }
 
@@ -28,7 +28,10 @@ export function AmountsTable({ amounts, addresses, token }: AmountsTableProps): 
           dataIndex: 'amount',
           key: 'amount',
           align: 'right',
-          render: (value) => Math.round(parseInt(formatUnits(value, token.decimals))) + ' ' + token.symbol,
+          render: (value) =>
+            (typeof value === 'number' ? value.toString() : Math.round(parseInt(formatUnits(value, token.decimals)))) +
+            ' ' +
+            token.symbol,
         },
       ]}
     />

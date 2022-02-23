@@ -1,6 +1,6 @@
 import { getAddress } from '@ethersproject/address';
 
-export function parseAddressesInput<T>(input: string, convert: (meta: string[]) => T): { [key: string]: T } {
+export function parseAddressesInput<T>(input: string, convert?: (meta: string[]) => T): { [key: string]: T } {
   if (input.trim() === '') {
     throw { message: 'Invalid input', description: 'Please provide an address list' };
   }
@@ -17,7 +17,7 @@ export function parseAddressesInput<T>(input: string, convert: (meta: string[]) 
     } catch (e) {
       throw { message: 'Error parsing address list', description: `${e.reason}: ${uncheckedAddress}` };
     }
-    data[address] = convert(rest);
+    data[address] = convert ? convert(rest) : rest;
   }
 
   return data;

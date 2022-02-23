@@ -11,6 +11,7 @@ export * from './ManageDistribute';
 export * from './ManageAsset';
 export * from './ManageDividends';
 export * from './AccountsAddModal';
+export * from './AccountsBurnModal';
 export * from './AccountBurnModal';
 export * from './AffiliateEditModal';
 export * from './TransferModal';

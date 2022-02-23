@@ -1,9 +1,9 @@
 query WhitelistGreylist($token: String!) {
-  whitelistedAccounts(where: { token: $token }) {
+  whitelistedAccounts(where: { token: $token }, first: 1000) {
     address
     createdAt
   },
-  greylistedAccounts(where: { token: $token }) {
+  greylistedAccounts(where: { token: $token }, first: 1000) {
     address
     createdAt
   },

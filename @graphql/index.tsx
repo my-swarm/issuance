@@ -3545,7 +3545,7 @@ export const TokenHoldersDocument = gql`
     query TokenHolders($token: ID!) {
   token(id: $token) {
     ...TokenInfo
-    holders {
+    holders(first: 1000) {
       ...TokenHolder
     }
   }
@@ -3826,10 +3826,10 @@ export const WalletDocument = gql`
     ...TokenHolder
     token {
       ...TokenInfo
-      whitelist(where: {address: $address}) {
+      whitelist(where: {address: $address}, first: 1000) {
         address
       }
-      greylist(where: {address: $address}) {
+      greylist(where: {address: $address}, first: 1000) {
         address
       }
       features {
@@ -3940,11 +3940,11 @@ export type WalletDetailLazyQueryHookResult = ReturnType<typeof useWalletDetailL
 export type WalletDetailQueryResult = Apollo.QueryResult<WalletDetailQuery, WalletDetailQueryVariables>;
 export const WhitelistGreylistDocument = gql`
     query WhitelistGreylist($token: String!) {
-  whitelistedAccounts(where: {token: $token}) {
+  whitelistedAccounts(where: {token: $token}, first: 1000) {
     address
     createdAt
   }
-  greylistedAccounts(where: {token: $token}) {
+  greylistedAccounts(where: {token: $token}, first: 1000) {
     address
     createdAt
   }

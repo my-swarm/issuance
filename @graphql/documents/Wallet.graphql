@@ -4,10 +4,10 @@ query Wallet($address: Bytes) {
     ...TokenHolder
     token {
       ...TokenInfo
-      whitelist(where: { address: $address }) {
+      whitelist(where: { address: $address }, first: 1000) {
         address
       },
-      greylist(where: { address: $address }) {
+      greylist(where: { address: $address }, first: 1000) {
         address
       },
       features {

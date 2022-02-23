@@ -15,7 +15,7 @@ type FormData = {
   addresses: string;
 };
 
-const distributeBatchSize = 5;
+const batchSize = 100;
 
 export function ManageDistribute(): ReactElement {
   const { block, address: myAddress } = useEthers();
@@ -36,24 +36,24 @@ export function ManageDistribute(): ReactElement {
   );
   const pendingContributors = contributors.filter((c) => c.status === ContributorStatus.Pending);
 
-  async function distributeBatch(amounts, addresses, totalCount, totalAmount) {
-    const numBatches = Math.ceil(totalCount / distributeBatchSize);
+  async function distributeChunk(amounts, addresses, totalCount, totalAmount) {
+    const numBatches = Math.ceil(totalCount / batchSize);
     const oneBatch = numBatches === 1;
-    const amountsBatch = amounts.slice(0, distributeBatchSize);
-    const addressesBatch = addresses.slice(0, distributeBatchSize);
-    const amountsLeft = amounts.slice(distributeBatchSize);
-    const addressesLeft = addresses.slice(distributeBatchSize);
-    const batchesLeft = Math.ceil(amountsLeft.length / distributeBatchSize);
+    const amountsBatch = amounts.slice(0, batchSize);
+    const addressesBatch = addresses.slice(0, batchSize);
+    const amountsLeft = amounts.slice(batchSize);
+    const addressesLeft = addresses.slice(batchSize);
+    const batchesLeft = Math.ceil(amountsLeft.length / batchSize);
     const batchNum = numBatches - batchesLeft;
     dispatchTransaction({
       method: 'src20.bulkTransfer',
       args: [addressesBatch, amountsBatch],
       description: `Distributing ${totalAmount} ${token.symbol} to ${addresses.length} accounts${
-        oneBatch ? `` : ` (batch ${batchNum} of ${numBatches}, ${distributeBatchSize} per batch)`
+        oneBatch ? `` : ` (batch ${batchNum} of ${numBatches}; ${batchSize} per batch)`
       }`,
       onSuccess: () => {
         if (amountsLeft.length > 0) {
-          distributeBatch(amountsLeft, addressesLeft, totalCount, totalAmount);
+          distributeChunk(amountsLeft, addressesLeft, totalCount, totalAmount);
         } else {
           form.resetFields();
         }
@@ -115,7 +115,7 @@ export function ManageDistribute(): ReactElement {
         </>
       ),
 
-      onOk: () => distributeBatch(amounts, addresses, amounts.length, niceAmount),
+      onOk: () => distributeChunk(amounts, addresses, amounts.length, niceAmount),
     });
   };
 

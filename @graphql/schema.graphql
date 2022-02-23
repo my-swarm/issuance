@@ -1834,6 +1834,7 @@ type Subscription {
 
 type Token {
   id: ID!
+  deployedAt: Int!
   owner: Bytes!
   address: Bytes!
   name: String!
@@ -1868,6 +1869,14 @@ input Token_filter {
   id_lte: ID
   id_in: [ID!]
   id_not_in: [ID!]
+  deployedAt: Int
+  deployedAt_not: Int
+  deployedAt_gt: Int
+  deployedAt_lt: Int
+  deployedAt_gte: Int
+  deployedAt_lte: Int
+  deployedAt_in: [Int!]
+  deployedAt_not_in: [Int!]
   owner: Bytes
   owner_not: Bytes
   owner_in: [Bytes!]
@@ -2034,6 +2043,7 @@ input Token_filter {
 
 enum Token_orderBy {
   id
+  deployedAt
   owner
   address
   name

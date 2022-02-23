@@ -1707,6 +1707,7 @@ export type Subscription_MetaArgs = {
 export type Token = {
   __typename?: 'Token';
   id: Scalars['ID'];
+  deployedAt: Scalars['Int'];
   owner: Scalars['Bytes'];
   address: Scalars['Bytes'];
   name: Scalars['String'];
@@ -1795,6 +1796,14 @@ export type Token_Filter = {
   id_lte?: Maybe<Scalars['ID']>;
   id_in?: Maybe<Array<Scalars['ID']>>;
   id_not_in?: Maybe<Array<Scalars['ID']>>;
+  deployedAt?: Maybe<Scalars['Int']>;
+  deployedAt_not?: Maybe<Scalars['Int']>;
+  deployedAt_gt?: Maybe<Scalars['Int']>;
+  deployedAt_lt?: Maybe<Scalars['Int']>;
+  deployedAt_gte?: Maybe<Scalars['Int']>;
+  deployedAt_lte?: Maybe<Scalars['Int']>;
+  deployedAt_in?: Maybe<Array<Scalars['Int']>>;
+  deployedAt_not_in?: Maybe<Array<Scalars['Int']>>;
   owner?: Maybe<Scalars['Bytes']>;
   owner_not?: Maybe<Scalars['Bytes']>;
   owner_in?: Maybe<Array<Scalars['Bytes']>>;
@@ -1961,6 +1970,7 @@ export type Token_Filter = {
 
 export enum Token_OrderBy {
   Id = 'id',
+  DeployedAt = 'deployedAt',
   Owner = 'owner',
   Address = 'address',
   Name = 'name',
@@ -2727,7 +2737,7 @@ export type TokenSupplyQuery = (
 
 export type TokenInfoFragment = (
   { __typename?: 'Token' }
-  & Pick<Token, 'id' | 'name' | 'symbol' | 'address' | 'availableSupply' | 'fee' | 'decimals' | 'supply' | 'maxSupply'>
+  & Pick<Token, 'id' | 'deployedAt' | 'name' | 'symbol' | 'address' | 'availableSupply' | 'fee' | 'decimals' | 'supply' | 'maxSupply'>
   & { features?: Maybe<(
     { __typename?: 'Features' }
     & Pick<Features, 'forceTransfer' | 'tokenFreeze' | 'accountFreeze' | 'accountBurn' | 'autoburn' | 'autoburnTs'>
@@ -2941,6 +2951,7 @@ export type WhitelistGreylistQuery = (
 export const TokenInfoFragmentDoc = gql`
     fragment TokenInfo on Token {
   id
+  deployedAt
   name
   symbol
   address

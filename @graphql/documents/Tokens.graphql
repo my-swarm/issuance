@@ -1,5 +1,6 @@
 fragment TokenInfo on Token {
   id
+  deployedAt
   name
   symbol
   address

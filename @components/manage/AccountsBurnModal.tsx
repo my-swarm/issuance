@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import { Form, Input, InputNumber, Modal, Radio } from 'antd';
 import { useAppState, useDispatch } from '@app';
-import { getUnitsAsNumber, parseAddressesInput } from '@lib';
+import { getUnitsAsNumber, parseAddressesInput, sameAddress } from '@lib';
 import { useTokenHoldersQuery } from '@graphql';
 import { AmountsTable, Loading } from '../utility';
 import { BigNumber } from '@ethersproject/bignumber';
@@ -12,8 +12,6 @@ interface Props {
   onClose: () => void;
   refetch: () => void;
 }
-
-const batchSize = 200;
 
 export function AccountsBurnModal({ onClose, refetch }: Props): ReactElement {
   const [input, setInput] = useState<string>('');
@@ -27,6 +25,8 @@ export function AccountsBurnModal({ onClose, refetch }: Props): ReactElement {
     return <Loading />;
   }
 
+  const batchSize = onlineToken.deployedAt < 1645623558 ? 1 : 200; // todo: check by version instead
+
   const holders = data.token.holders;
 
   async function burnChunk(addresses, totalCount) {
@@ -37,13 +37,29 @@ export function AccountsBurnModal({ onClose, refetch }: Props): ReactElement {
     const batchesLeft = Math.ceil(addressesLeft.length / batchSize);
     const batchNum = numBatches - batchesLeft;
 
-    const description = `Burning ${percent}% from ${totalCount} accounts${
-      oneBatch ? `` : ` (batch ${batchNum} of ${numBatches}; ${batchSize} per batch)`
-    }`;
+    const percentContract = Math.round(percent * 1_0000); // 4 decimal places
+    let description: string;
+    let method: string;
+    let args: any[];
+    if (batchSize === 1) {
+      const address = addressesBatch[0];
+      const amount = BigNumber.from(holders.find((h) => sameAddress(h.address, address)).balance)
+        .mul(percentContract)
+        .div(100_0000);
+      method = 'src20.burnAccount';
+      args = [address, amount];
+      description = `Burning ${percent}% from ${totalCount} accounts (${batchNum} of ${numBatches})`;
+    } else {
+      method = 'src20.burnAccountsPercent';
+      args = [addressesBatch, percentContract];
+      description = `Burning ${percent}% from ${totalCount} accounts${
+        oneBatch ? `` : ` (batch ${batchNum} of ${numBatches}; ${batchSize} per batch)`
+      }`;
+    }
 
     dispatchTransaction({
-      method: 'src20.burnAccountsPercent',
-      args: [addressesBatch, Math.round(percent * 10000)],
+      method,
+      args,
       description,
       onSuccess: () => {
         if (addressesLeft.length > 0) {
@@ -72,8 +88,16 @@ export function AccountsBurnModal({ onClose, refetch }: Props): ReactElement {
         );
       }
 
-      const amounts = holders.map((holder) =>
-        round(getUnitsAsNumber(BigNumber.from(holder.balance), onlineToken.decimals) * percent, 4),
+      const amounts = addresses.map((address) =>
+        round(
+          (getUnitsAsNumber(
+            BigNumber.from(holders.find((holder) => sameAddress(holder.address, address)).balance),
+            onlineToken.decimals,
+          ) *
+            percent) /
+            100,
+          4,
+        ),
       );
 
       Modal.confirm({

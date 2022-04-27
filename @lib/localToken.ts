@@ -110,7 +110,7 @@ export const tokenFeatures = {
 };
 
 export function processNewToken(token: LocalToken): LocalToken {
-  return { ...token, assetLegalDocuments: token.assetLegalDocuments || [] };
+  return { ...token, decimals: 18, assetLegalDocuments: token.assetLegalDocuments || [] };
 }
 
 /**

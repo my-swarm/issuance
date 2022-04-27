@@ -16,7 +16,7 @@ interface TokenFormProps {
   formData?: LocalToken;
 }
 
-const defaultToken = isDev ? devDefaultToken : ({ decimals: 18 } as LocalToken);
+const defaultToken = isDev ? devDefaultToken : ({} as LocalToken);
 
 const disabledTime = (date) => {
   const now = dayjs();
@@ -65,18 +65,15 @@ export function TokenForm({ onCancel, onSubmit, formData = defaultToken }: Token
       initialValues={formDataProcessed}
     >
       <Fieldset legend="Token basics">
-        <Form.Item name="name" label="Token name" rules={rules.name}>
-          <Input placeholder="Your token name" />
-        </Form.Item>
         <Row gutter={16}>
           <Col lg={12}>
-            <Form.Item name="symbol" label="Symbol" rules={rules.symbol} normalize={(x) => x.toUpperCase()}>
-              <Input placeholder="XXX" />
+            <Form.Item name="name" label="Token name" rules={rules.name}>
+              <Input placeholder="Your token name" />
             </Form.Item>
           </Col>
           <Col lg={12}>
-            <Form.Item name="decimals" label="Decimals (keep 18 if not sure)" rules={rules.decimals}>
-              <InputNumber min={0} max={36} placeholder="18" style={{ width: '100%' }} />
+            <Form.Item name="symbol" label="Symbol" rules={rules.symbol} normalize={(x) => x.toUpperCase()}>
+              <Input placeholder="XXX" />
             </Form.Item>
           </Col>
         </Row>

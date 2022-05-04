@@ -102,7 +102,7 @@ export class KyaStorage {
     }
     const found = file.content.match(/^ipfs:(.*)/);
     if (found && found[1]) {
-      const data = await this.ipfsCat(found[1], 'base64');
+      // const data = await this.ipfsCat(found[1], 'base64');
       // const content = `data:${file.type};base64,${data}`;
       const url = KyaStorage.ipfsUrl(found[1]);
       const content = url;

@@ -26,7 +26,7 @@ export const BASE_CURRENCIES: { [key: string]: EthereumToken } = {
     addresses: {
       [EthereumNetwork.Main]: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
       [EthereumNetwork.Kovan]: '0xF2ed3cA62b1D4dd57ad46184634f6b1F8Be85EE3',
-      [EthereumNetwork.Mumbai]: '0xTBD',
+      [EthereumNetwork.Mumbai]: '0x2058a9d7613eee744279e3856ef0eada5fcbaa7e',
       [EthereumNetwork.Polygon]: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
       [EthereumNetwork.Local]: localAddresses.USDC,
     },
